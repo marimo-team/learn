@@ -7,7 +7,7 @@
 
 import marimo
 
-__generated_with = "0.10.13"
+__generated_with = "0.10.12"
 app = marimo.App()
 
 
@@ -35,7 +35,6 @@ def _(mo):
         ```
 
         Below is an example string.
-
         """
     )
     return
@@ -88,7 +87,7 @@ def _(text):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("Use string methods and the `in` operator to find things in strings.")
+    mo.md("""Use string methods and the `in` operator to find things in strings.""")
     return
 
 
@@ -115,12 +114,13 @@ def _(mo):
     mo.md(
         """
         ## Inserting values in strings
-        
+
         Modern Python uses f-strings to insert values into strings. For example,
         check out how the next cell greets you (and notice the `f''''`)!
 
         Try changing the value of `my_name`, and watch how the greeting changes.
-    """)
+        """
+    )
     return
 
 
