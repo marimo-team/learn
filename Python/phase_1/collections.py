@@ -68,63 +68,21 @@ def _(sample_list):
 
 @app.cell
 def _(sample_list):
-    sample_list.append(6)  # Add item to end
-    sample_list
+    # sample_list.append(6)  # Add item to end
+    extended_list = sample_list + [6] # concatenate two lists
+    extended_list
+    return (extended_list,)
+
+
+@app.cell
+def _(extended_list):
+    extended_list[0]  # Access first element
     return
 
 
 @app.cell
-def _(sample_list):
-    sample_list[0]  # Access first element
-    return
-
-
-@app.cell
-def _(sample_list):
-    sample_list[-1]  # Access last element
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ### Try marimo's Array Interface!
-
-        Explore how marimo handles arrays with this interactive element:
-        """
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    item = mo.ui.text(placeholder="Enter list item")
-    items = mo.ui.array([item] * 3, label="Create a list of 3 items")
-    return item, items
-
-
-@app.cell
-def _(items, mo):
-    mo.hstack(
-        [
-            items,
-            mo.md(f"Your list: {items.value}")
-        ],
-        justify="space-between"
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    _text = mo.md("""
-        - Try entering different types of items
-        - Watch how the list updates in real-time
-
-        This is a great way to experiment with list creation!
-    """)
-    mo.accordion({"💡 Interactive List Builder Tips": _text})
+def _(extended_list):
+    extended_list[-1]  # Access last element
     return
 
 
@@ -151,6 +109,23 @@ def _(coordinates):
     x, y = coordinates  # Tuple unpacking
     x
     return x, y
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""#### Tuple concatenation""")
+    return
+
+
+@app.cell
+def _():
+    tuple1 = (1, 2, 3)
+    tuple2 = (4, 5, 6)
+
+    tuple3 = tuple1 + tuple2
+
+    tuple3
+    return tuple1, tuple2, tuple3
 
 
 @app.cell(hide_code=True)
@@ -190,63 +165,6 @@ def _(person):
 @app.cell
 def _(person):
     person.values()  # Get all values
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ### Try marimo's Dictionary Interface!
-
-        Create your own dictionary using marimo's interactive elements:
-        """
-    )
-    return
-
-
-@app.cell
-def _(mo):
-    key1 = mo.ui.text(placeholder="Key 1")
-    value1 = mo.ui.text(placeholder="Value 1")
-    key2 = mo.ui.text(placeholder="Key 2")
-    value2 = mo.ui.text(placeholder="Value 2")
-
-    dictionary = mo.ui.dictionary(
-        {
-            "First key": key1,
-            "First value": value1,
-            "Second key": key2,
-            "Second value": value2,
-        }
-    )
-
-    return dictionary, key1, key2, value1, value2
-
-
-@app.cell
-def _(dictionary, mo):
-    mo.hstack(
-        [
-            dictionary,
-            mo.md(f"Your dictionary: {dictionary.value}")
-        ],
-        justify="space-between"
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    _text = mo.md("""Enter key-value pairs to build your dictionary
-        
-        - Watch how the dictionary updates as you type
-        
-        - Try different types of values
-
-        This interactive builder helps understand dictionary structure!
-    """)
-    mo.accordion({"💡 Dictionary Builder Tips": _text})
     return
 
 
