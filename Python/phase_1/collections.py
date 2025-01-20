@@ -68,7 +68,6 @@ def _(sample_list):
 
 @app.cell
 def _(sample_list):
-    # sample_list.append(6)  # Add item to end
     extended_list = sample_list + [6] # concatenate two lists
     extended_list
     return (extended_list,)
