@@ -188,7 +188,7 @@ def _(temperature):
         Analyze weather based on temperature.
 
         Args:
-            temp (float): Temperature in Celsius (superior unit of measurement)
+            temp (float): Temperature in Celsius
 
         Returns:
             tuple: Weather status, recommendation, warning level
