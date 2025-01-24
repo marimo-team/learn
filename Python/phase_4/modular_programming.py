@@ -39,71 +39,69 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## Custom Modules
-        Create your own Python modules to organize code:
+        ## Standard Library Imports
+        Python's standard library provides powerful, pre-built modules:
 
         ```python
-        # math_utils.py
-        def add(a, b):
-            return a + b
+        # String manipulation
+        import string
 
-        def multiply(a, b):
-            return a * b
+        # Operating system interactions
+        import os
 
-        # main.py
-        import math_utils
-        result = math_utils.add(5, 3)
+        # Date and time handling
+        import datetime
+
+        # Mathematical operations
+        import math
         ```
+
+        For more details, check the [Python Standard Library Documentation](https://docs.python.org/3/library/)
         """
     )
     return
 
 
 @app.cell
-def _(module_name):
-    module_name
-    return
+def _():
+    # importing and using standard library modules
+    import string
+    import os
+    import datetime
+    import math
 
+    # Example of using imported modules
+    def demonstrate_standard_library_usage():
+        # String module: get all punctuation
+        punctuation_example = string.punctuation
 
-@app.cell
-def _(mo):
-    # Module naming approaches
-    module_name = mo.ui.text(
-        value="math_utils", 
-        label="Module Name"
+        # OS module: get current working directory
+        current_dir = os.getcwd()
+
+        # Datetime module: get current date
+        today = datetime.date.today()
+
+        # Math module: calculate square root
+        sqrt_example = math.sqrt(16)
+
+        return {
+            "Punctuation": punctuation_example,
+            "Current Directory": current_dir,
+            "Today's Date": today,
+            "Square Root Example": sqrt_example
+        }
+
+    # Run the demonstration
+    module_usage_examples = demonstrate_standard_library_usage()
+    module_usage_examples
+    return (
+        datetime,
+        demonstrate_standard_library_usage,
+        math,
+        module_usage_examples,
+        os,
+        string,
     )
-    return (module_name,)
-
-
-@app.cell
-def _(mo, module_name):
-    def generate_module_content(name):
-        """Generate a sample module based on the name"""
-        return f"""
-        # {name}.py
-        def add(a, b):
-            '''Add two numbers'''
-            return a + b
-
-        def multiply(a, b):
-            '''Multiply two numbers'''
-            return a * b
-
-        def power(a, b):
-            '''Raise a to the power of b'''
-            return a ** b
-        """
-
-    module_content = generate_module_content(module_name.value)
-
-    mo.md(f"""
-    ## Module: {module_name.value}.py
-
-    ```python
-    {module_content}
-    ```
-    """)
-    return generate_module_content, module_content
 
 
 @app.cell(hide_code=True)
@@ -115,13 +113,13 @@ def _(mo):
 
         ```python
         # Import entire module
-        import math_utils
+        import math
 
         # Import specific functions
-        from math_utils import add, multiply
+        from math import sqrt, pow
 
         # Import with alias
-        import math_utils as mu
+        import math as m
         ```
         """
     )
@@ -129,45 +127,33 @@ def _(mo):
 
 
 @app.cell
-def _(import_strategy):
-    import_strategy
-    return
+def _():
+    def demonstrate_import_strategies():
+        """
+        Demonstrate different import strategies using the math module
+        """
+        # Strategy 1: Import entire module
+        import math
+        entire_module_result = math.sqrt(25)
 
+        # Strategy 2: Import specific functions
+        from math import pow, sqrt
+        specific_import_result = pow(2, 3)
 
-@app.cell(hide_code=True)
-def _(mo):
-    # Import strategy selector
-    import_strategy = mo.ui.dropdown(
-        options=[
-            "Import entire module",
-            "Import specific functions",
-            "Import with alias"
-        ],
-        label="Choose Import Strategy"
-    )
-    return (import_strategy,)
+        # Strategy 3: Import with alias
+        import math as m
+        alias_result = m.sqrt(16)
 
+        return {
+            "Entire Module Import": entire_module_result,
+            "Specific Function Import": specific_import_result,
+            "Alias Import": alias_result
+        }
 
-@app.cell
-def _(import_strategy, mo):
-    def demonstrate_import(strategy):
-        if strategy == "Import entire module":
-            return "import math_utils\nresult = math_utils.add(5, 3)"
-        elif strategy == "Import specific functions":
-            return "from math_utils import add, multiply\nresult = add(5, 3)"
-        else:
-            return "import math_utils as mu\nresult = mu.add(5, 3)"
-
-    import_example = demonstrate_import(import_strategy.value)
-
-    mo.md(f"""
-    ## Import examples with code
-
-    ```python
-    {import_example}
-    ```
-    """)
-    return demonstrate_import, import_example
+    # Run the import strategy demonstration
+    import_strategy_examples = demonstrate_import_strategies()
+    import_strategy_examples
+    return demonstrate_import_strategies, import_strategy_examples
 
 
 @app.cell(hide_code=True)
@@ -182,71 +168,46 @@ def _(mo):
 
 
 @app.cell
-def _(input_type):
-    input_type
-    return
+def _():
+    def generate_reusable_functions():
+        """
+        Demonstrate different types of reusable functions
+        """
 
-
-@app.cell(hide_code=True)
-def _(mo):
-    # demo of reusability types
-    input_type = mo.ui.dropdown(
-        options=[
-            "String Processing",
-            "Number Manipulation",
-            "Data Validation"
-        ],
-        label="Choose Reusability Scenario"
-    )
-    return (input_type,)
-
-
-@app.cell
-def _(input_type, mo):
-    def generate_reusable_function(func_type):
-        if func_type == "String Processing":
-            return """
         def process_text(text):
             '''Reusable text processing function'''
             return text.strip().lower()
 
-        # Can be used in multiple contexts
-        username = process_text("  John Doe  ")
-        email = process_text("  Example@Email.com  ")
-            """
-        elif func_type == "Number Manipulation":
-            return """
-            def normalize_number(value, min_val=0, max_val=100):
-                '''Normalize a number to a specific range'''
-                return max(min_val, min(max_val, value))
+        def normalize_number(value, min_val=0, max_val=100):
+            '''Normalize a number to a specific range'''
+            return max(min_val, min(max_val, value))
 
-            # Consistent number handling across the application
-            age = normalize_number(150)  # Returns 100
-            temperature = normalize_number(-10, min_val=-20, max_val=50)
-            """
-        else:
-            return """
-            def validate_input(value, type_check=str, min_length=1):
-                '''Validate input based on type and minimum length'''
-                if not isinstance(value, type_check):
-                    return False
-                return len(str(value)) >= min_length
+        def validate_input(value, type_check=str, min_length=1):
+            '''Validate input based on type and minimum length'''
+            if not isinstance(value, type_check):
+                return False
+            return len(str(value)) >= min_length
 
-            # Reusable validation across different input types
-            valid_username = validate_input("john")
-            valid_age = validate_input(25, type_check=int)
-            """
+        # usage
+        return {
+            "Text Processing": {
+                "Example 1": process_text("  John Doe  "),
+                "Example 2": process_text("  Example@Email.com  ")
+            },
+            "Number Normalization": {
+                "Oversized Input": normalize_number(150),
+                "Negative Input": normalize_number(-10, min_val=-20, max_val=50)
+            },
+            "Input Validation": {
+                "Username Validation": validate_input("john"),
+                "Age Validation": validate_input(25, type_check=int)
+            }
+        }
 
-    reusable_code = generate_reusable_function(input_type.value)
-
-    mo.md(f"""
-    ## Reusability Example: {input_type.value}
-
-    ```python
-    {reusable_code}
-    ```
-    """)
-    return generate_reusable_function, reusable_code
+    # Run the reusable functions demonstration
+    reusable_function_examples = generate_reusable_functions()
+    reusable_function_examples
+    return generate_reusable_functions, reusable_function_examples
 
 
 @app.cell(hide_code=True)
@@ -256,13 +217,14 @@ def _(mo):
 
     Next Steps:
 
-    - Create your own custom modules
+    - Explore Python's standard library
 
-    - Experiment with different import strategies
+    - Practice different import strategies
 
     - Design reusable functions
 
     """)
+
     mo.callout(callout_text, kind="success")
     return (callout_text,)
 
