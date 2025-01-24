@@ -73,49 +73,40 @@ def _(mo):
 
 
 @app.cell
-def _(default_age):
-    default_age
-    return
-
-
-@app.cell
-def _(mo):
-    # Interactive function (default parameter demo)
-    default_age = mo.ui.number(value=18, start=0, stop=120, label="Default Age")
-    return (default_age,)
-
-
-@app.cell
-def _(default_age):
-    def create_profile(name, age=default_age.value):
+def _():
+    # Function with default parameter
+    def create_profile(name, age=18):
         return f"{name} is {age} years old"
 
+    # Example usage
     example_name = "Alex"
-    return create_profile, example_name
+    example_profile = create_profile(example_name)
+    example_profile
+    return create_profile, example_name, example_profile
 
 
 @app.cell
-def _(create_profile, example_name):
-    create_profile(example_name)
-    return
+def _():
+    # Show closure over values
+    base_multiplier = 2
+    def multiplier(x):
+        """
+        Create a function that multiplies input by a base value.
+
+        This demonstrates how functions can 'close over' 
+        values from their surrounding scope.
+        """
+        return x * base_multiplier
+
+    # Example of using the closure
+    sample_numbers = [1, 2, 3, 4, 5]
+    multiplied_numbers = [multiplier(num) for num in sample_numbers]
+    print(multiplied_numbers)
+    return base_multiplier, multiplied_numbers, multiplier, sample_numbers
 
 
 @app.cell
-def _(first_param, mo, second_param):
-    mo.hstack([first_param, second_param])
-    return
-
-
-@app.cell
-def _(mo):
-    # Multiple parameters interactive function demo
-    first_param = mo.ui.number(value=10, start=0, stop=100, label="First Number")
-    second_param = mo.ui.number(value=5, start=0, stop=100, label="Second Number")
-    return first_param, second_param
-
-
-@app.cell
-def _(first_param, second_param):
+def _():
     def calculate(a, b):
         """
         Perform multiple calculations on two numbers.
@@ -134,8 +125,11 @@ def _(first_param, second_param):
             "max": max(a, b)
         }
 
-    result = calculate(first_param.value, second_param.value)
-    return calculate, result
+    # Example usage with concrete values
+    first_number = 10
+    second_number = 5
+    result = calculate(first_number, second_number)
+    return calculate, first_number, result, second_number
 
 
 @app.cell(hide_code=True)
@@ -169,20 +163,7 @@ def _(mo):
 
 
 @app.cell
-def _(temperature):
-    temperature
-    return
-
-
-@app.cell
-def _(mo):
-    # Multiple return values and how they are captured
-    temperature = mo.ui.number(value=25, start=-50, stop=50, label="Temperature")
-    return (temperature,)
-
-
-@app.cell
-def _(temperature):
+def _():
     def weather_analysis(temp):
         """
         Analyze weather based on temperature.
@@ -202,17 +183,25 @@ def _(temperature):
         else:
             return "Hot", "Stay hydrated", "High"
 
-    analysis = weather_analysis(temperature.value)
-    return analysis, weather_analysis
+    # Example temperature analysis
+    temperature = 25
+    status, recommendation, warning_level = weather_analysis(temperature)
+    return (
+        recommendation,
+        status,
+        temperature,
+        warning_level,
+        weather_analysis,
+    )
 
 
 @app.cell(hide_code=True)
-def _(mo, weather_analysis):
+def _(mo, recommendation, status, warning_level):
     mo.md(f"""
-    ## Multiple Return Demonstration
+    ## Function Results
 
-    Current Temperature Analysis:
-    {weather_analysis(25)}
+    Calculation Results:
+    {status}, {recommendation}, {warning_level}
     """)
     return
 
