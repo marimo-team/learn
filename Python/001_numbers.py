@@ -7,14 +7,8 @@
 
 import marimo
 
-__generated_with = "0.10.14"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
@@ -23,9 +17,10 @@ def _(mo):
         """
         # 🔢 Numbers in Python
 
-        Let's explore how Python handles numbers and mathematical operations! 
+        This tutorial provides a brief overview of working with numbers.
 
         ## Number Types
+
         Python has several types of numbers:
 
         ```python
@@ -104,11 +99,11 @@ def _(number):
 
 @app.cell
 def _(number):
-    number ** 2  # Exponentiation
+    number**2  # Exponentiation
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -134,7 +129,7 @@ def _(decimal_number):
 
 @app.cell
 def _(number):
-    float(number)  # Convert to float
+    float(number)  # Convert to "float" or decimal
     return
 
 
@@ -179,49 +174,72 @@ def _(mo):
         """
         ## Advanced Math Operations
 
-        For more complex mathematical operations, Python's `math` module is your friend:
-
-        ```python
-        import math
-
-        # Square root
-        math.sqrt(16)    # 4.0
-
-        # Trigonometry
-        math.sin(math.pi/2)  # 1.0
-        math.cos(0)      # 1.0
-
-        # Constants
-        math.pi          # 3.141592653589793
-        math.e           # 2.718281828459045
-
-        # Logarithms
-        math.log10(100)  # 2.0
-        math.log(math.e) # 1.0
-        ```
+        For more complex mathematical operations, use Python's [math module](https://docs.python.org/3/library/math.html).
         """
     )
     return
 
 
+@app.cell
+def _():
+    import math
+    return (math,)
+
+
+@app.cell
+def _(math):
+    math.sqrt(16)
+    return
+
+
+@app.cell
+def _(math):
+    math.sin(math.pi/2)
+    return
+
+
+@app.cell
+def _(math):
+    math.cos(0)
+    return
+
+
+@app.cell
+def _(math):
+    math.pi, math.e
+    return
+
+
+@app.cell
+def _(math):
+    math.log10(100)
+    return
+
+
+@app.cell
+def _(math):
+    math.log(math.e)
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
-    callout_text = mo.md("""
-    ## Master the Numbers!
-
-    Next Steps:
+    mo.md("""
+    ## Next Steps:
 
     - Practice different mathematical operations
-
     - Experiment with type conversions
-
     - Try out the math module functions
 
     Keep calculating! 🧮✨
     """)
+    return
 
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

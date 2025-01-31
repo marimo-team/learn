@@ -7,14 +7,8 @@
 
 import marimo
 
-__generated_with = "0.10.14"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
@@ -47,7 +41,7 @@ def _():
         "type": "programming language",
         "year": 1991,
         "creator": "Guido van Rossum",
-        "is_awesome": True
+        "is_awesome": True,
     }
     return (sample_dict,)
 
@@ -71,6 +65,8 @@ def _(sample_dict):
     def access_dict():
         print(f"Name: {sample_dict['name']}")
         print(f"Year: {sample_dict['year']}")
+
+
     access_dict()
     return (access_dict,)
 
@@ -81,17 +77,21 @@ def _(sample_dict):
     def safe_access():
         print(f"Version: {sample_dict.get('version', 'Not specified')}")
         print(f"Type: {sample_dict.get('type', 'Unknown')}")
+
+
     safe_access()
     return (safe_access,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(
+        """
         ## Dictionary Methods
 
         Python dictionaries come with powerful built-in methods:
-        """)
+        """
+    )
     return
 
 
@@ -102,6 +102,8 @@ def _(sample_dict):
         print("Keys:", list(sample_dict.keys()))
         print("Values:", list(sample_dict.values()))
         print("Items:", list(sample_dict.items()))
+
+
     view_components()
     return (view_components,)
 
@@ -120,17 +122,21 @@ def _():
         # Removing
         _removed = _dict.pop("b")
         print(f"Removed {_removed}, Now:", _dict)
+
+
     demonstrate_modification()
     return (demonstrate_modification,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(
+        """
         ## Dictionary Comprehension
 
         Create dictionaries efficiently with dictionary comprehensions:
-        """)
+        """
+    )
     return
 
 
@@ -145,17 +151,21 @@ def _():
         # Filtered dictionary
         _even_squares = {x: x**2 for x in range(5) if x % 2 == 0}
         print("Even squares:", _even_squares)
+
+
     demonstrate_comprehension()
     return (demonstrate_comprehension,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(
+        """
         ## Nested Dictionaries
 
         Dictionaries can contain other dictionaries, creating complex data structures:
-        """)
+        """
+    )
     return
 
 
@@ -166,13 +176,13 @@ def _():
             "alice": {
                 "age": 25,
                 "email": "alice@example.com",
-                "interests": ["python", "data science"]
+                "interests": ["python", "data science"],
             },
             "bob": {
                 "age": 30,
                 "email": "bob@example.com",
-                "interests": ["web dev", "gaming"]
-            }
+                "interests": ["web dev", "gaming"],
+            },
         }
     }
     return (nested_data,)
@@ -196,14 +206,22 @@ def _(nested_data):
             return _current
 
         print("\nSafe access example:")
-        print("Charlie's age:", _get_nested(nested_data, "users", "charlie", "age", default="Not found"))
+        print(
+            "Charlie's age:",
+            _get_nested(
+                nested_data, "users", "charlie", "age", default="Not found"
+            ),
+        )
+
+
     access_nested()
     return (access_nested,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(
+        """
         ## Common Dictionary Patterns
 
         Here are some useful patterns when working with dictionaries:
@@ -227,7 +245,8 @@ def _(mo):
                 cache[arg] = compute_result(arg)
             return cache[arg]
         ```
-        """)
+        """
+    )
     return
 
 
@@ -248,6 +267,12 @@ def _(mo):
 
     mo.callout(callout_text, kind="success")
     return (callout_text,)
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

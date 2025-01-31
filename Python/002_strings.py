@@ -7,221 +7,254 @@
 
 import marimo
 
-__generated_with = "0.10.14"
-app = marimo.App()
+__generated_with = "0.10.19"
+app = marimo.App(width="medium")
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        # 🎭 Strings
+
+        This notebook introduces **strings**, which are containers for text.
+
+        ## Creating strings
+        Create strings by wrapping text in quotes:
+
+        ```python
+        # Use double quotes
+        greeting = "Hello, Python!"
+
+        # or single quotes
+        name = 'Alice'
+
+        # or triple quotes
+        multiline_string = \"""
+        Dear, Alice,
+        Nice to meet you.
+        Sincerely,
+        Bob.
+        \"""
+        ```
+
+        Below is an example string.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    text = "Python is amazing!"
+    text
+    return (text,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Essential string operations
+
+        Here are some methods for working with strings.
+
+        Tip: Try changing the value of `text` above, and watch how the
+        computed values below change.
+        """
+    )
+    return
+
+
+@app.cell
+def _(text):
+    # the `len` method returns the number of characters in the string.
+    len(text)
+    return
+
+
+@app.cell
+def _(text):
+    text.upper()
+    return
+
+
+@app.cell
+def _(text):
+    text.lower()
+    return
+
+
+@app.cell
+def _(text):
+    text.title()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""Use string methods and the `in` operator to find things in strings.""")
+    return
+
+
+@app.cell
+def _(text):
+    # Returns the index of "is" in the string
+    text.find("is")
+    return
+
+
+@app.cell
+def _(text):
+    "Python" in text
+    return
+
+
+@app.cell
+def _(text):
+    "Javascript" in text
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Inserting values in strings
+
+        Modern Python uses f-strings to insert values into strings. For example,
+        check out how the next cell greets you (and notice the `f''''`)!
+
+        **Try it!** Enter your name in `my_name` below, then run the cell.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    my_name = ""
+    return (my_name,)
+
+
+@app.cell
+def _(my_name):
+    f"Hello, {my_name}!"
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Working with Parts of Strings
+        You can access any part of a string using its position (index):
+        """
+    )
+    return
+
+
+@app.cell
+def _(text):
+    first_letter = text[0]
+    first_letter
+    return (first_letter,)
+
+
+@app.cell
+def _(text):
+    last_letter = text[-1]
+    last_letter
+    return (last_letter,)
+
+
+@app.cell
+def _(text):
+    first_three = text[0:3]
+    first_three
+    return (first_three,)
+
+
+@app.cell
+def _(text):
+    last_two = text[-2:]
+    last_two
+    return (last_two,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Other helpful string methods
+
+        Finally, here are some other helpful string methods. Feel free to try them out on your own strings by modifying the value of `sentence` below.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    sentence = "  python is fun  "
+    sentence
+    return (sentence,)
+
+
+@app.cell
+def _(sentence):
+    # Remove extra spaces
+    sentence.strip()
+    return
+
+
+@app.cell
+def _(sentence):
+    # Split into a list of words
+    sentence.split()
+    return
+
+
+@app.cell
+def _(sentence):
+    sentence.replace("fun", "awesome")
+    return
+
+
+@app.cell
+def _():
+    "123".isdigit(), "abc".isdigit()
+    return
+
+
+@app.cell
+def _():
+    "123".isalpha(), "abc".isalpha()
+    return
+
+
+@app.cell
+def _():
+    "Python3".isalnum()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Next steps
+
+        For a full primer on strings, check out the [official documentation](https://docs.python.org/3/library/string.html).
+        """
+    )
+    return
 
 
 @app.cell
 def _():
     import marimo as mo
     return (mo,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        # 🔢 Numbers in Python
-
-        Let's explore how Python handles numbers and mathematical operations! 
-
-        ## Number Types
-        Python has several types of numbers:
-
-        ```python
-        integer = 42          # whole numbers (int)
-        decimal = 3.14        # floating-point numbers (float)
-        complex_num = 2 + 3j  # complex numbers
-        ```
-
-        Below is an example number we'll use to explore operations.
-        """
-    )
-    return
-
-
-@app.cell
-def _():
-    number = 42
-    return (number,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ## Basic Mathematical Operations
-
-        Python supports all standard mathematical operations.
-
-        Try changing the value of `number` above and watch how the results change.
-        """
-    )
-    return
-
-
-@app.cell
-def _(number):
-    number + 10  # Addition
-    return
-
-
-@app.cell
-def _(number):
-    number - 5  # Subtraction
-    return
-
-
-@app.cell
-def _(number):
-    number * 3  # Multiplication
-    return
-
-
-@app.cell
-def _(number):
-    number / 2  # Division (always returns float)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""Python also has special division operators and power operations.""")
-    return
-
-
-@app.cell
-def _(number):
-    number // 5  # Floor division (rounds down)
-    return
-
-
-@app.cell
-def _(number):
-    number % 5  # Modulus (remainder)
-    return
-
-
-@app.cell
-def _(number):
-    number ** 2  # Exponentiation
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(
-        """
-        ## Type Conversion
-
-        You can convert between different number types. Try changing these values!
-        """
-    )
-    return
-
-
-@app.cell
-def _():
-    decimal_number = 3.14
-    return (decimal_number,)
-
-
-@app.cell
-def _(decimal_number):
-    int(decimal_number)  # Convert to integer (truncates decimal part)
-    return
-
-
-@app.cell
-def _(number):
-    float(number)  # Convert to float
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ## Built-in Math Functions
-        Python provides many useful built-in functions for working with numbers:
-        """
-    )
-    return
-
-
-@app.cell
-def _(number):
-    abs(-number)  # Absolute value
-    return
-
-
-@app.cell
-def _():
-    round(3.14159, 2)  # Round to 2 decimal places
-    return
-
-
-@app.cell
-def _():
-    max(1, 5, 3, 7, 2)  # Find maximum value
-    return
-
-
-@app.cell
-def _():
-    min(1, 5, 3, 7, 2)  # Find minimum value
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ## Advanced Math Operations
-
-        For more complex mathematical operations, Python's `math` module is your friend:
-
-        ```python
-        import math
-
-        # Square root
-        math.sqrt(16)    # 4.0
-
-        # Trigonometry
-        math.sin(math.pi/2)  # 1.0
-        math.cos(0)      # 1.0
-
-        # Constants
-        math.pi          # 3.141592653589793
-        math.e           # 2.718281828459045
-
-        # Logarithms
-        math.log10(100)  # 2.0
-        math.log(math.e) # 1.0
-        ```
-        """
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    callout_text = mo.md("""
-    ## Master the Numbers!
-
-    Next Steps:
-
-    - Practice different mathematical operations
-
-    - Experiment with type conversions
-
-    - Try out the math module functions
-
-    Keep calculating! 🧮✨
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
 
 
 if __name__ == "__main__":
