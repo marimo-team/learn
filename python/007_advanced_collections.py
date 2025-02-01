@@ -15,7 +15,7 @@ app = marimo.App()
 def _(mo):
     mo.md(
         """
-        # 🔄 Advanced Collections
+        # 🔄 Advanced collections
 
         This tutorials hows advanced patterns for working with collections.
 
@@ -66,7 +66,7 @@ def _(users_data):
 def _(mo):
     mo.md(
         """
-        ## Nested Data Structures
+        ## Nested data structures
 
         Python collections can be nested in various ways to represent complex data:
         """

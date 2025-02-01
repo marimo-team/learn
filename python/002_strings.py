@@ -147,7 +147,7 @@ def _(my_name):
 def _(mo):
     mo.md(
         """
-        ## Working with Parts of Strings
+        ## Working with parts of strings
         You can access any part of a string using its position (index):
         """
     )

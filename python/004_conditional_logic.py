@@ -15,7 +15,7 @@ app = marimo.App()
 def _(mo):
     mo.md(
         """
-        # 🔄 Conditional Logic in Python
+        # 🔄 Conditional logic
 
         This tutorial teaches you how to how to make **decisions** in your code, using
         Python's conditional statements.
@@ -80,7 +80,7 @@ def _(mo, number):
 def _(mo):
     mo.md(
         r"""
-        ### Interactive Decision Making
+        ### Interactive decision making
         **Try it!** Try changing the conditions below and see how the results change:
         """
     )
@@ -125,7 +125,7 @@ def _(mo, threshold, value):
 def _(mo):
     mo.md(
         r"""
-        ## Boolean Operations
+        ## Boolean operations
         Python uses boolean operators to combine conditions:
 
         - `and`: Both conditions must be True
@@ -167,7 +167,7 @@ def _(age, has_id, mo):
     can_vote = age.value >= 18 and has_id.value
 
     explanation = f"""
-    ### Voting Eligibility Check
+    ### Voting eligibility check
 
     Current Status:
 
@@ -210,7 +210,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Complex Conditions
+        ## Complex conditions
         Combine multiple conditions for more sophisticated logic:
         ```python
         # Multiple conditions
@@ -267,7 +267,7 @@ def _(humidity, mo, temp, wind):
     conditions = get_weather_advice()
 
     message = f"""
-    ### Weather Analysis
+    ### Weather analysis
 
     Current Conditions:
 

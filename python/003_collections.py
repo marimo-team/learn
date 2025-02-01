@@ -44,7 +44,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## List Operations
+        ## List operations
 
         Here are common operations you can perform on lists.
 
@@ -190,7 +190,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Collection Methods and Operations
+        ## Collection methods and operations
 
         Here are some common operations across collections:
 

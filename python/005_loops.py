@@ -15,7 +15,7 @@ app = marimo.App()
 def _(mo):
     mo.md(
         """
-        # 🔄 Loops in Python
+        # 🔄 Loops
 
         Let's learn how Python helps us repeat tasks efficiently with loops.
 

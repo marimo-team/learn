@@ -15,7 +15,7 @@ app = marimo.App()
 def _(mo):
     mo.md(
         """
-        # 🔢 Numbers in Python
+        # 🔢 Numbers
 
         This tutorial provides a brief overview of working with numbers.
 
@@ -45,7 +45,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Basic Mathematical Operations
+        ## Basic mathematical operations
 
         Python supports all standard mathematical operations.
 
@@ -107,7 +107,7 @@ def _(number):
 def _(mo):
     mo.md(
         """
-        ## Type Conversion
+        ## Type conversion
 
         You can convert between different number types. Try changing these values!
         """
@@ -137,7 +137,7 @@ def _(number):
 def _(mo):
     mo.md(
         """
-        ## Built-in Math Functions
+        ## Built-in math functions
         Python provides many useful built-in functions for working with numbers:
         """
     )
@@ -172,7 +172,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Advanced Math Operations
+        ## Advanced operations
 
         For more complex mathematical operations, use Python's [math module](https://docs.python.org/3/library/math.html).
         """
@@ -225,7 +225,7 @@ def _(math):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ## Next Steps:
+    ## Next steps:
 
     - Practice different mathematical operations
     - Experiment with type conversions
