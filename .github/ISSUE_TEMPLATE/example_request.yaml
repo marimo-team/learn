@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/github-issue-forms.json
+name: '🚀 Course or notebook proposal'
+description: Request a course or notebook
+type: Example
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Let us know what you'd like to see added!
+  - type: textarea
+    id: example-description
+    attributes:
+      label: Description
+      description: 'Description of the notebook or course to add. Please make the reason and usecases as detailed as possible. If you intend to submit a PR for this issue, tell us in the description. Thanks!'
+      placeholder: I would like a notebook or course on ...
+    validations:
+      required: true
