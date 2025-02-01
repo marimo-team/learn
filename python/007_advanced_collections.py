@@ -7,27 +7,22 @@
 
 import marimo
 
-__generated_with = "0.10.14"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        # 🔄 Advanced Collections in Python
+        # 🔄 Advanced collections
 
-        Let's dive deep into advanced collection handling in Python! 
+        This tutorials hows advanced patterns for working with collections.
 
-        ## Lists of Dictionaries
-        A common pattern in data handling is working with lists of dictionaries - 
-        perfect for representing structured data like records or entries.
+        ## Lists of dictionaries
+
+        A common pattern in data handling is working with lists of dictionaries:
+        this is helpful for representing structured data like records or entries.
         """
     )
     return
@@ -48,10 +43,10 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Working with Lists of Dictionaries
-
         Let's explore common operations on structured data.
-        Try modifying the `users_data` above and see how the results change!
+
+        **Try it!** Try modifying the `users_data` above and see how the results
+        change!
         """
     )
     return
@@ -60,18 +55,22 @@ def _(mo):
 @app.cell
 def _(users_data):
     # Finding users with specific skills
-    python_users = [user["name"] for user in users_data if "Python" in user["skills"]]
+    python_users = [
+        user["name"] for user in users_data if "Python" in user["skills"]
+    ]
     print("Python developers:", python_users)
     return (python_users,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
-        ## Nested Data Structures
+    mo.md(
+        """
+        ## Nested data structures
 
         Python collections can be nested in various ways to represent complex data:
-        """)
+        """
+    )
     return
 
 
@@ -110,11 +109,13 @@ def _(project_data):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
-        ## Data Transformation
+    mo.md(
+        """
+        ### Example: data transformation
 
         Let's explore how to transform and reshape collection data:
-        """)
+        """
+    )
     return
 
 
@@ -148,10 +149,11 @@ def _(sales_data):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
-        ## Collection Utilities
+    mo.md(
+        """
+        ## More collection utilities
 
-        Python's collections module provides specialized container datatypes:
+        Python's `collections` module provides specialized container datatypes:
 
         ```python
         from collections import defaultdict, Counter, deque
@@ -169,7 +171,8 @@ def _(mo):
         history = deque(maxlen=10)  # Only keeps last 10 items
         history.append(item)
         ```
-        """)
+        """
+    )
     return
 
 
@@ -191,20 +194,21 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    callout_text = mo.md("""
-    ## Level Up Your Collections!
+    mo.md(
+        """
+        ## Next steps
 
-    Next Steps:
+        For a reference on the `collections` module, see [the official Python 
+        docs](https://docs.python.org/3/library/collections.html).
+        """
+    )
+    return
 
-    - Practice transforming complex data structures
-    - Experiment with different collection types
-    - Try combining multiple data structures
 
-    Keep organizing! 📊✨
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

@@ -7,23 +7,17 @@
 
 import marimo
 
-__generated_with = "0.10.14"
-app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
+__generated_with = "0.10.19"
+app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        # 📦 Collections in Python
+        # 📦 Collections
 
-        Explore Python's built-in collection types — the essential data structures! 
+        A "collection" is a type of variable that holds multiple values.
 
         ## Lists
         Lists are ordered, mutable sequences. Create them using square brackets:
@@ -31,7 +25,7 @@ def _(mo):
         ```python
         fruits = ["apple", "banana", "orange"]
         numbers = [1, 2, 3, 4, 5]
-        mixed = [1, "hello", 3.14, True]  # Can contain different types
+        mixed = [1, "hello", 3.14, True]
         ```
 
         Below is an example list we'll use to explore operations.
@@ -50,7 +44,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## List Operations
+        ## List operations
 
         Here are common operations you can perform on lists.
 
@@ -68,7 +62,7 @@ def _(sample_list):
 
 @app.cell
 def _(sample_list):
-    extended_list = sample_list + [6] # concatenate two lists
+    extended_list = sample_list + [6]  # Concatenate two lists
     extended_list
     return (extended_list,)
 
@@ -122,7 +116,6 @@ def _():
     tuple2 = (4, 5, 6)
 
     tuple3 = tuple1 + tuple2
-
     tuple3
     return tuple1, tuple2, tuple3
 
@@ -141,11 +134,7 @@ def _(mo):
 
 @app.cell
 def _():
-    person = {
-        "name": "John Doe",
-        "age": 25,
-        "city": "New York"
-    }
+    person = {"name": "John Doe", "age": 25, "city": "New York"}
     return (person,)
 
 
@@ -187,24 +176,21 @@ def _():
 
 @app.cell
 def _(numbers_set):
-    numbers_set.add(4)  # Add new element
-    numbers_set
+    numbers_set | {4}  # Add a new element
     return
 
 
 @app.cell
 def _():
-    set1 = {1, 2, 3}
-    set2 = {3, 4, 5}
-    set1.intersection(set2)  # Find common elements
-    return set1, set2
+    {1, 2, 3} & {3, 4, 5}  # Find common elements
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## Collection Methods and Operations
+        ## Collection methods and operations
 
         Here are some common operations across collections:
 
@@ -234,20 +220,20 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    callout_text = mo.md("""
-    ## Collection Mastery Awaits!
+    mo.md(
+        r"""
+        ## Documentation
 
-    Next Steps:
+        See the official [Python tutorial on data structures](https://docs.python.org/3/tutorial/datastructures.html) for more in-depth information.
+        """
+    )
+    return
 
-    - Practice list and dictionary comprehensions
-    - Experiment with nested collections
-    - Try combining different collection types
 
-    Keep organizing data! 🗃️✨
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

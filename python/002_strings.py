@@ -7,14 +7,8 @@
 
 import marimo
 
-__generated_with = "0.10.12"
-app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
+__generated_with = "0.10.19"
+app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
@@ -23,15 +17,25 @@ def _(mo):
         """
         # 🎭 Strings
 
-        Dive into the world of Python strings — where text comes to life! 
+        This notebook introduces **strings**, which are containers for text.
 
         ## Creating strings
-        In Python, strings are containers for text. You can create them in two simple
-        ways:
+        Create strings by wrapping text in quotes:
 
         ```python
-        greeting = "Hello, Python!"  # using double quotes
-        name = 'Alice'               # using single quotes
+        # Use double quotes
+        greeting = "Hello, Python!"
+
+        # or single quotes
+        name = 'Alice'
+
+        # or triple quotes
+        multiline_string = \"""
+        Dear, Alice,
+        Nice to meet you.
+        Sincerely,
+        Bob.
+        \"""
         ```
 
         Below is an example string.
@@ -42,7 +46,8 @@ def _(mo):
 
 @app.cell
 def _():
-    text = "Python is amazing"
+    text = "Python is amazing!"
+    text
     return (text,)
 
 
@@ -63,6 +68,7 @@ def _(mo):
 
 @app.cell
 def _(text):
+    # the `len` method returns the number of characters in the string.
     len(text)
     return
 
@@ -93,7 +99,8 @@ def _(mo):
 
 @app.cell
 def _(text):
-    text.find('is')
+    # Returns the index of "is" in the string
+    text.find("is")
     return
 
 
@@ -109,7 +116,7 @@ def _(text):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -118,7 +125,7 @@ def _(mo):
         Modern Python uses f-strings to insert values into strings. For example,
         check out how the next cell greets you (and notice the `f''''`)!
 
-        Try changing the value of `my_name`, and watch how the greeting changes.
+        **Try it!** Enter your name in `my_name` below, then run the cell.
         """
     )
     return
@@ -126,7 +133,7 @@ def _(mo):
 
 @app.cell
 def _():
-    my_name = ''
+    my_name = ""
     return (my_name,)
 
 
@@ -140,7 +147,7 @@ def _(my_name):
 def _(mo):
     mo.md(
         """
-        ## Working with Parts of Strings
+        ## Working with parts of strings
         You can access any part of a string using its position (index):
         """
     )
@@ -181,48 +188,73 @@ def _(mo):
         """
         ## Other helpful string methods
 
-        Finally, here are some other helpful string methods. Feel free to try them out on your own strings!
-
-        ```python
-        sentence = "  python is fun  "
-
-        # Remove extra spaces
-        print(sentence.strip())        # "python is fun"
-
-        # Split into a list of words
-        print(sentence.split())        # ['python', 'is', 'fun']
-
-        # Replace words
-        print(sentence.replace('fun', 'awesome'))
-
-        # Check what kind of text you have
-        print("123".isdigit())        # True - only numbers?
-        print("abc".isalpha())        # True - only letters?
-        print("Python3".isalnum())    # True - letters or numbers?
-        ```
+        Finally, here are some other helpful string methods. Feel free to try them out on your own strings by modifying the value of `sentence` below.
         """
     )
     return
 
 
+@app.cell
+def _():
+    sentence = "  python is fun  "
+    sentence
+    return (sentence,)
+
+
+@app.cell
+def _(sentence):
+    # Remove extra spaces
+    sentence.strip()
+    return
+
+
+@app.cell
+def _(sentence):
+    # Split into a list of words
+    sentence.split()
+    return
+
+
+@app.cell
+def _(sentence):
+    sentence.replace("fun", "awesome")
+    return
+
+
+@app.cell
+def _():
+    "123".isdigit(), "abc".isdigit()
+    return
+
+
+@app.cell
+def _():
+    "123".isalpha(), "abc".isalpha()
+    return
+
+
+@app.cell
+def _():
+    "Python3".isalnum()
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
-    callout_text = mo.md("""
-    ## Your String Journey Begins!
+    mo.md(
+        r"""
+        ## Next steps
 
-    Next Steps:
+        For a full primer on strings, check out the [official documentation](https://docs.python.org/3/library/string.html).
+        """
+    )
+    return
 
-    - Try combining different string methods
 
-    - Practice with f-strings
-
-    - Experiment with string slicing
-
-    You're doing great! 🐍✨
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":
