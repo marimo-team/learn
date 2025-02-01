@@ -6,7 +6,7 @@
   <em>A curated collection of educational <a href="https://github.com/marimo-team/marimo">marimo</a> notebooks</em>.
 </p>
 
-# Learn
+# 📚 Learn
 
 This repository contains a curated collection of educational
 [marimo](https://github.com/marimo-team/marimo) notebooks. These notebooks,
@@ -24,21 +24,21 @@ notebooks for educators, students, and practitioners.
 
 **Coming soon.** 
 
-- 🎲 probability
-- 📏 linear algebra
-- ❄️  polars
-- 🔥 pytorch
+- 🎲 Probability
+- 📏 Linear algebra
+- ❄️ Polars
+- 🔥 Pytorch
 
-_If you'd like to contribute, please reach out!_
+_We're seeking contributions! If you'd like to contribute, please [reach out](https://github.com/marimo-team/learn/issues/new?template=example_request.yaml)._
 
 ## Adding notebooks
 
 We welcome community contributions of notebooks and entire courses (folders of
 notebooks on a single topic).
 
-To get started, please start by opening an issue and proposing the notebook
+To get started, please start by [opening an issue](https://github.com/marimo-team/learn/issues/new?template=example_request.yaml) and proposing the notebook
 or course you'd like to contribute. Once your proposal is accepted, draft
-your notebook and submit it for review. We hold learn notebooks to a high
+your notebook and submit it for review as a pull request. We hold learn notebooks to a high
 standard, and we may go through a few rounds of reviews before your notebook
 is merged.
 
@@ -50,7 +50,7 @@ Here's a contribution checklist:
 - [ ] Keep language direct and simple.
 
 If you aren't comfortable adding a new notebook or course, you can also request
-what you'd like to see by filing an issue.
+what you'd like to see by [filing an issue](https://github.com/marimo-team/learn/issues/new?template=example_request.yaml).
 
 ## Community
 
