@@ -7,44 +7,78 @@
 
 import marimo
 
-__generated_with = "0.10.16"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        # 🛡️ Error Management in Python
+        # 🛡️ Handling errors
 
-        Welcome to the world of Python error handling - where bugs become learning opportunities! 
-
-        ## Why Error Handling Matters
-        Imagine your code as a superhero navigating through the treacherous landscape of potential problems. 
-        Error handling is like your hero's shield, protecting your program from unexpected challenges.
-
-        ```python
-        # Without error handling
-        result = 10 / 0  # 💥 Boom! Unhandled ZeroDivisionError
-
-        # With error handling
-        try:
-            result = 10 / 0
-        except ZeroDivisionError:
-            result = "Oops! Can't divide by zero 🛑"
-        ```
+        Sometimes things go wrong in programs. When that happens, Python raises `exceptions` to tell you what went amiss. For example, maybe you divided by 0:
         """
     )
     return
 
 
 @app.cell
+def _():
+    1 / 0
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        That's a lot of red! The outputs above are Python telling you that
+        something went wrong — in this case, we tried dividing a number by 0.
+
+        Python provides tools to catch and handle exceptions: the `try/except`
+        block. This is demonstrated in the next couple cells.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    # Try changing the value of divisor below, and see how the output changes.
+    divisor = 0
+    return (divisor,)
+
+
+@app.cell
+def _(divisor):
+    try:
+        print(1 / divisor)
+    except ZeroDivisionError as e:
+        print("Something went wrong!", e)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        Python has many types of Exceptions besides `ZeroDivisionError`. If you
+        don't know what kind of exception you're handling, catch the generic
+        `Exception` type:
+
+        ```python
+        try:
+            ...
+        except Exception:
+            ...
+        ```
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
 def _(error_types):
     error_types
     return
@@ -54,6 +88,7 @@ def _(error_types):
 def _(mo):
     # Choose error type
     error_types = mo.ui.dropdown(
+        value="ZeroDivisionError",
         options=[
             "ZeroDivisionError", 
             "TypeError", 
@@ -61,7 +96,7 @@ def _(mo):
             "IndexError", 
             "KeyError"
         ],
-        label="Select an Error Type to Explore"
+        label="Learn about ..."
     )
     return (error_types,)
 
@@ -122,58 +157,12 @@ def _(error_types, mo):
     return (error_explanations,)
 
 
-@app.cell
-def _(division_input, divisor_input, mo):
-    mo.hstack([division_input, divisor_input])
-    return
-
-
 @app.cell(hide_code=True)
 def _(mo):
-    # Try-Except work help
-    division_input = mo.ui.number(
-        value=10, 
-        label="Number to Divide", 
-        start=-100, 
-        stop=100
-    )
-    divisor_input = mo.ui.number(
-        value=0, 
-        label="Divisor", 
-        start=-100, 
-        stop=100
-    )
-    return division_input, divisor_input
-
-
-@app.cell
-def _(division_input, divisor_input, mo):
-    # Safe division function with appropriate error handling
-    def safe_divide(numerator, denominator):
-        try:
-            _result = numerator / denominator
-            return f"Result: {_result}"
-        except ZeroDivisionError:
-            return "🚫 Cannot divide by zero!"
-        except Exception as e:
-            return f"Unexpected error: {e}"
-
-    # Display result with explanation
-    _result = safe_divide(division_input.value, divisor_input.value)
-
-    mo.hstack([
-        mo.md(f"**Division**: {division_input.value} ÷ {divisor_input.value}"),
-        mo.md(f"**Result**: {_result}")
-    ])
-    return (safe_divide,)
-
-
-@app.cell
-def _(mo):
-    # Multiple Exception Handling
     mo.md(
         """
-        ## Multiple Exception Handling
+        ## Handling multiple exception types
+        
         Catch and handle different types of errors specifically:
 
         ```python
@@ -188,64 +177,28 @@ def _(mo):
                 return "No division by zero!"
             except ValueError:
                 return "Conversion error!"
+            finally:
+                # The `finally` block always runs, regardless if there
+                # was an error or not
+                ...
+                
         ```
         """
     )
     return
 
 
-@app.cell
-def _(error_chain_input):
-    error_chain_input
-    return
-
-
-@app.cell
-def _(mo):
-    # Try it out
-    error_chain_input = mo.ui.text(
-        label="Try to break the code",
-        placeholder="Enter something tricky..."
-    )
-    return (error_chain_input,)
-
-
-@app.cell
-def _(error_chain_input, mo):
-    # Error chain demonstration
-    def tricky_function(input_str):
-        try:
-            # Simulating a error scenario
-            number = int(input_str)
-            result = 100 / number
-            return f"Success! Result: {result}"
-        except ValueError:
-            return "❌ Could not convert to number"
-        except ZeroDivisionError:
-            return "❌ Cannot divide by zero"
-        except Exception as e:
-            return f"🤯 Unexpected error: {type(e).__name__}"
-
-    result = tricky_function(error_chain_input.value)
-
-    mo.hstack([
-        mo.md(f"**Input**: {error_chain_input.value}"),
-        mo.md(f"**Result**: {result}")
-    ])
-    return result, tricky_function
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _(finally_input):
     finally_input
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     # Finally Block Demonstration
     finally_input = mo.ui.switch(
-        label="Simulate Resource Management",
+        label="Throw an error?",
         value=True
     )
     return (finally_input,)
@@ -256,7 +209,7 @@ def _(finally_input, mo):
     def simulate_resource_management():
         try:
             # Simulating a resource-intensive operation
-            if finally_input.value:
+            if not finally_input.value:
                 return "🟢 Resource processing successful"
             else:
                 raise Exception("Simulated failure")
@@ -265,12 +218,13 @@ def _(finally_input, mo):
         finally:
             return "📦 Resource cleanup completed"
 
+
     _result = simulate_resource_management()
 
     mo.md(f"""
-    ### Resource Management Simulation
+    ### Example: the finally clause
 
-    **Scenario**: {'Normal operation' if finally_input.value else 'Error scenario'}
+    **Scenario**: {"Normal operation" if not finally_input.value else "An exception was raised"}
 
     **Result**: {_result}
 
@@ -279,22 +233,10 @@ def _(finally_input, mo):
     return (simulate_resource_management,)
 
 
-@app.cell(hide_code=True)
-def _(mo):
-    callout_text = mo.md("""
-    ## Your Error Handling Journey Continues!
-
-    Next Steps:
-
-    - Practice creating custom exceptions
-    - Explore context managers
-    - Build robust error-handling strategies
-
-    You're becoming a Python error-handling ninja! 🥷🐍
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

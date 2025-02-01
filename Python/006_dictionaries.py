@@ -15,17 +15,17 @@ app = marimo.App()
 def _(mo):
     mo.md(
         """
-        # 📚 Python Dictionaries
+        # 📚 Dictionaries
 
-        Welcome to the world of Python dictionaries — where data gets organized with keys! 
+        Dictionaries are collections of key-value pairs, with each key associated with a value. The keys are unique, meaning they show up only once.
 
-        ## Creating Dictionaries
-        Dictionaries are collections of key-value pairs. Here's how to create them:
+        ## Creating dictionaries
+        Here are a few ways to create dictionaries:
 
         ```python
-        simple_dict = {"name": "Alice", "age": 25}  # direct creation
-        empty_dict = dict()                         # empty dictionary
-        from_pairs = dict([("a", 1), ("b", 2)])    # from key-value pairs
+        simple_dict = {"name": "Alice", "age": 25}
+        empty_dict = dict()
+        from_pairs = dict([("a", 1), ("b", 2)])
         ```
 
         Below is a sample dictionary we'll use to explore operations.
@@ -50,10 +50,23 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Basic Dictionary Operations
+        ## Operations
 
         Let's explore how to work with dictionaries.
-        Try modifying the `sample_dict` above and watch how the results change!
+
+        **Try it!** Try modifying the `sample_dict` above and watch how the results change!
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### Accessing values by key
+
+        Access values by key using square brackets, like below
         """
     )
     return
@@ -61,35 +74,29 @@ def _(mo):
 
 @app.cell
 def _(sample_dict):
-    # Accessing values of the dictionary
-    def access_dict():
-        print(f"Name: {sample_dict['name']}")
-        print(f"Year: {sample_dict['year']}")
+    sample_dict['name'], sample_dict['year']
+    return
 
 
-    access_dict()
-    return (access_dict,)
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""If you're not sure if a dictionary has a given key, use `get()`:""")
+    return
 
 
 @app.cell
 def _(sample_dict):
-    # Safe access with get()
-    def safe_access():
-        print(f"Version: {sample_dict.get('version', 'Not specified')}")
-        print(f"Type: {sample_dict.get('type', 'Unknown')}")
-
-
-    safe_access()
-    return (safe_access,)
+    sample_dict.get("version", "Not specified"), sample_dict.get("type", "Unknown")
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## Dictionary Methods
+        ## Enumerating dictionary contents
 
-        Python dictionaries come with powerful built-in methods:
+        Python dictionaries come with helpful methods to enumerate keys, values, and pairs.
         """
     )
     return
@@ -97,20 +104,24 @@ def _(mo):
 
 @app.cell
 def _(sample_dict):
-    # Viewing dictionary components
-    def view_components():
-        print("Keys:", list(sample_dict.keys()))
-        print("Values:", list(sample_dict.values()))
-        print("Items:", list(sample_dict.items()))
+    print(list(sample_dict.keys()))
+    return
 
 
-    view_components()
-    return (view_components,)
+@app.cell
+def _(sample_dict):
+    print(list(sample_dict.values()))
+    return
+
+
+@app.cell
+def _(sample_dict):
+    print(list(sample_dict.items()))
+    return
 
 
 @app.cell
 def _():
-    # Modifying dictionaries
     def demonstrate_modification():
         _dict = {"a": 1, "b": 2}
         print("Original:", _dict)
@@ -132,7 +143,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Dictionary Comprehension
+        ## Dictionary comprehension
 
         Create dictionaries efficiently with dictionary comprehensions:
         """
@@ -142,26 +153,21 @@ def _(mo):
 
 @app.cell
 def _():
-    # Dictionary comprehension examples
-    def demonstrate_comprehension():
-        # Squares dictionary
-        _squares = {x: x**2 for x in range(5)}
-        print("Squares:", _squares)
-
-        # Filtered dictionary
-        _even_squares = {x: x**2 for x in range(5) if x % 2 == 0}
-        print("Even squares:", _even_squares)
+    print({x: x**2 for x in range(5)})
+    return
 
 
-    demonstrate_comprehension()
-    return (demonstrate_comprehension,)
+@app.cell
+def _():
+    print({x: x**2 for x in range(5) if x % 2 == 0})
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## Nested Dictionaries
+        ## Nested dictionaries
 
         Dictionaries can contain other dictionaries, creating complex data structures:
         """
@@ -189,40 +195,22 @@ def _():
 
 
 @app.cell
-def _(nested_data):
-    # Accessing nested data
-    def access_nested():
-        print("Alice's age:", nested_data["users"]["alice"]["age"])
-        print("Bob's interests:", nested_data["users"]["bob"]["interests"])
-
-        # Safe nested access
-        def _get_nested(data, *keys, default=None):
-            _current = data
-            for _key in keys:
-                if isinstance(_current, dict):
-                    _current = _current.get(_key, default)
-                else:
-                    return default
-            return _current
-
-        print("\nSafe access example:")
-        print(
-            "Charlie's age:",
-            _get_nested(
-                nested_data, "users", "charlie", "age", default="Not found"
-            ),
-        )
+def _(mo, nested_data):
+    mo.md(f"Alice's age: {nested_data["users"]["alice"]["age"]}")
+    return
 
 
-    access_nested()
-    return (access_nested,)
+@app.cell
+def _(mo, nested_data):
+    mo.md(f"Bob's interests: {nested_data["users"]["bob"]["interests"]}")
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## Common Dictionary Patterns
+        ## Common dictionary patterns
 
         Here are some useful patterns when working with dictionaries:
 
@@ -248,25 +236,6 @@ def _(mo):
         """
     )
     return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    callout_text = mo.md("""
-    ## Master the Dictionary!
-
-    Next Steps:
-
-    - Practice different dictionary methods
-    - Try creating nested data structures
-    - Experiment with dictionary comprehensions
-    - Build something using common patterns
-
-    Keep organizing your data! 🗂️✨
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
 
 
 @app.cell

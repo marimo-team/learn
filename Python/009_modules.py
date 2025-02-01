@@ -7,29 +7,21 @@
 
 import marimo
 
-__generated_with = "0.10.16"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        # 🧩 Modular Programming in Python
+        # 🧩 Using modules
 
-        Unlock the power of organized, reusable, and maintainable code!
+        A `module` in Python is a Python file that defines functions and variables. Modules can be `imported` into other Python files, letting you reuse their
+        functions and variables.
 
-        ## Why Modular Programming?
-        - Break complex problems into smaller, manageable pieces
-        - Improve code readability
-        - Enhance code reusability
-        - Easier debugging and maintenance
+        We have already seen some modules in previous tutorials, including the `math`
+        module. Python comes with many other modules built-in.
         """
     )
     return
@@ -39,8 +31,9 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## Standard Library Imports
-        Python's standard library provides powerful, pre-built modules:
+        ## The Python standard library
+
+        Python's "standard library" provides many modules, for many kinds of tasks.
 
         ```python
         # String manipulation
@@ -56,15 +49,20 @@ def _(mo):
         import math
         ```
 
-        For more details, check the [Python Standard Library Documentation](https://docs.python.org/3/library/)
+        See the [Python standard library documentation](https://docs.python.org/3/library/) for a full reference
         """
     )
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""### Example""")
+    return
+
+
 @app.cell
 def _():
-    # importing and using standard library modules
     import string
     import os
     import datetime
@@ -108,8 +106,9 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Import Strategies
-        Multiple ways to import and use modules:
+        ## Import syntax
+
+        You can import entire modules, and access their functions and variables using dot notation (`math.sqrt`). Or you can import specific members:
 
         ```python
         # Import entire module
@@ -160,8 +159,16 @@ def _():
 def _(mo):
     mo.md(
         """
-        ## Code Reusability
-        Create functions that can be used across different parts of your project
+        ## Third-party packages
+
+        In addition to Python's standard library, there are hundreds of thousands of
+        modules available for free on the Python Package index.
+
+        These are distributed as Python "packages", and include packages for
+        manipulating arrays of numbers, creating web applications, and more. `marimo`
+        itself is a third-party package!
+
+        For installing packages on your machine, we recommend using the [`uv` package manager](https://docs.astral.sh/uv/).
         """
     )
     return
@@ -169,64 +176,8 @@ def _(mo):
 
 @app.cell
 def _():
-    def generate_reusable_functions():
-        """
-        Demonstrate different types of reusable functions
-        """
-
-        def process_text(text):
-            '''Reusable text processing function'''
-            return text.strip().lower()
-
-        def normalize_number(value, min_val=0, max_val=100):
-            '''Normalize a number to a specific range'''
-            return max(min_val, min(max_val, value))
-
-        def validate_input(value, type_check=str, min_length=1):
-            '''Validate input based on type and minimum length'''
-            if not isinstance(value, type_check):
-                return False
-            return len(str(value)) >= min_length
-
-        # usage
-        return {
-            "Text Processing": {
-                "Example 1": process_text("  John Doe  "),
-                "Example 2": process_text("  Example@Email.com  ")
-            },
-            "Number Normalization": {
-                "Oversized Input": normalize_number(150),
-                "Negative Input": normalize_number(-10, min_val=-20, max_val=50)
-            },
-            "Input Validation": {
-                "Username Validation": validate_input("john"),
-                "Age Validation": validate_input(25, type_check=int)
-            }
-        }
-
-    # Run the reusable functions demonstration
-    reusable_function_examples = generate_reusable_functions()
-    reusable_function_examples
-    return generate_reusable_functions, reusable_function_examples
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    callout_text = mo.md("""
-    ## Your Modular Programming Journey!
-
-    Next Steps:
-
-    - Explore Python's standard library
-
-    - Practice different import strategies
-
-    - Design reusable functions
-
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":

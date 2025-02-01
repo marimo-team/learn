@@ -7,39 +7,21 @@
 
 import marimo
 
-__generated_with = "0.10.16"
+__generated_with = "0.10.19"
 app = marimo.App()
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        # 🧩 Function Design in Python
+        # 🧩 Functions
 
-        Dive into the world of Python functions — where code becomes modular and powerful!
+        This tutorial is about an important topic: **functions.**
 
-        ## Function Basics
-        Functions help you:
+        A function is a reusable block of code, similar in spirit to a mathematical function. Each function has a **name**, and accepts some number of **arguments**. These arguments are used in the function "body" (its block of code), and each function can **return** values.
 
-        - Break down complex problems
-
-        - Create reusable code blocks
-
-        - Improve code readability (good practice)
-
-        ```python
-        def function_name(parameters):
-            '''Docstring explaining the function'''
-            # Function body
-            return result
-        ```
+        **Example.** Below is an example function.
         """
     )
     return
@@ -47,17 +29,14 @@ def _(mo):
 
 @app.cell
 def _():
-    # Example function with parameter
-    def greet(name):
-        return f"Hello, {name}!"
-
-    name = "Python Learner"
-    return greet, name
+    def greet(your_name):
+        return f"Hello, {your_name}!"
+    return (greet,)
 
 
-@app.cell
-def _(greet, name):
-    greet(name)
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""The keyword `def` starts the function definition. The function's **name** is `greet`. It accepts one **argument** called `your_name`. It then creates a string and **returns** it.""")
     return
 
 
@@ -65,7 +44,40 @@ def _(greet, name):
 def _(mo):
     mo.md(
         """
-        ## Default Parameters
+        In the next cell, we **call** the function with a value and assign its return value to a variable.
+
+        **Try it!** Try changing the input to the function.
+        """
+    )
+    return
+
+
+@app.cell
+def _(greet):
+    greeting = greet(your_name="<your name here>")
+    greeting
+    return (greeting,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        **Why use functions?** Functions help you:
+
+        - Break down complex problems
+        - Create reusable code blocks
+        - Improve code readability
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Default parameters
         Make your functions more flexible by providing default values.
         """
     )
@@ -74,21 +86,30 @@ def _(mo):
 
 @app.cell
 def _():
-    # Function with default parameter
     def create_profile(name, age=18):
         return f"{name} is {age} years old"
+    return (create_profile,)
 
+
+@app.cell
+def _(create_profile):
     # Example usage
     example_name = "Alex"
     example_profile = create_profile(example_name)
     example_profile
-    return create_profile, example_name, example_profile
+    return example_name, example_profile
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""You can also create functions that reference variables outside the function body. This is called 'closing over' variables""")
+    return
 
 
 @app.cell
 def _():
-    # Show closure over values
     base_multiplier = 2
+
     def multiplier(x):
         """
         Create a function that multiplies input by a base value.
@@ -97,49 +118,12 @@ def _():
         values from their surrounding scope.
         """
         return x * base_multiplier
-
-    # Example of using the closure
-    sample_numbers = [1, 2, 3, 4, 5]
-    multiplied_numbers = [multiplier(num) for num in sample_numbers]
-    print(multiplied_numbers)
-    return base_multiplier, multiplied_numbers, multiplier, sample_numbers
+    return base_multiplier, multiplier
 
 
 @app.cell
-def _():
-    def calculate(a, b):
-        """
-        Perform multiple calculations on two numbers.
-
-        Args:
-            a (int): First number
-            b (int): Second number
-
-        Returns:
-            dict: Results of various calculations
-        """
-        return {
-            "sum": a + b,
-            "product": a * b,
-            "difference": a - b,
-            "max": max(a, b)
-        }
-
-    # Example usage with concrete values
-    first_number = 10
-    second_number = 5
-    result = calculate(first_number, second_number)
-    return calculate, first_number, result, second_number
-
-
-@app.cell(hide_code=True)
-def _(mo, result):
-    mo.md(f"""
-    ## Function Results
-
-    Calculation Results:
-    {result}
-    """)
+def _(multiplier):
+    print([multiplier(num) for num in [1, 2, 3]])
     return
 
 
@@ -147,16 +131,10 @@ def _(mo, result):
 def _(mo):
     mo.md(
         """
-        ## Multiple Return Values
-        Python allows returning multiple values easily:
+        ## Returning multiple values
 
-        ```python
-        def multiple_returns():
-            return value1, value2, value3
-
-        # Unpacking returns
-        x, y, z = multiple_returns()
-        ```
+        Functions can return multiple values: just separate the values to return by
+        commas. Check out the next cell for an example.
         """
     )
     return
@@ -182,47 +160,26 @@ def _():
             return "Mild", "Comfortable clothing", "Low"
         else:
             return "Hot", "Stay hydrated", "High"
+    return (weather_analysis,)
 
-    # Example temperature analysis
+
+@app.cell
+def _():
     temperature = 25
+    return (temperature,)
+
+
+@app.cell
+def _(temperature, weather_analysis):
     status, recommendation, warning_level = weather_analysis(temperature)
-    return (
-        recommendation,
-        status,
-        temperature,
-        warning_level,
-        weather_analysis,
-    )
+    status, recommendation, warning_level
+    return recommendation, status, warning_level
 
 
-@app.cell(hide_code=True)
-def _(mo, recommendation, status, warning_level):
-    mo.md(f"""
-    ## Function Results
-
-    Calculation Results:
-    {status}, {recommendation}, {warning_level}
-    """)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    callout_text = mo.md("""
-    ## Your Function Design Journey!
-
-    Next Steps:
-
-    - Practice creating functions
-
-    - Experiment with default parameters
-
-    - Explore multiple return values
-
-    """)
-
-    mo.callout(callout_text, kind="success")
-    return (callout_text,)
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":
