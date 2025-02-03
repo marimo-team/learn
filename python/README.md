@@ -16,4 +16,4 @@ uvx marimo edit https://github.com/marimo-team/learn/blob/main/python/001_number
 ```
 
 You can also open notebooks in our online playground by appending `marimo.app/`
-to a notebook's URL: [marimo.app/https://github.com/marimo-team/learn/blob/main/python/001_numbers.py](https://github.com/marimo-team/learn/blob/main/python/001_numbers.py).
+to a notebook's URL: [marimo.app/https://github.com/marimo-team/learn/blob/main/python/001_numbers.py](marimo.app/https://github.com/marimo-team/learn/blob/main/python/001_numbers.py).
