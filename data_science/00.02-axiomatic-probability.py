@@ -7,7 +7,7 @@
 
 import marimo
 
-__generated_with = "0.10.17"
+__generated_with = "0.10.19"
 app = marimo.App()
 
 
@@ -15,8 +15,8 @@ app = marimo.App()
 def _(mo):
     title = mo.md("# 🎲 The Rules of Probability: A Beginner's Guide")
     subtitle = mo.md("""
-    Welcome to the world of probability axioms! Think of axioms as the 'rules of the game' 
-    that all probabilities must follow. We'll explore these rules using simple, everyday examples.
+    Think of axioms as the 'rules of the game' 
+    that all probabilities must follow. We'll explore these rules using simple examples.
     """)
 
     mo.hstack([
@@ -30,15 +30,39 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## 🌟 The Three Basic Rules
+        ## The Three Fundamental Axioms
 
-        Before we dive into formal axioms, let's understand three simple rules about probability:
+        Probability theory is built on three fundamental axioms:
 
-        1. Probabilities are always between 0 and 1
-        2. The probability of a certain event is 1
-        3. The probability of impossible events is 0
+        1. **Non-Negativity**: Probabilities can't be negative
+           - $P(A) ≥ 0$ for any event A
 
-        Let's explore these with a simple dice roll! 🎲
+        2. **Normalization**: The probability of the entire sample space is 1
+           - $P(S) = 1$ where S is the sample space
+
+        3. **Additivity**: For mutually exclusive events, probabilities add
+           - $P(A \cup B) = P(A) + P(B)$ when $A \cap B = \emptyset$
+
+        Let's explore these with simple examples.
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ### Understanding Axioms Through Events
+
+        Before we explore each axiom in detail, let's use a simple dice roll to see how these rules work in practice. 
+        This interactive example demonstrates all three axioms:
+
+        - All probabilities shown will be 0 or greater
+        - The probability of all possible rolls (1-6) is 1
+        - When we consider events like "rolling an even number", we're adding individual probabilities
+
+        Try different events below to see how probabilities behave according to these rules:
         """
     )
     return
@@ -52,7 +76,7 @@ def _(event):
 
 @app.cell
 def _(mo):
-    # dice probability explorer
+    # Single interactive example with dice
     event = mo.ui.dropdown(
         options=[
             "Rolling a number from 1 to 6",
@@ -101,183 +125,70 @@ def _(event, mo):
 def _(mo):
     mo.md(
         """
-        ## 🎯 First Axiom: Non-Negativity
+        ## First Axiom: Non-Negativity
 
         The first axiom states that probabilities can't be negative.
 
         $P(A) ≥ 0$ for any event A
 
         This makes intuitive sense - you can't have a negative chance of something happening!
+
+        **Example**: When rolling a die
+
+        - P(rolling a 6) = 1/6 ≈ 0.167 (positive)
+
+        - P(rolling a negative number) = 0 (zero, but not negative)
         """
     )
     return
-
-
-@app.cell
-def _(prob_value):
-    prob_value
-    return
-
-
-@app.cell
-def _(mo):
-    # probability checker
-    prob_value = mo.ui.number(
-        value=0.5,
-        start=-1,
-        stop=100,
-        label="Enter a probability"
-    )
-    return (prob_value,)
-
-
-@app.cell
-def _(mo, prob_value):
-    is_valid = 0 <= prob_value.value <= 1
-
-    message = mo.md(f"""
-    ### Is this a valid probability?
-
-    **Value checked**: {prob_value.value}
-
-    **Result**: {"✅ Valid" if is_valid else "❌ Invalid"}
-
-    **Why?** {"This is between 0 and 1" if is_valid else "Probabilities must be between 0 and 1"}
-    """)
-
-    mo.callout(message, kind="success" if is_valid else "danger")
-    return is_valid, message
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## 🌍 Second Axiom: Total Probability
+        ## Second Axiom: Total Probability
 
         The second axiom states that the probability of all possible outcomes together must equal 1.
 
         $P(S) = 1$ where S is the sample space (all possible outcomes)
 
-        Let's verify this with a weather forecast!
+        **Example**: Rolling a number from 1 to 6
+
+        - P(rolling a 1) = 1/6
+        - P(rolling a 2) = 1/6
+        - P(rolling a 3) = 1/6
+        - P(rolling a 4) = 1/6
+        - P(rolling a 5) = 1/6
+        - P(rolling a 6) = 1/6
+
+        Total: 1/6 + 1/6 + 1/6 + 1/6 + 1/6 + 1/6 = 1
+
+        This satisfies our axiom because all possible outcomes sum to 1.
         """
     )
     return
-
-
-@app.cell
-def _(mo, rainy_prob, sunny_prob):
-    mo.hstack([sunny_prob, rainy_prob]).center()
-    return
-
-
-@app.cell
-def _(mo):
-    # probability adjuster
-    sunny_prob = mo.ui.slider(
-        value=0.6,
-        start=0,
-        stop=1,
-        step=0.1,
-        label="Probability of Sunny ☀️"
-    )
-    rainy_prob = mo.ui.slider(
-        value=0.3,
-        start=0,
-        stop=1,
-        step=0.1,
-        label="Probability of Rainy 🌧️"
-    )
-    return rainy_prob, sunny_prob
-
-
-@app.cell
-def _(mo, rainy_prob, sunny_prob):
-    total_prob = sunny_prob.value + rainy_prob.value
-    cloudy_prob = 1 - total_prob if total_prob <= 1 else 0
-
-    weather_status = mo.md(f"""
-    ### Weather Probability Check
-
-    ☀️ Sunny: {sunny_prob.value}
-    🌧️ Rainy: {rainy_prob.value}
-    ☁️ Cloudy: {cloudy_prob:.1f}
-
-    **Total**: {total_prob + cloudy_prob:.1f}
-
-    **Status**: {"✅ Valid" if abs(total_prob + cloudy_prob - 1) < 0.01 else "❌ Invalid"}
-    """)
-
-    mo.callout(
-        weather_status,
-        kind="success" if abs(total_prob + cloudy_prob - 1) < 0.01 else "danger"
-    )
-    return cloudy_prob, total_prob, weather_status
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
-        ## 🎮 Let's Practice!
+        ## Third Axiom: Additivity
 
-        Try this simple exercise to check your understanding:
+        For events that cannot occur simultaneously (mutually exclusive), 
+        their probabilities add.
+
+        **Example**: Rolling a die
+
+        - P(rolling a 1 or 2) = P(rolling a 1) + P(rolling a 2)
+
+        - 2/6 = 1/6 + 1/6
+
+        This works because you can't roll a 1 and 2 simultaneously.
         """
     )
     return
-
-
-@app.cell
-def _(question):
-    question
-    return
-
-
-@app.cell
-def _(answer, check_button, mo):
-    mo.hstack([answer, check_button], justify="start")
-    return
-
-
-@app.cell
-def _(mo, random):
-    # Generate a simple probability question
-    correct_prob = random.choice([0.3, 0.4, 0.5, 0.6, 0.7])
-
-    question = mo.md(f"""
-    If P(Heads) = {correct_prob}, what must P(Tails) be?
-    """)
-
-    answer = mo.ui.number(
-        value=0.5,
-        start=0,
-        stop=1,
-        step=0.1,
-        label="Your answer"
-    )
-
-    check_button = mo.ui.button(label="Check Answer")
-    return answer, check_button, correct_prob, question
-
-
-@app.cell
-def _(answer, check_button, correct_prob, mo):
-    check_callout = None
-    if check_button.value:
-        correct_answer = 1 - correct_prob
-        is_correct = abs(answer.value - correct_answer) < 0.01
-
-        result = mo.md(f"""
-        ### Your Answer: {answer.value}
-
-        **Correct Answer**: {correct_answer}
-
-        {"🎉 Perfect! The probabilities sum to 1" if is_correct 
-         else "❌ Remember: Probabilities must sum to 1"}
-        """)
-        mo.callout(result, kind="success" if is_correct else "danger")
-    check_callout
-    return check_callout, correct_answer, is_correct, result
 
 
 @app.cell(hide_code=True)
@@ -294,11 +205,10 @@ def _(mo):
     next_topics = mo.md("""
     ## 📚 Coming Up Next
 
-    - Sample Space and Events
-    - Probability Functions
     - Addition Laws of Probability
         - Simple Events
         - Mutually Exclusive Events
+        - General Addition Rule
 
     Moving towards Core Probability Laws! 🚀
     """)
@@ -314,12 +224,6 @@ def _(mo):
 def _():
     import marimo as mo
     return (mo,)
-
-
-@app.cell
-def _():
-    import random
-    return (random,)
 
 
 if __name__ == "__main__":
