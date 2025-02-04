@@ -10,7 +10,7 @@ def _(mo):
         """
         # 🎲 Mathematical Probability: First Steps
 
-        Welcome to the fascinating world of probability! In this notebook, we'll explore the 
+In this notebook, we'll explore the
         fundamental approaches to understanding probability.
 
         ## What is Probability?
