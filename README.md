@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/imgs/marimo-learn.png">
+  <img src="/assets/marimo-learn.png">
 </p>
 
 <p align="center">
