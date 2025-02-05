@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg">
+  <img src="/imgs/marimo-learn.png">
 </p>
 
 <p align="center">
