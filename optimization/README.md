@@ -13,7 +13,7 @@ resource allocation, and more.
 
 ![SpaceX](https://www.debugmind.com/wp-content/uploads/2020/01/spacex-1.jpg)
 
-_SpaceX uses SpaceX solves convex optimization problems onboard to land its rockets, using CVXGEN, a code generator for quadratic programming developed at Stephen Boyd’s Stanford lab. Photo by SpaceX, licensed CC BY-NC 2.0._
+_SpaceX solves convex optimization problems onboard to land its rockets, using CVXGEN, a code generator for quadratic programming developed at Stephen Boyd’s Stanford lab. Photo by SpaceX, licensed CC BY-NC 2.0._
 
 **Running notebooks.** To run a notebook locally, use
 
