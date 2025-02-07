@@ -26,6 +26,7 @@ notebooks for educators, students, and practitioners.
 
 - 🎲 Probability
 - 📏 Linear algebra
+- ⚖️ Optimization
 - ❄️ Polars
 - 🔥 Pytorch
 
