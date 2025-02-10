@@ -209,7 +209,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## (e) Compatibility with Other ML Libraries 🤝
+        ### Compatibility with other machine learning libraries 🤝
 
         Polars integrates seamlessly with popular machine learning libraries like Scikit-learn, PyTorch, and TensorFlow. Its ability to handle large datasets efficiently makes it an excellent choice for preprocessing data before feeding it into ML models.
 
