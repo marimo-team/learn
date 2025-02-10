@@ -23,7 +23,7 @@ def _():
 def _(mo):
     mo.md(
         """
-        # What is Polars?
+        # An introduction to Polars
 
         [Polars](https://pola.rs/) is a blazingly fast, efficient, and user-friendly DataFrame library designed for data manipulation and analysis in Python. Built with performance in mind, Polars leverages the power of Rust under the hood, enabling it to handle large datasets with ease while maintaining a simple and intuitive API. Whether you're working with structured data, performing complex transformations, or analyzing massive datasets, Polars is designed to deliver exceptional speed and memory efficiency, often outperforming other popular DataFrame libraries like Pandas.
 
