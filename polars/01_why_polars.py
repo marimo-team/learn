@@ -41,7 +41,6 @@ def _(mo):
         """
         # Why Polars?
 
-        Pandas has long been the go-to library for data manipulation and analysis in Python. However, as datasets grow larger and more complex, Pandas often struggles with performance and memory limitations. This is where Polars shines. Polars is a modern, high-performance DataFrame library designed to address the shortcomings of Pandas while providing a user-friendly experience. 
 
         Below, we’ll explore key reasons why Polars is a better choice in many scenarios, along with examples.
         """
