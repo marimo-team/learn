@@ -58,29 +58,6 @@ def _(mo):
         Polars' syntax is similar to PySpark and intuitive like SQL, making heavy use of **method chaining**. This makes it easy for data professionals to transition to Polars, and leads to an API that is more concise and readable than Pandas.
         
         **Example.** In the next few cells, we contrast the code to perform a basic filter and aggregation of data with Pandas to the code required to accomplish the same task with `Polars`.
-
-        **Example: Filtering and Aggregating Data**
-
-        ```python
-        import pandas as pd
-
-        df_pd = pd.DataFrame(
-            { 
-                "Gender": ["Male", "Female", "Male", "Female", "Male", "Female", 
-                           "Male", "Female", "Male", "Female"],
-                "Age": [13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
-                "Height_CM": [150.0, 170.0, 146.5, 142.0, 155.0, 165.0, 170.8, 130.0, 132.5, 162.0]
-            }
-        )
-
-        # query: average height of male and female after the age of 15 years
-
-        # step-1: filter
-        filtered_df_pd = df_pd[df_pd["Age"] > 15]
-
-        # step-2: groupby and aggregation
-        result_pd = filtered_df_pd.groupby("Gender")["Height_CM"].mean()
-        ```
         """
     )
     return
