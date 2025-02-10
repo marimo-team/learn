@@ -286,7 +286,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        # 🔖 References
+        ## 🔖 References
 
         - [Polars official website](https://pola.rs/)
         - [Polars vs. Pandas](https://blog.jetbrains.com/pycharm/2024/07/polars-vs-pandas/)
