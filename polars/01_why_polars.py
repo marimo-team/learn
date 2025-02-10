@@ -39,7 +39,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        # Why Polars?
+        ## Choosing Polars over Pandas
 
 
         In this section we'll give a few reasons why Polars is a better choice than Pandas, along with examples.
