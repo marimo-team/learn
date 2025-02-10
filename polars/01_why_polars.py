@@ -53,7 +53,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## (a) Easier & Intuitive Syntax 📝
+        ### Intuitive syntax
 
         Polars is designed with a syntax that is very similar to PySpark while being intuitive like SQL. This makes it easier for data professionals to transition to Polars without a steep learning curve. For example:
 
