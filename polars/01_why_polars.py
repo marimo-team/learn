@@ -188,7 +188,7 @@ def _(mo):
         df = pd.read_csv("large_dataset.csv")
         ```
 
-        In Polars, the same operation is seamless:
+        In Polars, the same operation runs quickly, without memory pressure:
 
         ```python
         df = pl.read_csv("large_dataset.csv")
