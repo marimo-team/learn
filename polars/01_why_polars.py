@@ -140,7 +140,7 @@ def _(df_pl):
 def _(mo):
     mo.md(
         """
-        ## (b) Large Collection of Built-in APIs ⚙️
+        ### A large collection of built-in APIs
 
         Polars boasts an **extremely expressive API**, enabling you to perform virtually any operation using built-in methods. In contrast, Pandas often requires more complex operations to be handled using the `apply` method with a lambda function. The issue with `apply` is that it processes rows sequentially, looping through the DataFrame one row at a time, which can be inefficient. By leveraging Polars' built-in methods, you can operate on entire columns at once, unlocking the power of **SIMD (Single Instruction, Multiple Data)** parallelism. This approach not only simplifies your code but also significantly enhances performance.
         """
