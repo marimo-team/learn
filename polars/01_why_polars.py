@@ -90,7 +90,7 @@ def _():
 def _(mo):
     mo.md(
         r"""
-        The same example can be worked out in Polars like below,
+        The same example can be worked out in Polars more concisely, using method chaining. Notice how the Polars code is essentially as readable as English.
         """
     )
     return
