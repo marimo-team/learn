@@ -247,7 +247,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## (f) Rich Functionality ⚡
+        ### Easy to use, with room for power users
 
         Polars supports advanced operations like
 
