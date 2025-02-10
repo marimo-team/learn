@@ -42,7 +42,7 @@ def _(mo):
         # Why Polars?
 
 
-        Below, we’ll explore key reasons why Polars is a better choice in many scenarios, along with examples.
+        In this section we'll give a few reasons why Polars is a better choice than Pandas, along with examples.
         """
     )
     return
