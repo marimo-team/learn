@@ -124,23 +124,6 @@ def _(mo):
         Notice how Polars uses a *method-chaining* approach, similar to PySpark, which makes the code more readable and expressive while using a *single line* to design the query.
 
         Additionally, Polars supports SQL-like operations *natively*, that allows you to write SQL queries directly on polars dataframe:
-
-        ```python
-        import polars as pl
-
-        df_pl = pl.DataFrame(
-            { 
-                "Gender": ["Male", "Female", "Male", "Female", "Male", "Female", 
-                           "Male", "Female", "Male", "Female"],
-                "Age": [13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
-                "Height_CM": [150.0, 170.0, 146.5, 142.0, 155.0, 165.0, 170.8, 130.0, 132.5, 162.0]
-            }
-        )
-
-        # query: average height of male and female after the age of 15 years
-        result = df_pl.sql("SELECT Gender, AVG(Height_CM) FROM self WHERE Age > 15 GROUP BY Gender")
-        result
-        ```
         """
     )
     return
