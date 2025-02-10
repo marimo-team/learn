@@ -55,7 +55,9 @@ def _(mo):
         """
         ### Intuitive syntax
 
-        Polars is designed with a syntax that is very similar to PySpark while being intuitive like SQL. This makes it easier for data professionals to transition to Polars without a steep learning curve. For example:
+        Polars' syntax is similar to PySpark and intuitive like SQL, making heavy use of **method chaining**. This makes it easy for data professionals to transition to Polars, and leads to an API that is more concise and readable than Pandas.
+        
+        **Example.** In the next few cells, we contrast the code to perform a basic filter and aggregation of data with Pandas to the code required to accomplish the same task with `Polars`.
 
         **Example: Filtering and Aggregating Data**
 
