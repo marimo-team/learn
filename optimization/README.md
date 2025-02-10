@@ -1,15 +1,13 @@
 # Learn optimization
 
-🚧 _This collection is a work in progress. Check back later for new notebooks!_
-
-This collection of marimo notebooks teaches you the basics of mathematical
+This collection of marimo notebooks teaches you the basics of convex
 optimization.
 
 After working through these notebooks, you'll understand how to create
 and solve optimization problems using the Python library
 [CVXPY](https://github.com/cvxpy/cvxpy), as well as how to apply what you've
 learned to real-world problems such as portfolio allocation in finance,
-resource allocation, and more.
+control of vehicles, and more.
 
 ![SpaceX](https://www.debugmind.com/wp-content/uploads/2020/01/spacex-1.jpg)
 
