@@ -176,7 +176,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## (d) Scalability - Handling Large Datasets in Memory ⬆️
+        ### Scalability — handling large datasets in memory ⬆️
 
         Pandas is limited by its single-threaded design and reliance on Python, which makes it inefficient for processing large datasets. Polars, on the other hand, is built in Rust and optimized for parallel processing, enabling it to handle datasets that are orders of magnitude larger.
 
