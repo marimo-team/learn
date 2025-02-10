@@ -283,7 +283,7 @@ def _(mo):
         # 🔖 References
 
         - [Polars official website](https://pola.rs/)
-        - [Polars Vs. Pandas](https://blog.jetbrains.com/pycharm/2024/07/polars-vs-pandas/)
+        - [Polars vs. Pandas](https://blog.jetbrains.com/pycharm/2024/07/polars-vs-pandas/)
         """
     )
     return
