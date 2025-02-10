@@ -268,7 +268,7 @@ def _(mo):
         """
         ## Why not PySpark?
 
-        While **PySpark** is undoubtedly a versatile tool that has transformed the way big data is handled and processed in Python, its **complex setup process** can be intimidating, especially for beginners. In contrast, **Polars** requires minimal setup and is ready to use right out of the box, making it more accessible for users of all skill levels.
+        While **PySpark** is versatile tool that has transformed the way big data is handled and processed in Python, its **complex setup process** can be intimidating, especially for beginners. In contrast, **Polars** requires minimal setup and is ready to use right out of the box, making it more accessible for users of all skill levels.
 
         When deciding between the two, **PySpark** is the preferred choice for processing large datasets distributed across a **multi-node cluster**. However, for computations on a **single-node machine**, **Polars** is an excellent alternative. Remarkably, Polars is capable of handling datasets that exceed the size of the available RAM, making it a powerful tool for efficient data processing even on limited hardware.
         """
