@@ -152,7 +152,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## (c) Query Optimization 📈
+        ### Query optimization 📈
 
         A key factor behind Polars' performance lies in its **evaluation strategy**. While Pandas defaults to **eager execution**, executing operations in the exact order they are written, Polars offers both **eager and lazy execution**. With lazy execution, Polars employs a **query optimizer** that analyzes all required operations and determines the most efficient way to execute them. This optimization can involve reordering operations, eliminating redundant calculations, and more. 
 
