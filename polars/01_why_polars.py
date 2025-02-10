@@ -91,25 +91,6 @@ def _(mo):
     mo.md(
         r"""
         The same example can be worked out in Polars like below,
-
-        ```python
-        import polars as pl
-
-        df_pl = pl.DataFrame(
-            { 
-                "Gender": ["Male", "Female", "Male", "Female", "Male", "Female", 
-                           "Male", "Female", "Male", "Female"],
-                "Age": [13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
-                "Height_CM": [150.0, 170.0, 146.5, 142.0, 155.0, 165.0, 170.8, 130.0, 132.5, 162.0]
-            }
-        )
-
-        # query: average height of male and female after the age of 15 years
-
-        # filter, groupby and aggregation using method chaining
-        result_pl = df_pl.filter(pl.col("Age") > 15).group_by("Gender").agg(pl.mean("Height_CM"))
-        result_pl
-        ```
         """
     )
     return
