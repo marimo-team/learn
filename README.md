@@ -9,7 +9,7 @@
 # 📚 Learn
 
 This repository contains a curated collection of educational
-[marimo](https://github.com/marimo-team/marimo) notebooks. These notebooks,
+[marimo](https://github.com/marimo-team/marimo) notebooks. These Python notebooks,
 organized into courses, explain fundamental concepts for an expanding set of
 topics, including academic topics like computer science, linear algebra,
 probability, and machine learning, as well as applied topics such as how to use
@@ -21,12 +21,13 @@ notebooks for educators, students, and practitioners.
 ## Courses
 
 - 🐍 [Python](python/): Learn the basics of the Python programming language
+- ⚖️ [Optimization](optimization/): Learn how to solve optimization problems, with applications to finance and control
 
 **Coming soon.** 
 
 - 🎲 Probability
 - 📏 Linear algebra
-- ⚖️ Optimization
+
 - ❄️ Polars
 - 🔥 Pytorch
 
