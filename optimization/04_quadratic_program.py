@@ -15,6 +15,12 @@ __generated_with = "0.11.0"
 app = marimo.App()
 
 
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -253,12 +259,6 @@ def _(np):
         )
         return plt.gca()
     return (plot_contours,)
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 if __name__ == "__main__":

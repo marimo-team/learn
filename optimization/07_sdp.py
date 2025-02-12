@@ -14,6 +14,12 @@ __generated_with = "0.11.2"
 app = marimo.App()
 
 
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""# Semidefinite program""")
@@ -116,12 +122,6 @@ def _(X, mo, prob, wigglystuff):
 def _():
     import wigglystuff
     return (wigglystuff,)
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 if __name__ == "__main__":
