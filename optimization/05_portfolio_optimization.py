@@ -16,6 +16,12 @@ __generated_with = "0.11.2"
 app = marimo.App()
 
 
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""# Portfolio optimization""")
@@ -245,12 +251,6 @@ def _(gamma, gamma_vals, markers_on, np, plt, prob, ret, risk):
     plt.legend(loc="upper right")
     plt.show()
     return midx, spstats, x
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 if __name__ == "__main__":
