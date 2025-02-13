@@ -46,7 +46,9 @@ def _(mo):
         | **Axiom 2** | $P(S) = 1$ | The probability of the sample space is 1 |
         | **Axiom 3** | $P(E \cup F) = P(E) + P(F)$ | For mutually exclusive events, probabilities add |
 
-        where $S$ is the sample space (all possible outcomes), and $E$ and $F$ are events.
+        where the set $S$ is the sample space (all possible outcomes), and $E$ and $F$ are sets that represent events. The notation $P(E)$ denotes the probability of $E$, which you can interpret as the chance that something happens. $P(E) = 0$ means that the event cannot happen, while $P(E) = 1$ means the event will happen no matter what; $P(E) = 0.5$ means that $E$ has a 50% chance of happening.
+        
+        For an example, when rolling a fair six-sided die once, the sample space $S$ is the set of die faces ${1, 2, 3, 4, 5, 6}$, and there are many possible events; we'll see some examples below.
         """
     )
     return
