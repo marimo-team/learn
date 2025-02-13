@@ -123,7 +123,7 @@ def _(event, mo, np, plt):
     fig, ax = plt.subplots(figsize=(8, 2))
     ax.bar(dice, np.ones_like(dice), color=colors)
     ax.set_xticks(dice)
-    ax.set_ylim(0, 1.2)
+    ax.set_yticks([])
     ax.set_title(f"P(Event) = {prob:.2f}")
 
     # Add explanation
