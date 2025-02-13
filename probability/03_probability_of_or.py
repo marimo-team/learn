@@ -10,7 +10,7 @@
 import marimo
 
 __generated_with = "0.11.2"
-app = marimo.App()
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -141,6 +141,7 @@ def _(mo):
         Why subtract $P(E \cap F)$? Because when we add $P(E)$ and $P(F)$, we count the overlap twice!
 
         For example, consider calculating $P(\text{prime or even})$ when rolling a die:
+
         - Prime numbers: {2, 3, 5}
         - Even numbers: {2, 4, 6}
         - The number 2 is counted twice unless we subtract its probability
@@ -235,7 +236,9 @@ def _(event_type, mo, plt, venn2):
             ### Mutually Exclusive Events
 
             $P(\text{Odd}) = \frac{3}{6} = 0.5$
+
             $P(\text{Even}) = \frac{3}{6} = 0.5$
+
             $P(\text{Odd} \cap \text{Even}) = 0$
 
             $P(\text{Odd} \cup \text{Even}) = P(\text{Odd}) + P(\text{Even}) = 1$
@@ -251,7 +254,9 @@ def _(event_type, mo, plt, venn2):
             ### Non-Mutually Exclusive Events
 
             $P(\text{Prime}) = \frac{3}{6} = 0.5$ (2,3,5)
+
             $P(\text{Even}) = \frac{3}{6} = 0.5$ (2,4,6)
+
             $P(\text{Prime} \cap \text{Even}) = \frac{1}{6}$ (2)
 
             $P(\text{Prime} \cup \text{Even}) = \frac{3}{6} + \frac{3}{6} - \frac{1}{6} = \frac{5}{6}$
@@ -267,7 +272,9 @@ def _(event_type, mo, plt, venn2):
             ### Complex Event Interaction
 
             $P(x < 3) = \frac{2}{6}$ (1,2)
+
             $P(\text{Even}) = \frac{3}{6}$ (2,4,6)
+
             $P(x < 3 \cap \text{Even}) = \frac{1}{6}$ (2)
 
             $P(x < 3 \cup \text{Even}) = \frac{2}{6} + \frac{3}{6} - \frac{1}{6} = \frac{4}{6}$
