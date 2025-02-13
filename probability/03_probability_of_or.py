@@ -35,7 +35,7 @@ def _(mo):
 
         When calculating the probability of either one event _or_ another occurring, we need to be careful about how we combine probabilities. The method depends on whether the events can happen together[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/prob_or/).
 
-        Let's explore how to calculate $P(E \cup F)$ or $P(E \text{ or } F)$ in different scenarios.
+        Let's explore how to calculate $P(E \cup F)$, i.e. $P(E \text{ or } F)$, in different scenarios.
         """
     )
     return
