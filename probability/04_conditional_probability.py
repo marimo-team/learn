@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.2"
+__generated_with = "0.11.4"
 app = marimo.App(width="medium", app_title="Conditional Probability")
 
 
@@ -20,19 +20,13 @@ def _():
     return (mo,)
 
 
-@app.cell
-def _():
-    import matplotlib.pyplot as plt
-    from matplotlib_venn import venn3
-    import numpy as np
-    return np, plt, venn3
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
         # Conditional Probability
+
+        _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/cond_prob/), by Stanford professor Chris Piech._
 
         In probability theory, we often want to update our beliefs when we receive new information. 
         Conditional probability helps us formalize this process by calculating "_what is the chance of 
@@ -54,26 +48,34 @@ def _(mo):
         r"""
         ## Definition of Conditional Probability
 
-        The probability of event $E$ given that event $F$ has occurred is denoted as $P(E|F)$ and is defined as:
+        The probability of event $E$ given that event $F$ has occurred is denoted as $P(E \mid F)$ and is defined as:
 
-        $$P(E|F) = \frac{P(E \cap F)}{P(F)}$$
+        $$P(E \mid F) = \frac{P(E \cap F)}{P(F)}$$
 
         This formula tells us that the conditional probability is the probability of both events occurring 
         divided by the probability of the conditioning event.
 
-        Let's understand this with a function that computes conditional probability:
+        Let's start with a visual example.
         """
     )
     return
 
 
+@app.cell
+def _():
+    import matplotlib.pyplot as plt
+    from matplotlib_venn import venn3
+    import numpy as np
+    return np, plt, venn3
+
+
 @app.cell(hide_code=True)
 def _(mo, plt, venn3):
     # Create figure with square boundaries
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(10, 3))
 
     # Draw square sample space first
-    rect = plt.Rectangle((-2, -2), 4, 4, fill=False, color='gray', linestyle='--')
+    rect = plt.Rectangle((-2, -2), 4, 4, fill=False, color="gray", linestyle="--")
     plt.gca().add_patch(rect)
 
     # Set the axis limits to show the full rectangle
@@ -83,35 +85,38 @@ def _(mo, plt, venn3):
     # Create Venn diagram showing E and F
     # For venn3, subsets order is: (100, 010, 110, 001, 101, 011, 111)
     # Representing: (A, B, AB, C, AC, BC, ABC)
-    v = venn3(subsets=(30, 20, 10, 40, 0, 0, 0),
-             set_labels=('E', 'F', 'Rest'))
+    v = venn3(subsets=(30, 20, 10, 40, 0, 0, 0), set_labels=("E", "F", "Rest"))
 
     # Customize colors
     if v:
-        for id in ['100', '010', '110', '001']:
+        for id in ["100", "010", "110", "001"]:
             if v.get_patch_by_id(id):
-                if id == '100':
-                    v.get_patch_by_id(id).set_color('#ffcccc')  # Light red for E
-                elif id == '010':
-                    v.get_patch_by_id(id).set_color('#ccffcc')  # Light green for F
-                elif id == '110':
-                    v.get_patch_by_id(id).set_color('#e6ffe6')  # Lighter green for intersection
-                elif id == '001':
-                    v.get_patch_by_id(id).set_color('white')    # White for rest
+                if id == "100":
+                    v.get_patch_by_id(id).set_color("#ffcccc")  # Light red for E
+                elif id == "010":
+                    v.get_patch_by_id(id).set_color("#ccffcc")  # Light green for F
+                elif id == "110":
+                    v.get_patch_by_id(id).set_color(
+                        "#e6ffe6"
+                    )  # Lighter green for intersection
+                elif id == "001":
+                    v.get_patch_by_id(id).set_color("white")  # White for rest
 
-    plt.title('Conditional Probability in Sample Space')
+    plt.title("Conditional Probability in Sample Space")
 
     # Remove ticks but keep the box visible
     plt.gca().set_yticks([])
     plt.gca().set_xticks([])
-    plt.axis('on')
+    plt.axis("on")
 
     # Add sample space annotation with arrow
-    plt.annotate('Sample Space (100)', 
-                xy=(-1.5, 1.5),
-                xytext=(-2.2, 2),
-                bbox=dict(boxstyle='round,pad=0.5', fc='white', ec='gray'),
-                arrowprops=dict(arrowstyle='->'))
+    plt.annotate(
+        "Sample Space (100)",
+        xy=(-1.5, 1.5),
+        xytext=(-2.2, 2),
+        bbox=dict(boxstyle="round,pad=0.5", fc="white", ec="gray"),
+        arrowprops=dict(arrowstyle="->"),
+    )
 
     # Add explanation
     explanation = mo.md(r"""
@@ -125,15 +130,23 @@ def _(mo, plt, venn3):
     - Remaining cases: 40 (to complete sample space of 100)
 
     When we condition on $F$:
-    $$P(E|F) = \frac{P(E \cap F)}{P(F)} = \frac{10}{30} = \frac{1}{3} \approx 0.33$$
+    $$P(E \mid F) = \frac{P(E \cap F)}{P(F)} = \frac{10}{30} = \frac{1}{3} \approx 0.33$$
 
     This means: When we know $F$ has occurred (restricting ourselves to the green region),
     the probability of $E$ also occurring is $\frac{1}{3}$ - as 10 out of the 30 cases in the 
     green region also belong to the red region.
     """)
 
-    mo.hstack([plt.gcf(), explanation])
+    mo.vstack([mo.center(plt.gcf()), explanation])
     return explanation, id, rect, v
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"Next, here's a function that computes $P(E \mid F)$, given $P( E \cap F)$ and $P(F)$"
+    )
+    return
 
 
 @app.cell
@@ -153,7 +166,7 @@ def _(conditional_probability):
     # Example 1: Rolling a die
     # E: Rolling an even number (2,4,6)
     # F: Rolling a number greater than 3 (4,5,6)
-    p_even_given_greater_than_3 = conditional_probability(2/6, 3/6)
+    p_even_given_greater_than_3 = conditional_probability(2 / 6, 3 / 6)
     print("Example 1: Rolling a die")
     print(f"P(Even | >3) = {p_even_given_greater_than_3}")  # Should be 2/3
     return (p_even_given_greater_than_3,)
@@ -164,7 +177,7 @@ def _(conditional_probability):
     # Example 2: Cards
     # E: Drawing a Heart
     # F: Drawing a Face card (J,Q,K)
-    p_heart_given_face = conditional_probability(3/52, 12/52)
+    p_heart_given_face = conditional_probability(3 / 52, 12 / 52)
     print("\nExample 2: Drawing cards")
     print(f"P(Heart | Face card) = {p_heart_given_face}")  # Should be 1/4
     return (p_heart_given_face,)
@@ -226,10 +239,10 @@ def _(mo):
 
         | Rule | Original | Conditioned on $G$ |
         |------|----------|-------------------|
-        | Axiom 1 | $0 \leq P(E) \leq 1$ | $0 \leq P(E\|G) \leq 1$ |
-        | Axiom 2 | $P(S) = 1$ | $P(S\|G) = 1$ |
-        | Axiom 3* | $P(E \cup F) = P(E) + P(F)$ | $P(E \cup F\|G) = P(E\|G) + P(F\|G)$ |
-        | Complement | $P(E^C) = 1 - P(E)$ | $P(E^C\|G) = 1 - P(E\|G)$ |
+        | Axiom 1 | $0 \leq P(E) \leq 1$ | $0 \leq P(E \mid G) \leq 1$ |
+        | Axiom 2 | $P(S) = 1$ | $P(S \mid G) = 1$ |
+        | Axiom 3* | $P(E \cup F) = P(E) + P(F)$ | $P(E \cup F \mid G) = P(E \mid G) + P(F \mid G)$ |
+        | Complement | $P(E^C) = 1 - P(E)$ | $P(E^C \mid G) = 1 - P(E \mid G)$ |
 
         *_For mutually exclusive events_
         """
@@ -243,12 +256,12 @@ def _(mo):
         r"""
         ## Multiple Conditions
 
-        We can condition on multiple events. The notation $P(E|F,G)$ means "_the probability of $E$ 
+        We can condition on multiple events. The notation $P(E \mid F,G)$ means "_the probability of $E$ 
         occurring, given that both $F$ and $G$ have occurred._"
 
         The conditional probability formula still holds in the universe where $G$ has occurred:
 
-        $$P(E|F,G) = \frac{P(E \cap F|G)}{P(F|G)}$$
+        $$P(E \mid F,G) = \frac{P(E \cap F \mid G)}{P(F \mid G)}$$
 
         This is a powerful extension that allows us to update our probabilities as we receive 
         multiple pieces of information.
@@ -259,12 +272,16 @@ def _(mo):
 
 @app.cell
 def _():
-    def multiple_conditional_probability(p_intersection_all, p_intersection_conditions, p_condition):
+    def multiple_conditional_probability(
+        p_intersection_all, p_intersection_conditions, p_condition
+    ):
         """Calculate P(E|F,G) = P(E∩F|G)/P(F|G) = P(E∩F∩G)/P(F∩G)"""
         if p_condition == 0:
             raise ValueError("Cannot condition on an impossible event")
         if p_intersection_conditions == 0:
-            raise ValueError("Cannot condition on an impossible combination of events")
+            raise ValueError(
+                "Cannot condition on an impossible combination of events"
+            )
         if p_intersection_all > p_intersection_conditions:
             raise ValueError("P(E∩F∩G) cannot be greater than P(F∩G)")
 
@@ -284,7 +301,9 @@ def _(multiple_conditional_probability):
 
     p_admit_given_both = multiple_conditional_probability(0.15, 0.25, 0.25)
     print("College Admissions Example:")
-    print(f"P(Admitted | High GPA, Good Scores) = {p_admit_given_both}")  # Should be 0.6
+    print(
+        f"P(Admitted | High GPA, Good Scores) = {p_admit_given_both}"
+    )  # Should be 0.6
 
     # Error case: impossible condition
     try:
@@ -335,7 +354,7 @@ def _(mo):
         You've learned:
 
         - How conditional probability updates our beliefs with new information
-        - The formula $P(E|F) = P(E \cap F)/P(F)$ and its intuition
+        - The formula $P(E \mid F) = P(E \cap F)/P(F)$ and its intuition
         - How probability rules work in conditional universes
         - How to handle multiple conditions
 
