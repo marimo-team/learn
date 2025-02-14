@@ -19,6 +19,13 @@ def _():
     return (mo,)
 
 
+@app.cell
+def _():
+    import matplotlib.pyplot as plt
+    from matplotlib_venn import venn2
+    return plt, venn2
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -303,13 +310,6 @@ def _(mo):
         """
     )
     return
-
-
-@app.cell
-def _():
-    import matplotlib.pyplot as plt
-    from matplotlib_venn import venn2
-    return plt, venn2
 
 
 if __name__ == "__main__":
