@@ -27,9 +27,12 @@ notebooks for educators, students, and practitioners.
 
 - 🎲 Probability
 - 📏 Linear algebra
-
 - ❄️ Polars
 - 🔥 Pytorch
+- 📈 Altair
+- 📈 Plotly
+- 📈 matplotlib
+
 
 _We're seeking contributions! If you'd like to contribute, please [reach out](https://github.com/marimo-team/learn/issues/new?template=example_request.yaml)._
 
