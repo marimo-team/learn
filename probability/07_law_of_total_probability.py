@@ -67,7 +67,7 @@ def _(mo):
         &= P(E|F)P(F) + P(E|F^c)P(F^c)
         \end{align}
 
-        This two-part version generalizes to any number of [mutually exclusive](https://github.com/marimo-team/learn/blob/main/probability/03_probability_of_or.py) events that cover the sample space:
+        This two-part version generalizes to any number of [mutually exclusive](marimo.app/https://github.com/marimo-team/learn/blob/main/probability/03_probability_of_or.py) events that cover the sample space:
 
         $P(A) = \sum_{i=1}^n P(A|B_i)P(B_i)$
 
