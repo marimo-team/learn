@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.11.0"
+__generated_with = "0.11.8"
 app = marimo.App(width="medium")
 
 
@@ -19,19 +19,41 @@ def _():
     return (mo,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
         # An introduction to Polars
 
         This notebook provides a birds-eye overview of [Polars](https://pola.rs/), a fast and user-friendly data manipulation library for Python, and compares it to alternatives like Pandas and PySpark.
-        
-        Like Pandas and PySpark, the central data structure in Polars is **the DataFrame**, a tabular data structure consisting of named columns. For example, the next cell constructs a DataFrame that records the gender, age, and height in centimeters for a number of individuals. 
-        
-        <INSERT CODE CELL>
-        
-        Unlike Python's earliest DataFrame library Pandas, Polars was designed with performance and usability in mind — Polars can scale to large datasets with ease while maintaining a simple and intuitive API. 
+
+        Like Pandas and PySpark, the central data structure in Polars is **the DataFrame**, a tabular data structure consisting of named columns. For example, the next cell constructs a DataFrame that records the gender, age, and height in centimeters for a number of individuals.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    import polars as pl
+
+    df_pl = pl.DataFrame(
+        { 
+            "gender": ["Male", "Female", "Male", "Female", "Male", "Female", 
+                       "Male", "Female", "Male", "Female"],
+            "age": [13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
+            "height_cm": [150.0, 170.0, 146.5, 142.0, 155.0, 165.0, 170.8, 130.0, 132.5, 162.0]
+        }
+    )
+    df_pl
+    return df_pl, pl
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        Unlike Python's earliest DataFrame library Pandas, Polars was designed with performance and usability in mind — Polars can scale to large datasets with ease while maintaining a simple and intuitive API. 
 
         Polars' performance is due to a number of factors, including its implementation and rust and its ability to perform operations in a parallelized and vectorized manner. It supports a wide range of data types, advanced query optimizations, and seamless integration with other Python libraries, making it a versatile tool for data scientists, engineers, and analysts. Additionally, Polars provides a lazy API for deferred execution, allowing users to optimize their workflows by chaining operations and executing them in a single pass.
 
@@ -41,12 +63,11 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
         ## Choosing Polars over Pandas
-
 
         In this section we'll give a few reasons why Polars is a better choice than Pandas, along with examples.
         """
@@ -54,14 +75,14 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
         ### Intuitive syntax
 
         Polars' syntax is similar to PySpark and intuitive like SQL, making heavy use of **method chaining**. This makes it easy for data professionals to transition to Polars, and leads to an API that is more concise and readable than Pandas.
-        
+
         **Example.** In the next few cells, we contrast the code to perform a basic filter and aggregation of data with Pandas to the code required to accomplish the same task with `Polars`.
         """
     )
@@ -92,21 +113,15 @@ def _():
     return df_pd, filtered_df_pd, pd, result_pd
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        The same example can be worked out in Polars more concisely, using method chaining. Notice how the Polars code is essentially as readable as English.
-        """
-    )
+    mo.md(r"""The same example can be worked out in Polars more concisely, using method chaining. Notice how the Polars code is essentially as readable as English.""")
     return
 
 
 @app.cell
-def _():
-    import polars as pl
-
-    df_pl = pl.DataFrame(
+def _(pl):
+    data_pl = pl.DataFrame(
         { 
             "Gender": ["Male", "Female", "Male", "Female", "Male", "Female", 
                        "Male", "Female", "Male", "Female"],
@@ -118,17 +133,16 @@ def _():
     # query: average height of male and female after the age of 15 years
 
     # filter, groupby and aggregation using method chaining
-    result_pl = df_pl.filter(pl.col("Age") > 15).group_by("Gender").agg(pl.mean("Height_CM"))
+    result_pl = data_pl.filter(pl.col("Age") > 15).group_by("Gender").agg(pl.mean("Height_CM"))
     result_pl
-    return df_pl, pl, result_pl
+    return data_pl, result_pl
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
         Notice how Polars uses a *method-chaining* approach, similar to PySpark, which makes the code more readable and expressive while using a *single line* to design the query.
-
         Additionally, Polars supports SQL-like operations *natively*, that allows you to write SQL queries directly on polars dataframe:
         """
     )
@@ -136,13 +150,13 @@ def _(mo):
 
 
 @app.cell
-def _(df_pl):
-    result = df_pl.sql("SELECT Gender, AVG(Height_CM) FROM self WHERE Age > 15 GROUP BY Gender")
+def _(data_pl):
+    result = data_pl.sql("SELECT Gender, AVG(Height_CM) FROM self WHERE Age > 15 GROUP BY Gender")
     result
     return (result,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -154,7 +168,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -178,7 +192,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -211,7 +225,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -249,7 +263,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -268,7 +282,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -282,7 +296,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
