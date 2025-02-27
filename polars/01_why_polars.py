@@ -25,6 +25,8 @@ def _(mo):
         """
         # An introduction to Polars
 
+        _By [Koushik Khan](https://github.com/koushikkhan)._
+
         This notebook provides a birds-eye overview of [Polars](https://pola.rs/), a fast and user-friendly data manipulation library for Python, and compares it to alternatives like Pandas and PySpark.
 
         Like Pandas and PySpark, the central data structure in Polars is **the DataFrame**, a tabular data structure consisting of named columns. For example, the next cell constructs a DataFrame that records the gender, age, and height in centimeters for a number of individuals.

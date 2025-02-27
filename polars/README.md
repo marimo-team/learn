@@ -8,7 +8,7 @@ This collection of marimo notebooks is designed to teach you the basics of data 
 
 Any notebook with the status "🚧" needs a contributor! Please file an issue if you plan to contribute.
 
-| Notebook               | Description                                                                  | Status |
+| Notebook               | Description                                                                  | Status | 
 | ---------------------- | ---------------------------------------------------------------------------- | ------ |
 | Why Polars             | An introduction to Polars and its advantages over other Dataframe libraries. | ✅     |
 | Series                 | Homogenous columns of data                                                   | 🚧     |
@@ -30,3 +30,9 @@ Any notebook with the status "🚧" needs a contributor! Please file an issue if
 ```bash
 uvx marimo edit <file_url>
 ```
+
+**Authors.**
+
+Thanks to all our notebook authors!
+
+* [Koushik Khan](https://github.com/koushikkhan)
