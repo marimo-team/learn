@@ -31,6 +31,10 @@ Any notebook with the status "🚧" needs a contributor! Please file an issue if
 uvx marimo edit <file_url>
 ```
 
+You can also open notebooks in our online playground by appending marimo.app/ to a notebook's URL:
+
+[https://marimo.app/github.com/marimo-team/learn/blob/main/polars/01_why_polars.py](https://marimo.app/github.com/marimo-team/learn/blob/main/polars/01_why_polars.py).
+
 **Authors.**
 
 Thanks to all our notebook authors!
