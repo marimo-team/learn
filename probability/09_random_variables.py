@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.9"
+__generated_with = "0.11.10"
 app = marimo.App(width="medium", app_title="Random Variables")
 
 
@@ -72,7 +72,7 @@ def _(mo):
         r"""
         ## Properties of Random Variables
 
-        Each random variable has several key properties that help us understand and work with it:
+        Each random variable has several key properties:
 
         | Property | Description | Example |
         |----------|-------------|---------|
@@ -81,7 +81,7 @@ def _(mo):
         | Support/Range | Possible values | $\{0,1,2,...,n\}$ for binomial |
         | Distribution | PMF or PDF | $p_X(x)$ or $f_X(x)$ |
         | Expectation | Weighted average | $E[X]$ |
-        | Variance | Measure of spread | $Var(X)$ |
+        | Variance | Measure of spread | $\text{Var}(X)$ |
         | Standard Deviation | Square root of variance | $\sigma_X$ |
         | Mode | Most likely value | argmax$_x$ $p_X(x)$ |
 
@@ -121,14 +121,14 @@ def _(mo):
 def _(np, plt):
     def die_pmf(x):
         if x in [1, 2, 3, 4, 5, 6]:
-            return 1/6
+            return 1 / 6
         return 0
 
     # Plot the PMF
     _x = np.arange(1, 7)
     probabilities = [die_pmf(i) for i in _x]
 
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(8, 2))
     plt.bar(_x, probabilities)
     plt.title("PMF of Rolling a Fair Die")
     plt.xlabel("Outcome")
@@ -166,7 +166,7 @@ def _(np, plt, stats):
     _pdf = stats.norm.pdf(_x, loc=0, scale=1)
 
     plt.figure(figsize=(8, 4))
-    plt.plot(_x, _pdf, 'b-', label='PDF')
+    plt.plot(_x, _pdf, "b-", label="PDF")
     plt.fill_between(_x, _pdf, where=(_x >= -1) & (_x <= 1), alpha=0.3)
     plt.title("Standard Normal Distribution")
     plt.xlabel("x")
@@ -214,7 +214,7 @@ def _(np):
 
 @app.cell
 def _(E_X):
-    print(E_X)
+    E_X
     return
 
 
@@ -224,17 +224,17 @@ def _(mo):
         r"""
         ## Variance
 
-        The variance $Var(X)$ measures the spread of a random variable around its mean:
+        The variance $\text{Var}(X)$ measures the spread of a random variable around its mean:
 
-        $Var(X) = E[(X - E[X])^2]$
+        $\text{Var}(X) = E[(X - E[X])^2]$
 
         This can be computed as:
-        $Var(X) = E[X^2] - (E[X])^2$
+        $\text{Var}(X) = E[X^2] - (E[X])^2$
 
         Properties:
 
-        1. $Var(aX) = a^2Var(X)$
-        2. $Var(X + b) = Var(X)$
+        1. $\text{Var}(aX) = a^2Var(X)$
+        2. $\text{Var}(X + b) = Var(X)$
         """
     )
     return
@@ -243,7 +243,7 @@ def _(mo):
 @app.cell
 def _(E_X, die_probs, die_values, np):
     def variance_discrete(x_values, probabilities, expected_value):
-        squared_diff = [(x - expected_value)**2 for x in x_values]
+        squared_diff = [(x - expected_value) ** 2 for x in x_values]
         return sum(d * p for d, p in zip(squared_diff, probabilities))
 
     # Example: Variance of a fair die roll
@@ -305,12 +305,12 @@ def _(np, variance_discrete):
 @app.cell(hide_code=True)
 def _(coin_var, mo, normal_var, uniform_var):
     mo.md(
-        f"""
+        rf"""
         Let's look at some calculated variances:
 
-        - Fair coin (X = 0 or 1): Var(X) = {coin_var:.4f}
-        - Standard normal distribution (discretized): Var(X) ≈ {normal_var:.4f}
-        - Uniform distribution on [0,1] (discretized): Var(X) ≈ {uniform_var:.4f}
+        - Fair coin (X = 0 or 1): $\text{{Var}}(X) = {coin_var:.4f}$
+        - Standard normal distribution (discretized): $\text{{Var(X)}} ≈ {normal_var:.4f}$
+        - Uniform distribution on $[0,1]$ (discretized): $\text{{Var(X)}} ≈ {uniform_var:.4f}$
         """
     )
     return
@@ -320,7 +320,34 @@ def _(coin_var, mo, normal_var, uniform_var):
 def _(mo):
     mo.md(
         r"""
-        ## Interactive Example: Comparing PMF and PDF
+        ## Common Distributions
+
+        1. Bernoulli Distribution
+            - Models a single success/failure experiment
+            - $P(X = 1) = p$, $P(X = 0) = 1-p$
+            - $E[X] = p$, $\text{Var}(X) = p(1-p)$
+
+        2. Binomial Distribution
+
+            - Models number of successes in $n$ independent trials
+            - $P(X = k) = \binom{n}{k}p^k(1-p)^{n-k}$
+            - $E[X] = np$, $\text{Var}(X) = np(1-p)$
+
+        3. Normal Distribution
+
+            - Bell-shaped curve defined by mean $\mu$ and variance $\sigma^2$
+            - PDF: $f_X(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$
+            - $E[X] = \mu$, $\text{Var}(X) = \sigma^2$
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### Example: Comparing Discrete and Continuous Distributions
 
         This example shows the relationship between a Binomial distribution (discrete) and its Normal approximation (continuous).
         The parameters control both distributions:
@@ -334,7 +361,7 @@ def _(mo):
 
 @app.cell
 def _(mo, n_trials, p_success):
-    mo.hstack([n_trials, p_success], justify='space-around')
+    mo.hstack([n_trials, p_success], justify="space-around")
     return
 
 
@@ -348,28 +375,28 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(n_trials, np, p_success, plt, stats):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3))
 
     # Discrete: Binomial PMF
     k = np.arange(0, n_trials.value + 1)
     pmf = stats.binom.pmf(k, n_trials.value, p_success.value)
-    ax1.bar(k, pmf, alpha=0.8, color='#1f77b4', label='PMF')
-    ax1.set_title(f'Binomial PMF (n={n_trials.value}, p={p_success.value})')
-    ax1.set_xlabel('Number of Successes')
-    ax1.set_ylabel('Probability')
+    ax1.bar(k, pmf, alpha=0.8, color="#1f77b4", label="PMF")
+    ax1.set_title(f"Binomial PMF (n={n_trials.value}, p={p_success.value})")
+    ax1.set_xlabel("Number of Successes")
+    ax1.set_ylabel("Probability")
     ax1.grid(True, alpha=0.3)
 
     # Continuous: Normal PDF approx.
     mu = n_trials.value * p_success.value
-    sigma = np.sqrt(n_trials.value * p_success.value * (1-p_success.value))
-    x = np.linspace(max(0, mu - 4*sigma), min(n_trials.value, mu + 4*sigma), 100)
+    sigma = np.sqrt(n_trials.value * p_success.value * (1 - p_success.value))
+    x = np.linspace(max(0, mu - 4 * sigma), min(n_trials.value, mu + 4 * sigma), 100)
     pdf = stats.norm.pdf(x, mu, sigma)
 
-    ax2.plot(x, pdf, 'r-', linewidth=2, label='PDF')
-    ax2.fill_between(x, pdf, alpha=0.3, color='red')
-    ax2.set_title(f'Normal PDF (μ={mu:.1f}, σ={sigma:.1f})')
-    ax2.set_xlabel('Continuous Approximation')
-    ax2.set_ylabel('Density')
+    ax2.plot(x, pdf, "r-", linewidth=2, label="PDF")
+    ax2.fill_between(x, pdf, alpha=0.3, color="red")
+    ax2.set_title(f"Normal PDF (μ={mu:.1f}, σ={sigma:.1f})")
+    ax2.set_xlabel("Continuous Approximation")
+    ax2.set_ylabel("Density")
     ax2.grid(True, alpha=0.3)
 
     # Set consistent x-axis limits for better comparison
@@ -387,40 +414,13 @@ def _(mo, n_trials, np, p_success):
     **Current Distribution Properties:**
 
     - Mean (μ) = {n_trials.value * p_success.value:.2f}
-    - Standard Deviation (σ) = {np.sqrt(n_trials.value * p_success.value * (1-p_success.value)):.2f}
+    - Standard Deviation (σ) = {np.sqrt(n_trials.value * p_success.value * (1 - p_success.value)):.2f}
 
     Notice how the Normal distribution (right) approximates the Binomial distribution (left) better when:
 
     1. The number of trials is larger
     2. The success probability is closer to 0.5
     """)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Common Distributions
-
-        1. Bernoulli Distribution
-            - Models a single success/failure experiment
-            - $P(X = 1) = p$, $P(X = 0) = 1-p$
-            - $E[X] = p$, $Var(X) = p(1-p)$
-
-        2. Binomial Distribution
-
-            - Models number of successes in $n$ independent trials
-            - $P(X = k) = \binom{n}{k}p^k(1-p)^{n-k}$
-            - $E[X] = np$, $Var(X) = np(1-p)$
-
-        3. Normal Distribution
-
-            - Bell-shaped curve defined by mean $\mu$ and variance $\sigma^2$
-            - PDF: $f_X(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$
-            - $E[X] = \mu$, $Var(X) = \sigma^2$
-        """
-    )
     return
 
 
@@ -435,7 +435,7 @@ def _(mo):
 
         1. The support of $X$
         2. The PMF $p_X(x)$
-        3. $E[X]$ and $Var(X)$
+        3. $E[X]$ and $\text{Var}(X)$
 
         <details>
         <summary>Solution</summary>
@@ -457,7 +457,7 @@ def _(mo):
 
         1. The PDF integrates to 1
         2. $E[X] = 1/2$
-        3. $Var(X) = 1/12$
+        3. $\text{Var}(X) = 1/12$
 
         Try solving this yourself first, then check the solution below.
         """
@@ -490,13 +490,13 @@ def _(mo):
            $E[X] = \int_0^1 x \cdot 1 \, dx = [\frac{x^2}{2}]_0^1 = \frac{1}{2} - 0 = \frac{1}{2}$
 
         3. **Variance**:
-           $Var(X) = E[X^2] - (E[X])^2$
+           $\text{Var}(X) = E[X^2] - (E[X])^2$
 
            First calculate $E[X^2]$:
            $E[X^2] = \int_0^1 x^2 \cdot 1 \, dx = [\frac{x^3}{3}]_0^1 = \frac{1}{3}$
 
            Then:
-           $Var(X) = \frac{1}{3} - (\frac{1}{2})^2 = \frac{1}{3} - \frac{1}{4} = \frac{1}{12}$
+           $\text{Var}(X) = \frac{1}{3} - (\frac{1}{2})^2 = \frac{1}{3} - \frac{1}{4} = \frac{1}{12}$
         """
     )
     return (mktext,)
