@@ -1,3 +1,11 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "marimo",
+#     "polars==1.23.0",
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.11.13"
@@ -526,7 +534,7 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now, let's create the *status* column.""")
+    mo.md(r"""Now, let's create the **status** column.""")
     return
 
 
