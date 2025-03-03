@@ -35,7 +35,7 @@ def _(mo):
 def _():
     import polars as pl
 
-    df = (pl.read_csv('https://raw.githubusercontent.com/jorammutenge/learn-rust/refs/heads/main/sample_sales.csv')
+    df = (pl.read_csv('https://raw.githubusercontent.com/jorammutenge/learn-rust/refs/heads/main/sample_sales.csv', try_parse_dates=True)
           .rename(lambda col: col.replace(' ','_').lower())
          )
     df
