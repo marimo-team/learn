@@ -42,16 +42,6 @@ def _():
     return df, pl
 
 
-@app.cell
-def _(df, pl):
-    (df
-     .with_columns(pl.col('sku','category').cast(pl.Categorical),
-                  pl.col('quantity').cast(pl.Int8))
-     .write_csv('sample_sales.csv')
-    )
-    return
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
