@@ -35,9 +35,21 @@ def _(mo):
 def _():
     import polars as pl
 
-    df = pl.read_parquet('../data/sales.parquet')
+    df = (pl.read_csv('https://raw.githubusercontent.com/jorammutenge/learn-rust/refs/heads/main/sample_sales.csv')
+          .rename(lambda col: col.replace(' ','_').lower())
+         )
     df
     return df, pl
+
+
+@app.cell
+def _(df, pl):
+    (df
+     .with_columns(pl.col('sku','category').cast(pl.Categorical),
+                  pl.col('quantity').cast(pl.Int8))
+     .write_csv('sample_sales.csv')
+    )
+    return
 
 
 @app.cell(hide_code=True)
