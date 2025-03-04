@@ -8,7 +8,7 @@
 
 import marimo
 
-__generated_with = "0.11.13"
+__generated_with = "0.11.14"
 app = marimo.App(width="medium")
 
 
@@ -102,7 +102,7 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Actually, the way we've been writing the aggregate lines is syntactic sugar. Here's a longer way of doing it as shown in the Polars documentation.""")
+    mo.md(r"""Actually, the way we've been writing the aggregate lines is syntactic sugar. Here's a longer way of doing it as shown in the [Polars documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.dataframe.group_by.GroupBy.agg.html).""")
     return
 
 
@@ -140,7 +140,7 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        Aggregations when grouping data are not limited to sums. You can also use functions like `max`, `min`, `median`, `first`, and `last`.  
+        Aggregations when grouping data are not limited to sums. You can also use functions like [`max`, `min`, `median`, `first`, and `last`](https://docs.pola.rs/user-guide/expressions/aggregation/#basic-aggregations).  
 
         Let's find the largest sale quantity for each product category.
         """
@@ -347,12 +347,7 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""There's more you can do with aggregations in Polars. We hope that in this notebook, we've armed you with the tools to get started.""")
-    return
-
-
-@app.cell
-def _():
+    mo.md(r"""There's more you can do with aggregations in Polars such as [sorting with aggregations](https://docs.pola.rs/user-guide/expressions/aggregation/#sorting). We hope that in this notebook, we've armed you with the tools to get started.""")
     return
 
 
