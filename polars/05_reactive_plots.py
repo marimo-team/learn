@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.11.13"
+__generated_with = "0.11.14"
 app = marimo.App(width="medium")
 
 
@@ -90,12 +90,11 @@ def _(df, pl):
 
 
 @app.cell
-def _(df, mo, pl, px):
+def _(df, mo, px):
     # Let's visualize it and get a feel for which region makes sense to focus on for our analysis
     duration_counts = df.group_by("duration_seconds").len("count")
     fig = px.bar(duration_counts, x="duration_seconds", y="count")
     fig.update_layout(selectdirection="h")
-    fig.add_selection(x0=120, y0=0, x1=360, y1=duration_counts.select(pl.col("count").max()).item())
     plot = mo.ui.plotly(fig)
     plot
     return duration_counts, fig, plot
@@ -124,10 +123,14 @@ def _(pl, plot):
 
 @app.cell
 def _(df, pl, plot):
-    min_dur, max_dur = (
-        min(row["duration_seconds"] for row in plot.value),
-        max(row["duration_seconds"] for row in plot.value),
-    )
+    if plot.value:
+        min_dur, max_dur = (
+            min(row["duration_seconds"] for row in plot.value),
+            max(row["duration_seconds"] for row in plot.value),
+        )
+    else:
+        print("Could not find a selected region. Using default values instead, try clicking and dragging in the above plot to change them.")
+        min_dur, max_dur = 120, 360
 
     # Calculate how many we are keeping vs throwing away with the filter
     duration_in_range = pl.col("duration_seconds").is_between(min_dur, max_dur)
@@ -306,6 +309,7 @@ def _(
         color=color.value,
         opacity=alpha.value,
         trendline="lowess" if include_trendline.value else None,
+        render_mode="webgl",
     )
     chart2 = mo.ui.plotly(fig2)
     chart2
@@ -329,6 +333,7 @@ def _(chart2, filtered_duration, mo, pl):
     # Let's look at which sort of songs were included in that region
     if len(chart2.value) == 0:
         out = mo.md("No data found in selection")
+        active_columns = column_order = None
     else:
         active_columns = list(chart2.value[0].keys())
         column_order = ["track_name", *active_columns, "album_name", "artists"]
