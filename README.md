@@ -29,6 +29,7 @@ notebooks for educators, students, and practitioners.
 - 📏 Linear algebra
 - ❄️ Polars
 - 🔥 Pytorch
+- 🗄️ Duckdb
 - 📈 Altair
 - 📈 Plotly
 - 📈 matplotlib
