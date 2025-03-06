@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.11.14"
+__generated_with = "0.11.16"
 app = marimo.App(width="medium")
 
 
@@ -41,13 +41,17 @@ def _(mo):
 
 @app.cell
 def _(pl):
-    repo_id, branch, file_path = (
-        "maharshipandya/spotify-tracks-dataset",
-        "~parquet",
-        "default/train/0000.parquet",
-    )
-    URL = f"hf://datasets/{repo_id}@{branch}/{file_path}"
-    lz = pl.scan_parquet(URL)
+    # You can read directly from the Hugging Face dataset, in which case polars will only read the necessary data:
+    #repo_id, branch, file_path = (
+    #    "maharshipandya/spotify-tracks-dataset",
+    #    "~parquet",
+    #    "default/train/0000.parquet",
+    #)
+    #URL = f"hf://datasets/{repo_id}@{branch}/{file_path}"
+    #lz = pl.scan_parquet(URL)
+    # Or save to a local file first if you want to avoid downloading it each time you run:
+    file_path = "spotify-tracks.parquet"
+    lz = pl.scan_parquet(file_path)
     df = (
         lz
         # Filter data we consider relevant (somewhat arbitrary in this example)
@@ -66,7 +70,7 @@ def _(pl):
         .collect()
     )
     df
-    return URL, branch, df, file_path, lz, repo_id
+    return df, file_path, lz
 
 
 @app.cell(hide_code=True)
@@ -361,10 +365,17 @@ def _(filtered_duration, mo, pl):
     # Note that we cannot use dropdown due to the sheer number of elements being enormous:
     all_artists = filtered_duration.select(pl.col("artists").str.split(';').explode().unique().sort())['artists'].to_list()
     all_tracks = filtered_duration['track_name'].unique().sort().to_list()
-    filter_artist = mo.ui.dropdown(all_artists, value=None, searchable=True)
-    filter_track = mo.ui.dropdown(all_tracks, value=None, searchable=True)
+    alternative_filter_artist = mo.ui.dropdown(all_artists, value=None, searchable=True)
+    alternative_filter_track = mo.ui.dropdown(all_tracks, value=None, searchable=True)
     # So we just provide freeform text boxes and filter ourselfves later
-    return all_artists, all_tracks, filter_artist, filter_track
+    # (the "alternative_" in the name is just to avoid conflicts with the above cell,
+    #  despite this being disabled marimo still requires global variables to be unique)
+    return (
+        all_artists,
+        all_tracks,
+        alternative_filter_artist,
+        alternative_filter_track,
+    )
 
 
 @app.cell
