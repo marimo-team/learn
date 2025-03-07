@@ -250,7 +250,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    docstring_length_df = expressions_df.with_columns(
+    docstring_length_df = expressions_df.select(
+        'namespace',
+        'member',
         docstring_len_chars=pl.col("docstring").str.len_chars(),
         docstring_len_bytes=pl.col("docstring").str.len_bytes(),
     )
@@ -446,7 +448,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    expressions_df.with_columns(
+    expressions_df.select(
+        'namespace',
+        'member',
         is_deprecated=pl.col('docstring').str.contains('.. deprecated', literal=True),
         has_parameters=pl.col('docstring').str.contains('Parameters'),
         has_examples=pl.col('docstring').str.contains('Examples'),
@@ -464,7 +468,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    expressions_df.with_columns(
+    expressions_df.select(
+        'namespace',
+        'member',
         has_reference=pl.col('docstring').str.contains_any(['See Also', 'https://'])
     )
     return
@@ -492,7 +498,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    expressions_df.with_columns(
+    expressions_df.select(
+        'namespace',
+        'member',
         variable_assignment_count=pl.col('docstring').str.count_matches(r'[a-zA-Z_][a-zA-Z0-9_]* = '),
     )
     return
@@ -506,7 +514,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    expressions_df.with_columns(
+    expressions_df.select(
+        'namespace',
+        'member',
         code_example_start=pl.col('docstring').str.find('>>>'),
     )
     return
@@ -533,8 +543,6 @@ def _(mo):
 @app.cell
 def _(expressions_df, pl, slice):
     sliced_df = expressions_df.select(
-        # Original string
-        "docstring",
         # First 25 chars
         docstring_head=pl.col("docstring").str.head(slice.value),
         # 50 chars after the first 25 chars
@@ -651,7 +659,7 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    descriptions_df = expressions_df.select(
+    descriptions_df = expressions_df.sample(5).select(
         description=pl.concat_str(
             [
                 pl.lit("- Expression "),
@@ -717,8 +725,9 @@ def _(mo):
 @app.cell
 def _(expressions_df, pl):
     url_pattern = r'(https?://[^\s>]+)'
-    expressions_df.with_columns(
-        "docstring",
+    expressions_df.select(
+        'namespace',
+        'member',
         url_match=pl.col('docstring').str.extract(url_pattern),
         url_matches=pl.col('docstring').str.extract_all(url_pattern),
     ).filter(pl.col('url_match').is_not_null())
@@ -741,7 +750,9 @@ def _(mo):
 
 @app.cell
 def _(expressions_df, pl):
-    expressions_df.with_columns(
+    expressions_df.select(
+        'namespace',
+        'member',
         example_df_shape=pl.col('docstring').str.extract_groups(r"shape:\s*\((?<height>\S+),\s*(?<width>\S+)\)"),
     )
     return
@@ -845,6 +856,8 @@ def _(mo):
         We make use of string expressions to extract the raw Python source code of examples from the docstrings and we leverage the interactive Marimo environment to enable the selection of expressions via a searchable dropdown and a fully functional code editor whose output is rendered with Marimo's rich display utilities.
 
         In other words, we will use Polars to execute Polars. ❄️ How cool is that?
+
+        ---
         """
     )
     return
@@ -861,6 +874,7 @@ def _(
 ):
     mo.vstack(
         [
+            mo.md(f'### {expression.value}'),
             expression,
             mo.hstack([expression_description, expression_docs_link]),
             example_editor,
