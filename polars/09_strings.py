@@ -34,7 +34,7 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ##  🛠️  Parsing & Conversion
+        ## 🛠️  Parsing & Conversion
 
         Let's warm up with one of the most frequent use cases: parsing raw strings into various formats.
         We'll take a tiny dataframe with metadata about Python packages represented as raw JSON strings and we'll use Polars string expressions to parse the attributes into their true data types.
