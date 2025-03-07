@@ -1,6 +1,16 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "altair==5.5.0",
+#     "marimo",
+#     "numpy==2.2.3",
+#     "polars==1.24.0",
+# ]
+# ///
+
 import marimo
 
-__generated_with = "0.11.13"
+__generated_with = "0.11.17"
 app = marimo.App(width="medium")
 
 
@@ -573,13 +583,30 @@ def _(expressions_df, pl):
 
 @app.cell
 def _(mo):
-    mo.md(r"""As a more practical example, we can use the `split` expression with some aggregation to count the number of times a particular word occurs in member names across all namespaces.""")
+    mo.md(r"""As a more practical example, we can use the `split` expression with some aggregation to count the number of times a particular word occurs in member names across all namespaces. This enables us to create a word cloud of the API members' constituents!""")
     return
 
 
 @app.cell(hide_code=True)
-def _(alt, expressions_df, pl, random):
-    wc_df = (
+def _(mo, wordcloud, wordcloud_height, wordcloud_width):
+    mo.vstack([
+        wordcloud_width,
+        wordcloud_height,
+        wordcloud,
+    ])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    wordcloud_width = mo.ui.slider(0, 64, step=1, value=32, label="Word Cloud Width")
+    wordcloud_height = mo.ui.slider(0, 32, step=1, value=16, label="Word Cloud Height")
+    return wordcloud_height, wordcloud_width
+
+
+@app.cell(hide_code=True)
+def _(alt, expressions_df, pl, random, wordcloud_height, wordcloud_width):
+    wordcloud_df = (
         expressions_df.select(pl.col("member").str.split("_"))
         .explode("member")
         .group_by("member")
@@ -587,17 +614,17 @@ def _(alt, expressions_df, pl, random):
         # Generating random x and y coordinates to distribute the words in the 2D space
         .with_columns(
             x=pl.col("member").map_elements(
-                lambda e: random.randint(0, 32),
+                lambda e: random.randint(0, wordcloud_width.value),
                 return_dtype=pl.UInt8,
             ),
             y=pl.col("member").map_elements(
-                lambda e: random.randint(0, 16),
+                lambda e: random.randint(0, wordcloud_height.value),
                 return_dtype=pl.UInt8,
             ),
         )
     )
 
-    alt.Chart(wc_df).mark_text(baseline="middle").encode(
+    wordcloud = alt.Chart(wordcloud_df).mark_text(baseline="middle").encode(
         x=alt.X("x:O", axis=None),
         y=alt.Y("y:O", axis=None),
         text="member:N",
@@ -605,7 +632,7 @@ def _(alt, expressions_df, pl, random):
         size=alt.Size("len:Q", legend=None),
         tooltip=["member", "len"],
     ).configure_view(strokeWidth=0)
-    return (wc_df,)
+    return wordcloud, wordcloud_df
 
 
 @app.cell
@@ -955,7 +982,7 @@ def _():
     import altair as alt
     import random
 
-    random.seed(14)
+    random.seed(42)
     return alt, mo, pl, random
 
 
