@@ -14,7 +14,7 @@ __generated_with = "0.11.17"
 app = marimo.App(width="medium")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -30,7 +30,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -43,7 +43,7 @@ def _(mo):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(pl):
     pip_metadata_raw_df = pl.DataFrame(
         [
@@ -56,7 +56,7 @@ def _(pl):
     return (pip_metadata_raw_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""We can use the [`json_decode`](https://docs.pola.rs/api/python/stable/reference/series/api/polars.Series.str.json_decode.html) expression to parse the raw JSON strings into Polars-native structs and we can use the [unnest](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.unnest.html) dataframe operation to have a dedicated column per parsed attribute.""")
     return
@@ -69,13 +69,13 @@ def _(pip_metadata_raw_df, pl):
     return (pip_metadata_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""This is already a much friendlier representation of the data we started out with, but note that since the JSON entries had only string attributes, all values are strings, even the temporal `released_at` and numerical `size_mb` columns.""")
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""As we know that the `size_mb` column should have a decimal representation, we go ahead and use [`to_decimal`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.to_decimal.html#polars.Expr.str.to_decimal) to perform the conversion.""")
     return
@@ -91,7 +91,7 @@ def _(pip_metadata_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -127,7 +127,7 @@ def _(pip_metadata_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""Alternatively, instead of using three different functions to perform the conversion to date, we can use a single one, [`strptime`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.strptime.html) which takes the desired temporal data type as its first parameter.""")
     return
@@ -145,7 +145,7 @@ def _(pip_metadata_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""And to wrap up this section on parsing and conversion, let's consider a final scenario. What if we don't want to parse the entire raw JSON string, because we only need a subset of its attributes? Well, in this case we can leverage the [`json_path_match`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.json_path_match.html) expression to extract only the desired attributes using standard [JSONPath](https://goessner.net/articles/JsonPath/) syntax.""")
     return
@@ -163,7 +163,7 @@ def _(pip_metadata_raw_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -217,7 +217,7 @@ def _(pl):
     return expressions_df, list_expr_meta, list_members
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""As the following visualization shows, `str` is one of the richest Polars expression namespaces with multiple dozens of functions in it.""")
     return
@@ -232,7 +232,7 @@ def _(alt, expressions_df):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -260,7 +260,7 @@ def _(expressions_df, pl):
     return (docstring_length_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""As the dataframe preview above and the scatterplot below show, the docstring length measured in bytes is almost always bigger than the length expressed in characters. This is due to the fact that the docstrings include characters which require more than a single byte to represent, such as "╞" for displaying dataframe header and body separators.""")
     return
@@ -276,7 +276,7 @@ def _(alt, docstring_length_df):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -298,7 +298,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -338,7 +338,7 @@ def _(mo, padded_df, padding):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -362,7 +362,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -388,7 +388,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -412,7 +412,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -434,7 +434,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -460,7 +460,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""For scenarios where we want to combine multiple substrings to check for, we can use the [`contains`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.contains.html) expression to check for the presence of various patterns.""")
     return
@@ -476,7 +476,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -506,7 +506,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""A related application example is to *find* the first index where a particular pattern is present, so that it can be used for downstream processing such as slicing. Below we use the [`find`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.find.html) expression to determine the index at which a code example starts in the docstring - identified by the Python shell substring `">>>"`.""")
     return
@@ -522,7 +522,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -562,7 +562,7 @@ def _(mo, slice, sliced_df):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -589,7 +589,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""As a more practical example, we can use the `split` expression with some aggregation to count the number of times a particular word occurs in member names across all namespaces. This enables us to create a word cloud of the API members' constituents!""")
     return
@@ -643,7 +643,7 @@ def _(alt, expressions_df, pl, random, wordcloud_height, wordcloud_width):
     return wordcloud, wordcloud_df
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -677,7 +677,7 @@ def _(expressions_df, pl):
     return (descriptions_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -706,7 +706,7 @@ def _(descriptions_df, mo, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -734,7 +734,7 @@ def _(expressions_df, pl):
     return (url_pattern,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -758,7 +758,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -783,7 +783,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -807,7 +807,7 @@ def _(expressions_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -830,7 +830,7 @@ def _(expressions_df, pl):
     return (encoded_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""And of course, you can convert back into a human-readable representation using the [`decode`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.str.decode.html) expression.""")
     return
@@ -845,7 +845,7 @@ def _(encoded_df, pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
