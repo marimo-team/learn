@@ -103,7 +103,17 @@ def _(md):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
+def _():
+    from dataclasses import dataclass
+    from typing import Callable, Generic, TypeVar
+
+    a = TypeVar("a")
+    b = TypeVar("b")
+    return Callable, Generic, TypeVar, a, b, dataclass
+
+
+@app.cell
 def _(Callable, Functor, Generic, a, b, dataclass):
     @dataclass
     class Wrapper(Functor, Generic[a]):
@@ -152,28 +162,11 @@ def _(md):
     ## The List Wrapper
 
     We can define a `ListWrapper` class to represent a wrapped list that supports `fmap`:
-
-    ```python
-    @dataclass
-    class ListWrapper(Generic[a]):
-        value: list[a]
-
-        def fmap(self, func: Callable[[a], b]) -> "ListWrapper[b]":
-            return ListWrapper([func(x) for x in self.value])
-
-
-    >>> list_wrapper = ListWrapper([1, 2, 3, 4])
-    >>> list_wrapper.fmap(lambda x: x + 1)
-    ListWrapper(value=[2, 3, 4, 5])
-    >>> list_wrapper.fmap(lambda x: [x])
-    ListWrapper(value=[[1], [2], [3], [4]])
-    ```
-    > Try using `ListWrapper` in the cell below.
     """)
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(Callable, Functor, Generic, a, b, dataclass):
     @dataclass
     class ListWrapper(Functor, Generic[a]):
@@ -188,6 +181,14 @@ def _(Callable, Functor, Generic, a, b, dataclass):
 
     list_wrapper = ListWrapper([1, 2, 3, 4])
     return ListWrapper, list_wrapper
+
+
+@app.cell
+def _(ListWrapper, mo):
+    with mo.redirect_stdout():
+        print(ListWrapper(value=[2, 3, 4, 5]))
+        print(ListWrapper(value=[[1], [2], [3], [4]]))
+    return
 
 
 @app.cell(hide_code=True)
@@ -315,17 +316,6 @@ def _(md):
 
 
 @app.cell(hide_code=True)
-def _(RoseTree, mo):
-    ftree = RoseTree(1, [RoseTree(2, []), RoseTree(3, [RoseTree(4, [])])])
-
-    with mo.redirect_stdout():
-        print(ftree)
-        print(ftree.fmap(lambda x: [x]))
-        print(ftree.fmap(lambda x: RoseTree(x, [])))
-    return (ftree,)
-
-
-@app.cell(hide_code=True)
 def _(Callable, Functor, Generic, a, b, dataclass, md):
     @dataclass
     class RoseTree(Functor, Generic[a]):
@@ -370,6 +360,17 @@ def _(Callable, Functor, Generic, a, b, dataclass, md):
 
     md(RoseTree.__doc__)
     return (RoseTree,)
+
+
+@app.cell(hide_code=True)
+def _(RoseTree, mo):
+    ftree = RoseTree(1, [RoseTree(2, []), RoseTree(3, [RoseTree(4, [])])])
+
+    with mo.redirect_stdout():
+        print(ftree)
+        print(ftree.fmap(lambda x: [x]))
+        print(ftree.fmap(lambda x: RoseTree(x, [])))
+    return (ftree,)
 
 
 @app.cell(hide_code=True)
@@ -511,28 +512,12 @@ def _(ftree, list_wrapper, mo, wrapper):
 @app.cell(hide_code=True)
 def _(md):
     md("""
-    And here is an `EvilFunctor`
-
-    ```Python
-    @dataclass
-    class EvilFunctor(Functor, Generic[a]):
-        value: list[a]
-
-        def fmap(self, func: Callable[[a], b]) -> "EvilFunctor[b]":
-            return (
-                EvilFunctor([self.value[0]] * 2 + list(map(func, self.value[1:])))
-                if self.value
-                else []
-            )
-
-        def __repr__(self):
-            return repr(self.value)
-    ```
+    And here is an `EvilFunctor`. We can verify it's not a valid `Functor`.
     """)
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(Callable, Functor, Generic, a, b, dataclass):
     @dataclass
     class EvilFunctor(Functor, Generic[a]):
@@ -646,7 +631,7 @@ def _(ABC, Callable, Generic, a, abstractmethod, b, dataclass, id, md):
 @app.cell(hide_code=True)
 def _(md):
     md("""
-    - Try with utility functions in the cell below
+    > Try with utility functions in the cell below
     """)
     return
 
@@ -675,8 +660,12 @@ def _(md):
     One example is the **`Maybe`** type from Haskell, which is used to represent computations that can either result in a value (`Just a`) or no value (`Nothing`). 
 
     We can define the `Maybe` functor as below:
+    """)
+    return
 
-    ```python
+
+@app.cell
+def _(Callable, Functor, Generic, a, b, dataclass):
     @dataclass
     class Just(Generic[a]):
         value: a
@@ -688,18 +677,25 @@ def _(md):
         def __repr__(self):
             return f"Just {self.value}"
 
+
     @dataclass
     class Maybe(Functor, Generic[a]):
         value: None | Just[a]
 
         def fmap(self, func: Callable[[a], b]) -> "Maybe[b]":
             # Apply the function to the value inside `Just`, or return `Nothing` if value is None
-            return Maybe(Just(func(self.value.value))) if self.value else Maybe(None)
+            return (
+                Maybe(Just(func(self.value.value))) if self.value else Maybe(None)
+            )
 
         def __repr__(self):
             return repr(self.value) if self.value else "Nothing"
-    ```
+    return Just, Maybe
 
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
     - **`Just`** is a wrapper that holds a value. We use it to represent the presence of a value.
     - **`Maybe`** is a functor that can either hold a `Just` value or be `Nothing` (equivalent to `None` in Python). The `fmap` method applies a function to the value inside the `Just` wrapper, if it exists. If the value is `None` (representing `Nothing`), `fmap` simply returns `Nothing`.
 
@@ -708,33 +704,6 @@ def _(md):
     > Try using `Maybe` in the cell below.
     """)
     return
-
-
-@app.cell(hide_code=True)
-def _(Callable, Functor, Generic, a, b, dataclass):
-    @dataclass
-    class Just(Generic[a]):
-        value: a
-
-        def __init__(self, value: a):
-            self.value = value.value if isinstance(value, Just) else value
-
-        def __repr__(self):
-            return f"Just {self.value}"
-
-
-    @dataclass
-    class Maybe(Functor, Generic[a]):
-        value: None | Just[a]
-
-        def fmap(self, func: Callable[[a], b]) -> "Maybe[b]":
-            return (
-                Maybe(Just(func(self.value.value))) if self.value else Maybe(None)
-            )
-
-        def __repr__(self):
-            return repr(self.value) if self.value else "Nothing"
-    return Just, Maybe
 
 
 @app.cell(hide_code=True)
@@ -792,7 +761,7 @@ def _(md):
     There are three laws that categories need to follow. 
 
     1. The composition of morphisms needs to be **associative**. Symbolically, $f ∘ (g ∘ h) = (f ∘ g) ∘ h$
-  
+
         - Morphisms are applied right to left, so with $f ∘ g$ first $g$ is applied, then $f$. 
 
     2. The category needs to be **closed** under the composition operation. So if $f : B → C$ and $g : A → B$, then there must be some morphism $h : A → C$ in the category such that $h = f ∘ g$. 
@@ -1066,87 +1035,11 @@ def _(md):
     ### Category of List Concatenation
 
     First, let’s define the category of list concatenation:
-
-    ```python
-    @dataclass
-    class ListConcatenation(Generic[a]):
-        value: list[a]
-
-        @staticmethod
-        def id() -> "ListConcatenation[a]":
-            return ListConcatenation([])
-
-        @staticmethod
-        def compose(
-            this: "ListConcatenation[a]", other: "ListConcatenation[a]"
-        ) -> "ListConcatenation[a]":
-            return ListConcatenation(this.value + other.value)
-    ```
-
-    - **Identity**: The identity element is an empty list (`ListConcatenation([])`).
-    - **Composition**: The composition of two lists is their concatenation (`this.value + other.value`).
-
-    ### Category of Integer Addition
-
-    Now, let's define the category of integer addition:
-
-    ```python
-    @dataclass
-    class IntAddition:
-        value: int
-
-        @staticmethod
-        def id() -> "IntAddition":
-            return IntAddition(0)
-
-        @staticmethod
-        def compose(this: "IntAddition", other: "IntAddition") -> "IntAddition":
-            return IntAddition(this.value + other.value)
-    ```
-
-    - **Identity**: The identity element is `IntAddition(0)` (the additive identity).
-    - **Composition**: The composition of two integers is their sum (`this.value + other.value`).
-
-    ### Defining the Length Functor
-
-    We now define the `length` function as a functor, mapping from the category of list concatenation to the category of integer addition:
-
-    ```python
-    length = lambda l: IntAddition(len(l.value))
-    ```
-
-    This function takes an instance of `ListConcatenation`, computes its length, and returns an `IntAddition` instance with the computed length.
-
-    ### Verifying Functor Laws
-
-    Now, let’s verify that `length` satisfies the two functor laws.
-
-    #### 1. **Identity Law**:
-    The identity law states that applying the functor to the identity element of one category should give the identity element of the other category.
-
-    ```python
-    >>> length(ListConcatenation.id()) == IntAddition.id()
-    True
-    ```
-
-    This ensures that the length of an empty list (identity in the `ListConcatenation` category) is `0` (identity in the `IntAddition` category).
-
-    #### 2. **Composition Law**:
-    The composition law states that the functor should preserve composition. Applying the functor to a composed element should be the same as composing the functor applied to the individual elements.
-
-    ```python
-    >>> length(ListConcatenation.compose(lista, listb)) == IntAddition.compose(
-    >>>    length(lista), length(listb)
-    >>> )
-    True
-    ```
-
-    This ensures that the length of the concatenation of two lists is the same as the sum of the lengths of the individual lists.
     """)
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(Generic, a, dataclass):
     @dataclass
     class ListConcatentation(Generic[a]):
@@ -1161,8 +1054,30 @@ def _(Generic, a, dataclass):
             this: "ListConcatentation[a]", other: "ListConcatentation[a]"
         ) -> "ListConcatentation[a]":
             return ListConcatentation(this.value + other.value)
+    return (ListConcatentation,)
 
 
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    - **Identity**: The identity element is an empty list (`ListConcatenation([])`).
+    - **Composition**: The composition of two lists is their concatenation (`this.value + other.value`).
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    ### Category of Integer Addition
+
+    Now, let's define the category of integer addition:
+    """)
+    return
+
+
+@app.cell
+def _(dataclass):
     @dataclass
     class IntAddition:
         value: int
@@ -1174,30 +1089,95 @@ def _(Generic, a, dataclass):
         @staticmethod
         def compose(this: "IntAddition", other: "IntAddition") -> "IntAddition":
             return IntAddition(this.value + other.value)
-    return IntAddition, ListConcatentation
+    return (IntAddition,)
 
 
 @app.cell(hide_code=True)
+def _(md):
+    md("""
+    - **Identity**: The identity element is `IntAddition(0)` (the additive identity).
+    - **Composition**: The composition of two integers is their sum (`this.value + other.value`).
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    ### Defining the Length Functor
+
+    We now define the `length` function as a functor, mapping from the category of list concatenation to the category of integer addition:
+    """)
+    return
+
+
+@app.cell
 def _(IntAddition):
     length = lambda l: IntAddition(len(l.value))
     return (length,)
 
 
 @app.cell(hide_code=True)
+def _(md):
+    md("""
+    This function takes an instance of `ListConcatenation`, computes its length, and returns an `IntAddition` instance with the computed length.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    ### Verifying Functor Laws
+
+    Now, let’s verify that `length` satisfies the two functor laws.
+
+    #### 1. **Identity Law**:
+    The identity law states that applying the functor to the identity element of one category should give the identity element of the other category.
+    """)
+    return
+
+
+@app.cell
 def _(IntAddition, ListConcatentation, length):
     length(ListConcatentation.id()) == IntAddition.id()
     return
 
 
 @app.cell(hide_code=True)
+def _(md):
+    md("""
+    This ensures that the length of an empty list (identity in the `ListConcatenation` category) is `0` (identity in the `IntAddition` category).
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    #### 2. **Composition Law**:
+    The composition law states that the functor should preserve composition. Applying the functor to a composed element should be the same as composing the functor applied to the individual elements.
+    """)
+    return
+
+
+@app.cell
 def _(IntAddition, ListConcatentation, length):
-    _list_a = ListConcatentation([1, 2])
-    _list_b = ListConcatentation([3, 4])
+    lista = ListConcatentation([1, 2])
+    listb = ListConcatentation([3, 4])
 
 
-    length(ListConcatentation.compose(_list_a, _list_b)) == IntAddition.compose(
-        length(_list_a), length(_list_b)
+    length(ListConcatentation.compose(lista, listb)) == IntAddition.compose(
+        length(lista), length(listb)
     )
+    return lista, listb
+
+
+@app.cell(hide_code=True)
+def _(md):
+    md("""
+    This ensures that the length of the concatenation of two lists is the same as the sum of the lengths of the individual lists.
+    """)
     return
 
 
@@ -1243,23 +1223,13 @@ def _():
 @app.cell(hide_code=True)
 def _():
     from abc import abstractmethod, ABC
-    from dataclasses import dataclass
-    return ABC, abstractmethod, dataclass
-
-
-@app.cell(hide_code=True)
-def _():
-    from typing import TypeVar, Generic
-    from collections.abc import Callable
-    return Callable, Generic, TypeVar
+    return ABC, abstractmethod
 
 
 @app.cell(hide_code=True)
 def _(TypeVar):
-    a = TypeVar("a")
-    b = TypeVar("b")
     c = TypeVar("c")
-    return a, b, c
+    return (c,)
 
 
 if __name__ == "__main__":
