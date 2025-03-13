@@ -4,6 +4,7 @@
 #     "marimo",
 # ]
 # ///
+
 import marimo
 
 __generated_with = "0.11.17"
@@ -36,7 +37,8 @@ def _(mo):
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.0 | last modified: 2025-03-13 | author: [métaboulie](https://github.com/metaboulie)
+        version: 0.1.0 | last modified: 2025-03-13 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
         """
@@ -295,6 +297,7 @@ def _(mo):
         - Each node has a **list of child nodes** (which are also RoseTrees).
 
         This structure is useful for representing hierarchical data, such as:
+
         - Abstract Syntax Trees (ASTs)
         - File system directories
         - Recursive computations
@@ -554,7 +557,7 @@ def _(Callable, Functor, Generic, a, b, dataclass):
     return (EvilFunctor,)
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(EvilFunctor):
     EvilFunctor([1, 2, 3, 4]).check_functor_law()
     return
@@ -564,9 +567,9 @@ def _(EvilFunctor):
 def _(mo):
     mo.md(
         """
-        ## Final defination of Functor
+        ## Final definition of Functor
 
-        We can now draft the final defination of `Functor` with some utility functions.
+        We can now draft the final definition of `Functor` with some utility functions.
 
         ```Python
         @dataclass
@@ -1088,19 +1091,19 @@ def _(mo):
 @app.cell
 def _(Generic, a, dataclass):
     @dataclass
-    class ListConcatentation(Generic[a]):
+    class ListConcatenation(Generic[a]):
         value: list[a]
 
         @staticmethod
-        def id() -> "ListConcatentation[a]":
-            return ListConcatentation([])
+        def id() -> "ListConcatenation[a]":
+            return ListConcatenation([])
 
         @staticmethod
         def compose(
-            this: "ListConcatentation[a]", other: "ListConcatentation[a]"
-        ) -> "ListConcatentation[a]":
-            return ListConcatentation(this.value + other.value)
-    return (ListConcatentation,)
+            this: "ListConcatenation[a]", other: "ListConcatenation[a]"
+        ) -> "ListConcatenation[a]":
+            return ListConcatenation(this.value + other.value)
+    return (ListConcatenation,)
 
 
 @app.cell(hide_code=True)
@@ -1193,8 +1196,8 @@ def _(mo):
 
 
 @app.cell
-def _(IntAddition, ListConcatentation, length):
-    length(ListConcatentation.id()) == IntAddition.id()
+def _(IntAddition, ListConcatenation, length):
+    length(ListConcatenation.id()) == IntAddition.id()
     return
 
 
@@ -1216,15 +1219,15 @@ def _(mo):
 
 
 @app.cell
-def _(ListConcatentation):
-    lista = ListConcatentation([1, 2])
-    listb = ListConcatentation([3, 4])
+def _(ListConcatenation):
+    lista = ListConcatenation([1, 2])
+    listb = ListConcatenation([3, 4])
     return lista, listb
 
 
 @app.cell
-def _(IntAddition, ListConcatentation, length, lista, listb):
-    length(ListConcatentation.compose(lista, listb)) == IntAddition.compose(
+def _(IntAddition, ListConcatenation, length, lista, listb):
+    length(ListConcatenation.compose(lista, listb)) == IntAddition.compose(
         length(lista), length(listb)
     )
     return
