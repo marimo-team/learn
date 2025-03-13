@@ -90,7 +90,7 @@ def _(np, plt):
                 xy=(exp_num_rolls, exp_running_avg[-1]), xytext=(exp_num_rolls/3, 4),
                 arrowprops=dict(facecolor='black', shrink=0.05, width=1.5))
 
-    plt.gca()  # Return the current axes to ensure proper display
+    plt.gca()
     return exp_die_rolls, exp_num_rolls, exp_running_avg
 
 
@@ -506,16 +506,12 @@ def _(
     # Plot the expected value function
     dist_ax.plot(param_values, expected_values, 'b-', linewidth=2, label="Expected Value Function")
 
-    # Mark the current parameter value
     dist_ax.plot(current_param, current_expected, 'ro', markersize=10, label=f"Current Value: E[X] = {current_expected}")
 
-    # Add a horizontal line from y-axis to the current point
     dist_ax.hlines(current_expected, param_values[0], current_param, colors='r', linestyles='dashed')
 
-    # Add a vertical line from x-axis to the current point
     dist_ax.vlines(current_param, 0, current_expected, colors='r', linestyles='dashed')
 
-    # Add shaded area under the curve
     dist_ax.fill_between(param_values, 0, expected_values, alpha=0.2, color='blue')
 
     dist_ax.set_xlabel(x_label, fontsize=12)
@@ -531,7 +527,6 @@ def _(
     dist_ax.text(0.02, 0.95, formula, transform=dist_ax.transAxes, fontsize=12,
             verticalalignment='top', bbox=dist_props)
 
-    # Set reasonable y-axis limits based on the distribution
     if dist_selection.value == "geometric":
         max_y = min(50, 2/max(0.01, param_values[0]))
         dist_ax.set_ylim(0, max_y)
@@ -540,7 +535,6 @@ def _(
     else:
         dist_ax.set_ylim(0, max(expected_values) * 1.1)
 
-    # Add annotations for current value
     annotation_x = current_param + (param_values[-1] - param_values[0]) * 0.05
     annotation_y = current_expected
 
@@ -609,7 +603,6 @@ def _(np, plt, stats):
     skew_expected = skew_n * skew_p
     skew_expected_rounded = round(skew_expected, 2)
 
-    # Create the plot
     skew_fig, skew_ax = plt.subplots(figsize=(10, 5))
     skew_ax.bar(skew_x_values, skew_pmf_values, alpha=0.7, width=0.4)
 
@@ -619,15 +612,12 @@ def _(np, plt, stats):
     skew_ax.axvline(x=skew_expected, color='r', linestyle='--', linewidth=2, 
                 label=f'Expected Value = {skew_expected_rounded} (Mean)')
 
-    # Add annotations to highlight the difference
     skew_ax.annotate('Mode', xy=(skew_mode, 0.05), xytext=(skew_mode-2.0, 0.1),
                 arrowprops=dict(facecolor='green', shrink=0.05, width=1.5), color='green')
     skew_ax.annotate('Expected Value', xy=(skew_expected, 0.05), xytext=(skew_expected+1, 0.15),
                 arrowprops=dict(facecolor='red', shrink=0.05, width=1.5), color='red')
 
-    # Highlight the difference between mode and expected value
     if skew_mode != int(skew_expected):
-        # Add a shaded region between mode and expected value
         min_x = min(skew_mode, skew_expected)
         max_x = max(skew_mode, skew_expected)
         skew_ax.axvspan(min_x, max_x, alpha=0.2, color='purple')
@@ -685,9 +675,8 @@ def _(mo):
 
         1. **Finance**: Expected return on investments, option pricing
         2. **Insurance**: Setting premiums based on expected claims
-        3. **Gaming**: Calculating the expected winnings in games of chance
-        4. **Machine Learning**: Loss function minimization
-        5. **Operations Research**: Decision making under uncertainty
+        3. **Machine Learning**: Loss function minimization
+        4. **Operations Research**: Decision making under uncertainty
         """
     )
     return
