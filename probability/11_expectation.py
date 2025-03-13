@@ -459,7 +459,6 @@ def _(
         formula = "E[X] = p"
 
     elif dist_selection.value == "binomial":
-        # Get parameter range for visualization
         p_min, p_max = param_range.value
         param_values = np.linspace(p_min, p_max, 100)
 
@@ -473,7 +472,6 @@ def _(
         formula = f"E[X] = n × p = {n} × p"
 
     elif dist_selection.value == "geometric":
-        # Get parameter range for visualization
         p_min, p_max = param_range.value
         # Ensure p is not 0 for geometric distribution
         p_min = max(0.01, p_min)
@@ -488,7 +486,6 @@ def _(
         formula = "E[X] = 1/p"
 
     else:  # Poisson
-        # Get parameter range for visualization
         lambda_min, lambda_max = lambda_range.value
         param_values = np.linspace(lambda_min, lambda_max, 100)
 
