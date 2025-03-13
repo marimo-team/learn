@@ -669,23 +669,6 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Applications of Expectation
-
-        Expected value has numerous applications across various fields:
-
-        1. **Finance**: Expected return on investments, option pricing
-        2. **Insurance**: Setting premiums based on expected claims
-        3. **Machine Learning**: Loss function minimization
-        4. **Operations Research**: Decision making under uncertainty
-        """
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
         ## 🤔 Test Your Understanding
 
         Choose what you believe are the correct options in the questions below:
