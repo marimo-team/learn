@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <em>A curated collection of educational <a href="https://github.com/marimo-team/marimo">marimo</a> notebooks</em>.
+  <span><em>A curated collection of educational <a href="https://github.com/marimo-team/marimo">marimo</a> notebooks</em> || <a href="https://discord.gg/rT48v2Y9fe">💬 Discord</a></span>
 </p>
 
 # 📚 Learn
@@ -63,7 +63,7 @@ what you'd like to see by [filing an issue](https://github.com/marimo-team/learn
 We're building a community. Come hang out with us!
 
 - 🌟 [Star us on GitHub](https://github.com/marimo-team/examples)
-- 💬 [Chat with us on Discord](https://marimo.io/discord?ref=readme)
+- 💬 [Chat with us on Discord](https://discord.gg/rT48v2Y9fe)
 - 📧 [Subscribe to our Newsletter](https://marimo.io/newsletter)
 - ☁️ [Join our Cloud Waitlist](https://marimo.io/cloud)
 - ✏️ [Start a GitHub Discussion](https://github.com/marimo-team/marimo/discussions)
