@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#     "marimo",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.11.17"
@@ -723,19 +729,24 @@ def _(mo):
     return
 
 
+@app.cell
+def _(Just, Maybe, ftree):
+    mftree = Maybe(Just(ftree))
+    mint = Maybe(Just(1))
+    mnone = Maybe(None)
+    return mftree, mint, mnone
+
+
 @app.cell(hide_code=True)
-def _(Just, Maybe, ftree, inc, mo):
+def _(inc, mftree, mint, mnone, mo):
     with mo.redirect_stdout():
-        mftree = Maybe(Just(ftree))
-        mint = Maybe(Just(1))
-        mnone = Maybe(None)
         print(mftree.check_functor_law())
         print(mint.check_functor_law())
         print(mnone.check_functor_law())
         print(mftree.fmap(inc))
         print(mint.fmap(lambda x: x + 1))
         print(mnone.fmap(lambda x: x + 1))
-    return mftree, mint, mnone
+    return
 
 
 @app.cell(hide_code=True)
@@ -1205,15 +1216,18 @@ def _(mo):
 
 
 @app.cell
-def _(IntAddition, ListConcatentation, length):
+def _(ListConcatentation):
     lista = ListConcatentation([1, 2])
     listb = ListConcatentation([3, 4])
+    return lista, listb
 
 
+@app.cell
+def _(IntAddition, ListConcatentation, length, lista, listb):
     length(ListConcatentation.compose(lista, listb)) == IntAddition.compose(
         length(lista), length(listb)
     )
-    return lista, listb
+    return
 
 
 @app.cell(hide_code=True)
@@ -1248,9 +1262,7 @@ def _(mo):
 @app.cell(hide_code=True)
 def _():
     import marimo as mo
-
-    from marimo import md, mermaid
-    return md, mermaid, mo
+    return (mo,)
 
 
 @app.cell(hide_code=True)
@@ -1263,11 +1275,15 @@ def _():
 def _():
     from dataclasses import dataclass
     from typing import Callable, Generic, TypeVar
+    return Callable, Generic, TypeVar, dataclass
 
+
+@app.cell(hide_code=True)
+def _(TypeVar):
     a = TypeVar("a")
     b = TypeVar("b")
     c = TypeVar("c")
-    return Callable, Generic, TypeVar, a, b, c, dataclass
+    return a, b, c
 
 
 if __name__ == "__main__":
