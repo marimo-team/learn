@@ -6,7 +6,7 @@ This series of marimo notebooks introduces the powerful paradigm of functional p
 
 ## What You'll Learn
 
-Using only Python's standard library, we'll construct functional programming concepts from first principles.
+**Using only Python's standard library**, we'll construct functional programming concepts from first principles.
 
 Topics include:
 - Recursion and higher-order functions
@@ -16,9 +16,9 @@ Topics include:
 
 ## Timeline & Collaboration
 
-I'm currently studying functional programming and Haskell, estimating about 2 months to complete this series. The structure may evolve as the project develops.
+I'm currently studying functional programming and Haskell, estimating about 2 months or even longer to complete this series. The structure may evolve as the project develops.
 
-If you're interested in collaborating or have questions, please reach out to me on Discord (@eugene.hs). I welcome contributors who share an interest in bringing functional programming concepts to the Python ecosystem.
+If you're interested in collaborating or have questions, please reach out to me on Discord (@eugene.hs).
 
 **Running notebooks.** To run a notebook locally, use
 
@@ -44,7 +44,7 @@ to a notebook's URL: [marimo.app/github.com/marimo-team/learn/blob/main/function
 | Higher-Order Functions and Currying | Functions as first-class values, composition patterns, and implementing Haskell-style currying in Python | 🚧 | |
 | Python's Functional Toolkit: functools, itertools and operator | Leveraging Python's built-in functional programming utilities, advanced iterator operations, and function transformations | 🚧 | |
 | Recursion and Tail Recursion | Recursive problem solving, implementing tail-call optimization in Python, and trampoline techniques to avoid stack overflow | 🚧 | |
-| Category Theory and Functors | Introduction to categories, morphisms, functor patterns, and implementing the functor interface and practical use cases | 🚧 | |
+| Category Theory and Functors | Introduction to categories, morphisms, functor patterns, and implementing the functor interface and practical use cases | `0.1.0` | |
 | Applicatives and Effectful Programming | Combining independent computations with effects, implementing the applicative interface and practical use cases | 🚧 | |
 | Kleisli Category and Monads | Understanding monadic computation, composing impure functions, and implementing basic monads | 🚧 | |
 | Monad Fail, Transformers and Fix | Error handling with MonadFail, combining monads with transformers, and handling recursive structures | 🚧 | |
@@ -68,14 +68,16 @@ In [this notebook](https://github.com/marimo-team/learn/blob/main/Functional_pro
 
 ### References
 
-- [Haskellforall.The.Category.Design.Pattern](https://www.haskellforall.com/2012/08/the-category-design-pattern.html)
-- [Haskellforall.The.Functor.Design.Pattern](https://www.haskellforall.com/2012/09/the-functor-design-pattern.html)
-- [Haskellwiki.Functor](https://wiki.haskell.org/index.php?title=Functor)
-- [Haskellwiki.Typeclassopedia#Functor](https://wiki.haskell.org/index.php?title=Typeclassopedia#Functor)
-- [Haskellwiki.Typeclassopedia#Category](https://wiki.haskell.org/index.php?title=Typeclassopedia#Category)
+- [The Trivial Monad](http://blog.sigfpe.com/2007/04/trivial-monad.html)
+- [Haskellwiki. Category Theory](https://en.wikibooks.org/wiki/Haskell/Category_theory)
+- [Haskellforall. The Category Design Pattern](https://www.haskellforall.com/2012/08/the-category-design-pattern.html)
+- [Haskellforall. The Functor Design Pattern](https://www.haskellforall.com/2012/09/the-functor-design-pattern.html)
+- [Haskellwiki. Functor](https://wiki.haskell.org/index.php?title=Functor)
+- [Haskellwiki. Typeclassopedia#Functor](https://wiki.haskell.org/index.php?title=Typeclassopedia#Functor)
+- [Haskellwiki. Typeclassopedia#Category](https://wiki.haskell.org/index.php?title=Typeclassopedia#Category)
 
 **Authors.**
 
 Thanks to all our notebook authors!
 
-* [eugene.hs](https://github.com/metaboulie)
+* [métaboulie](https://github.com/metaboulie)
