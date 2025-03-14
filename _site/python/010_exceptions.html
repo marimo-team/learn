@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"code_editor_font_size": 14, "default_width": "medium", "cell_output": "above", "dataframes": "rich", "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>010 exceptions</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%20%F0%9F%9B%A1%EF%B8%8F%20Handling%20errors%0A%0A%20%20%20%20%20%20%20%20Sometimes%20things%20go%20wrong%20in%20programs.%20When%20that%20happens%2C%20Python%20raises%20%60exceptions%60%20to%20tell%20you%20what%20went%20amiss.%20For%20example%2C%20maybe%20you%20divided%20by%200%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%201%20%2F%200%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20That's%20a%20lot%20of%20red!%20The%20outputs%20above%20are%20Python%20telling%20you%20that%0A%20%20%20%20%20%20%20%20something%20went%20wrong%20%E2%80%94%20in%20this%20case%2C%20we%20tried%20dividing%20a%20number%20by%200.%0A%0A%20%20%20%20%20%20%20%20Python%20provides%20tools%20to%20catch%20and%20handle%20exceptions%3A%20the%20%60try%2Fexcept%60%0A%20%20%20%20%20%20%20%20block.%20This%20is%20demonstrated%20in%20the%20next%20couple%20cells.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%23%20Try%20changing%20the%20value%20of%20divisor%20below%2C%20and%20see%20how%20the%20output%20changes.%0A%20%20%20%20divisor%20%3D%200%0A%20%20%20%20return%20(divisor%2C)%0A%0A%0A%40app.cell%0Adef%20_(divisor)%3A%0A%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20print(1%20%2F%20divisor)%0A%20%20%20%20except%20ZeroDivisionError%20as%20e%3A%0A%20%20%20%20%20%20%20%20print(%22Something%20went%20wrong!%22%2C%20e)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20Python%20has%20many%20types%20of%20Exceptions%20besides%20%60ZeroDivisionError%60.%20If%20you%0A%20%20%20%20%20%20%20%20don't%20know%20what%20kind%20of%20exception%20you're%20handling%2C%20catch%20the%20generic%0A%20%20%20%20%20%20%20%20%60Exception%60%20type%3A%0A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20...%0A%20%20%20%20%20%20%20%20except%20Exception%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20...%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(error_types)%3A%0A%20%20%20%20error_types%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20%23%20Choose%20error%20type%0A%20%20%20%20error_types%20%3D%20mo.ui.dropdown(%0A%20%20%20%20%20%20%20%20value%3D%22ZeroDivisionError%22%2C%0A%20%20%20%20%20%20%20%20options%3D%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22ZeroDivisionError%22%2C%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%22TypeError%22%2C%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%22ValueError%22%2C%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%22IndexError%22%2C%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%22KeyError%22%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20label%3D%22Learn%20about%20...%22%0A%20%20%20%20)%0A%20%20%20%20return%20(error_types%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(error_types%2C%20mo)%3A%0A%20%20%20%20%23%20Error%20explanation%0A%20%20%20%20error_explanations%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22ZeroDivisionError%22%3A%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20%F0%9F%9A%AB%20ZeroDivisionError%0A%20%20%20%20%20%20%20%20-%20Occurs%20when%20you%20try%20to%20divide%20by%20zero%0A%20%20%20%20%20%20%20%20-%20Mathematical%20impossibility%0A%20%20%20%20%20%20%20%20-%20Example%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20x%20%3D%2010%20%2F%200%20%20%23%20Triggers%20ZeroDivisionError%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%2C%0A%20%20%20%20%20%20%20%20%22TypeError%22%3A%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20%F0%9F%94%80%20TypeError%0A%20%20%20%20%20%20%20%20-%20Happens%20when%20an%20operation%20is%20applied%20to%20an%20inappropriate%20type%0A%20%20%20%20%20%20%20%20-%20Mixing%20incompatible%20types%0A%20%20%20%20%20%20%20%20-%20Example%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20%222%22%20%2B%203%20%20%23%20Can't%20add%20string%20and%20integer%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%2C%0A%20%20%20%20%20%20%20%20%22ValueError%22%3A%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20%F0%9F%93%8A%20ValueError%0A%20%20%20%20%20%20%20%20-%20Raised%20when%20a%20function%20receives%20an%20argument%20of%20correct%20type%20%0A%20%20%20%20%20%20%20%20%20%20but%20inappropriate%20value%0A%20%20%20%20%20%20%20%20-%20Example%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20int(%22hello%22)%20%20%23%20Can't%20convert%20non-numeric%20string%20to%20int%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%2C%0A%20%20%20%20%20%20%20%20%22IndexError%22%3A%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20%F0%9F%93%91%20IndexError%0A%20%20%20%20%20%20%20%20-%20Occurs%20when%20trying%20to%20access%20a%20list%20index%20that%20doesn't%20exist%0A%20%20%20%20%20%20%20%20-%20Going%20beyond%20list%20boundaries%0A%20%20%20%20%20%20%20%20-%20Example%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20my_list%20%3D%20%5B1%2C%202%2C%203%5D%0A%20%20%20%20%20%20%20%20print(my_list%5B5%5D)%20%20%23%20Only%20has%20indices%200%2C%201%2C%202%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%2C%0A%20%20%20%20%20%20%20%20%22KeyError%22%3A%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20%F0%9F%97%9D%EF%B8%8F%20KeyError%0A%20%20%20%20%20%20%20%20-%20Raised%20when%20trying%20to%20access%20a%20dictionary%20key%20that%20doesn't%20exist%0A%20%20%20%20%20%20%20%20-%20Example%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20my_dict%20%3D%20%7B%22a%22%3A%201%2C%20%22b%22%3A%202%7D%0A%20%20%20%20%20%20%20%20print(my_dict%5B%22c%22%5D)%20%20%23%20%22c%22%20key%20doesn't%20exist%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%7D%0A%0A%20%20%20%20mo.md(error_explanations.get(error_types.value%2C%20%22Select%20an%20error%20type%22))%0A%20%20%20%20return%20(error_explanations%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Handling%20multiple%20exception%20types%0A%0A%20%20%20%20%20%20%20%20Catch%20and%20handle%20different%20types%20of%20errors%20specifically%3A%0A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20def%20complex_function(x%2C%20y)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Potential%20errors%3A%20TypeError%2C%20ZeroDivisionError%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%20%3D%20x%20%2F%20y%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20int(result)%0A%20%20%20%20%20%20%20%20%20%20%20%20except%20TypeError%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22Type%20mismatch!%22%0A%20%20%20%20%20%20%20%20%20%20%20%20except%20ZeroDivisionError%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22No%20division%20by%20zero!%22%0A%20%20%20%20%20%20%20%20%20%20%20%20except%20ValueError%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22Conversion%20error!%22%0A%20%20%20%20%20%20%20%20%20%20%20%20finally%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20The%20%60finally%60%20block%20always%20runs%2C%20regardless%20if%20there%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20was%20an%20error%20or%20not%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20...%0A%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(finally_input)%3A%0A%20%20%20%20finally_input%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20%23%20Finally%20Block%20Demonstration%0A%20%20%20%20finally_input%20%3D%20mo.ui.switch(%0A%20%20%20%20%20%20%20%20label%3D%22Throw%20an%20error%3F%22%2C%0A%20%20%20%20%20%20%20%20value%3DTrue%0A%20%20%20%20)%0A%20%20%20%20return%20(finally_input%2C)%0A%0A%0A%40app.cell%0Adef%20_(finally_input%2C%20mo)%3A%0A%20%20%20%20def%20simulate_resource_management()%3A%0A%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20Simulating%20a%20resource-intensive%20operation%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20not%20finally_input.value%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22%F0%9F%9F%A2%20Resource%20processing%20successful%22%0A%20%20%20%20%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20raise%20Exception(%22Simulated%20failure%22)%0A%20%20%20%20%20%20%20%20except%20Exception%20as%20e%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%F0%9F%94%B4%20Error%3A%20%7Be%7D%22%0A%20%20%20%20%20%20%20%20finally%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20%22%F0%9F%93%A6%20Resource%20cleanup%20completed%22%0A%0A%0A%20%20%20%20_result%20%3D%20simulate_resource_management()%0A%0A%20%20%20%20mo.md(f%22%22%22%0A%20%20%20%20%23%23%23%20Example%3A%20the%20finally%20clause%0A%0A%20%20%20%20**Scenario**%3A%20%7B%22Normal%20operation%22%20if%20not%20finally_input.value%20else%20%22An%20exception%20was%20raised%22%7D%0A%0A%20%20%20%20**Result**%3A%20%7B_result%7D%0A%0A%20%20%20%20Notice%20how%20the%20%60finally%60%20block%20always%20runs%2C%20ensuring%20cleanup!%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%20(simulate_resource_management%2C)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

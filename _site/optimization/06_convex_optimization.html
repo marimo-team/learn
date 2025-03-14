@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"dataframes": "rich", "default_width": "medium", "cell_output": "above", "code_editor_font_size": 14, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>06 convex optimization</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%20Convex%20optimization%0A%0A%20%20%20%20%20%20%20%20In%20the%20previous%20tutorials%2C%20we%20learned%20about%20least%20squares%2C%20linear%20programming%2C%0A%20%20%20%20%20%20%20%20and%20quadratic%20programming%2C%20and%20saw%20applications%20of%20each.%20We%20also%20learned%20that%20these%20problem%0A%20%20%20%20%20%20%20%20classes%20can%20be%20solved%20efficiently%20and%20reliably%20using%20CVXPY.%20That's%20because%20these%20problem%20classes%20are%20a%20special%0A%20%20%20%20%20%20%20%20case%20of%20a%20more%20general%20class%20of%20tractable%20problems%2C%20called%20**convex%20optimization%20problems.**%0A%0A%20%20%20%20%20%20%20%20A%20convex%20optimization%20problem%20is%20an%20optimization%20problem%20that%20minimizes%20a%20convex%0A%20%20%20%20%20%20%20%20function%2C%20subject%20to%20affine%20equality%20constraints%20and%20convex%20inequality%0A%20%20%20%20%20%20%20%20constraints%20(%24f_i(x)%5Cleq%200%24%2C%20where%20%24f_i%24%20is%20a%20convex%20function).%0A%0A%20%20%20%20%20%20%20%20**CVXPY.**%20CVXPY%20lets%20you%20specify%20and%20solve%20any%20convex%20optimization%20problem%2C%0A%20%20%20%20%20%20%20%20abstracting%20away%20the%20more%20specific%20problem%20classes.%20You%20start%20with%20CVXPY's%20**atomic%20functions**%2C%20like%20%60cp.exp%60%2C%20%60cp.log%60%2C%20and%20%60cp.square%60%2C%20and%20compose%20them%20to%20build%20more%20complex%20convex%20functions.%20As%20long%20as%20the%20functions%20are%20composed%20in%20the%20right%20way%20%E2%80%94%20as%20long%20as%20they%20are%20%22DCP-compliant%22%20%E2%80%94%20%20your%20resulting%20problem%20will%20be%20convex%20and%20solvable%20by%20CVXPY.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20**%F0%9F%9B%91%20Stop!**%20Before%20proceeding%2C%20read%20the%20CVXPY%20docs%20to%20learn%20about%20atomic%20functions%20and%20the%20DCP%20ruleset%3A%0A%0A%20%20%20%20%20%20%20%20https%3A%2F%2Fwww.cvxpy.org%2Ftutorial%2Findex.html%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22**Is%20my%20problem%20DCP-compliant%3F**%20Below%20is%20a%20sample%20CVXPY%20problem.%20It%20is%20DCP-compliant.%20Try%20typing%20in%20other%20problems%20and%20seeing%20if%20they%20are%20DCP-compliant.%20If%20you%20know%20your%20problem%20is%20convex%2C%20there%20exists%20a%20way%20to%20express%20it%20in%20a%20DCP-compliant%20way.%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20import%20cvxpy%20as%20cp%0A%20%20%20%20import%20numpy%20as%20np%0A%0A%20%20%20%20x%20%3D%20cp.Variable(3)%0A%20%20%20%20P_sqrt%20%3D%20np.random.randn(3%2C%203)%0A%0A%20%20%20%20objective%20%3D%20cp.log(np.random.randn(3)%20%40%20x)%20-%20cp.sum_squares(P_sqrt%20%40%20x)%0A%20%20%20%20constraints%20%3D%20%5Bx%20%3E%3D%200%2C%20cp.sum(x)%20%3D%3D%201%5D%0A%20%20%20%20problem%20%3D%20cp.Problem(cp.Maximize(objective)%2C%20constraints)%0A%20%20%20%20mo.md(f%22Is%20my%20problem%20DCP%3F%20%60%7Bproblem.is_dcp()%7D%60%22)%0A%20%20%20%20return%20P_sqrt%2C%20constraints%2C%20cp%2C%20np%2C%20objective%2C%20problem%2C%20x%0A%0A%0A%40app.cell%0Adef%20_(problem)%3A%0A%20%20%20%20problem.solve()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(x)%3A%0A%20%20%20%20x.value%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

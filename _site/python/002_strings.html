@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"default_width": "medium", "code_editor_font_size": 14, "theme": "light", "cell_output": "above", "dataframes": "rich"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "medium"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>002 strings</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%20%F0%9F%8E%AD%20Strings%0A%0A%20%20%20%20%20%20%20%20This%20notebook%20introduces%20**strings**%2C%20which%20are%20containers%20for%20text.%0A%0A%20%20%20%20%20%20%20%20%23%23%20Creating%20strings%0A%20%20%20%20%20%20%20%20Create%20strings%20by%20wrapping%20text%20in%20quotes%3A%0A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20Use%20double%20quotes%0A%20%20%20%20%20%20%20%20greeting%20%3D%20%22Hello%2C%20Python!%22%0A%0A%20%20%20%20%20%20%20%20%23%20or%20single%20quotes%0A%20%20%20%20%20%20%20%20name%20%3D%20'Alice'%0A%0A%20%20%20%20%20%20%20%20%23%20or%20triple%20quotes%0A%20%20%20%20%20%20%20%20multiline_string%20%3D%20%5C%22%22%22%0A%20%20%20%20%20%20%20%20Dear%2C%20Alice%2C%0A%20%20%20%20%20%20%20%20Nice%20to%20meet%20you.%0A%20%20%20%20%20%20%20%20Sincerely%2C%0A%20%20%20%20%20%20%20%20Bob.%0A%20%20%20%20%20%20%20%20%5C%22%22%22%0A%20%20%20%20%20%20%20%20%60%60%60%0A%0A%20%20%20%20%20%20%20%20Below%20is%20an%20example%20string.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20text%20%3D%20%22Python%20is%20amazing!%22%0A%20%20%20%20text%0A%20%20%20%20return%20(text%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Essential%20string%20operations%0A%0A%20%20%20%20%20%20%20%20Here%20are%20some%20methods%20for%20working%20with%20strings.%0A%0A%20%20%20%20%20%20%20%20Tip%3A%20Try%20changing%20the%20value%20of%20%60text%60%20above%2C%20and%20watch%20how%20the%0A%20%20%20%20%20%20%20%20computed%20values%20below%20change.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20%23%20the%20%60len%60%20method%20returns%20the%20number%20of%20characters%20in%20the%20string.%0A%20%20%20%20len(text)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20text.upper()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20text.lower()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20text.title()%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%22%22%22Use%20string%20methods%20and%20the%20%60in%60%20operator%20to%20find%20things%20in%20strings.%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20%23%20Returns%20the%20index%20of%20%22is%22%20in%20the%20string%0A%20%20%20%20text.find(%22is%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20%22Python%22%20in%20text%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20%22Javascript%22%20in%20text%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Inserting%20values%20in%20strings%0A%0A%20%20%20%20%20%20%20%20Modern%20Python%20uses%20f-strings%20to%20insert%20values%20into%20strings.%20For%20example%2C%0A%20%20%20%20%20%20%20%20check%20out%20how%20the%20next%20cell%20greets%20you%20(and%20notice%20the%20%60f''''%60)!%0A%0A%20%20%20%20%20%20%20%20**Try%20it!**%20Enter%20your%20name%20in%20%60my_name%60%20below%2C%20then%20run%20the%20cell.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20my_name%20%3D%20%22%22%0A%20%20%20%20return%20(my_name%2C)%0A%0A%0A%40app.cell%0Adef%20_(my_name)%3A%0A%20%20%20%20f%22Hello%2C%20%7Bmy_name%7D!%22%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Working%20with%20parts%20of%20strings%0A%20%20%20%20%20%20%20%20You%20can%20access%20any%20part%20of%20a%20string%20using%20its%20position%20(index)%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20first_letter%20%3D%20text%5B0%5D%0A%20%20%20%20first_letter%0A%20%20%20%20return%20(first_letter%2C)%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20last_letter%20%3D%20text%5B-1%5D%0A%20%20%20%20last_letter%0A%20%20%20%20return%20(last_letter%2C)%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20first_three%20%3D%20text%5B0%3A3%5D%0A%20%20%20%20first_three%0A%20%20%20%20return%20(first_three%2C)%0A%0A%0A%40app.cell%0Adef%20_(text)%3A%0A%20%20%20%20last_two%20%3D%20text%5B-2%3A%5D%0A%20%20%20%20last_two%0A%20%20%20%20return%20(last_two%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Other%20helpful%20string%20methods%0A%0A%20%20%20%20%20%20%20%20Finally%2C%20here%20are%20some%20other%20helpful%20string%20methods.%20Feel%20free%20to%20try%20them%20out%20on%20your%20own%20strings%20by%20modifying%20the%20value%20of%20%60sentence%60%20below.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20sentence%20%3D%20%22%20%20python%20is%20fun%20%20%22%0A%20%20%20%20sentence%0A%20%20%20%20return%20(sentence%2C)%0A%0A%0A%40app.cell%0Adef%20_(sentence)%3A%0A%20%20%20%20%23%20Remove%20extra%20spaces%0A%20%20%20%20sentence.strip()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(sentence)%3A%0A%20%20%20%20%23%20Split%20into%20a%20list%20of%20words%0A%20%20%20%20sentence.split()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(sentence)%3A%0A%20%20%20%20sentence.replace(%22fun%22%2C%20%22awesome%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%22123%22.isdigit()%2C%20%22abc%22.isdigit()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%22123%22.isalpha()%2C%20%22abc%22.isalpha()%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%22Python3%22.isalnum()%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Next%20steps%0A%0A%20%20%20%20%20%20%20%20For%20a%20full%20primer%20on%20strings%2C%20check%20out%20the%20%5Bofficial%20documentation%5D(https%3A%2F%2Fdocs.python.org%2F3%2Flibrary%2Fstring.html).%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"theme": "light", "code_editor_font_size": 14, "dataframes": "rich", "cell_output": "above", "default_width": "medium"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>07 sdp</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%23%20Semidefinite%20program%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20_This%20notebook%20introduces%20an%20advanced%20topic._%20A%20semidefinite%20program%20(SDP)%20is%20an%20optimization%20problem%20of%20the%20form%0A%0A%20%20%20%20%20%20%20%20%5C%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Cbegin%7Barray%7D%7Bll%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Ctext%7Bminimize%7D%20%20%20%26%20%5Cmathbf%7Btr%7D(CX)%20%5C%5C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Ctext%7Bsubject%20to%7D%20%26%20%5Cmathbf%7Btr%7D(A_iX)%20%3D%20b_i%2C%20%5Cquad%20i%3D1%2C%5Cldots%2Cp%20%5C%5C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%26%20X%20%5Csucceq%200%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Cend%7Barray%7D%0A%20%20%20%20%20%20%20%20%5C%5D%0A%0A%20%20%20%20%20%20%20%20where%20%24%5Cmathbf%7Btr%7D%24%20is%20the%20trace%20function%2C%20%24X%20%5Cin%20%5Cmathcal%7BS%7D%5E%7Bn%7D%24%20is%20the%20optimization%20variable%20and%20%24C%2C%20A_1%2C%20%5Cldots%2C%20A_p%20%5Cin%20%5Cmathcal%7BS%7D%5E%7Bn%7D%24%2C%20and%20%24b_1%2C%20%5Cldots%2C%20b_p%20%5Cin%20%5Cmathcal%7BR%7D%24%20are%20problem%20data%2C%20and%20%24X%20%5Csucceq%200%24%20is%20a%20matrix%20inequality.%20Here%20%24%5Cmathcal%7BS%7D%5E%7Bn%7D%24%20denotes%20the%20set%20of%20%24n%24-by-%24n%24%20symmetric%20matrices.%0A%0A%20%20%20%20%20%20%20%20**Example.**%20An%20example%20of%20an%20SDP%20is%20to%20complete%20a%20covariance%20matrix%20%24%5Ctilde%20%5CSigma%20%5Cin%20%5Cmathcal%7BS%7D%5E%7Bn%7D_%2B%24%20with%20missing%20entries%20%24M%20%5Csubset%20%5C%7B1%2C%5Cldots%2Cn%5C%7D%20%5Ctimes%20%5C%7B1%2C%5Cldots%2Cn%5C%7D%24%3A%0A%0A%20%20%20%20%20%20%20%20%5C%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Cbegin%7Barray%7D%7Bll%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Ctext%7Bminimize%7D%20%20%20%26%200%20%5C%5C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Ctext%7Bsubject%20to%7D%20%26%20%5CSigma_%7Bij%7D%20%3D%20%5Ctilde%20%5CSigma_%7Bij%7D%2C%20%5Cquad%20(i%2Cj)%20%5Cnotin%20M%20%5C%5C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%26%20%5CSigma%20%5Csucceq%200%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Cend%7Barray%7D%0A%20%20%20%20%20%20%20%20%5C%5D%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Example%0A%0A%20%20%20%20%20%20%20%20In%20the%20following%20code%2C%20we%20show%20how%20to%20specify%20and%20solve%20an%20SDP%20with%20CVXPY.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20cvxpy%20as%20cp%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20return%20cp%2C%20np%0A%0A%0A%40app.cell%0Adef%20_(np)%3A%0A%20%20%20%20%23%20Generate%20a%20random%20SDP.%0A%20%20%20%20n%20%3D%203%0A%20%20%20%20p%20%3D%203%0A%20%20%20%20np.random.seed(1)%0A%20%20%20%20C%20%3D%20np.random.randn(n%2C%20n)%0A%20%20%20%20A%20%3D%20%5B%5D%0A%20%20%20%20b%20%3D%20%5B%5D%0A%20%20%20%20for%20i%20in%20range(p)%3A%0A%20%20%20%20%20%20%20%20A.append(np.random.randn(n%2C%20n))%0A%20%20%20%20%20%20%20%20b.append(np.random.randn())%0A%20%20%20%20return%20A%2C%20C%2C%20b%2C%20i%2C%20n%2C%20p%0A%0A%0A%40app.cell%0Adef%20_(A%2C%20C%2C%20b%2C%20cp%2C%20n%2C%20p)%3A%0A%20%20%20%20%23%20Create%20a%20symmetric%20matrix%20variable.%0A%20%20%20%20X%20%3D%20cp.Variable((n%2C%20n)%2C%20symmetric%3DTrue)%0A%0A%20%20%20%20%23%20The%20operator%20%3E%3E%20denotes%20matrix%20inequality%2C%20with%20X%20%3E%3E%200%20constraining%20X%0A%20%20%20%20%23%20to%20be%20positive%20semidefinite%0A%20%20%20%20constraints%20%3D%20%5BX%20%3E%3E%200%5D%0A%20%20%20%20constraints%20%2B%3D%20%5Bcp.trace(A%5Bi%5D%20%40%20X)%20%3D%3D%20b%5Bi%5D%20for%20i%20in%20range(p)%5D%0A%20%20%20%20prob%20%3D%20cp.Problem(cp.Minimize(cp.trace(C%20%40%20X))%2C%20constraints)%0A%20%20%20%20_%20%3D%20prob.solve()%0A%20%20%20%20return%20X%2C%20constraints%2C%20prob%0A%0A%0A%40app.cell%0Adef%20_(X%2C%20mo%2C%20prob%2C%20wigglystuff)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20f%22%22%22%0A%20%20%20%20%20%20%20%20The%20optimal%20value%20is%20%7Bprob.value%3A0.4f%7D.%0A%0A%20%20%20%20%20%20%20%20A%20solution%20for%20%24X%24%20is%20(rounded%20to%20the%20nearest%20decimal)%20is%3A%20%0A%0A%20%20%20%20%20%20%20%20%7Bmo.ui.anywidget(wigglystuff.Matrix(X.value)).center()%7D%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20wigglystuff%0A%20%20%20%20return%20(wigglystuff%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,216 @@
+{
+  "optimization": {
+    "id": "optimization",
+    "title": "Optimization",
+    "description": "This collection of marimo notebooks teaches you the basics of convex optimization.",
+    "notebooks": [
+      {
+        "id": "01_least_squares",
+        "path": "optimization\\01_least_squares.py",
+        "display_name": "Least Squares",
+        "order": 1
+      },
+      {
+        "id": "02_linear_program",
+        "path": "optimization\\02_linear_program.py",
+        "display_name": "Linear Program",
+        "order": 2
+      },
+      {
+        "id": "03_minimum_fuel_optimal_control",
+        "path": "optimization\\03_minimum_fuel_optimal_control.py",
+        "display_name": "Minimum Fuel Optimal Control",
+        "order": 3
+      },
+      {
+        "id": "04_quadratic_program",
+        "path": "optimization\\04_quadratic_program.py",
+        "display_name": "Quadratic Program",
+        "order": 4
+      },
+      {
+        "id": "05_portfolio_optimization",
+        "path": "optimization\\05_portfolio_optimization.py",
+        "display_name": "Portfolio Optimization",
+        "order": 5
+      },
+      {
+        "id": "06_convex_optimization",
+        "path": "optimization\\06_convex_optimization.py",
+        "display_name": "Convex Optimization",
+        "order": 6
+      },
+      {
+        "id": "07_sdp",
+        "path": "optimization\\07_sdp.py",
+        "display_name": "Sdp",
+        "order": 7
+      }
+    ]
+  },
+  "polars": {
+    "id": "polars",
+    "title": "Polars",
+    "description": "_\ud83d\udea7 This collection is a work in progress. Please help us add notebooks!_",
+    "notebooks": [
+      {
+        "id": "01_why_polars",
+        "path": "polars\\01_why_polars.py",
+        "display_name": "Why Polars",
+        "order": 1
+      },
+      {
+        "id": "04_basic_operations",
+        "path": "polars\\04_basic_operations.py",
+        "display_name": "Basic Operations",
+        "order": 4
+      },
+      {
+        "id": "12_aggregations",
+        "path": "polars\\12_aggregations.py",
+        "display_name": "Aggregations",
+        "order": 12
+      },
+      {
+        "id": "14_user_defined_functions",
+        "path": "polars\\14_user_defined_functions.py",
+        "display_name": "User Defined Functions",
+        "order": 14
+      }
+    ]
+  },
+  "probability": {
+    "id": "probability",
+    "title": "Probability",
+    "description": "\ud83d\udea7 _This collection is a work in progress. Check back later for new noteboks._",
+    "notebooks": [
+      {
+        "id": "01_sets",
+        "path": "probability\\01_sets.py",
+        "display_name": "Sets",
+        "order": 1
+      },
+      {
+        "id": "02_axioms",
+        "path": "probability\\02_axioms.py",
+        "display_name": "Axioms",
+        "order": 2
+      },
+      {
+        "id": "03_probability_of_or",
+        "path": "probability\\03_probability_of_or.py",
+        "display_name": "Probability Of Or",
+        "order": 3
+      },
+      {
+        "id": "04_conditional_probability",
+        "path": "probability\\04_conditional_probability.py",
+        "display_name": "Conditional Probability",
+        "order": 4
+      },
+      {
+        "id": "05_independence",
+        "path": "probability\\05_independence.py",
+        "display_name": "Independence",
+        "order": 5
+      },
+      {
+        "id": "06_probability_of_and",
+        "path": "probability\\06_probability_of_and.py",
+        "display_name": "Probability Of And",
+        "order": 6
+      },
+      {
+        "id": "07_law_of_total_probability",
+        "path": "probability\\07_law_of_total_probability.py",
+        "display_name": "Law Of Total Probability",
+        "order": 7
+      },
+      {
+        "id": "08_bayes_theorem",
+        "path": "probability\\08_bayes_theorem.py",
+        "display_name": "Bayes Theorem",
+        "order": 8
+      },
+      {
+        "id": "09_random_variables",
+        "path": "probability\\09_random_variables.py",
+        "display_name": "Random Variables",
+        "order": 9
+      },
+      {
+        "id": "10_probability_mass_function",
+        "path": "probability\\10_probability_mass_function.py",
+        "display_name": "Probability Mass Function",
+        "order": 10
+      },
+      {
+        "id": "11_expectation",
+        "path": "probability\\11_expectation.py",
+        "display_name": "Expectation",
+        "order": 11
+      }
+    ]
+  },
+  "python": {
+    "id": "python",
+    "title": "Python",
+    "description": "This collection of marimo notebooks is designed to teach you the basics of the Python programming language.",
+    "notebooks": [
+      {
+        "id": "001_numbers",
+        "path": "python\\001_numbers.py",
+        "display_name": "Numbers",
+        "order": 1
+      },
+      {
+        "id": "002_strings",
+        "path": "python\\002_strings.py",
+        "display_name": "Strings",
+        "order": 2
+      },
+      {
+        "id": "003_collections",
+        "path": "python\\003_collections.py",
+        "display_name": "Collections",
+        "order": 3
+      },
+      {
+        "id": "004_conditional_logic",
+        "path": "python\\004_conditional_logic.py",
+        "display_name": "Conditional Logic",
+        "order": 4
+      },
+      {
+        "id": "005_loops",
+        "path": "python\\005_loops.py",
+        "display_name": "Loops",
+        "order": 5
+      },
+      {
+        "id": "007_advanced_collections",
+        "path": "python\\007_advanced_collections.py",
+        "display_name": "Advanced Collections",
+        "order": 7
+      },
+      {
+        "id": "008_functions",
+        "path": "python\\008_functions.py",
+        "display_name": "Functions",
+        "order": 8
+      },
+      {
+        "id": "009_modules",
+        "path": "python\\009_modules.py",
+        "display_name": "Modules",
+        "order": 9
+      },
+      {
+        "id": "010_exceptions",
+        "path": "python\\010_exceptions.py",
+        "display_name": "Exceptions",
+        "order": 10
+      }
+    ]
+  }
+}

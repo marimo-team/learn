@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"default_width": "medium", "code_editor_font_size": 14, "dataframes": "rich", "cell_output": "above", "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>03 minimum fuel optimal control</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%20Minimal%20fuel%20optimal%20control%0A%0A%20%20%20%20%20%20%20%20This%20notebook%20includes%20an%20application%20of%20linear%20programming%20to%20controlling%20a%0A%20%20%20%20%20%20%20%20physical%20system%2C%20adapted%20from%20%5BConvex%0A%20%20%20%20%20%20%20%20Optimization%5D(https%3A%2F%2Fweb.stanford.edu%2F~boyd%2Fcvxbook%2F)%20by%20Boyd%20and%20Vandenberghe.%0A%0A%20%20%20%20%20%20%20%20We%20consider%20a%20linear%20dynamical%20system%20with%20state%20%24x(t)%20%5Cin%20%5Cmathbf%7BR%7D%5En%24%2C%20for%20%24t%20%3D%200%2C%20%5Cldots%2C%20T%24.%20At%20each%20time%20step%20%24t%20%3D%200%2C%20%5Cldots%2C%20T%20-%201%24%2C%20an%20actuator%20or%20input%20signal%20%24u(t)%24%20is%20applied%2C%20affecting%20the%20state.%20The%20dynamics%0A%20%20%20%20%20%20%20%20of%20the%20system%20is%20given%20by%20the%20linear%20recurrence%0A%0A%20%20%20%20%20%20%20%20%5C%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20x(t%20%2B%201)%20%3D%20Ax(t)%20%2B%20bu(t)%2C%20%5Cquad%20t%20%3D%200%2C%20%5Cldots%2C%20T%20-%201%2C%0A%20%20%20%20%20%20%20%20%5C%5D%0A%0A%20%20%20%20%20%20%20%20where%20%24A%20%5Cin%20%5Cmathbf%7BR%7D%5E%7Bn%20%5Ctimes%20n%7D%24%20and%20%24b%20%5Cin%20%5Cmathbf%7BR%7D%5En%24%20are%20given%20and%20encode%20how%20the%20system%20evolves.%20The%20initial%20state%20%24x(0)%24%20is%20also%20given.%0A%0A%20%20%20%20%20%20%20%20The%20_minimum%20fuel%20optimal%20control%20problem_%20is%20to%20choose%20the%20inputs%20%24u(0)%2C%20%5Cldots%2C%20u(T%20-%201)%24%20so%20as%20to%20achieve%0A%20%20%20%20%20%20%20%20a%20given%20desired%20state%20%24x_%5Ctext%7Bdes%7D%20%3D%20x(T)%24%20while%20minimizing%20the%20total%20fuel%20consumed%0A%0A%20%20%20%20%20%20%20%20%5C%5B%0A%20%20%20%20%20%20%20%20F%20%3D%20%5Csum_%7Bt%3D0%7D%5E%7BT%20-%201%7D%20f(u(t)).%0A%20%20%20%20%20%20%20%20%5C%5D%0A%0A%20%20%20%20%20%20%20%20The%20function%20%24f%20%3A%20%5Cmathbf%7BR%7D%20%5Cto%20%5Cmathbf%7BR%7D%24%20tells%20us%20how%20much%20fuel%20is%20consumed%20as%20a%20function%20of%20the%20input%2C%20and%20is%20given%20by%0A%0A%20%20%20%20%20%20%20%20%5C%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20f(a)%20%3D%20%5Cbegin%7Bcases%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7Ca%7C%20%26%20%7Ca%7C%20%5Cleq%201%20%5C%5C%0A%20%20%20%20%20%20%20%20%20%20%20%202%7Ca%7C%20-%201%20%26%20%7Ca%7C%20%3E%201.%0A%20%20%20%20%20%20%20%20%20%20%20%20%5Cend%7Bcases%7D%0A%20%20%20%20%20%20%20%20%5C%5D%0A%0A%20%20%20%20%20%20%20%20This%20means%20the%20fuel%20use%20is%20proportional%20to%20the%20magnitude%20of%20the%20signal%20between%20%24-1%24%20and%20%241%24%2C%20but%20for%20larger%20signals%20the%20marginal%20fuel%20efficiency%20is%20half.%0A%0A%20%20%20%20%20%20%20%20**This%20notebook.**%20In%20this%20notebook%20we%20use%20CVXPY%20to%20formulate%20the%20minimum%20fuel%20optimal%20control%20problem%20as%20a%20linear%20program.%20The%20notebook%20lets%20you%20play%20with%20the%20initial%20and%20target%20states%2C%20letting%20you%20see%20how%20they%20affect%20the%20planned%20trajectory%20of%20inputs%20%24u%24.%0A%0A%20%20%20%20%20%20%20%20First%2C%20we%20create%20the%20**problem%20data**.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20return%20(np%2C)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20n%2C%20T%20%3D%203%2C%2030%0A%20%20%20%20return%20T%2C%20n%0A%0A%0A%40app.cell%0Adef%20_(np)%3A%0A%20%20%20%20A%20%3D%20np.array(%5B%5B-1%2C%200.4%2C%200.8%5D%2C%20%5B1%2C%200%2C%200%5D%2C%20%5B0%2C%201%2C%200%5D%5D)%0A%20%20%20%20b%20%3D%20np.array(%5B%5B1%2C%200%2C%200.3%5D%5D).T%0A%20%20%20%20return%20A%2C%20b%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo%2C%20n%2C%20np)%3A%0A%20%20%20%20import%20wigglystuff%0A%0A%20%20%20%20x0_widget%20%3D%20mo.ui.anywidget(wigglystuff.Matrix(np.zeros((1%2C%20n))))%0A%20%20%20%20xdes_widget%20%3D%20mo.ui.anywidget(wigglystuff.Matrix(np.array(%5B%5B7%2C%202%2C%20-6%5D%5D)))%0A%0A%20%20%20%20_a%20%3D%20mo.md(%0A%20%20%20%20%20%20%20%20rf%22%22%22%0A%0A%20%20%20%20%20%20%20%20Choose%20a%20value%20for%20%24x_0%24%20...%0A%0A%20%20%20%20%20%20%20%20%7Bx0_widget%7D%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%0A%20%20%20%20_b%20%3D%20mo.md(%0A%20%20%20%20%20%20%20%20rf%22%22%22%0A%20%20%20%20%20%20%20%20...%20and%20for%20%24x_%5Ctext%7B%7Bdes%7D%7D%24%0A%0A%20%20%20%20%20%20%20%20%7Bxdes_widget%7D%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%0A%20%20%20%20mo.hstack(%5B_a%2C%20_b%5D%2C%20justify%3D%22space-around%22)%0A%20%20%20%20return%20wigglystuff%2C%20x0_widget%2C%20xdes_widget%0A%0A%0A%40app.cell%0Adef%20_(x0_widget%2C%20xdes_widget)%3A%0A%20%20%20%20x0%20%3D%20x0_widget.matrix%0A%20%20%20%20xdes%20%3D%20xdes_widget.matrix%0A%20%20%20%20return%20x0%2C%20xdes%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22**Next%2C%20we%20specify%20the%20problem%20as%20a%20linear%20program%20using%20CVXPY.**%20This%20problem%20is%20linear%20because%20the%20objective%20and%20constraints%20are%20affine.%20(In%20fact%2C%20the%20objective%20is%20piecewise%20affine%2C%20but%20CVXPY%20rewrites%20it%20to%20be%20affine%20for%20you.)%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20cvxpy%20as%20cp%0A%20%20%20%20return%20(cp%2C)%0A%0A%0A%40app.cell%0Adef%20_(A%2C%20T%2C%20b%2C%20cp%2C%20mo%2C%20n%2C%20x0%2C%20xdes)%3A%0A%20%20%20%20X%2C%20u%20%3D%20cp.Variable(shape%3D(n%2C%20T%20%2B%201))%2C%20cp.Variable(shape%3D(1%2C%20T))%0A%0A%20%20%20%20objective%20%3D%20cp.sum(cp.maximum(cp.abs(u)%2C%202%20*%20cp.abs(u)%20-%201))%0A%20%20%20%20constraints%20%3D%20%5B%0A%20%20%20%20%20%20%20%20X%5B%3A%2C%201%3A%5D%20%3D%3D%20A%20%40%20X%5B%3A%2C%20%3A-1%5D%20%2B%20b%20%40%20u%2C%0A%20%20%20%20%20%20%20%20X%5B%3A%2C%200%5D%20%3D%3D%20x0%2C%0A%20%20%20%20%20%20%20%20X%5B%3A%2C%20-1%5D%20%3D%3D%20xdes%2C%0A%20%20%20%20%5D%0A%0A%20%20%20%20fuel_used%20%3D%20cp.Problem(cp.Minimize(objective)%2C%20constraints).solve()%0A%20%20%20%20mo.md(f%22Achieved%20a%20fuel%20usage%20of%20%7Bfuel_used%3A.02f%7D.%20%F0%9F%9A%80%22)%0A%20%20%20%20return%20X%2C%20constraints%2C%20fuel_used%2C%20objective%2C%20u%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20Finally%2C%20we%20plot%20the%20chosen%20inputs%20over%20time.%0A%0A%20%20%20%20%20%20%20%20**%F0%9F%8C%8A%20Try%20it!**%20Change%20the%20initial%20and%20desired%20states%3B%20how%20do%20fuel%20usage%20and%20controls%20change%3F%20Can%20you%20explain%20what%20you%20see%3F%20You%20can%20also%20try%20experimenting%20with%20the%20value%20of%20%24T%24.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(plot_solution%2C%20u)%3A%0A%20%20%20%20plot_solution(u)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(T%2C%20cp%2C%20np)%3A%0A%20%20%20%20def%20plot_solution(u%3A%20cp.Variable)%3A%0A%20%20%20%20%20%20%20%20import%20matplotlib.pyplot%20as%20plt%0A%0A%20%20%20%20%20%20%20%20plt.step(np.arange(T)%2C%20u.T.value)%0A%20%20%20%20%20%20%20%20plt.axis(%22tight%22)%0A%20%20%20%20%20%20%20%20plt.xlabel(%22%24t%24%22)%0A%20%20%20%20%20%20%20%20plt.ylabel(%22%24u%24%22)%0A%20%20%20%20%20%20%20%20return%20plt.gca()%0A%20%20%20%20return%20(plot_solution%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

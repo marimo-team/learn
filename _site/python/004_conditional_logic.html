@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"default_width": "medium", "theme": "light", "code_editor_font_size": 14, "cell_output": "above", "dataframes": "rich"}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>004 conditional logic</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%20%F0%9F%94%84%20Conditional%20logic%0A%0A%20%20%20%20%20%20%20%20This%20tutorial%20teaches%20you%20how%20to%20how%20to%20make%20**decisions**%20in%20your%20code%2C%20using%0A%20%20%20%20%20%20%20%20Python's%20conditional%20statements.%0A%0A%20%20%20%20%20%20%20%20%23%23%20If%20Statements%0A%20%20%20%20%20%20%20%20The%20foundation%20of%20decision-making%20in%20Python%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20if%20condition%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20code%20to%20run%20if%20condition%20is%20True%0A%20%20%20%20%20%20%20%20elif%20another_condition%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20code%20to%20run%20if%20another_condition%20is%20True%0A%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20code%20to%20run%20if%20no%20conditions%20are%20True%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20Let's%20explore%20with%20some%20examples%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%22%22%22**Try%20it!**%20Try%20changing%20the%20value%20of%20%6042%60%20below%2C%20and%20see%20how%20the%20output%20changes.%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20number%20%3D%2042%0A%20%20%20%20return%20(number%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20Compare%20numbers%20using%20operators%20like%0A%0A%20%20%20%20%20%20%20%20-%20%60%3E%60%0A%20%20%20%20%20%20%20%20-%20%60%3E%3D%60%0A%20%20%20%20%20%20%20%20-%20%60%3C%60%0A%20%20%20%20%20%20%20%20-%20%60%3C%3D%60%0A%20%20%20%20%20%20%20%20-%20%60%3D%3D%60%20%20(note%20the%20two%20equal%20signs!)%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo%2C%20number)%3A%0A%20%20%20%20if%20number%20%3E%2042%3A%0A%20%20%20%20%20%20%20%20result%20%3D%20%22Greater%20than%2042%22%0A%20%20%20%20elif%20number%20%3D%3D%2042%3A%0A%20%20%20%20%20%20%20%20result%20%3D%20%22Equal%20to%2042!%22%0A%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20result%20%3D%20%22Less%20than%2042%22%0A%20%20%20%20mo.md(result)%0A%20%20%20%20return%20(result%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20Interactive%20decision%20making%0A%20%20%20%20%20%20%20%20**Try%20it!**%20Try%20changing%20the%20conditions%20below%20and%20see%20how%20the%20results%20change%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo%2C%20threshold%2C%20value)%3A%0A%20%20%20%20mo.hstack(%5Bvalue%2C%20threshold%5D%2C%20justify%3D%22start%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20value%20%3D%20mo.ui.number(value%3D25%2C%20start%3D0%2C%20stop%3D100%2C%20label%3D%22Enter%20a%20number%22)%0A%20%20%20%20threshold%20%3D%20mo.ui.slider(value%3D50%2C%20start%3D0%2C%20stop%3D100%2C%20label%3D%22Set%20threshold%22)%0A%20%20%20%20return%20threshold%2C%20value%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo%2C%20threshold%2C%20value)%3A%0A%20%20%20%20if%20value.value%20%3E%20threshold.value%3A%0A%20%20%20%20%20%20%20%20decision%20%3D%20f%22%7Bvalue.value%7D%20is%20greater%20than%20%7Bthreshold.value%7D%22%0A%20%20%20%20elif%20value.value%20%3D%3D%20threshold.value%3A%0A%20%20%20%20%20%20%20%20decision%20%3D%20f%22%7Bvalue.value%7D%20is%20equal%20to%20%7Bthreshold.value%7D%22%0A%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20decision%20%3D%20f%22%7Bvalue.value%7D%20is%20less%20than%20%7Bthreshold.value%7D%22%0A%0A%20%20%20%20mo.hstack(%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(f%22**Decision**%3A%20%7Bdecision%7D%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22**Threshold%20cleared%3F**%3A%20%7B'%E2%9C%85'%20if%20value.value%20%3E%3D%20threshold.value%20else%20'%E2%9D%8C'%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20justify%3D%22space-around%22%2C%0A%20%20%20%20)%0A%20%20%20%20return%20(decision%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20r%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Boolean%20operations%0A%20%20%20%20%20%20%20%20Python%20uses%20boolean%20operators%20to%20combine%20conditions%3A%0A%0A%20%20%20%20%20%20%20%20-%20%60and%60%3A%20Both%20conditions%20must%20be%20True%0A%0A%20%20%20%20%20%20%20%20-%20%60or%60%3A%20At%20least%20one%20condition%20must%20be%20True%0A%0A%20%20%20%20%20%20%20%20-%20%60not%60%3A%20Inverts%20the%20condition%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20_text%20%3D%20mo.md(%22%22%22%0A%20%20%20%20%20%20%20%20-%20Try%20different%20combinations%20of%20age%20and%20ID%20status%0A%20%20%20%20%20%20%20%20-%20Notice%20how%20both%20conditions%20must%20be%20True%20to%20allow%20voting%0A%20%20%20%20%20%20%20%20-%20Experiment%20with%20edge%20cases%20(exactly%2018%2C%20no%20ID%2C%20etc.)%0A%20%20%20%20%22%22%22)%0A%20%20%20%20mo.accordion(%7B%22%F0%9F%92%A1%20Experiment%20Tips%22%3A%20_text%7D)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(age%2C%20has_id%2C%20mo)%3A%0A%20%20%20%20mo.hstack(%5Bage%2C%20has_id%5D%2C%20justify%3D%22start%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20age%20%3D%20mo.ui.number(value%3D18%2C%20start%3D0%2C%20stop%3D120%2C%20label%3D%22Age%22)%0A%20%20%20%20has_id%20%3D%20mo.ui.switch(value%3DTrue%2C%20label%3D%22Has%20ID%22)%0A%20%20%20%20return%20age%2C%20has_id%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(age%2C%20has_id%2C%20mo)%3A%0A%20%20%20%20can_vote%20%3D%20age.value%20%3E%3D%2018%20and%20has_id.value%0A%0A%20%20%20%20explanation%20%3D%20f%22%22%22%0A%20%20%20%20%23%23%23%20Voting%20eligibility%20check%0A%0A%20%20%20%20Current%20Status%3A%0A%0A%20%20%20%20-%20Age%3A%20%7Bage.value%7D%20years%20old%0A%0A%20%20%20%20-%20Has%20ID%3A%20%7B%22Yes%22%20if%20has_id.value%20else%20%22No%22%7D%0A%0A%20%20%20%20-%20Can%20Vote%3A%20%7B%22Yes%20%E2%9C%85%22%20if%20can_vote%20else%20%22No%20%E2%9D%8C%22%7D%0A%0A%20%20%20%20Reason%3A%20%7B%0A%20%20%20%20%20%20%20%20%22Both%20age%20and%20ID%20requirements%20met%22%0A%20%20%20%20%20%20%20%20if%20can_vote%0A%20%20%20%20%20%20%20%20else%20%22Missing%20%22%20%2B%20(%22required%20age%22%20if%20age.value%20%3C%2018%20else%20%22valid%20ID%22)%0A%20%20%20%20%7D%0A%20%20%20%20%22%22%22%0A%0A%20%20%20%20mo.md(explanation)%0A%20%20%20%20return%20can_vote%2C%20explanation%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22**Try%20it!**%20Write%20Python%20code%20that%20computes%20whether%20an%20individual%20can%20vote.%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20my_age%20%3D%2018%0A%20%20%20%20return%20(my_age%2C)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20has_an_id%20%3D%20False%0A%20%20%20%20return%20(has_an_id%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Complex%20conditions%0A%20%20%20%20%20%20%20%20Combine%20multiple%20conditions%20for%20more%20sophisticated%20logic%3A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20Multiple%20conditions%0A%20%20%20%20%20%20%20%20if%20(age%20%3E%3D%2018%20and%20has_id)%20or%20has_special_permission%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20print(%22Access%20granted%22)%0A%0A%20%20%20%20%20%20%20%20%23%20Nested%20conditions%0A%20%20%20%20%20%20%20%20if%20age%20%3E%3D%2018%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20has_id%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20print(%22Full%20access%22)%0A%20%20%20%20%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20print(%22Limited%20access%22)%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(humidity%2C%20mo%2C%20temp%2C%20wind)%3A%0A%20%20%20%20mo.hstack(%5Btemp%2C%20humidity%2C%20wind%5D)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20temp%20%3D%20mo.ui.number(value%3D25%2C%20start%3D-20%2C%20stop%3D50%2C%20label%3D%22Temperature%20(%C2%B0C)%22)%0A%20%20%20%20humidity%20%3D%20mo.ui.slider(value%3D60%2C%20start%3D0%2C%20stop%3D100%2C%20label%3D%22Humidity%20(%25)%22)%0A%20%20%20%20wind%20%3D%20mo.ui.number(value%3D10%2C%20start%3D0%2C%20stop%3D100%2C%20label%3D%22Wind%20Speed%20(km%2Fh)%22)%0A%20%20%20%20return%20humidity%2C%20temp%2C%20wind%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(humidity%2C%20mo%2C%20temp%2C%20wind)%3A%0A%20%20%20%20def%20get_weather_advice()%3A%0A%20%20%20%20%20%20%20%20conditions%20%3D%20%5B%5D%0A%0A%20%20%20%20%20%20%20%20if%20temp.value%20%3E%2030%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20conditions.append(%22%F0%9F%8C%A1%EF%B8%8F%20High%20temperature%22)%0A%20%20%20%20%20%20%20%20elif%20temp.value%20%3C%2010%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20conditions.append(%22%E2%9D%84%EF%B8%8F%20Cold%20temperature%22)%0A%0A%20%20%20%20%20%20%20%20if%20humidity.value%20%3E%2080%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20conditions.append(%22%F0%9F%92%A7%20High%20humidity%22)%0A%20%20%20%20%20%20%20%20elif%20humidity.value%20%3C%2030%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20conditions.append(%22%F0%9F%8F%9C%EF%B8%8F%20Low%20humidity%22)%0A%0A%20%20%20%20%20%20%20%20if%20wind.value%20%3E%2030%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20conditions.append(%22%F0%9F%92%A8%20Strong%20winds%22)%0A%0A%20%20%20%20%20%20%20%20return%20conditions%0A%0A%0A%20%20%20%20conditions%20%3D%20get_weather_advice()%0A%0A%20%20%20%20message%20%3D%20f%22%22%22%0A%20%20%20%20%23%23%23%20Weather%20analysis%0A%0A%20%20%20%20Current%20Conditions%3A%0A%0A%20%20%20%20-%20Temperature%3A%20%7Btemp.value%7D%C2%B0C%0A%0A%20%20%20%20-%20Humidity%3A%20%7Bhumidity.value%7D%25%0A%0A%20%20%20%20-%20Wind%20Speed%3A%20%7Bwind.value%7D%20km%2Fh%0A%0A%20%20%20%20Alerts%3A%20%7B%22%2C%20%22.join(conditions)%20if%20conditions%20else%20%22No%20special%20alerts%22%7D%0A%20%20%20%20%22%22%22%0A%0A%20%20%20%20mo.md(message)%0A%20%20%20%20return%20conditions%2C%20get_weather_advice%2C%20message%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%23%20Next%20steps%0A%0A%20%20%20%20-%20Practice%20combining%20multiple%20conditions%0A%20%20%20%20-%20Explore%20nested%20if%20statements%0A%20%20%20%20-%20Try%20creating%20your%20own%20complex%20decision%20trees%0A%0A%20%20%20%20Keep%20coding!%20%F0%9F%8E%AF%E2%9C%A8%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-B2ootaw-.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-CxL0S8W7.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-D9fedIX3.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-BTCkDNvf.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-DU3aDxX5.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-CLVRCuM9.ttf" as="font" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        var scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          var element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          var hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          var newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((entries) => {
+          setHeight();
+        });
+        resizeObserver.observe(obj.contentWindow.document.body);
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <marimo-mode data-mode='edit' hidden></marimo-mode>
+    <marimo-version data-version='0.11.9' hidden></marimo-version>
+    <marimo-user-config data-config='{"completion": {"activate_on_typing": true, "copilot": false}, "display": {"theme": "light", "cell_output": "above", "dataframes": "rich", "default_width": "medium", "code_editor_font_size": 14}, "formatting": {"line_length": 79}, "keymap": {"preset": "default", "overrides": {}}, "runtime": {"auto_instantiate": true, "auto_reload": "off", "on_cell_change": "autorun", "watcher_on_save": "lazy", "output_max_bytes": 8000000, "std_stream_max_bytes": 1000000}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "package_management": {"manager": "pip"}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}}' data-overrides='{}' hidden></marimo-user-config>
+    <marimo-app-config data-config='{"width": "compact"}' hidden></marimo-app-config>
+    <marimo-server-token data-token='123' hidden></marimo-server-token>
+    <title>007 advanced collections</title>
+    <script type="module" crossorigin src="./assets/index-BiV-b1K2.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DkqMrX_B.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    <marimo-code hidden="" data-show-code="false">import%20marimo%0A%0A__generated_with%20%3D%20%220.11.9%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%20%F0%9F%94%84%20Advanced%20collections%0A%0A%20%20%20%20%20%20%20%20This%20tutorials%20hows%20advanced%20patterns%20for%20working%20with%20collections.%0A%0A%20%20%20%20%20%20%20%20%23%23%20Lists%20of%20dictionaries%0A%0A%20%20%20%20%20%20%20%20A%20common%20pattern%20in%20data%20handling%20is%20working%20with%20lists%20of%20dictionaries%3A%0A%20%20%20%20%20%20%20%20this%20is%20helpful%20for%20representing%20structured%20data%20like%20records%20or%20entries.%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%23%20Sample%20data%3A%20List%20of%20user%20records%0A%20%20%20%20users_data%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%7B%22id%22%3A%201%2C%20%22name%22%3A%20%22Alice%22%2C%20%22skills%22%3A%20%5B%22Python%22%2C%20%22SQL%22%5D%7D%2C%0A%20%20%20%20%20%20%20%20%7B%22id%22%3A%202%2C%20%22name%22%3A%20%22Bob%22%2C%20%22skills%22%3A%20%5B%22JavaScript%22%2C%20%22HTML%22%5D%7D%2C%0A%20%20%20%20%20%20%20%20%7B%22id%22%3A%203%2C%20%22name%22%3A%20%22Charlie%22%2C%20%22skills%22%3A%20%5B%22Python%22%2C%20%22Java%22%5D%7D%0A%20%20%20%20%5D%0A%20%20%20%20return%20(users_data%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20Let's%20explore%20common%20operations%20on%20structured%20data.%0A%0A%20%20%20%20%20%20%20%20**Try%20it!**%20Try%20modifying%20the%20%60users_data%60%20above%20and%20see%20how%20the%20results%0A%20%20%20%20%20%20%20%20change!%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(users_data)%3A%0A%20%20%20%20%23%20Finding%20users%20with%20specific%20skills%0A%20%20%20%20python_users%20%3D%20%5B%0A%20%20%20%20%20%20%20%20user%5B%22name%22%5D%20for%20user%20in%20users_data%20if%20%22Python%22%20in%20user%5B%22skills%22%5D%0A%20%20%20%20%5D%0A%20%20%20%20print(%22Python%20developers%3A%22%2C%20python_users)%0A%20%20%20%20return%20(python_users%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Nested%20data%20structures%0A%0A%20%20%20%20%20%20%20%20Python%20collections%20can%20be%20nested%20in%20various%20ways%20to%20represent%20complex%20data%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%23%20Complex%20nested%20structure%0A%20%20%20%20project_data%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22web_app%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22frontend%22%3A%20%5B%22HTML%22%2C%20%22CSS%22%2C%20%22React%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22backend%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22languages%22%3A%20%5B%22Python%22%2C%20%22Node.js%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22databases%22%3A%20%5B%22MongoDB%22%2C%20%22PostgreSQL%22%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%22mobile_app%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22platforms%22%3A%20%5B%22iOS%22%2C%20%22Android%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22technologies%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22iOS%22%3A%20%5B%22Swift%22%2C%20%22SwiftUI%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22Android%22%3A%20%5B%22Kotlin%22%2C%20%22Jetpack%20Compose%22%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20return%20(project_data%2C)%0A%0A%0A%40app.cell%0Adef%20_(project_data)%3A%0A%20%20%20%20%23%20Nested%20data%20accessing%0A%20%20%20%20backend_langs%20%3D%20project_data%5B%22web_app%22%5D%5B%22backend%22%5D%5B%22languages%22%5D%0A%20%20%20%20print(%22Backend%20languages%3A%22%2C%20backend_langs)%0A%0A%20%20%20%20ios_tech%20%3D%20project_data%5B%22mobile_app%22%5D%5B%22technologies%22%5D%5B%22iOS%22%5D%0A%20%20%20%20print(%22iOS%20technologies%3A%22%2C%20ios_tech)%0A%20%20%20%20return%20backend_langs%2C%20ios_tech%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%23%20Example%3A%20data%20transformation%0A%0A%20%20%20%20%20%20%20%20Let's%20explore%20how%20to%20transform%20and%20reshape%20collection%20data%3A%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20%23%20Data-sample%20for%20transformation%0A%20%20%20%20sales_data%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%7B%22date%22%3A%20%222024-01%22%2C%20%22product%22%3A%20%22A%22%2C%20%22units%22%3A%20100%7D%2C%0A%20%20%20%20%20%20%20%20%7B%22date%22%3A%20%222024-01%22%2C%20%22product%22%3A%20%22B%22%2C%20%22units%22%3A%20150%7D%2C%0A%20%20%20%20%20%20%20%20%7B%22date%22%3A%20%222024-02%22%2C%20%22product%22%3A%20%22A%22%2C%20%22units%22%3A%20120%7D%2C%0A%20%20%20%20%20%20%20%20%7B%22date%22%3A%20%222024-02%22%2C%20%22product%22%3A%20%22B%22%2C%20%22units%22%3A%20130%7D%0A%20%20%20%20%5D%0A%20%20%20%20return%20(sales_data%2C)%0A%0A%0A%40app.cell%0Adef%20_(sales_data)%3A%0A%20%20%20%20%23%20Transform%20to%20product-based%20structure%0A%20%20%20%20product_sales%20%3D%20%7B%7D%0A%20%20%20%20for%20sale%20in%20sales_data%3A%0A%20%20%20%20%20%20%20%20if%20sale%5B%22product%22%5D%20not%20in%20product_sales%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20product_sales%5Bsale%5B%22product%22%5D%5D%20%3D%20%5B%5D%0A%20%20%20%20%20%20%20%20product_sales%5Bsale%5B%22product%22%5D%5D.append(%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22date%22%3A%20sale%5B%22date%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22units%22%3A%20sale%5B%22units%22%5D%0A%20%20%20%20%20%20%20%20%7D)%0A%0A%20%20%20%20print(%22Sales%20by%20product%3A%22%2C%20product_sales)%0A%20%20%20%20return%20product_sales%2C%20sale%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20More%20collection%20utilities%0A%0A%20%20%20%20%20%20%20%20Python's%20%60collections%60%20module%20provides%20specialized%20container%20datatypes%3A%0A%0A%20%20%20%20%20%20%20%20%60%60%60python%0A%20%20%20%20%20%20%20%20from%20collections%20import%20defaultdict%2C%20Counter%2C%20deque%0A%0A%20%20%20%20%20%20%20%20%23%20defaultdict%20-%20dictionary%20with%20default%20factory%0A%20%20%20%20%20%20%20%20word_count%20%3D%20defaultdict(int)%0A%20%20%20%20%20%20%20%20for%20word%20in%20words%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20word_count%5Bword%5D%20%2B%3D%201%0A%0A%20%20%20%20%20%20%20%20%23%20Counter%20-%20count%20hashable%20objects%0A%20%20%20%20%20%20%20%20colors%20%3D%20Counter(%5B'red'%2C%20'blue'%2C%20'red'%2C%20'green'%2C%20'blue'%2C%20'blue'%5D)%0A%20%20%20%20%20%20%20%20print(colors.most_common(2))%20%20%23%20Top%202%20most%20common%20colors%0A%0A%20%20%20%20%20%20%20%20%23%20deque%20-%20double-ended%20queue%0A%20%20%20%20%20%20%20%20history%20%3D%20deque(maxlen%3D10)%20%20%23%20Only%20keeps%20last%2010%20items%0A%20%20%20%20%20%20%20%20history.append(item)%0A%20%20%20%20%20%20%20%20%60%60%60%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20from%20collections%20import%20Counter%0A%0A%20%20%20%20%23%20Example%20using%20Counter%0A%20%20%20%20programming_languages%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%22Python%22%2C%20%22JavaScript%22%2C%20%22Python%22%2C%20%22Java%22%2C%20%0A%20%20%20%20%20%20%20%20%22Python%22%2C%20%22JavaScript%22%2C%20%22C%2B%2B%22%2C%20%22Java%22%0A%20%20%20%20%5D%0A%0A%20%20%20%20language_count%20%3D%20Counter(programming_languages)%0A%20%20%20%20print(%22Language%20frequency%3A%22%2C%20dict(language_count))%0A%20%20%20%20print(%22Most%20common%20language%3A%22%2C%20language_count.most_common(1))%0A%20%20%20%20return%20Counter%2C%20language_count%2C%20programming_languages%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Next%20steps%0A%0A%20%20%20%20%20%20%20%20For%20a%20reference%20on%20the%20%60collections%60%20module%2C%20see%20%5Bthe%20official%20Python%20%0A%20%20%20%20%20%20%20%20docs%5D(https%3A%2F%2Fdocs.python.org%2F3%2Flibrary%2Fcollections.html).%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20return%20(mo%2C)%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
