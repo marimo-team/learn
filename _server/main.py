@@ -6,12 +6,20 @@
 #     "starlette",
 #     "python-dotenv",
 #     "pydantic",
-#     "polars",
 #     "duckdb",
+#     "altair==5.5.0",
+#     "beautifulsoup4==4.13.3",
+#     "httpx==0.28.1",
+#     "marimo",
+#     "nest-asyncio==1.6.0",
+#     "numba==0.61.0",
+#     "numpy==2.1.3",
+#     "polars==1.24.0",
 # ]
 # ///
 
 import logging
+import os
 from pathlib import Path
 
 import marimo
@@ -25,6 +33,9 @@ load_dotenv()
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Get port from environment variable or use default
+PORT = int(os.environ.get("PORT", 7860))
 
 root_dir = Path(__file__).parent.parent
 
@@ -76,4 +87,4 @@ app.mount("/", server.build())
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")

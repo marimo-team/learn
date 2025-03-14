@@ -7,7 +7,7 @@ COPY duckdb/ duckdb/
 RUN uv venv
 RUN uv export --script _server/main.py | uv pip install -r -
 
-ENV PORT=8000
-EXPOSE 8000
+ENV PORT=7860
+EXPOSE 7860
 
 CMD ["uv", "run", "_server/main.py"]

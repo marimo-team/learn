@@ -17,5 +17,5 @@ docker build -t marimo-learn .
 ## Running the Docker container
 
 ```bash
-docker run -p 8000:8000 marimo-learn
+docker run -p 7860:7860 marimo-learn
 ```
