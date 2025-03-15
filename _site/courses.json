@@ -1,4 +1,17 @@
 {
+  "functional_programming": {
+    "id": "functional_programming",
+    "title": "Functional Programming",
+    "description": "_\ud83d\udea7 This collection is a [work in progress](https://github.com/marimo-team/learn/issues/51)._",
+    "notebooks": [
+      {
+        "id": "05_functors",
+        "path": "functional_programming\\05_functors.py",
+        "display_name": "Functors",
+        "order": 5
+      }
+    ]
+  },
   "optimization": {
     "id": "optimization",
     "title": "Optimization",
@@ -143,12 +156,6 @@
         "path": "probability\\10_probability_mass_function.py",
         "display_name": "Probability Mass Function",
         "order": 10
-      },
-      {
-        "id": "11_expectation",
-        "path": "probability\\11_expectation.py",
-        "display_name": "Expectation",
-        "order": 11
       }
     ]
   },

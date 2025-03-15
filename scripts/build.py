@@ -303,9 +303,9 @@ def generate_eva_css() -> str:
     }
     
     .eva-courses {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 2rem;
+        display: block;
+        width: 100%;
+        max-width: 100%;
     }
     
     .eva-course {
@@ -315,6 +315,9 @@ def generate_eva_css() -> str:
         transition: var(--eva-transition);
         position: relative;
         overflow: hidden;
+        width: 100%;
+        display: block;
+        margin-bottom: 2rem;
     }
     
     .eva-course:hover {
@@ -353,23 +356,20 @@ def generate_eva_css() -> str:
     .eva-course-toggle {
         color: var(--eva-purple);
         font-size: 1.5rem;
-        transition: var(--eva-transition);
-    }
-    
-    .eva-course-content {
-        padding: 0 1.5rem;
-        max-height: 0;
-        overflow: hidden;
-        transition: var(--eva-transition);
-    }
-    
-    .eva-course.active .eva-course-content {
-        padding: 1.5rem;
-        max-height: 1000px;
+        transition: transform 0.3s ease;
     }
     
     .eva-course.active .eva-course-toggle {
         transform: rotate(180deg);
+    }
+    
+    .eva-course-content {
+        display: none;
+        padding: 1.5rem;
+    }
+    
+    .eva-course.active .eva-course-content {
+        display: block;
     }
     
     .eva-course-description {
@@ -380,20 +380,26 @@ def generate_eva_css() -> str:
     
     .eva-notebooks {
         margin-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 0.75rem;
     }
     
     .eva-notebook {
-        margin-bottom: 0.75rem;
-        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem;
         border-left: 2px solid var(--eva-blue);
         transition: var(--eva-transition);
         display: flex;
         align-items: center;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 0 var(--eva-border-radius) var(--eva-border-radius) 0;
     }
     
     .eva-notebook:hover {
         background-color: rgba(0, 102, 255, 0.1);
         padding-left: 1rem;
+        transform: translateX(3px);
     }
     
     .eva-notebook a {
@@ -411,9 +417,10 @@ def generate_eva_css() -> str:
     .eva-notebook-number {
         color: var(--eva-blue);
         font-size: 0.8rem;
-        margin-right: 0.5rem;
+        margin-right: 0.75rem;
         opacity: 0.7;
         min-width: 24px;
+        font-weight: bold;
     }
     
     .eva-button {
@@ -613,6 +620,10 @@ def generate_eva_css() -> str:
             align-items: center;
             text-align: center;
         }
+        
+        .eva-notebooks {
+            grid-template-columns: 1fr;
+        }
     }
     """
 
@@ -629,7 +640,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             f.write(
                 """<!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marimo Learn - Interactive Educational Notebooks</title>
@@ -637,7 +648,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
     <style>
 """ + generate_eva_css() + """
     </style>
-</head>
+  </head>
 <body>
     <div class="eva-container">
         <header class="eva-header">
@@ -687,7 +698,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             <div class="eva-search">
                 <input type="text" id="courseSearch" placeholder="Search courses and notebooks...">
                 <span class="eva-search-icon"><i class="fas fa-search"></i></span>
-            </div>
+    </div>
             <div class="eva-courses">
 """
             )
@@ -699,7 +710,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                 # Skip if no notebooks
                 if not course["notebooks"]:
                     continue
-                    
+
                 f.write(
                     f'<div class="eva-course" data-course-id="{course["id"]}">\n'
                     f'    <div class="eva-course-header">\n'
@@ -719,7 +730,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                         f'                <a href="{notebook["path"].replace(".py", ".html")}" data-notebook-title="{notebook["display_name"]}">{notebook["display_name"]}</a>\n'
                         f'            </div>\n'
                     )
-                
+
                 f.write(
                     f'        </div>\n'
                     f'    </div>\n'
@@ -790,13 +801,43 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             
             typeTitle();
             
-            // Course toggle functionality
+            // Course toggle functionality - fixed to only open one at a time
             const courseHeaders = document.querySelectorAll('.eva-course-header');
             
             courseHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const course = header.parentElement;
-                    course.classList.toggle('active');
+                header.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const currentCourse = this.parentElement;
+                    const isActive = currentCourse.classList.contains('active');
+                    
+                    // First close all courses
+                    document.querySelectorAll('.eva-course').forEach(course => {
+                        course.classList.remove('active');
+                    });
+                    
+                    // Toggle the clicked course
+                    if (!isActive) {
+                        currentCourse.classList.add('active');
+                        
+                        // Check if the course has any notebooks
+                        const notebooks = currentCourse.querySelectorAll('.eva-notebook');
+                        const content = currentCourse.querySelector('.eva-course-content');
+                        
+                        if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
+                            // If no notebooks, show a message
+                            const emptyMessage = document.createElement('p');
+                            emptyMessage.className = 'eva-empty-message';
+                            emptyMessage.textContent = 'No notebooks available in this course yet.';
+                            emptyMessage.style.color = 'var(--eva-text)';
+                            emptyMessage.style.fontStyle = 'italic';
+                            emptyMessage.style.opacity = '0.7';
+                            emptyMessage.style.textAlign = 'center';
+                            emptyMessage.style.padding = '1rem 0';
+                            content.appendChild(emptyMessage);
+                        }
+                    }
                 });
             });
             
@@ -818,6 +859,15 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                     notebooks.forEach(notebook => {
                         notebook.style.display = 'flex';
                     });
+                    
+                    // Open the first course with notebooks by default when search is cleared
+                    for (let i = 0; i < courses.length; i++) {
+                        const courseNotebooks = courses[i].querySelectorAll('.eva-notebook');
+                        if (courseNotebooks.length > 0) {
+                            courses[i].classList.add('active');
+                            break;
+                        }
+                    }
                     
                     return;
                 }
@@ -858,8 +908,20 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                 });
             });
             
-            // Open the first course by default
-            if (courses.length > 0) {
+            // Open the first course with notebooks by default
+            let firstCourseWithNotebooks = null;
+            for (let i = 0; i < courses.length; i++) {
+                const courseNotebooks = courses[i].querySelectorAll('.eva-notebook');
+                if (courseNotebooks.length > 0) {
+                    firstCourseWithNotebooks = courses[i];
+                    break;
+                }
+            }
+            
+            if (firstCourseWithNotebooks) {
+                firstCourseWithNotebooks.classList.add('active');
+            } else if (courses.length > 0) {
+                // If no courses have notebooks, just open the first one
                 courses[0].classList.add('active');
             }
             
@@ -881,7 +943,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             });
         });
     </script>
-</body>
+  </body>
 </html>"""
             )
     except IOError as e:
