@@ -251,7 +251,7 @@
         background-color: var(--eva-terminal-bg);
         border: 1px solid var(--eva-purple);
         border-radius: var(--eva-border-radius);
-        transition: var(--eva-transition);
+        transition: var(--eva-transition), height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         position: relative;
         overflow: hidden;
         height: 350px;
@@ -345,7 +345,7 @@
     .eva-course-toggle {
         color: var(--eva-purple);
         font-size: 1.5rem;
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     }
     
     .eva-course.active .eva-course-toggle {
@@ -422,6 +422,8 @@
     .eva-course.active {
         height: auto;
         min-height: 350px;
+        max-height: 800px;
+        transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.3s ease, box-shadow 0.3s ease;
     }
     
     .eva-notebooks {
@@ -435,11 +437,13 @@
         margin-bottom: 0.5rem;
         padding: 0.75rem;
         border-left: 2px solid var(--eva-blue);
-        transition: var(--eva-transition);
+        transition: all 0.25s ease;
         display: flex;
         align-items: center;
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: 0 var(--eva-border-radius) var(--eva-border-radius) 0;
+        opacity: 1;
+        transform: translateX(0);
     }
     
     [data-theme="light"] .eva-notebook {
@@ -703,6 +707,18 @@
         .eva-notebooks {
             grid-template-columns: 1fr;
         }
+    }
+    
+    .eva-course.closing .eva-course-content {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    
+    .eva-course.closing .eva-course-front {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
     }
     
     </style>
@@ -1083,31 +1099,52 @@
             function toggleCourse(course) {
                 const isActive = course.classList.contains('active');
                 
-                // First close all courses
-                document.querySelectorAll('.eva-course').forEach(c => {
-                    c.classList.remove('active');
+                // First close all courses with a slight delay for better visual effect
+                document.querySelectorAll('.eva-course.active').forEach(c => {
+                    if (c !== course) {
+                        // Add a closing class for animation
+                        c.classList.add('closing');
+                        // Remove active class after a short delay
+                        setTimeout(() => {
+                            c.classList.remove('active');
+                            c.classList.remove('closing');
+                        }, 300);
+                    }
                 });
                 
                 // Toggle the clicked course
                 if (!isActive) {
-                    course.classList.add('active');
-                    
-                    // Check if the course has any notebooks
-                    const notebooks = course.querySelectorAll('.eva-notebook');
-                    const content = course.querySelector('.eva-course-content');
-                    
-                    if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
-                        // If no notebooks, show a message
-                        const emptyMessage = document.createElement('p');
-                        emptyMessage.className = 'eva-empty-message';
-                        emptyMessage.textContent = 'No notebooks available in this course yet.';
-                        emptyMessage.style.color = 'var(--eva-text)';
-                        emptyMessage.style.fontStyle = 'italic';
-                        emptyMessage.style.opacity = '0.7';
-                        emptyMessage.style.textAlign = 'center';
-                        emptyMessage.style.padding = '1rem 0';
-                        content.appendChild(emptyMessage);
-                    }
+                    // Add a small delay before opening to allow others to close
+                    setTimeout(() => {
+                        course.classList.add('active');
+                        
+                        // Check if the course has any notebooks
+                        const notebooks = course.querySelectorAll('.eva-notebook');
+                        const content = course.querySelector('.eva-course-content');
+                        
+                        if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
+                            // If no notebooks, show a message
+                            const emptyMessage = document.createElement('p');
+                            emptyMessage.className = 'eva-empty-message';
+                            emptyMessage.textContent = 'No notebooks available in this course yet.';
+                            emptyMessage.style.color = 'var(--eva-text)';
+                            emptyMessage.style.fontStyle = 'italic';
+                            emptyMessage.style.opacity = '0.7';
+                            emptyMessage.style.textAlign = 'center';
+                            emptyMessage.style.padding = '1rem 0';
+                            content.appendChild(emptyMessage);
+                        }
+                        
+                        // Animate notebooks to appear sequentially
+                        notebooks.forEach((notebook, index) => {
+                            notebook.style.opacity = '0';
+                            notebook.style.transform = 'translateX(-10px)';
+                            setTimeout(() => {
+                                notebook.style.opacity = '1';
+                                notebook.style.transform = 'translateX(0)';
+                            }, 50 + (index * 30)); // Stagger the animations
+                        });
+                    }, 100);
                 }
             }
             
