@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +8,9 @@
     <style>
 
     :root {
+        /* Dark mode colors (default) */
         --eva-purple: #9a1eb3;
-        --eva-green: #00ff00;
+        --eva-green: #1c7361;
         --eva-orange: #ff6600;
         --eva-blue: #0066ff;
         --eva-red: #ff0000;
@@ -21,6 +22,19 @@
         --eva-transition: all 0.3s ease;
     }
     
+    /* Light mode colors */
+    [data-theme="light"] {
+        --eva-purple: #7209b7;
+        --eva-green: #1c7361;
+        --eva-orange: #e65100;
+        --eva-blue: #0039cb;
+        --eva-red: #c62828;
+        --eva-black: #f5f5f5;
+        --eva-dark: #e0e0e0;
+        --eva-terminal-bg: rgba(255, 255, 255, 0.9);
+        --eva-text: #333333;
+    }
+    
     body {
         background-color: var(--eva-black);
         color: var(--eva-text);
@@ -28,6 +42,7 @@
         margin: 0;
         padding: 0;
         line-height: 1.6;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
     
     .eva-container {
@@ -45,10 +60,15 @@
         align-items: center;
         position: sticky;
         top: 0;
-        background-color: rgba(17, 17, 17, 0.95);
+        background-color: var(--eva-black);
         z-index: 100;
         backdrop-filter: blur(5px);
         padding-top: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    
+    [data-theme="light"] .eva-header {
+        background-color: rgba(245, 245, 245, 0.95);
     }
     
     .eva-logo {
@@ -57,16 +77,21 @@
         color: var(--eva-green);
         text-transform: uppercase;
         letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        text-shadow: 0 0 10px rgba(28, 115, 97, 0.5);
+    }
+    
+    [data-theme="light"] .eva-logo {
+        text-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
     }
     
     .eva-nav {
         display: flex;
         gap: 1.5rem;
+        align-items: center;
     }
     
     .eva-nav a {
-        color: white;
+        color: var(--eva-text);
         text-decoration: none;
         text-transform: uppercase;
         font-size: 0.9rem;
@@ -91,6 +116,21 @@
         animation: scanline 1.5s linear infinite;
     }
     
+    .theme-toggle {
+        background: none;
+        border: none;
+        color: var(--eva-text);
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        margin-left: 1rem;
+        transition: color 0.3s;
+    }
+    
+    .theme-toggle:hover {
+        color: var(--eva-green);
+    }
+    
     .eva-hero {
         background-color: var(--eva-terminal-bg);
         border: 1px solid var(--eva-green);
@@ -106,6 +146,11 @@
         background-size: cover;
         background-position: center;
         background-blend-mode: overlay;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    
+    [data-theme="light"] .eva-hero {
+        background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url('https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg');
     }
     
     .eva-hero::before {
@@ -125,7 +170,11 @@
         color: var(--eva-green);
         text-transform: uppercase;
         letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        text-shadow: 0 0 10px rgba(28, 115, 97, 0.5);
+    }
+    
+    [data-theme="light"] .eva-hero h1 {
+        text-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
     }
     
     .eva-hero p {
@@ -191,10 +240,11 @@
         background-color: var(--eva-green);
     }
     
+    /* Flashcard view for courses */
     .eva-courses {
-        display: block;
-        width: 100%;
-        max-width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
     }
     
     .eva-course {
@@ -204,9 +254,9 @@
         transition: var(--eva-transition);
         position: relative;
         overflow: hidden;
-        width: 100%;
-        display: block;
-        margin-bottom: 2rem;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
     }
     
     .eva-course:hover {
@@ -225,17 +275,67 @@
         animation: scanline 2s linear infinite;
     }
     
+    .eva-course-badge {
+        position: absolute;
+        top: 15px;
+        right: -40px;
+        background: linear-gradient(135deg, var(--eva-orange) 0%, #ff9500 100%);
+        color: var(--eva-black);
+        font-size: 0.65rem;
+        padding: 0.3rem 2.5rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        z-index: 3;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transform: rotate(45deg);
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    
+    .eva-course-badge i {
+        margin-right: 4px;
+        font-size: 0.7rem;
+    }
+    
+    [data-theme="light"] .eva-course-badge {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+    }
+    
+    .eva-course-badge::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: scanline 2s linear infinite;
+    }
+    
     .eva-course-header {
-        padding: 1.5rem;
+        padding: 1rem 1.5rem;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid rgba(154, 30, 179, 0.3);
+        z-index: 2;
+        background-color: var(--eva-terminal-bg);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3.5rem;
+        box-sizing: border-box;
     }
     
     .eva-course-title {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         color: var(--eva-purple);
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -252,19 +352,76 @@
         transform: rotate(180deg);
     }
     
-    .eva-course-content {
-        display: none;
+    .eva-course-front {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         padding: 1.5rem;
+        margin-top: 3.5rem;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 3.5rem);
+        background-color: var(--eva-terminal-bg);
+        z-index: 1;
+        box-sizing: border-box;
     }
     
-    .eva-course.active .eva-course-content {
-        display: block;
+    .eva-course.active .eva-course-front {
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
     }
     
     .eva-course-description {
+        margin-top: 0.5rem;
         margin-bottom: 1.5rem;
         font-size: 0.9rem;
         line-height: 1.6;
+        flex-grow: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        max-height: 150px;
+    }
+    
+    .eva-course-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--eva-text);
+        opacity: 0.7;
+    }
+    
+    .eva-course-content {
+        position: absolute;
+        top: 3.5rem;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 3.5rem);
+        padding: 1.5rem;
+        background-color: var(--eva-terminal-bg);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        overflow-y: auto;
+        z-index: 1;
+        box-sizing: border-box;
+    }
+    
+    .eva-course.active .eva-course-content {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .eva-course.active {
+        height: auto;
+        min-height: 350px;
     }
     
     .eva-notebooks {
@@ -285,6 +442,10 @@
         border-radius: 0 var(--eva-border-radius) var(--eva-border-radius) 0;
     }
     
+    [data-theme="light"] .eva-notebook {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
     .eva-notebook:hover {
         background-color: rgba(0, 102, 255, 0.1);
         padding-left: 1rem;
@@ -292,7 +453,7 @@
     }
     
     .eva-notebook a {
-        color: white;
+        color: var(--eva-text);
         text-decoration: none;
         display: block;
         font-size: 0.9rem;
@@ -349,6 +510,12 @@
         left: 100%;
     }
     
+    .eva-course-button {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        align-self: center;
+    }
+    
     .eva-cta {
         background-color: var(--eva-terminal-bg);
         border: 1px solid var(--eva-orange);
@@ -388,15 +555,20 @@
         padding-top: 2rem;
         border-top: 2px solid var(--eva-green);
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
-        flex-wrap: wrap;
         gap: 2rem;
+    }
+    
+    .eva-footer-logo {
+        max-width: 200px;
+        margin-bottom: 1rem;
     }
     
     .eva-footer-links {
         display: flex;
         gap: 1.5rem;
+        margin-bottom: 1.5rem;
     }
     
     .eva-footer-links a {
@@ -409,8 +581,26 @@
         color: var(--eva-green);
     }
     
+    .eva-social-links {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .eva-social-links a {
+        color: var(--eva-text);
+        font-size: 1.5rem;
+        transition: var(--eva-transition);
+    }
+    
+    .eva-social-links a:hover {
+        color: var(--eva-green);
+        transform: translateY(-3px);
+    }
+    
     .eva-footer-copyright {
         font-size: 0.9rem;
+        text-align: center;
     }
     
     .eva-search {
@@ -432,7 +622,7 @@
     }
     
     .eva-search input:focus {
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        box-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
     }
     
     .eva-search input::placeholder {
@@ -527,6 +717,9 @@
                 <a href="#contribute">Contribute</a>
                 <a href="https://docs.marimo.io" target="_blank">Documentation</a>
                 <a href="https://github.com/marimo-team/learn" target="_blank">GitHub</a>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+                    <i class="fas fa-moon"></i>
+                </button>
             </nav>
         </header>
 
@@ -566,96 +759,75 @@
             <div class="eva-search">
                 <input type="text" id="courseSearch" placeholder="Search courses and notebooks...">
                 <span class="eva-search-icon"><i class="fas fa-search"></i></span>
-    </div>
+            </div>
             <div class="eva-courses">
-<div class="eva-course" data-course-id="functional_programming">
+<div class="eva-course" data-course-id="python">
     <div class="eva-course-header">
-        <h2 class="eva-course-title">Functional Programming</h2>
+        <h2 class="eva-course-title">Python</h2>
         <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
     </div>
-    <div class="eva-course-content">
-        <p class="eva-course-description">_🚧 This collection is a [work in progress](https://github.com/marimo-team/learn/issues/51)._</p>
-        <div class="eva-notebooks">
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">01</span>
-                <a href="functional_programming\05_functors.html" data-notebook-title="Functors">Functors</a>
-            </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">This collection of marimo notebooks is designed to teach you the basics of the Python programming language.</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> 9 notebooks</span>
         </div>
-    </div>
-</div>
-<div class="eva-course" data-course-id="optimization">
-    <div class="eva-course-header">
-        <h2 class="eva-course-title">Optimization</h2>
-        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
+        <button class="eva-button eva-course-button">View Notebooks</button>
     </div>
     <div class="eva-course-content">
-        <p class="eva-course-description">This collection of marimo notebooks teaches you the basics of convex optimization.</p>
         <div class="eva-notebooks">
             <div class="eva-notebook">
-                <span class="eva-notebook-number">01</span>
-                <a href="optimization\01_least_squares.html" data-notebook-title="Least Squares">Least Squares</a>
+                <span class="eva-notebook-number">001</span>
+                <a href="python\001_numbers.html" data-notebook-title="Numbers">Numbers</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">02</span>
-                <a href="optimization\02_linear_program.html" data-notebook-title="Linear Program">Linear Program</a>
+                <span class="eva-notebook-number">002</span>
+                <a href="python\002_strings.html" data-notebook-title="Strings">Strings</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">03</span>
-                <a href="optimization\03_minimum_fuel_optimal_control.html" data-notebook-title="Minimum Fuel Optimal Control">Minimum Fuel Optimal Control</a>
+                <span class="eva-notebook-number">003</span>
+                <a href="python\003_collections.html" data-notebook-title="Collections">Collections</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">04</span>
-                <a href="optimization\04_quadratic_program.html" data-notebook-title="Quadratic Program">Quadratic Program</a>
+                <span class="eva-notebook-number">004</span>
+                <a href="python\004_conditional_logic.html" data-notebook-title="Conditional Logic">Conditional Logic</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">05</span>
-                <a href="optimization\05_portfolio_optimization.html" data-notebook-title="Portfolio Optimization">Portfolio Optimization</a>
+                <span class="eva-notebook-number">005</span>
+                <a href="python\005_loops.html" data-notebook-title="Loops">Loops</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">06</span>
-                <a href="optimization\06_convex_optimization.html" data-notebook-title="Convex Optimization">Convex Optimization</a>
+                <span class="eva-notebook-number">007</span>
+                <a href="python\007_advanced_collections.html" data-notebook-title="Advanced Collections">Advanced Collections</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">07</span>
-                <a href="optimization\07_sdp.html" data-notebook-title="Sdp">Sdp</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="eva-course" data-course-id="polars">
-    <div class="eva-course-header">
-        <h2 class="eva-course-title">Polars</h2>
-        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
-    </div>
-    <div class="eva-course-content">
-        <p class="eva-course-description">_🚧 This collection is a work in progress. Please help us add notebooks!_</p>
-        <div class="eva-notebooks">
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">01</span>
-                <a href="polars\01_why_polars.html" data-notebook-title="Why Polars">Why Polars</a>
+                <span class="eva-notebook-number">008</span>
+                <a href="python\008_functions.html" data-notebook-title="Functions">Functions</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">02</span>
-                <a href="polars\04_basic_operations.html" data-notebook-title="Basic Operations">Basic Operations</a>
+                <span class="eva-notebook-number">009</span>
+                <a href="python\009_modules.html" data-notebook-title="Modules">Modules</a>
             </div>
             <div class="eva-notebook">
-                <span class="eva-notebook-number">03</span>
-                <a href="polars\12_aggregations.html" data-notebook-title="Aggregations">Aggregations</a>
-            </div>
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">04</span>
-                <a href="polars\14_user_defined_functions.html" data-notebook-title="User Defined Functions">User Defined Functions</a>
+                <span class="eva-notebook-number">010</span>
+                <a href="python\010_exceptions.html" data-notebook-title="Exceptions">Exceptions</a>
             </div>
         </div>
     </div>
 </div>
 <div class="eva-course" data-course-id="probability">
+    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>
     <div class="eva-course-header">
         <h2 class="eva-course-title">Probability</h2>
         <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
     </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">🚧 This collection is a work in progress. Check back later for new noteboks.</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> 10 notebooks</span>
+        </div>
+        <button class="eva-button eva-course-button">View Notebooks</button>
+    </div>
     <div class="eva-course-content">
-        <p class="eva-course-description">🚧 _This collection is a work in progress. Check back later for new noteboks._</p>
         <div class="eva-notebooks">
             <div class="eva-notebook">
                 <span class="eva-notebook-number">01</span>
@@ -700,49 +872,103 @@
         </div>
     </div>
 </div>
-<div class="eva-course" data-course-id="python">
+<div class="eva-course" data-course-id="polars">
+    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>
     <div class="eva-course-header">
-        <h2 class="eva-course-title">Python</h2>
+        <h2 class="eva-course-title">Polars</h2>
         <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
     </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">🚧 This collection is a work in progress. Please help us add notebooks!</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> 4 notebooks</span>
+        </div>
+        <button class="eva-button eva-course-button">View Notebooks</button>
+    </div>
     <div class="eva-course-content">
-        <p class="eva-course-description">This collection of marimo notebooks is designed to teach you the basics of the Python programming language.</p>
         <div class="eva-notebooks">
             <div class="eva-notebook">
                 <span class="eva-notebook-number">01</span>
-                <a href="python\001_numbers.html" data-notebook-title="Numbers">Numbers</a>
-            </div>
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">02</span>
-                <a href="python\002_strings.html" data-notebook-title="Strings">Strings</a>
-            </div>
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">03</span>
-                <a href="python\003_collections.html" data-notebook-title="Collections">Collections</a>
+                <a href="polars\01_why_polars.html" data-notebook-title="Why Polars">Why Polars</a>
             </div>
             <div class="eva-notebook">
                 <span class="eva-notebook-number">04</span>
-                <a href="python\004_conditional_logic.html" data-notebook-title="Conditional Logic">Conditional Logic</a>
+                <a href="polars\04_basic_operations.html" data-notebook-title="Basic Operations">Basic Operations</a>
+            </div>
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">12</span>
+                <a href="polars\12_aggregations.html" data-notebook-title="Aggregations">Aggregations</a>
+            </div>
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">14</span>
+                <a href="polars\14_user_defined_functions.html" data-notebook-title="User Defined Functions">User Defined Functions</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="eva-course" data-course-id="optimization">
+    <div class="eva-course-header">
+        <h2 class="eva-course-title">Optimization</h2>
+        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
+    </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">This collection of marimo notebooks teaches you the basics of convex optimization.</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> 7 notebooks</span>
+        </div>
+        <button class="eva-button eva-course-button">View Notebooks</button>
+    </div>
+    <div class="eva-course-content">
+        <div class="eva-notebooks">
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">01</span>
+                <a href="optimization\01_least_squares.html" data-notebook-title="Least Squares">Least Squares</a>
+            </div>
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">02</span>
+                <a href="optimization\02_linear_program.html" data-notebook-title="Linear Program">Linear Program</a>
+            </div>
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">03</span>
+                <a href="optimization\03_minimum_fuel_optimal_control.html" data-notebook-title="Minimum Fuel Optimal Control">Minimum Fuel Optimal Control</a>
+            </div>
+            <div class="eva-notebook">
+                <span class="eva-notebook-number">04</span>
+                <a href="optimization\04_quadratic_program.html" data-notebook-title="Quadratic Program">Quadratic Program</a>
             </div>
             <div class="eva-notebook">
                 <span class="eva-notebook-number">05</span>
-                <a href="python\005_loops.html" data-notebook-title="Loops">Loops</a>
+                <a href="optimization\05_portfolio_optimization.html" data-notebook-title="Portfolio Optimization">Portfolio Optimization</a>
             </div>
             <div class="eva-notebook">
                 <span class="eva-notebook-number">06</span>
-                <a href="python\007_advanced_collections.html" data-notebook-title="Advanced Collections">Advanced Collections</a>
+                <a href="optimization\06_convex_optimization.html" data-notebook-title="Convex Optimization">Convex Optimization</a>
             </div>
             <div class="eva-notebook">
                 <span class="eva-notebook-number">07</span>
-                <a href="python\008_functions.html" data-notebook-title="Functions">Functions</a>
+                <a href="optimization\07_sdp.html" data-notebook-title="Sdp">Sdp</a>
             </div>
+        </div>
+    </div>
+</div>
+<div class="eva-course" data-course-id="functional_programming">
+    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>
+    <div class="eva-course-header">
+        <h2 class="eva-course-title">Functional Programming</h2>
+        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
+    </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">🚧 This collection is a .</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> 1 notebook</span>
+        </div>
+        <button class="eva-button eva-course-button">View Notebooks</button>
+    </div>
+    <div class="eva-course-content">
+        <div class="eva-notebooks">
             <div class="eva-notebook">
-                <span class="eva-notebook-number">08</span>
-                <a href="python\009_modules.html" data-notebook-title="Modules">Modules</a>
-            </div>
-            <div class="eva-notebook">
-                <span class="eva-notebook-number">09</span>
-                <a href="python\010_exceptions.html" data-notebook-title="Exceptions">Exceptions</a>
+                <span class="eva-notebook-number">05</span>
+                <a href="functional_programming\05_functors.html" data-notebook-title="Functors">Functors</a>
             </div>
         </div>
     </div>
@@ -762,19 +988,58 @@
         </section>
 
         <footer class="eva-footer">
-            <div class="eva-footer-copyright">
-                © 2024 Marimo Learn. Built with <a href="https://marimo.io" target="_blank" style="color: var(--eva-green);">marimo</a>.
+            <div class="eva-footer-logo">
+                <a href="https://marimo.io" target="_blank">
+                    <img src="https://marimo.io/logotype-wide.svg" alt="Marimo" width="200">
+                </a>
+            </div>
+            <div class="eva-social-links">
+                <a href="https://github.com/marimo-team" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://marimo.io/discord?ref=learn" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                <a href="https://twitter.com/marimo_io" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.youtube.com/@marimo-io" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.linkedin.com/company/marimo-io" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
             <div class="eva-footer-links">
-                <a href="https://marimo.io" target="_blank">Marimo Website</a>
+                <a href="https://marimo.io" target="_blank">Website</a>
                 <a href="https://docs.marimo.io" target="_blank">Documentation</a>
                 <a href="https://github.com/marimo-team/learn" target="_blank">GitHub</a>
+            </div>
+            <div class="eva-footer-copyright">
+                © 2025 Marimo Inc. All rights reserved.
             </div>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference or use default (dark)
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Toggle theme when button is clicked
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'fas fa-sun';
+                } else {
+                    themeIcon.className = 'fas fa-moon';
+                }
+            }
+            
             // Terminal typing effect for hero text
             const heroTitle = document.querySelector('.eva-hero h1');
             const heroText = document.querySelector('.eva-hero p');
@@ -810,47 +1075,65 @@
             
             typeTitle();
             
-            // Course toggle functionality - fixed to only open one at a time
+            // Course toggle functionality - flashcard style
             const courseHeaders = document.querySelectorAll('.eva-course-header');
+            const courseButtons = document.querySelectorAll('.eva-course-button');
             
+            // Function to toggle course
+            function toggleCourse(course) {
+                const isActive = course.classList.contains('active');
+                
+                // First close all courses
+                document.querySelectorAll('.eva-course').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // Toggle the clicked course
+                if (!isActive) {
+                    course.classList.add('active');
+                    
+                    // Check if the course has any notebooks
+                    const notebooks = course.querySelectorAll('.eva-notebook');
+                    const content = course.querySelector('.eva-course-content');
+                    
+                    if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
+                        // If no notebooks, show a message
+                        const emptyMessage = document.createElement('p');
+                        emptyMessage.className = 'eva-empty-message';
+                        emptyMessage.textContent = 'No notebooks available in this course yet.';
+                        emptyMessage.style.color = 'var(--eva-text)';
+                        emptyMessage.style.fontStyle = 'italic';
+                        emptyMessage.style.opacity = '0.7';
+                        emptyMessage.style.textAlign = 'center';
+                        emptyMessage.style.padding = '1rem 0';
+                        content.appendChild(emptyMessage);
+                    }
+                }
+            }
+            
+            // Add click event to course headers
             courseHeaders.forEach(header => {
                 header.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     
-                    const currentCourse = this.parentElement;
-                    const isActive = currentCourse.classList.contains('active');
-                    
-                    // First close all courses
-                    document.querySelectorAll('.eva-course').forEach(course => {
-                        course.classList.remove('active');
-                    });
-                    
-                    // Toggle the clicked course
-                    if (!isActive) {
-                        currentCourse.classList.add('active');
-                        
-                        // Check if the course has any notebooks
-                        const notebooks = currentCourse.querySelectorAll('.eva-notebook');
-                        const content = currentCourse.querySelector('.eva-course-content');
-                        
-                        if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
-                            // If no notebooks, show a message
-                            const emptyMessage = document.createElement('p');
-                            emptyMessage.className = 'eva-empty-message';
-                            emptyMessage.textContent = 'No notebooks available in this course yet.';
-                            emptyMessage.style.color = 'var(--eva-text)';
-                            emptyMessage.style.fontStyle = 'italic';
-                            emptyMessage.style.opacity = '0.7';
-                            emptyMessage.style.textAlign = 'center';
-                            emptyMessage.style.padding = '1rem 0';
-                            content.appendChild(emptyMessage);
-                        }
-                    }
+                    const currentCourse = this.closest('.eva-course');
+                    toggleCourse(currentCourse);
                 });
             });
             
-            // Search functionality
+            // Add click event to course buttons
+            courseButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const currentCourse = this.closest('.eva-course');
+                    toggleCourse(currentCourse);
+                });
+            });
+            
+            // Search functionality with improved matching
             const searchInput = document.getElementById('courseSearch');
             const courses = document.querySelectorAll('.eva-course');
             const notebooks = document.querySelectorAll('.eva-notebook');
@@ -890,6 +1173,10 @@
                 // Then show courses and notebooks that match the search
                 let hasResults = false;
                 
+                // Track which courses have matching notebooks
+                const coursesWithMatchingNotebooks = new Set();
+                
+                // First check notebooks
                 notebooks.forEach(notebook => {
                     const notebookTitle = notebook.querySelector('a').getAttribute('data-notebook-title').toLowerCase();
                     const matchesSearch = notebookTitle.includes(searchTerm);
@@ -898,21 +1185,31 @@
                     
                     if (matchesSearch) {
                         const course = notebook.closest('.eva-course');
-                        course.style.display = 'block';
-                        course.classList.add('active');
+                        coursesWithMatchingNotebooks.add(course.getAttribute('data-course-id'));
                         hasResults = true;
                     }
                 });
                 
-                // Also search course titles
+                // Then check course titles and descriptions
                 courses.forEach(course => {
+                    const courseId = course.getAttribute('data-course-id');
                     const courseTitle = course.querySelector('.eva-course-title').textContent.toLowerCase();
                     const courseDescription = course.querySelector('.eva-course-description').textContent.toLowerCase();
                     
-                    if (courseTitle.includes(searchTerm) || courseDescription.includes(searchTerm)) {
+                    const courseMatches = courseTitle.includes(searchTerm) || courseDescription.includes(searchTerm);
+                    
+                    // Show course if it matches or has matching notebooks
+                    if (courseMatches || coursesWithMatchingNotebooks.has(courseId)) {
                         course.style.display = 'block';
                         course.classList.add('active');
                         hasResults = true;
+                        
+                        // If course matches but doesn't have matching notebooks, show all its notebooks
+                        if (courseMatches && !coursesWithMatchingNotebooks.has(courseId)) {
+                            course.querySelectorAll('.eva-notebook').forEach(nb => {
+                                nb.style.display = 'flex';
+                            });
+                        }
                     }
                 });
             });
