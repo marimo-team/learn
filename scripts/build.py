@@ -786,6 +786,10 @@ def generate_eva_css() -> str:
         color: rgba(224, 224, 224, 0.5);
     }
     
+    [data-theme="light"] .eva-search input::placeholder {
+        color: rgba(51, 51, 51, 0.5);
+    }
+    
     .eva-search-icon {
         position: absolute;
         right: 1rem;
