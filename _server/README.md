@@ -5,10 +5,13 @@ This folder contains server code for hosting marimo apps.
 ## Running the server
 
 ```bash
+cd _server
 uv run --no-project main.py
 ```
 
 ## Building a Docker image
+
+From the root directory, run:
 
 ```bash
 docker build -t marimo-learn .
