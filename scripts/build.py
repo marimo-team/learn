@@ -161,22 +161,7 @@ def generate_eva_css() -> str:
     """Generate Neon Genesis Evangelion inspired CSS with light/dark mode support."""
     return """
     :root {
-        /* Dark mode colors (default) */
-        --eva-purple: #9a1eb3;
-        --eva-green: #1c7361;
-        --eva-orange: #ff6600;
-        --eva-blue: #0066ff;
-        --eva-red: #ff0000;
-        --eva-black: #111111;
-        --eva-dark: #222222;
-        --eva-terminal-bg: rgba(0, 0, 0, 0.85);
-        --eva-text: #e0e0e0;
-        --eva-border-radius: 4px;
-        --eva-transition: all 0.3s ease;
-    }
-    
-    /* Light mode colors */
-    [data-theme="light"] {
+        /* Light mode colors (default) */
         --eva-purple: #7209b7;
         --eva-green: #1c7361;
         --eva-orange: #e65100;
@@ -186,6 +171,21 @@ def generate_eva_css() -> str:
         --eva-dark: #e0e0e0;
         --eva-terminal-bg: rgba(255, 255, 255, 0.9);
         --eva-text: #333333;
+        --eva-border-radius: 4px;
+        --eva-transition: all 0.3s ease;
+    }
+    
+    /* Dark mode colors */
+    [data-theme="dark"] {
+        --eva-purple: #9a1eb3;
+        --eva-green: #1c7361;
+        --eva-orange: #ff6600;
+        --eva-blue: #0066ff;
+        --eva-red: #ff0000;
+        --eva-black: #111111;
+        --eva-dark: #222222;
+        --eva-terminal-bg: rgba(0, 0, 0, 0.85);
+        --eva-text: #e0e0e0;
     }
     
     body {
@@ -891,7 +891,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
         with open(index_path, "w", encoding="utf-8") as f:
             f.write(
                 """<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1126,15 +1126,23 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
     </div>
 
     <script>
+        // Set light theme as default immediately
+        document.documentElement.setAttribute('data-theme', 'light');
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Theme toggle functionality
             const themeToggle = document.getElementById('themeToggle');
             const themeIcon = themeToggle.querySelector('i');
             
-            // Check for saved theme preference or use default (dark)
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
+            // Update theme icon based on current theme
+            updateThemeIcon('light');
+            
+            // Check localStorage for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme && savedTheme !== 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeIcon(savedTheme);
+            }
             
             // Toggle theme when button is clicked
             themeToggle.addEventListener('click', () => {
