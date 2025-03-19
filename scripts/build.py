@@ -30,8 +30,33 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
         cmd.extend([notebook_path, "-o", output_file])
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        print(f"Running command: {' '.join(cmd)}")
+        
+        # Use Popen to handle interactive prompts
+        process = subprocess.Popen(
+            cmd,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # Send 'Y' to the prompt
+        stdout, stderr = process.communicate(input="Y\n", timeout=60)
+        
+        if process.returncode != 0:
+            print(f"Error exporting {notebook_path}:")
+            print(f"Command: {' '.join(cmd)}")
+            print(f"Return code: {process.returncode}")
+            print(f"Stdout: {stdout}")
+            print(f"Stderr: {stderr}")
+            return False
+            
+        print(f"Successfully exported {notebook_path} to {output_file}")
         return True
+    except subprocess.TimeoutExpired:
+        print(f"Timeout exporting {notebook_path} - command took too long to execute")
+        return False
     except subprocess.CalledProcessError as e:
         print(f"Error exporting {notebook_path}:")
         print(e.stderr)
@@ -880,17 +905,9 @@ def generate_eva_css() -> str:
     """
 
 
-def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
-    """Generate the index.html file with Neon Genesis Evangelion aesthetics."""
-    print("Generating index.html")
-
-    index_path = os.path.join(output_dir, "index.html")
-    os.makedirs(output_dir, exist_ok=True)
-
-    try:
-        with open(index_path, "w", encoding="utf-8") as f:
-            f.write(
-                """<!DOCTYPE html>
+def get_html_header():
+    """Generate the HTML header with CSS and meta tags."""
+    return """<!DOCTYPE html>
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8">
@@ -898,7 +915,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
     <title>Marimo Learn - Interactive Educational Notebooks</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-""" + generate_eva_css() + """
+{css}
     </style>
   </head>
 <body>
@@ -915,8 +932,12 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                     <i class="fas fa-moon"></i>
                 </button>
             </nav>
-        </header>
+        </header>"""
 
+
+def get_html_hero_section():
+    """Generate the hero section of the page."""
+    return """
         <section class="eva-hero">
             <h1>Interactive Learning with Marimo<span class="eva-cursor"></span></h1>
             <p>
@@ -925,8 +946,12 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                 Python notebook that makes data exploration delightful.
             </p>
             <a href="#courses" class="eva-button">Explore Courses</a>
-        </section>
+        </section>"""
 
+
+def get_html_features_section():
+    """Generate the features section of the page."""
+    return """
         <section id="features">
             <h2 class="eva-section-title">Why Marimo Learn?</h2>
             <div class="eva-features">
@@ -946,150 +971,128 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                     <p>From Python basics to advanced optimization techniques, our courses cover a wide range of topics.</p>
                 </div>
             </div>
-        </section>
+        </section>"""
 
+
+def get_html_courses_start():
+    """Generate the beginning of the courses section."""
+    return """
         <section id="courses">
             <h2 class="eva-section-title">Explore Courses</h2>
             <div class="eva-search">
                 <input type="text" id="courseSearch" placeholder="Search courses and notebooks...">
                 <span class="eva-search-icon"><i class="fas fa-search"></i></span>
             </div>
-            <div class="eva-courses">
-"""
-            )
-            
-            # Define the custom order for courses
-            course_order = ["python", "probability", "polars", "optimization", "functional_programming"]
-            
-            # Create a dictionary of courses by ID for easy lookup
-            courses_by_id = {course["id"]: course for course in courses.values()}
-            
-            # Determine which courses are "work in progress" based on description or notebook count
-            work_in_progress = set()
-            for course_id, course in courses_by_id.items():
-                # Consider a course as "work in progress" if it has few notebooks or contains specific phrases
-                if (len(course["notebooks"]) < 5 or 
-                    "work in progress" in course["description"].lower() or
-                    "help us add" in course["description"].lower() or
-                    "check back later" in course["description"].lower()):
-                    work_in_progress.add(course_id)
-            
-            # First output courses in the specified order
-            for course_id in course_order:
-                if course_id in courses_by_id:
-                    course = courses_by_id[course_id]
-                    
-                    # Skip if no notebooks
-                    if not course["notebooks"]:
-                        continue
-                    
-                    # Count notebooks
-                    notebook_count = len(course["notebooks"])
-                    
-                    # Determine if this course is a work in progress
-                    is_wip = course_id in work_in_progress
-                    
-                    f.write(
-                        f'<div class="eva-course" data-course-id="{course["id"]}">\n'
-                    )
-                    
-                    # Add WIP badge if needed
-                    if is_wip:
-                        f.write(f'    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>\n')
-                    
-                    f.write(
-                        f'    <div class="eva-course-header">\n'
-                        f'        <h2 class="eva-course-title">{course["title"]}</h2>\n'
-                        f'        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>\n'
-                        f'    </div>\n'
-                        f'    <div class="eva-course-front">\n'
-                        f'        <p class="eva-course-description">{course["description"]}</p>\n'
-                        f'        <div class="eva-course-stats">\n'
-                        f'            <span><i class="fas fa-book"></i> {notebook_count} notebook{"s" if notebook_count != 1 else ""}</span>\n'
-                        f'        </div>\n'
-                        f'        <button class="eva-button eva-course-button">View Notebooks</button>\n'
-                        f'    </div>\n'
-                        f'    <div class="eva-course-content">\n'
-                        f'        <div class="eva-notebooks">\n'
-                    )
-                    
-                    for i, notebook in enumerate(course["notebooks"]):
-                        # Use original file number instead of sequential numbering
-                        notebook_number = notebook.get("original_number", f"{i+1:02d}")
-                        f.write(
-                            f'            <div class="eva-notebook">\n'
-                            f'                <span class="eva-notebook-number">{notebook_number}</span>\n'
-                            f'                <a href="{notebook["path"].replace(".py", ".html")}" data-notebook-title="{notebook["display_name"]}">{notebook["display_name"]}</a>\n'
-                            f'            </div>\n'
-                        )
+            <div class="eva-courses">"""
 
-                    f.write(
-                        f'        </div>\n'
-                        f'    </div>\n'
-                        f'</div>\n'
-                    )
-                    
-                    # Remove from the dictionary so we don't output it again
-                    del courses_by_id[course_id]
-            
-            # Then output any remaining courses alphabetically
-            sorted_remaining_courses = sorted(courses_by_id.values(), key=lambda x: x["title"])
-            
-            for course in sorted_remaining_courses:
-                # Skip if no notebooks
-                if not course["notebooks"]:
-                    continue
-                
-                # Count notebooks
-                notebook_count = len(course["notebooks"])
-                
-                # Determine if this course is a work in progress
-                is_wip = course["id"] in work_in_progress
-                
-                f.write(
-                    f'<div class="eva-course" data-course-id="{course["id"]}">\n'
-                )
-                
-                # Add WIP badge if needed
-                if is_wip:
-                    f.write(f'    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>\n')
-                
-                f.write(
-                    f'    <div class="eva-course-header">\n'
-                    f'        <h2 class="eva-course-title">{course["title"]}</h2>\n'
-                    f'        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>\n'
-                    f'    </div>\n'
-                    f'    <div class="eva-course-front">\n'
-                    f'        <p class="eva-course-description">{course["description"]}</p>\n'
-                    f'        <div class="eva-course-stats">\n'
-                    f'            <span><i class="fas fa-book"></i> {notebook_count} notebook{"s" if notebook_count != 1 else ""}</span>\n'
-                    f'        </div>\n'
-                    f'        <button class="eva-button eva-course-button">View Notebooks</button>\n'
-                    f'    </div>\n'
-                    f'    <div class="eva-course-content">\n'
-                    f'        <div class="eva-notebooks">\n'
-                )
-                
-                for i, notebook in enumerate(course["notebooks"]):
-                    # Use original file number instead of sequential numbering
-                    notebook_number = notebook.get("original_number", f"{i+1:02d}")
-                    f.write(
-                        f'            <div class="eva-notebook">\n'
-                        f'                <span class="eva-notebook-number">{notebook_number}</span>\n'
-                        f'                <a href="{notebook["path"].replace(".py", ".html")}" data-notebook-title="{notebook["display_name"]}">{notebook["display_name"]}</a>\n'
-                        f'            </div>\n'
-                    )
 
-                f.write(
-                    f'        </div>\n'
-                    f'    </div>\n'
-                    f'</div>\n'
-                )
-            
-            f.write(
-                """            </div>
-        </section>
+def generate_course_card(course, notebook_count, is_wip):
+    """Generate HTML for a single course card."""
+    html = f'<div class="eva-course" data-course-id="{course["id"]}">\n'
+    
+    # Add WIP badge if needed
+    if is_wip:
+        html += '    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>\n'
+    
+    html += f'''    <div class="eva-course-header">
+        <h2 class="eva-course-title">{course["title"]}</h2>
+        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
+    </div>
+    <div class="eva-course-front">
+        <p class="eva-course-description">{course["description"]}</p>
+        <div class="eva-course-stats">
+            <span><i class="fas fa-book"></i> {notebook_count} notebook{"s" if notebook_count != 1 else ""}</span>
+        </div>
+        <button class="eva-button eva-course-button">View Notebooks</button>
+    </div>
+    <div class="eva-course-content">
+        <div class="eva-notebooks">
+'''
+    
+    # Add notebooks
+    for i, notebook in enumerate(course["notebooks"]):
+        notebook_number = notebook.get("original_number", f"{i+1:02d}")
+        html += f'''            <div class="eva-notebook">
+                <span class="eva-notebook-number">{notebook_number}</span>
+                <a href="{notebook["path"].replace(".py", ".html")}" data-notebook-title="{notebook["display_name"]}">{notebook["display_name"]}</a>
+            </div>
+'''
 
+    html += '''        </div>
+    </div>
+</div>
+'''
+    return html
+
+
+def generate_course_cards(courses):
+    """Generate HTML for all course cards."""
+    html = ""
+    
+    # Define the custom order for courses
+    course_order = ["python", "probability", "polars", "optimization", "functional_programming"]
+    
+    # Create a dictionary of courses by ID for easy lookup
+    courses_by_id = {course["id"]: course for course in courses.values()}
+    
+    # Determine which courses are "work in progress" based on description or notebook count
+    work_in_progress = set()
+    for course_id, course in courses_by_id.items():
+        # Consider a course as "work in progress" if it has few notebooks or contains specific phrases
+        if (len(course["notebooks"]) < 5 or 
+            "work in progress" in course["description"].lower() or
+            "help us add" in course["description"].lower() or
+            "check back later" in course["description"].lower()):
+            work_in_progress.add(course_id)
+    
+    # First output courses in the specified order
+    for course_id in course_order:
+        if course_id in courses_by_id:
+            course = courses_by_id[course_id]
+            
+            # Skip if no notebooks
+            if not course["notebooks"]:
+                continue
+            
+            # Count notebooks
+            notebook_count = len(course["notebooks"])
+            
+            # Determine if this course is a work in progress
+            is_wip = course_id in work_in_progress
+            
+            html += generate_course_card(course, notebook_count, is_wip)
+            
+            # Remove from the dictionary so we don't output it again
+            del courses_by_id[course_id]
+    
+    # Then output any remaining courses alphabetically
+    sorted_remaining_courses = sorted(courses_by_id.values(), key=lambda x: x["title"])
+    
+    for course in sorted_remaining_courses:
+        # Skip if no notebooks
+        if not course["notebooks"]:
+            continue
+        
+        # Count notebooks
+        notebook_count = len(course["notebooks"])
+        
+        # Determine if this course is a work in progress
+        is_wip = course["id"] in work_in_progress
+        
+        html += generate_course_card(course, notebook_count, is_wip)
+    
+    return html
+
+
+def get_html_courses_end():
+    """Generate the end of the courses section."""
+    return """            </div>
+        </section>"""
+
+
+def get_html_contribute_section():
+    """Generate the contribute section."""
+    return """
         <section id="contribute" class="eva-cta">
             <h2>Contribute to Marimo Learn</h2>
             <p>
@@ -1099,8 +1102,12 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             <a href="https://github.com/marimo-team/learn" target="_blank" class="eva-button">
                 <i class="fab fa-github"></i> Contribute on GitHub
             </a>
-        </section>
+        </section>"""
 
+
+def get_html_footer():
+    """Generate the page footer."""
+    return """
         <footer class="eva-footer">
             <div class="eva-footer-logo">
                 <a href="https://marimo.io" target="_blank">
@@ -1111,7 +1118,7 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                 <a href="https://github.com/marimo-team" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
                 <a href="https://marimo.io/discord?ref=learn" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
                 <a href="https://twitter.com/marimo_io" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.youtube.com/@marimo-io" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.youtube.com/@marimo-team" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 <a href="https://www.linkedin.com/company/marimo-io" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
             <div class="eva-footer-links">
@@ -1122,9 +1129,12 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
             <div class="eva-footer-copyright">
                 © 2025 Marimo Inc. All rights reserved.
             </div>
-        </footer>
-    </div>
+        </footer>"""
 
+
+def get_html_scripts():
+    """Generate the JavaScript for the page."""
+    return """
     <script>
         // Set light theme as default immediately
         document.documentElement.setAttribute('data-theme', 'light');
@@ -1391,10 +1401,50 @@ def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
                 });
             });
         });
-    </script>
+    </script>"""
+
+
+def get_html_footer_closing():
+    """Generate closing HTML tags."""
+    return """
+  </div>
   </body>
 </html>"""
-            )
+
+
+def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
+    """Generate the index.html file with Neon Genesis Evangelion aesthetics."""
+    print("Generating index.html")
+
+    index_path = os.path.join(output_dir, "index.html")
+    os.makedirs(output_dir, exist_ok=True)
+
+    try:
+        with open(index_path, "w", encoding="utf-8") as f:
+            # Build the page HTML from individual components
+            header = get_html_header().format(css=generate_eva_css())
+            hero = get_html_hero_section()
+            features = get_html_features_section()
+            courses_start = get_html_courses_start()
+            course_cards = generate_course_cards(courses)
+            courses_end = get_html_courses_end()
+            contribute = get_html_contribute_section()
+            footer = get_html_footer()
+            scripts = get_html_scripts()
+            closing = get_html_footer_closing()
+            
+            # Write all elements to the file
+            f.write(header)
+            f.write(hero)
+            f.write(features)
+            f.write(courses_start)
+            f.write(course_cards)
+            f.write(courses_end)
+            f.write(contribute)
+            f.write(footer)
+            f.write(scripts)
+            f.write(closing)
+            
     except IOError as e:
         print(f"Error generating index.html: {e}")
 
