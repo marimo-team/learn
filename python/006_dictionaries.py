@@ -196,13 +196,13 @@ def _():
 
 @app.cell
 def _(mo, nested_data):
-    mo.md(f"Alice's age: {nested_data["users"]["alice"]["age"]}")
+    mo.md(f"Alice's age: {nested_data['users']['alice']['age']}")
     return
 
 
 @app.cell
 def _(mo, nested_data):
-    mo.md(f"Bob's interests: {nested_data["users"]["bob"]["interests"]}")
+    mo.md(f"Bob's interests: {nested_data['users']['bob']['interests']}")
     return
 
 
