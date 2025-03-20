@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "duckdb==1.2.1",
+#     "marimo",
+#     "polars[pyarrow]==1.25.2",
+#     "sqlglot==26.11.1",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.11.20"
