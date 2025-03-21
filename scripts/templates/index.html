@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marimo Learn - Interactive Python Notebooks</title>
+    <meta name="description" content="Learn Python, data science, and machine learning with interactive marimo notebooks">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #10B981;
+            --dark-green: #047857;
+            --light-green: #D1FAE5;
+        }
+        .bg-primary { background-color: var(--primary-green); }
+        .text-primary { color: var(--primary-green); }
+        .border-primary { border-color: var(--primary-green); }
+        .bg-light { background-color: var(--light-green); }
+        .hover-grow { transition: transform 0.2s ease; }
+        .hover-grow:hover { transform: scale(1.02); }
+        .card-shadow { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <!-- Hero Section -->
+    <header class="bg-white">
+        <div class="container mx-auto px-4 py-12 max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-12">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Interactive Python Learning with <span class="text-primary">Marimo</span></h1>
+                    <p class="text-lg text-gray-600 mb-6">Explore our collection of interactive notebooks for Python, data science, and machine learning.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#courses" class="bg-primary hover:bg-dark-green text-white font-medium py-2 px-6 rounded-md transition duration-300">Explore Courses</a>
+                        <a href="https://github.com/marimo-team/learn" target="_blank" class="bg-white border border-gray-300 hover:border-primary text-gray-700 font-medium py-2 px-6 rounded-md transition duration-300">View on GitHub</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-light p-1 rounded-lg">
+                        <img src="https://marimo.io/logo-glow.png" alt="Marimo Logo" class="w-64 h-64 mx-auto object-contain">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Why Learn with <span class="text-primary">Marimo</span>?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg card-shadow">
+                    <div class="w-12 h-12 bg-light rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Interactive Learning</h3>
+                    <p class="text-gray-600">Learn by doing with interactive notebooks that run directly in your browser.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg card-shadow">
+                    <div class="w-12 h-12 bg-light rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Practical Examples</h3>
+                    <p class="text-gray-600">Real-world examples and applications to reinforce your understanding.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg card-shadow">
+                    <div class="w-12 h-12 bg-light rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Comprehensive Curriculum</h3>
+                    <p class="text-gray-600">From Python basics to advanced machine learning concepts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Explore Our <span class="text-primary">Courses</span></h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for course_id, course in courses.items() %}
+                    {% set notebooks = course.get('notebooks', []) %}
+                    {% set notebook_count = notebooks|length %}
+                    
+                    {% if notebook_count > 0 %}
+                        {% set title = course.get('title', course_id|replace('_', ' ')|title) %}
+                        {% set description = course.get('description', '') %}
+                        {% if description|length > 120 %}
+                            {% set description = description[:117] + '...' %}
+                        {% endif %}
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover-grow card-shadow">
+                            <div class="h-2 bg-primary"></div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">{{ title }}</h3>
+                                <p class="text-gray-600 mb-4 h-20 overflow-hidden">{{ description }}</p>
+                                <div class="mb-4">
+                                    <span class="text-sm text-gray-500 block mb-2">{{ notebook_count }} notebooks:</span>
+                                    <ul class="space-y-1 max-h-40 overflow-y-auto pr-2">
+                                        {% for notebook in notebooks %}
+                                            {% set notebook_title = notebook.get('title', notebook.get('path', '').split('/')[-1].replace('.py', '').replace('_', ' ').title()) %}
+                                            <li>
+                                                <a href="{{ notebook.get('html_path', '#') }}" class="text-primary hover:text-dark-green text-sm flex items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                    </svg>
+                                                    {{ notebook_title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Contribute Section -->
+    <section class="py-16 bg-light">
+        <div class="container mx-auto px-4 max-w-6xl text-center">
+            <h2 class="text-3xl font-bold mb-6">Want to Contribute?</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Help us improve these learning materials by contributing to the GitHub repository. We welcome new content, bug fixes, and improvements!</p>
+            <a href="https://github.com/marimo-team/learn" target="_blank" class="bg-primary hover:bg-dark-green text-white font-medium py-3 px-8 rounded-md transition duration-300 inline-flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" clip-rule="evenodd"></path>
+                </svg>
+                Contribute on GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; {{ current_year }} Marimo Learn. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/marimo-team/learn" target="_blank" class="text-gray-300 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <a href="https://marimo.io" target="_blank" class="text-gray-300 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
