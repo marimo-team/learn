@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.11.23"
+__generated_with = "0.11.24"
 app = marimo.App(width="medium", app_title="Binomial Distribution")
 
 
@@ -248,7 +248,7 @@ def _(mo):
 
         There is an easy way to calculate the expectation of a binomial and a hard way. The easy way is to leverage the fact that a binomial is the sum of Bernoulli indicator random variables $X = \sum_{i=1}^{n} Y_i$ where $Y_i$ is an indicator of whether the $i$-th experiment was a success: $Y_i \sim \text{Bernoulli}(p)$. 
 
-        Since the expectation of the sum of random variables is the sum of expectations, we can add the expectation, $E[Y_i] = p$, of each of the Bernoulli's:
+        Since the [expectation of the sum](http://marimo.app/https://github.com/marimo-team/learn/blob/main/probability/11_expectation.py) of random variables is the sum of expectations, we can add the expectation, $E[Y_i] = p$, of each of the Bernoulli's:
 
         \begin{align}
         E[X] &= E\Big[\sum_{i=1}^{n} Y_i\Big] && \text{Since }X = \sum_{i=1}^{n} Y_i \\
@@ -285,7 +285,7 @@ def _(mo):
 
 
 @app.cell
-def _(stats, x):
+def _(stats):
     # define variables for x, n, and p
     _n = 5  # Integer value for n
     _p = 0.6
@@ -295,7 +295,7 @@ def _(stats, x):
     p_x = stats.binom.pmf(_x, _n, _p)
 
     # use the probability for future work
-    print(f'P(X = {x}) = {p_x:.4f}')
+    print(f'P(X = {_x}) = {p_x:.4f}')
     return (p_x,)
 
 
@@ -306,8 +306,7 @@ def _(mo):
 
 
 @app.cell
-def _(n, np, p, plt, stats):
-    # Ensure n is an integer to prevent TypeError
+def _(n, p, stats):
     n_int = int(n)
 
     # samples from the binomial distribution
@@ -315,7 +314,11 @@ def _(n, np, p, plt, stats):
 
     # Print the samples
     print(samples)
+    return n_int, samples
 
+
+@app.cell(hide_code=True)
+def _(n_int, np, p, plt, samples, stats):
     # Plot histogram of samples
     plt.figure(figsize=(10, 5))
     plt.hist(samples, bins=np.arange(-0.5, n_int+1.5, 1), alpha=0.7, color='royalblue', 
@@ -343,7 +346,7 @@ def _(n, np, p, plt, stats):
 
     plt.tight_layout()
     plt.gca()
-    return n_int, pmf_values, samples, x_values
+    return pmf_values, x_values
 
 
 @app.cell(hide_code=True)
@@ -376,7 +379,105 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(alpha_slider, chart, equation, mo, mu_slider):
+    mo.vstack(
+        [
+            mo.md(f"## Negative Binomial Distribution (Poisson + Overdispersion)\n{equation}"),
+            mo.hstack([mu_slider, alpha_slider], justify="start"),
+            chart,
+        ], justify='space-around'
+    ).center()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## 🤔 Test Your Understanding
+        Pick which of these statements about binomial distributions you think are correct:
+
+        /// details | The variance of a binomial distribution is always equal to its mean
+        ❌ Incorrect! The variance is $np(1-p)$ while the mean is $np$. They're only equal when $p=1$ (which is a degenerate case).
+        ///
+
+        /// details | If $X \sim \text{Bin}(n, p)$ and $Y \sim \text{Bin}(n, 1-p)$, then $X$ and $Y$ have the same variance
+        ✅ Correct! $\text{Var}(X) = np(1-p)$ and $\text{Var}(Y) = n(1-p)p$, which are the same.
+        ///
+
+        /// details | As the number of trials increases, the binomial distribution approaches a normal distribution
+        ✅ Correct! For large $n$, the binomial distribution can be approximated by a normal distribution with the same mean and variance.
+        ///
+
+        /// details | The PMF of a binomial distribution is symmetric when $p = 0.5$
+        ✅ Correct! When $p = 0.5$, the PMF is symmetric around $n/2$.
+        ///
+
+        /// details | The sum of two independent binomial random variables with the same $p$ is also a binomial random variable
+        ✅ Correct! If $X \sim \text{Bin}(n_1, p)$ and $Y \sim \text{Bin}(n_2, p)$ are independent, then $X + Y \sim \text{Bin}(n_1 + n_2, p)$.
+        ///
+
+        /// details | The maximum value of the PMF for $\text{Bin}(n,p)$ always occurs at $k = np$
+        ❌ Incorrect! The mode (maximum value of PMF) is either $\lfloor (n+1)p \rfloor$ or $\lceil (n+1)p-1 \rceil$ depending on whether $(n+1)p$ is an integer.
+        ///
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Summary
+
+        So we've explored the binomial distribution, and honestly, it's one of the most practical probability distributions you'll encounter. Think about it — anytime you're counting successes in a fixed number of trials (like those coin flips we discussed), this is your go-to distribution.
+
+        I find it fascinating how the expectation is simply $np$. Such a clean, intuitive formula! And remember that neat visualization we saw earlier? When we adjusted the parameters, you could actually see how the distribution shape changes—becoming more symmetric as $n$ increases.
+
+        The key things to take away:
+
+        - The binomial distribution models the number of successes in $n$ independent trials, each with probability $p$ of success
+
+        - Its PMF is given by the formula $P(X=k) = {n \choose k}p^k(1-p)^{n-k}$, which lets us calculate exactly how likely any specific number of successes is
+
+        - The expected value is $E[X] = np$ and the variance is $Var(X) = np(1-p)$
+
+        - It's related to other distributions: it's essentially a sum of Bernoulli random variables, and connects to both the negative binomial and Poisson distributions
+
+        - In Python, the `scipy.stats.binom` module makes working with binomial distributions straightforward—you can generate random samples and calculate probabilities with just a few lines of code
+
+        You'll see the binomial distribution pop up everywhere—from computer science to quality control, epidemiology, and data science. Any time you have scenarios with binary outcomes over multiple trials, this distribution has you covered.
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""Appendix code (helper functions, variables, etc.):""")
+    return
+
+
 @app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
+@app.cell(hide_code=True)
+def _():
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+    import pandas as pd
+    import altair as alt
+    from wigglystuff import TangleSlider
+    return TangleSlider, alt, np, pd, plt, stats
+
+
+@app.cell(hide_code=True)
 def _(mo):
     alpha_slider = mo.ui.slider(
         value=0.1,
@@ -390,7 +491,7 @@ def _(mo):
     return alpha_slider, mu_slider
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     equation = """
     $$
@@ -404,7 +505,7 @@ def _():
     return (equation,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(alpha_slider, alt, mu_slider, np, pd, stats):
     mu = mu_slider.value
     alpha = alpha_slider.value
@@ -438,67 +539,6 @@ def _(alpha_slider, alt, mu_slider, np, pd, stats):
 
     chart = (chart_poi + chart_nb).configure_view(continuousWidth=450)
     return alpha, base, chart, chart_nb, chart_poi, df, mu, n, p, r1k, x
-
-
-@app.cell
-def _(alpha_slider, chart, equation, mo, mu_slider):
-    mo.vstack(
-        [
-            mo.md(f"## Negative Binomial Distribution (Poisson + Overdispersion)\n{equation}"),
-            mo.hstack([mu_slider, alpha_slider], justify="start"),
-            chart,
-        ], justify='space-around'
-    ).center()
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Key Takeaways
-
-        The binomial distribution is a fundamental discrete probability distribution that models the number of successes in a fixed number of independent trials, each with the same probability of success.
-
-        Here's what we've learned:
-
-        1. **Binomial Distribution Definition**: It models the number of successes in $n$ independent trials, each with probability $p$ of success.
-
-        2. **PMF Formula**: $P(X=k) = {n \choose k}p^k(1-p)^{n-k}$, which calculates the probability of getting exactly $k$ successes.
-
-        3. **Key Properties**:
-           - Expected value: $E[X] = np$
-           - Variance: $Var(X) = np(1-p)$
-
-        4. **Relation to Other Distributions**:
-           - Sum of Bernoulli random variables
-           - Related to negative binomial and Poisson distributions
-
-        5. **Practical Usage**:
-           - Easily model in Python using `scipy.stats.binom`
-           - Generate random samples and calculate probabilities
-
-        The binomial distribution is widely used in many fields including computer science, quality control, epidemiology, and data science to model scenarios with binary outcomes over multiple trials.
-        """
-    )
-    return
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
-
-
-@app.cell
-def _():
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import scipy.stats as stats
-    import pandas as pd
-    import altair as alt
-    from wigglystuff import TangleSlider
-    return TangleSlider, alt, np, pd, plt, stats
 
 
 if __name__ == "__main__":
