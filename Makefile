@@ -1,3 +1,6 @@
+install:
+	uv pip install marimo jinja2 markdown
+
 build:
 	rm -rf _site
 	uv run scripts/build.py

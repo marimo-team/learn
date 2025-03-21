@@ -27,7 +27,7 @@
         <div class="container mx-auto px-4 py-12 max-w-6xl">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="md:w-1/2 mb-8 md:mb-0 md:pr-12">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Interactive Python Learning with <span class="text-primary">Marimo</span></h1>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Interactive Python Learning with <span class="text-primary">marimo</span></h1>
                     <p class="text-lg text-gray-600 mb-6">Explore our collection of interactive notebooks for Python, data science, and machine learning.</p>
                     <div class="flex flex-wrap gap-4">
                         <a href="#courses" class="bg-primary hover:bg-dark-green text-white font-medium py-2 px-6 rounded-md transition duration-300">Explore Courses</a>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="md:w-1/2">
                     <div class="bg-light p-1 rounded-lg">
-                        <img src="https://marimo.io/logo-glow.png" alt="Marimo Logo" class="w-64 h-64 mx-auto object-contain">
+                        <img src="https://github.com/marimo-team/learn/blob/main/assets/marimo-learn.png?raw=true" alt="Marimo Logo" class="w-64 h-64 mx-auto object-contain">
                     </div>
                 </div>
             </div>
@@ -90,31 +90,28 @@
                     
                     {% if notebook_count > 0 %}
                         {% set title = course.get('title', course_id|replace('_', ' ')|title) %}
-                        {% set description = course.get('description', '') %}
-                        {% if description|length > 120 %}
-                            {% set description = description[:117] + '...' %}
-                        {% endif %}
                         
                         <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover-grow card-shadow">
                             <div class="h-2 bg-primary"></div>
                             <div class="p-6">
                                 <h3 class="text-xl font-semibold mb-2">{{ title }}</h3>
-                                <p class="text-gray-600 mb-4 h-20 overflow-hidden">{{ description }}</p>
+                                <p class="text-gray-600 mb-4">
+                                    {% if course.get('description_html') %}
+                                        {{ course.get('description_html')|safe }}
+                                    {% endif %}
+                                </p>
                                 <div class="mb-4">
                                     <span class="text-sm text-gray-500 block mb-2">{{ notebook_count }} notebooks:</span>
-                                    <ul class="space-y-1 max-h-40 overflow-y-auto pr-2">
+                                    <ol class="space-y-1 list-decimal pl-5">
                                         {% for notebook in notebooks %}
                                             {% set notebook_title = notebook.get('title', notebook.get('path', '').split('/')[-1].replace('.py', '').replace('_', ' ').title()) %}
                                             <li>
                                                 <a href="{{ notebook.get('html_path', '#') }}" class="text-primary hover:text-dark-green text-sm flex items-center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                                    </svg>
                                                     {{ notebook_title }}
                                                 </a>
                                             </li>
                                         {% endfor %}
-                                    </ul>
+                                    </ol>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +140,7 @@
         <div class="container mx-auto px-4 max-w-6xl">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
-                    <p>&copy; {{ current_year }} Marimo Learn. All rights reserved.</p>
+                    <p>&copy; {{ current_year }} marimo. All rights reserved.</p>
                 </div>
                 <div class="flex space-x-4">
                     <a href="https://github.com/marimo-team/learn" target="_blank" class="text-gray-300 hover:text-white transition duration-300">

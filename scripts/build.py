@@ -5,6 +5,7 @@ import subprocess
 import argparse
 import json
 import datetime
+import markdown
 from datetime import date
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
@@ -66,6 +67,7 @@ def get_course_metadata(course_dir: Path) -> Dict[str, Any]:
     readme_path = course_dir / "README.md"
     title = course_dir.name.replace("_", " ").title()
     description = ""
+    description_html = ""
     
     if readme_path.exists():
         with open(readme_path, "r", encoding="utf-8") as f:
@@ -79,12 +81,15 @@ def get_course_metadata(course_dir: Path) -> Dict[str, Any]:
             # Extract description from content after first heading
             desc_content = "\n".join(content.split("\n")[1:]).strip()
             if desc_content:
-                # Take first paragraph as description
-                description = desc_content.split("\n\n")[0].replace("\n", " ").strip()
+                # Take first paragraph as description, preserve markdown formatting
+                description = desc_content.split("\n\n")[0].strip()
+                # Convert markdown to HTML
+                description_html = markdown.markdown(description)
     
     return {
         "title": title,
-        "description": description
+        "description": description,
+        "description_html": description_html
     }
 
 
@@ -119,6 +124,7 @@ def organize_notebooks_by_course(all_notebooks: List[str]) -> Dict[str, Dict[str
                 "id": course_id,
                 "title": course_metadata["title"],
                 "description": course_metadata["description"],
+                "description_html": course_metadata["description_html"],
                 "notebooks": []
             }
         
