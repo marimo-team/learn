@@ -4,1449 +4,207 @@ import os
 import subprocess
 import argparse
 import json
-from typing import List, Dict, Any
+import datetime
+import markdown
+from datetime import date
 from pathlib import Path
-import re
+from typing import Dict, List, Any, Optional, Tuple
+
+from jinja2 import Environment, FileSystemLoader
 
 
 def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) -> bool:
     """Export a single marimo notebook to HTML format.
-
+    
+    Args:
+        notebook_path: Path to the notebook to export
+        output_dir: Directory to write the output HTML files
+        as_app: If True, export as app instead of notebook
+    
     Returns:
         bool: True if export succeeded, False otherwise
     """
-    output_path = notebook_path.replace(".py", ".html")
-
-    cmd = ["marimo", "export", "html-wasm"]
-    if as_app:
-        print(f"Exporting {notebook_path} to {output_path} as app")
-        cmd.extend(["--mode", "run", "--no-show-code"])
-    else:
-        print(f"Exporting {notebook_path} to {output_path} as notebook")
-        cmd.extend(["--mode", "edit"])
-
+    # Create directory for the output
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Determine the output path (preserving directory structure)
+    rel_path = os.path.basename(os.path.dirname(notebook_path))
+    if rel_path != os.path.dirname(notebook_path):
+        # Create subdirectory if needed
+        os.makedirs(os.path.join(output_dir, rel_path), exist_ok=True)
+    
+    # Determine output filename (same as input but with .html extension)
+    output_filename = os.path.basename(notebook_path).replace(".py", ".html")
+    output_path = os.path.join(output_dir, rel_path, output_filename)
+    
+    # Run marimo export command
+    mode = "--mode app" if as_app else "--mode edit"
+    cmd = f"marimo export html-wasm {mode} {notebook_path} -o {output_path} --sandbox"
+    print(f"Exporting {notebook_path} to {rel_path}/{output_filename} as {'app' if as_app else 'notebook'}")
+    print(f"Running command: {cmd}")
+    
     try:
-        output_file = os.path.join(output_dir, output_path)
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-        cmd.extend([notebook_path, "-o", output_file])
-        print(f"Running command: {' '.join(cmd)}")
-        
-        # Use Popen to handle interactive prompts
-        process = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
-        
-        # Send 'Y' to the prompt
-        stdout, stderr = process.communicate(input="Y\n", timeout=60)
-        
-        if process.returncode != 0:
-            print(f"Error exporting {notebook_path}:")
-            print(f"Command: {' '.join(cmd)}")
-            print(f"Return code: {process.returncode}")
-            print(f"Stdout: {stdout}")
-            print(f"Stderr: {stderr}")
-            return False
-            
-        print(f"Successfully exported {notebook_path} to {output_file}")
+        result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
+        print(f"Successfully exported {notebook_path} to {output_path}")
         return True
-    except subprocess.TimeoutExpired:
-        print(f"Timeout exporting {notebook_path} - command took too long to execute")
-        return False
     except subprocess.CalledProcessError as e:
-        print(f"Error exporting {notebook_path}:")
-        print(e.stderr)
-        return False
-    except Exception as e:
-        print(f"Unexpected error exporting {notebook_path}: {e}")
+        print(f"Error exporting {notebook_path}: {e}")
+        print(f"Command output: {e.output}")
         return False
 
 
 def get_course_metadata(course_dir: Path) -> Dict[str, Any]:
-    """Extract metadata from a course directory."""
-    metadata = {
-        "id": course_dir.name,
-        "title": course_dir.name.replace("_", " ").title(),
-        "description": "",
-        "notebooks": []
-    }
+    """Extract metadata from a course directory.
     
-    # Try to read README.md for description
+    Reads the README.md file to extract title and description.
+    
+    Args:
+        course_dir: Path to the course directory
+    
+    Returns:
+        Dict: Dictionary containing course metadata (title, description)
+    """
     readme_path = course_dir / "README.md"
+    title = course_dir.name.replace("_", " ").title()
+    description = ""
+    description_html = ""
+    
     if readme_path.exists():
         with open(readme_path, "r", encoding="utf-8") as f:
             content = f.read()
-            # Extract first paragraph as description
-            if content:
-                lines = content.split("\n")
-                # Skip title line if it exists
-                start_idx = 1 if lines and lines[0].startswith("#") else 0
-                description_lines = []
-                for line in lines[start_idx:]:
-                    if line.strip() and not line.startswith("#"):
-                        description_lines.append(line)
-                    elif description_lines:  # Stop at the next heading
-                        break
-                description = " ".join(description_lines).strip()
-                # Clean up the description
-                description = description.replace("_", "")
-                description = description.replace("[work in progress]", "")
-                description = description.replace("(https://github.com/marimo-team/learn/issues/51)", "")
-                # Remove any other GitHub issue links
-                description = re.sub(r'\[.*?\]\(https://github\.com/.*?/issues/\d+\)', '', description)
-                description = re.sub(r'https://github\.com/.*?/issues/\d+', '', description)
-                # Clean up any double spaces
-                description = re.sub(r'\s+', ' ', description).strip()
-                metadata["description"] = description
+            
+            # Try to extract title from first heading
+            title_match = content.split("\n")[0]
+            if title_match.startswith("# "):
+                title = title_match[2:].strip()
+            
+            # Extract description from content after first heading
+            desc_content = "\n".join(content.split("\n")[1:]).strip()
+            if desc_content:
+                # Take first paragraph as description, preserve markdown formatting
+                description = desc_content.split("\n\n")[0].strip()
+                # Convert markdown to HTML
+                description_html = markdown.markdown(description)
     
-    return metadata
+    return {
+        "title": title,
+        "description": description,
+        "description_html": description_html
+    }
 
 
 def organize_notebooks_by_course(all_notebooks: List[str]) -> Dict[str, Dict[str, Any]]:
-    """Organize notebooks by course."""
+    """Organize notebooks by course.
+    
+    Args:
+        all_notebooks: List of paths to notebooks
+        
+    Returns:
+        Dict: A dictionary where keys are course directories and values are
+              metadata about the course and its notebooks
+    """
     courses = {}
     
-    for notebook_path in all_notebooks:
-        path = Path(notebook_path)
-        course_id = path.parts[0]
+    for notebook_path in sorted(all_notebooks):
+        # Parse the path to determine course
+        # The first directory in the path is the course
+        path_parts = Path(notebook_path).parts
         
+        if len(path_parts) < 2:
+            print(f"Skipping notebook with invalid path: {notebook_path}")
+            continue
+        
+        course_id = path_parts[0]
+        
+        # If this is a new course, initialize it
         if course_id not in courses:
-            course_dir = Path(course_id)
-            courses[course_id] = get_course_metadata(course_dir)
+            course_metadata = get_course_metadata(Path(course_id))
+            
+            courses[course_id] = {
+                "id": course_id,
+                "title": course_metadata["title"],
+                "description": course_metadata["description"],
+                "description_html": course_metadata["description_html"],
+                "notebooks": []
+            }
         
-        # Extract notebook info
-        filename = path.name
-        notebook_id = path.stem
+        # Extract the notebook number and name from the filename
+        filename = Path(notebook_path).name
+        basename = filename.replace(".py", "")
         
-        # Try to extract order from filename (e.g., 001_numbers.py -> 1)
-        order = 999
-        if "_" in notebook_id:
-            try:
-                order_str = notebook_id.split("_")[0]
-                order = int(order_str)
-            except ValueError:
-                pass
+        # Extract notebook metadata
+        notebook_title = basename.replace("_", " ").title()
         
-        # Create display name by removing order prefix and underscores
-        display_name = notebook_id
-        if "_" in notebook_id:
-            display_name = "_".join(notebook_id.split("_")[1:])
+        # Try to extract a sequence number from the start of the filename
+        # Match patterns like: 01_xxx, 1_xxx, etc.
+        import re
+        number_match = re.match(r'^(\d+)(?:[_-]|$)', basename)
+        notebook_number = number_match.group(1) if number_match else None
         
-        # Convert display name to title case, but handle italics properly
-        parts = display_name.split("_")
-        formatted_parts = []
+        # If we found a number, remove it from the title
+        if number_match:
+            notebook_title = re.sub(r'^\d+\s*[_-]?\s*', '', notebook_title)
         
-        i = 0
-        while i < len(parts):
-            if i + 1 < len(parts) and parts[i] == "" and parts[i+1] == "":
-                # Skip empty parts that might come from consecutive underscores
-                i += 2
-                continue
-                
-            if i + 1 < len(parts) and (parts[i] == "" or parts[i+1] == ""):
-                # This is an italics marker
-                if parts[i] == "":
-                    # Opening italics
-                    text_part = parts[i+1].replace("_", " ").title()
-                    formatted_parts.append(f"<em>{text_part}</em>")
-                    i += 2
-                else:
-                    # Text followed by italics marker
-                    text_part = parts[i].replace("_", " ").title()
-                    formatted_parts.append(text_part)
-                    i += 1
-            else:
-                # Regular text
-                text_part = parts[i].replace("_", " ").title()
-                formatted_parts.append(text_part)
-                i += 1
+        # Calculate the HTML output path (for linking)
+        html_path = f"{course_id}/{filename.replace('.py', '.html')}"
         
-        display_name = " ".join(formatted_parts)
-        
+        # Add the notebook to the course
         courses[course_id]["notebooks"].append({
-            "id": notebook_id,
             "path": notebook_path,
-            "display_name": display_name,
-            "order": order,
-            "original_number": notebook_id.split("_")[0] if "_" in notebook_id else ""
+            "html_path": html_path,
+            "title": notebook_title,
+            "display_name": notebook_title,
+            "original_number": notebook_number
         })
     
-    # Sort notebooks by order
-    for course_id in courses:
-        courses[course_id]["notebooks"].sort(key=lambda x: x["order"])
+    # Sort notebooks by number if available, otherwise by title
+    for course_id, course_data in courses.items():
+        # Sort the notebooks list by number and title
+        course_data["notebooks"] = sorted(
+            course_data["notebooks"],
+            key=lambda x: (
+                int(x["original_number"]) if x["original_number"] is not None else float('inf'),
+                x["title"]
+            )
+        )
     
     return courses
 
 
-def generate_eva_css() -> str:
-    """Generate Neon Genesis Evangelion inspired CSS with light/dark mode support."""
-    return """
-    :root {
-        /* Light mode colors (default) */
-        --eva-purple: #7209b7;
-        --eva-green: #1c7361;
-        --eva-orange: #e65100;
-        --eva-blue: #0039cb;
-        --eva-red: #c62828;
-        --eva-black: #f5f5f5;
-        --eva-dark: #e0e0e0;
-        --eva-terminal-bg: rgba(255, 255, 255, 0.9);
-        --eva-text: #333333;
-        --eva-border-radius: 4px;
-        --eva-transition: all 0.3s ease;
-    }
-    
-    /* Dark mode colors */
-    [data-theme="dark"] {
-        --eva-purple: #9a1eb3;
-        --eva-green: #1c7361;
-        --eva-orange: #ff6600;
-        --eva-blue: #0066ff;
-        --eva-red: #ff0000;
-        --eva-black: #111111;
-        --eva-dark: #222222;
-        --eva-terminal-bg: rgba(0, 0, 0, 0.85);
-        --eva-text: #e0e0e0;
-    }
-    
-    body {
-        background-color: var(--eva-black);
-        color: var(--eva-text);
-        font-family: 'Courier New', monospace;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    
-    .eva-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-    
-    .eva-header {
-        border-bottom: 2px solid var(--eva-green);
-        padding-bottom: 1rem;
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        background-color: var(--eva-black);
-        z-index: 100;
-        backdrop-filter: blur(5px);
-        padding-top: 1rem;
-        transition: background-color 0.3s ease;
-    }
-    
-    [data-theme="light"] .eva-header {
-        background-color: rgba(245, 245, 245, 0.95);
-    }
-    
-    .eva-logo {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: var(--eva-green);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(28, 115, 97, 0.5);
-    }
-    
-    [data-theme="light"] .eva-logo {
-        text-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
-    }
-    
-    .eva-nav {
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
-    }
-    
-    .eva-nav a {
-        color: var(--eva-text);
-        text-decoration: none;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
-        transition: color 0.3s;
-        position: relative;
-        padding: 0.5rem 0;
-    }
-    
-    .eva-nav a:hover {
-        color: var(--eva-green);
-    }
-    
-    .eva-nav a:hover::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: var(--eva-green);
-        animation: scanline 1.5s linear infinite;
-    }
-    
-    .theme-toggle {
-        background: none;
-        border: none;
-        color: var(--eva-text);
-        cursor: pointer;
-        font-size: 1.2rem;
-        padding: 0.5rem;
-        margin-left: 1rem;
-        transition: color 0.3s;
-    }
-    
-    .theme-toggle:hover {
-        color: var(--eva-green);
-    }
-    
-    .eva-hero {
-        background-color: var(--eva-terminal-bg);
-        border: 1px solid var(--eva-green);
-        padding: 3rem 2rem;
-        margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-        border-radius: var(--eva-border-radius);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url('https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg');
-        background-size: cover;
-        background-position: center;
-        background-blend-mode: overlay;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-    
-    [data-theme="light"] .eva-hero {
-        background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url('https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg');
-    }
-    
-    .eva-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: var(--eva-green);
-        animation: scanline 3s linear infinite;
-    }
-    
-    .eva-hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--eva-green);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(28, 115, 97, 0.5);
-    }
-    
-    [data-theme="light"] .eva-hero h1 {
-        text-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
-    }
-    
-    .eva-hero p {
-        font-size: 1.1rem;
-        max-width: 800px;
-        margin-bottom: 2rem;
-        line-height: 1.8;
-    }
-    
-    .eva-features {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
-    }
-    
-    .eva-feature {
-        background-color: var(--eva-terminal-bg);
-        border: 1px solid var(--eva-blue);
-        padding: 1.5rem;
-        border-radius: var(--eva-border-radius);
-        transition: var(--eva-transition);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .eva-feature:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
-    }
-    
-    .eva-feature-icon {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: var(--eva-blue);
-    }
-    
-    .eva-feature h3 {
-        font-size: 1.3rem;
-        margin-bottom: 1rem;
-        color: var(--eva-blue);
-    }
-    
-    .eva-section-title {
-        font-size: 2rem;
-        color: var(--eva-green);
-        margin-bottom: 2rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        text-align: center;
-        position: relative;
-        padding-bottom: 1rem;
-    }
-    
-    .eva-section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 2px;
-        background-color: var(--eva-green);
-    }
-    
-    /* Flashcard view for courses */
-    .eva-courses {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 2rem;
-    }
-    
-    .eva-course {
-        background-color: var(--eva-terminal-bg);
-        border: 1px solid var(--eva-purple);
-        border-radius: var(--eva-border-radius);
-        transition: var(--eva-transition), height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        position: relative;
-        overflow: hidden;
-        height: 350px;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .eva-course:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(154, 30, 179, 0.3);
-    }
-    
-    .eva-course::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: var(--eva-purple);
-        animation: scanline 2s linear infinite;
-    }
-    
-    .eva-course-badge {
-        position: absolute;
-        top: 15px;
-        right: -40px;
-        background: linear-gradient(135deg, var(--eva-orange) 0%, #ff9500 100%);
-        color: var(--eva-black);
-        font-size: 0.65rem;
-        padding: 0.3rem 2.5rem;
-        text-transform: uppercase;
-        font-weight: bold;
-        z-index: 3;
-        letter-spacing: 1px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        transform: rotate(45deg);
-        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-        white-space: nowrap;
-        overflow: hidden;
-    }
-    
-    .eva-course-badge i {
-        margin-right: 4px;
-        font-size: 0.7rem;
-    }
-    
-    [data-theme="light"] .eva-course-badge {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
-    }
-    
-    .eva-course-badge::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
-        animation: scanline 2s linear infinite;
-    }
-    
-    .eva-course-header {
-        padding: 1rem 1.5rem;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid rgba(154, 30, 179, 0.3);
-        z-index: 2;
-        background-color: var(--eva-terminal-bg);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3.5rem;
-        box-sizing: border-box;
-    }
-    
-    .eva-course-title {
-        font-size: 1.3rem;
-        color: var(--eva-purple);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin: 0;
-    }
-    
-    .eva-course-toggle {
-        color: var(--eva-purple);
-        font-size: 1.5rem;
-        transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-    
-    .eva-course.active .eva-course-toggle {
-        transform: rotate(180deg);
-    }
-    
-    .eva-course-front {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 1.5rem;
-        margin-top: 3.5rem;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: calc(100% - 3.5rem);
-        background-color: var(--eva-terminal-bg);
-        z-index: 1;
-        box-sizing: border-box;
-    }
-    
-    .eva-course.active .eva-course-front {
-        opacity: 0;
-        transform: translateY(-10px);
-        pointer-events: none;
-    }
-    
-    .eva-course-description {
-        margin-top: 0.5rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        line-height: 1.6;
-        flex-grow: 1;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-        max-height: 150px;
-    }
-    
-    .eva-course-stats {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8rem;
-        color: var(--eva-text);
-        opacity: 0.7;
-    }
-    
-    .eva-course-content {
-        position: absolute;
-        top: 3.5rem;
-        left: 0;
-        width: 100%;
-        height: calc(100% - 3.5rem);
-        padding: 1.5rem;
-        background-color: var(--eva-terminal-bg);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        opacity: 0;
-        transform: translateY(10px);
-        pointer-events: none;
-        overflow-y: auto;
-        z-index: 1;
-        box-sizing: border-box;
-    }
-    
-    .eva-course.active .eva-course-content {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-    
-    .eva-course.active {
-        height: auto;
-        min-height: 350px;
-        max-height: 800px;
-        transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .eva-notebooks {
-        margin-top: 1rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 0.75rem;
-    }
-    
-    .eva-notebook {
-        margin-bottom: 0.5rem;
-        padding: 0.75rem;
-        border-left: 2px solid var(--eva-blue);
-        transition: all 0.25s ease;
-        display: flex;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 0 var(--eva-border-radius) var(--eva-border-radius) 0;
-        opacity: 1;
-        transform: translateX(0);
-    }
-    
-    [data-theme="light"] .eva-notebook {
-        background-color: rgba(0, 0, 0, 0.05);
-    }
-    
-    .eva-notebook:hover {
-        background-color: rgba(0, 102, 255, 0.1);
-        padding-left: 1rem;
-        transform: translateX(3px);
-    }
-    
-    .eva-notebook a {
-        color: var(--eva-text);
-        text-decoration: none;
-        display: block;
-        font-size: 0.9rem;
-        flex-grow: 1;
-    }
-    
-    .eva-notebook a:hover {
-        color: var(--eva-blue);
-    }
-    
-    .eva-notebook-number {
-        color: var(--eva-blue);
-        font-size: 0.8rem;
-        margin-right: 0.75rem;
-        opacity: 0.7;
-        min-width: 24px;
-        font-weight: bold;
-    }
-    
-    .eva-button {
-        display: inline-block;
-        background-color: transparent;
-        color: var(--eva-green);
-        border: 1px solid var(--eva-green);
-        padding: 0.7rem 1.5rem;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
-        transition: var(--eva-transition);
-        cursor: pointer;
-        border-radius: var(--eva-border-radius);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .eva-button:hover {
-        background-color: var(--eva-green);
-        color: var(--eva-black);
-    }
-    
-    .eva-button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.5s;
-    }
-    
-    .eva-button:hover::after {
-        left: 100%;
-    }
-    
-    .eva-course-button {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-        align-self: center;
-    }
-    
-    .eva-cta {
-        background-color: var(--eva-terminal-bg);
-        border: 1px solid var(--eva-orange);
-        padding: 3rem 2rem;
-        margin: 4rem 0;
-        text-align: center;
-        border-radius: var(--eva-border-radius);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .eva-cta h2 {
-        font-size: 2rem;
-        color: var(--eva-orange);
-        margin-bottom: 1.5rem;
-        text-transform: uppercase;
-    }
-    
-    .eva-cta p {
-        max-width: 600px;
-        margin: 0 auto 2rem;
-        font-size: 1.1rem;
-    }
-    
-    .eva-cta .eva-button {
-        color: var(--eva-orange);
-        border-color: var(--eva-orange);
-    }
-    
-    .eva-cta .eva-button:hover {
-        background-color: var(--eva-orange);
-        color: var(--eva-black);
-    }
-    
-    .eva-footer {
-        margin-top: 4rem;
-        padding-top: 2rem;
-        border-top: 2px solid var(--eva-green);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-    }
-    
-    .eva-footer-logo {
-        max-width: 200px;
-        margin-bottom: 1rem;
-    }
-    
-    .eva-footer-links {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .eva-footer-links a {
-        color: var(--eva-text);
-        text-decoration: none;
-        transition: var(--eva-transition);
-    }
-    
-    .eva-footer-links a:hover {
-        color: var(--eva-green);
-    }
-    
-    .eva-social-links {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .eva-social-links a {
-        color: var(--eva-text);
-        font-size: 1.5rem;
-        transition: var(--eva-transition);
-    }
-    
-    .eva-social-links a:hover {
-        color: var(--eva-green);
-        transform: translateY(-3px);
-    }
-    
-    .eva-footer-copyright {
-        font-size: 0.9rem;
-        text-align: center;
-    }
-    
-    .eva-search {
-        position: relative;
-        margin-bottom: 3rem;
-    }
-    
-    .eva-search input {
-        width: 100%;
-        padding: 1rem;
-        background-color: var(--eva-terminal-bg);
-        border: 1px solid var(--eva-green);
-        color: var(--eva-text);
-        font-family: 'Courier New', monospace;
-        font-size: 1rem;
-        border-radius: var(--eva-border-radius);
-        outline: none;
-        transition: var(--eva-transition);
-    }
-    
-    .eva-search input:focus {
-        box-shadow: 0 0 10px rgba(28, 115, 97, 0.3);
-    }
-    
-    .eva-search input::placeholder {
-        color: rgba(224, 224, 224, 0.5);
-    }
-    
-    [data-theme="light"] .eva-search input::placeholder {
-        color: rgba(51, 51, 51, 0.5);
-    }
-    
-    .eva-search-icon {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--eva-green);
-        font-size: 1.2rem;
-    }
-    
-    @keyframes scanline {
-        0% {
-            transform: translateX(-100%);
-        }
-        100% {
-            transform: translateX(100%);
-        }
-    }
-    
-    @keyframes blink {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
-    }
-    
-    .eva-cursor {
-        display: inline-block;
-        width: 10px;
-        height: 1.2em;
-        background-color: var(--eva-green);
-        margin-left: 2px;
-        animation: blink 1s infinite;
-        vertical-align: middle;
-    }
-    
-    @media (max-width: 768px) {
-        .eva-courses {
-            grid-template-columns: 1fr;
-        }
-        
-        .eva-header {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 1rem;
-        }
-        
-        .eva-nav {
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .eva-hero {
-            padding: 2rem 1rem;
-        }
-        
-        .eva-hero h1 {
-            font-size: 2rem;
-        }
-        
-        .eva-features {
-            grid-template-columns: 1fr;
-        }
-        
-        .eva-footer {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .eva-notebooks {
-            grid-template-columns: 1fr;
-        }
-    }
-    
-    .eva-course.closing .eva-course-content {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    
-    .eva-course.closing .eva-course-front {
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
-    }
+def generate_clean_tailwind_landing_page(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
+    """Generate a clean tailwindcss landing page with green accents.
+    
+    This generates a modern, minimal landing page for marimo notebooks using tailwindcss.
+    The page is designed with clean aesthetics and green color accents using Jinja2 templates.
+    
+    Args:
+        courses: Dictionary of courses metadata
+        output_dir: Directory to write the output index.html file
     """
-
-
-def get_html_header():
-    """Generate the HTML header with CSS and meta tags."""
-    return """<!DOCTYPE html>
-<html lang="en" data-theme="light">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marimo Learn - Interactive Educational Notebooks</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-{css}
-    </style>
-  </head>
-<body>
-    <div class="eva-container">
-        <header class="eva-header">
-            <div class="eva-logo">MARIMO LEARN</div>
-            <nav class="eva-nav">
-                <a href="#features">Features</a>
-                <a href="#courses">Courses</a>
-                <a href="#contribute">Contribute</a>
-                <a href="https://docs.marimo.io" target="_blank">Documentation</a>
-                <a href="https://github.com/marimo-team/learn" target="_blank">GitHub</a>
-                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </nav>
-        </header>"""
-
-
-def get_html_hero_section():
-    """Generate the hero section of the page."""
-    return """
-        <section class="eva-hero">
-            <h1>Interactive Learning with Marimo<span class="eva-cursor"></span></h1>
-            <p>
-                A curated collection of educational notebooks covering computer science, 
-                mathematics, data science, and more. Built with marimo - the reactive 
-                Python notebook that makes data exploration delightful.
-            </p>
-            <a href="#courses" class="eva-button">Explore Courses</a>
-        </section>"""
-
-
-def get_html_features_section():
-    """Generate the features section of the page."""
-    return """
-        <section id="features">
-            <h2 class="eva-section-title">Why Marimo Learn?</h2>
-            <div class="eva-features">
-                <div class="eva-feature">
-                    <div class="eva-feature-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Reactive Notebooks</h3>
-                    <p>Experience the power of reactive programming with marimo notebooks that automatically update when dependencies change.</p>
-                </div>
-                <div class="eva-feature">
-                    <div class="eva-feature-icon"><i class="fas fa-code"></i></div>
-                    <h3>Learn by Doing</h3>
-                    <p>Interactive examples and exercises help you understand concepts through hands-on practice.</p>
-                </div>
-                <div class="eva-feature">
-                    <div class="eva-feature-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>Comprehensive Courses</h3>
-                    <p>From Python basics to advanced optimization techniques, our courses cover a wide range of topics.</p>
-                </div>
-            </div>
-        </section>"""
-
-
-def get_html_courses_start():
-    """Generate the beginning of the courses section."""
-    return """
-        <section id="courses">
-            <h2 class="eva-section-title">Explore Courses</h2>
-            <div class="eva-search">
-                <input type="text" id="courseSearch" placeholder="Search courses and notebooks...">
-                <span class="eva-search-icon"><i class="fas fa-search"></i></span>
-            </div>
-            <div class="eva-courses">"""
-
-
-def generate_course_card(course, notebook_count, is_wip):
-    """Generate HTML for a single course card."""
-    html = f'<div class="eva-course" data-course-id="{course["id"]}">\n'
+    print("Generating clean tailwindcss landing page")
     
-    # Add WIP badge if needed
-    if is_wip:
-        html += '    <div class="eva-course-badge"><i class="fas fa-code-branch"></i> In Progress</div>\n'
-    
-    html += f'''    <div class="eva-course-header">
-        <h2 class="eva-course-title">{course["title"]}</h2>
-        <span class="eva-course-toggle"><i class="fas fa-chevron-down"></i></span>
-    </div>
-    <div class="eva-course-front">
-        <p class="eva-course-description">{course["description"]}</p>
-        <div class="eva-course-stats">
-            <span><i class="fas fa-book"></i> {notebook_count} notebook{"s" if notebook_count != 1 else ""}</span>
-        </div>
-        <button class="eva-button eva-course-button">View Notebooks</button>
-    </div>
-    <div class="eva-course-content">
-        <div class="eva-notebooks">
-'''
-    
-    # Add notebooks
-    for i, notebook in enumerate(course["notebooks"]):
-        notebook_number = notebook.get("original_number", f"{i+1:02d}")
-        html += f'''            <div class="eva-notebook">
-                <span class="eva-notebook-number">{notebook_number}</span>
-                <a href="{notebook["path"].replace(".py", ".html")}" data-notebook-title="{notebook["display_name"]}">{notebook["display_name"]}</a>
-            </div>
-'''
-
-    html += '''        </div>
-    </div>
-</div>
-'''
-    return html
-
-
-def generate_course_cards(courses):
-    """Generate HTML for all course cards."""
-    html = ""
-    
-    # Define the custom order for courses
-    course_order = ["python", "probability", "polars", "optimization", "functional_programming"]
-    
-    # Create a dictionary of courses by ID for easy lookup
-    courses_by_id = {course["id"]: course for course in courses.values()}
-    
-    # Determine which courses are "work in progress" based on description or notebook count
-    work_in_progress = set()
-    for course_id, course in courses_by_id.items():
-        # Consider a course as "work in progress" if it has few notebooks or contains specific phrases
-        if (len(course["notebooks"]) < 5 or 
-            "work in progress" in course["description"].lower() or
-            "help us add" in course["description"].lower() or
-            "check back later" in course["description"].lower()):
-            work_in_progress.add(course_id)
-    
-    # First output courses in the specified order
-    for course_id in course_order:
-        if course_id in courses_by_id:
-            course = courses_by_id[course_id]
-            
-            # Skip if no notebooks
-            if not course["notebooks"]:
-                continue
-            
-            # Count notebooks
-            notebook_count = len(course["notebooks"])
-            
-            # Determine if this course is a work in progress
-            is_wip = course_id in work_in_progress
-            
-            html += generate_course_card(course, notebook_count, is_wip)
-            
-            # Remove from the dictionary so we don't output it again
-            del courses_by_id[course_id]
-    
-    # Then output any remaining courses alphabetically
-    sorted_remaining_courses = sorted(courses_by_id.values(), key=lambda x: x["title"])
-    
-    for course in sorted_remaining_courses:
-        # Skip if no notebooks
-        if not course["notebooks"]:
-            continue
-        
-        # Count notebooks
-        notebook_count = len(course["notebooks"])
-        
-        # Determine if this course is a work in progress
-        is_wip = course["id"] in work_in_progress
-        
-        html += generate_course_card(course, notebook_count, is_wip)
-    
-    return html
-
-
-def get_html_courses_end():
-    """Generate the end of the courses section."""
-    return """            </div>
-        </section>"""
-
-
-def get_html_contribute_section():
-    """Generate the contribute section."""
-    return """
-        <section id="contribute" class="eva-cta">
-            <h2>Contribute to Marimo Learn</h2>
-            <p>
-                Help us expand our collection of educational notebooks. Whether you're an expert in machine learning, 
-                statistics, or any other field, your contributions are welcome!
-            </p>
-            <a href="https://github.com/marimo-team/learn" target="_blank" class="eva-button">
-                <i class="fab fa-github"></i> Contribute on GitHub
-            </a>
-        </section>"""
-
-
-def get_html_footer():
-    """Generate the page footer."""
-    return """
-        <footer class="eva-footer">
-            <div class="eva-footer-logo">
-                <a href="https://marimo.io" target="_blank">
-                    <img src="https://marimo.io/logotype-wide.svg" alt="Marimo" width="200">
-                </a>
-            </div>
-            <div class="eva-social-links">
-                <a href="https://github.com/marimo-team" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://marimo.io/discord?ref=learn" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
-                <a href="https://twitter.com/marimo_io" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.youtube.com/@marimo-team" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.linkedin.com/company/marimo-io" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <div class="eva-footer-links">
-                <a href="https://marimo.io" target="_blank">Website</a>
-                <a href="https://docs.marimo.io" target="_blank">Documentation</a>
-                <a href="https://github.com/marimo-team/learn" target="_blank">GitHub</a>
-            </div>
-            <div class="eva-footer-copyright">
-                © 2025 Marimo Inc. All rights reserved.
-            </div>
-        </footer>"""
-
-
-def get_html_scripts():
-    """Generate the JavaScript for the page."""
-    return """
-    <script>
-        // Set light theme as default immediately
-        document.documentElement.setAttribute('data-theme', 'light');
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Theme toggle functionality
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = themeToggle.querySelector('i');
-            
-            // Update theme icon based on current theme
-            updateThemeIcon('light');
-            
-            // Check localStorage for saved theme preference
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme && savedTheme !== 'light') {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                updateThemeIcon(savedTheme);
-            }
-            
-            // Toggle theme when button is clicked
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-            });
-            
-            function updateThemeIcon(theme) {
-                if (theme === 'dark') {
-                    themeIcon.className = 'fas fa-sun';
-                } else {
-                    themeIcon.className = 'fas fa-moon';
-                }
-            }
-            
-            // Terminal typing effect for hero text
-            const heroTitle = document.querySelector('.eva-hero h1');
-            const heroText = document.querySelector('.eva-hero p');
-            const cursor = document.querySelector('.eva-cursor');
-            
-            const originalTitle = heroTitle.textContent;
-            const originalText = heroText.textContent.trim();
-            
-            heroTitle.textContent = '';
-            heroText.textContent = '';
-            
-            let titleIndex = 0;
-            let textIndex = 0;
-            
-            function typeTitle() {
-                if (titleIndex < originalTitle.length) {
-                    heroTitle.textContent += originalTitle.charAt(titleIndex);
-                    titleIndex++;
-                    setTimeout(typeTitle, 50);
-                } else {
-                    cursor.style.display = 'none';
-                    setTimeout(typeText, 500);
-                }
-            }
-            
-            function typeText() {
-                if (textIndex < originalText.length) {
-                    heroText.textContent += originalText.charAt(textIndex);
-                    textIndex++;
-                    setTimeout(typeText, 20);
-                }
-            }
-            
-            typeTitle();
-            
-            // Course toggle functionality - flashcard style
-            const courseHeaders = document.querySelectorAll('.eva-course-header');
-            const courseButtons = document.querySelectorAll('.eva-course-button');
-            
-            // Function to toggle course
-            function toggleCourse(course) {
-                const isActive = course.classList.contains('active');
-                
-                // First close all courses with a slight delay for better visual effect
-                document.querySelectorAll('.eva-course.active').forEach(c => {
-                    if (c !== course) {
-                        // Add a closing class for animation
-                        c.classList.add('closing');
-                        // Remove active class after a short delay
-                        setTimeout(() => {
-                            c.classList.remove('active');
-                            c.classList.remove('closing');
-                        }, 300);
-                    }
-                });
-                
-                // Toggle the clicked course
-                if (!isActive) {
-                    // Add a small delay before opening to allow others to close
-                    setTimeout(() => {
-                        course.classList.add('active');
-                        
-                        // Check if the course has any notebooks
-                        const notebooks = course.querySelectorAll('.eva-notebook');
-                        const content = course.querySelector('.eva-course-content');
-                        
-                        if (notebooks.length === 0 && !content.querySelector('.eva-empty-message')) {
-                            // If no notebooks, show a message
-                            const emptyMessage = document.createElement('p');
-                            emptyMessage.className = 'eva-empty-message';
-                            emptyMessage.textContent = 'No notebooks available in this course yet.';
-                            emptyMessage.style.color = 'var(--eva-text)';
-                            emptyMessage.style.fontStyle = 'italic';
-                            emptyMessage.style.opacity = '0.7';
-                            emptyMessage.style.textAlign = 'center';
-                            emptyMessage.style.padding = '1rem 0';
-                            content.appendChild(emptyMessage);
-                        }
-                        
-                        // Animate notebooks to appear sequentially
-                        notebooks.forEach((notebook, index) => {
-                            notebook.style.opacity = '0';
-                            notebook.style.transform = 'translateX(-10px)';
-                            setTimeout(() => {
-                                notebook.style.opacity = '1';
-                                notebook.style.transform = 'translateX(0)';
-                            }, 50 + (index * 30)); // Stagger the animations
-                        });
-                    }, 100);
-                }
-            }
-            
-            // Add click event to course headers
-            courseHeaders.forEach(header => {
-                header.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const currentCourse = this.closest('.eva-course');
-                    toggleCourse(currentCourse);
-                });
-            });
-            
-            // Add click event to course buttons
-            courseButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const currentCourse = this.closest('.eva-course');
-                    toggleCourse(currentCourse);
-                });
-            });
-            
-            // Search functionality with improved matching
-            const searchInput = document.getElementById('courseSearch');
-            const courses = document.querySelectorAll('.eva-course');
-            const notebooks = document.querySelectorAll('.eva-notebook');
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                
-                if (searchTerm === '') {
-                    // Reset all visibility
-                    courses.forEach(course => {
-                        course.style.display = 'block';
-                        course.classList.remove('active');
-                    });
-                    
-                    notebooks.forEach(notebook => {
-                        notebook.style.display = 'flex';
-                    });
-                    
-                    // Open the first course with notebooks by default when search is cleared
-                    for (let i = 0; i < courses.length; i++) {
-                        const courseNotebooks = courses[i].querySelectorAll('.eva-notebook');
-                        if (courseNotebooks.length > 0) {
-                            courses[i].classList.add('active');
-                            break;
-                        }
-                    }
-                    
-                    return;
-                }
-                
-                // First hide all courses
-                courses.forEach(course => {
-                    course.style.display = 'none';
-                    course.classList.remove('active');
-                });
-                
-                // Then show courses and notebooks that match the search
-                let hasResults = false;
-                
-                // Track which courses have matching notebooks
-                const coursesWithMatchingNotebooks = new Set();
-                
-                // First check notebooks
-                notebooks.forEach(notebook => {
-                    const notebookTitle = notebook.querySelector('a').getAttribute('data-notebook-title').toLowerCase();
-                    const matchesSearch = notebookTitle.includes(searchTerm);
-                    
-                    notebook.style.display = matchesSearch ? 'flex' : 'none';
-                    
-                    if (matchesSearch) {
-                        const course = notebook.closest('.eva-course');
-                        coursesWithMatchingNotebooks.add(course.getAttribute('data-course-id'));
-                        hasResults = true;
-                    }
-                });
-                
-                // Then check course titles and descriptions
-                courses.forEach(course => {
-                    const courseId = course.getAttribute('data-course-id');
-                    const courseTitle = course.querySelector('.eva-course-title').textContent.toLowerCase();
-                    const courseDescription = course.querySelector('.eva-course-description').textContent.toLowerCase();
-                    
-                    const courseMatches = courseTitle.includes(searchTerm) || courseDescription.includes(searchTerm);
-                    
-                    // Show course if it matches or has matching notebooks
-                    if (courseMatches || coursesWithMatchingNotebooks.has(courseId)) {
-                        course.style.display = 'block';
-                        course.classList.add('active');
-                        hasResults = true;
-                        
-                        // If course matches but doesn't have matching notebooks, show all its notebooks
-                        if (courseMatches && !coursesWithMatchingNotebooks.has(courseId)) {
-                            course.querySelectorAll('.eva-notebook').forEach(nb => {
-                                nb.style.display = 'flex';
-                            });
-                        }
-                    }
-                });
-            });
-            
-            // Open the first course with notebooks by default
-            let firstCourseWithNotebooks = null;
-            for (let i = 0; i < courses.length; i++) {
-                const courseNotebooks = courses[i].querySelectorAll('.eva-notebook');
-                if (courseNotebooks.length > 0) {
-                    firstCourseWithNotebooks = courses[i];
-                    break;
-                }
-            }
-            
-            if (firstCourseWithNotebooks) {
-                firstCourseWithNotebooks.classList.add('active');
-            } else if (courses.length > 0) {
-                // If no courses have notebooks, just open the first one
-                courses[0].classList.add('active');
-            }
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        });
-    </script>"""
-
-
-def get_html_footer_closing():
-    """Generate closing HTML tags."""
-    return """
-  </div>
-  </body>
-</html>"""
-
-
-def generate_index(courses: Dict[str, Dict[str, Any]], output_dir: str) -> None:
-    """Generate the index.html file with Neon Genesis Evangelion aesthetics."""
-    print("Generating index.html")
-
     index_path = os.path.join(output_dir, "index.html")
     os.makedirs(output_dir, exist_ok=True)
-
+    
+    # Load Jinja2 template
+    current_dir = Path(__file__).parent
+    templates_dir = current_dir / "templates"
+    env = Environment(loader=FileSystemLoader(templates_dir))
+    template = env.get_template('index.html')
+    
     try:
         with open(index_path, "w", encoding="utf-8") as f:
-            # Build the page HTML from individual components
-            header = get_html_header().format(css=generate_eva_css())
-            hero = get_html_hero_section()
-            features = get_html_features_section()
-            courses_start = get_html_courses_start()
-            course_cards = generate_course_cards(courses)
-            courses_end = get_html_courses_end()
-            contribute = get_html_contribute_section()
-            footer = get_html_footer()
-            scripts = get_html_scripts()
-            closing = get_html_footer_closing()
+            # Render the template with the provided data
+            rendered_html = template.render(
+                courses=courses, 
+                current_year=datetime.date.today().year
+            )
+            f.write(rendered_html)
             
-            # Write all elements to the file
-            f.write(header)
-            f.write(hero)
-            f.write(features)
-            f.write(courses_start)
-            f.write(course_cards)
-            f.write(courses_end)
-            f.write(contribute)
-            f.write(footer)
-            f.write(scripts)
-            f.write(closing)
+        print(f"Successfully generated clean tailwindcss landing page at {index_path}")
             
     except IOError as e:
-        print(f"Error generating index.html: {e}")
+        print(f"Error generating clean tailwindcss landing page: {e}")
 
 
 def main() -> None:
@@ -1507,8 +265,8 @@ def main() -> None:
     # Organize notebooks by course (only include successfully exported notebooks)
     courses = organize_notebooks_by_course(successful_notebooks)
     
-    # Generate index with organized courses
-    generate_index(courses, args.output_dir)
+    # Generate landing page using Tailwind CSS
+    generate_clean_tailwind_landing_page(courses, args.output_dir)
     
     # Save course data as JSON for potential use by other tools
     courses_json_path = os.path.join(args.output_dir, "courses.json")
