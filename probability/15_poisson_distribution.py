@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.11.24"
+__generated_with = "0.11.25"
 app = marimo.App(width="medium", app_title="Poisson Distribution")
 
 
@@ -93,7 +93,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(TangleSlider, mo):
-    # Create interactive elements using TangleSlider
+    # interactive elements using TangleSlider
     lambda_slider = mo.ui.anywidget(TangleSlider(
         amount=5, 
         min_value=0.1, 
@@ -118,56 +118,60 @@ def _(TangleSlider, mo):
 
 @app.cell(hide_code=True)
 def _(lambda_slider, np, plt, stats):
+    def create_poisson_pmf_plot(lambda_value):
+        """Create a visualization of Poisson PMF with annotations for mean and variance."""
+        # PMF for values
+        max_x = max(20, int(lambda_value * 3))  # Show at least up to 3*lambda
+        x = np.arange(0, max_x + 1)
+        pmf = stats.poisson.pmf(x, lambda_value)
+
+        # Relevant key statistics
+        mean = lambda_value  # For Poisson, mean = lambda
+        variance = lambda_value  # For Poisson, variance = lambda
+        std_dev = np.sqrt(variance)
+
+        # plot
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # PMF as bars
+        ax.bar(x, pmf, color='royalblue', alpha=0.7, label=f'PMF: P(X=k)')
+
+        # for the PMF values
+        ax.plot(x, pmf, 'ro-', alpha=0.6, label='PMF line')
+
+        # Vertical lines - mean and key values
+        ax.axvline(x=mean, color='green', linestyle='--', linewidth=2, 
+                label=f'Mean: {mean:.2f}')
+
+        # Stdev region
+        ax.axvspan(mean - std_dev, mean + std_dev, alpha=0.2, color='green',
+                label=f'±1 Std Dev: {std_dev:.2f}')
+
+        ax.set_xlabel('Number of Events (k)')
+        ax.set_ylabel('Probability: P(X=k)')
+        ax.set_title(f'Poisson Distribution with λ={lambda_value:.1f}')
+
+        # annotations
+        ax.annotate(f'E[X] = {mean:.2f}', 
+                    xy=(mean, stats.poisson.pmf(int(mean), lambda_value)), 
+                    xytext=(mean + 1, max(pmf) * 0.8),
+                    arrowprops=dict(facecolor='black', shrink=0.05, width=1))
+
+        ax.annotate(f'Var(X) = {variance:.2f}', 
+                    xy=(mean, stats.poisson.pmf(int(mean), lambda_value) / 2), 
+                    xytext=(mean + 1, max(pmf) * 0.6),
+                    arrowprops=dict(facecolor='black', shrink=0.05, width=1))
+
+        ax.grid(alpha=0.3)
+        ax.legend()
+
+        plt.tight_layout()
+        return plt.gca()
+
+    # Get parameter from slider and create plot
     _lambda = lambda_slider.amount
-
-    # PMF for values
-    _max_x = max(20, int(_lambda * 3))  # Show at least up to 3*lambda
-    _x = np.arange(0, _max_x + 1)
-    _pmf = stats.poisson.pmf(_x, _lambda)
-
-    # Relevant key statistics
-    _mean = _lambda  # For Poisson, mean = lambda
-    _variance = _lambda  # For Poisson, variance = lambda
-    _std_dev = np.sqrt(_variance)
-
-    # plot
-    _fig, _ax = plt.subplots(figsize=(10, 6))
-
-    # PMF as bars
-    _ax.bar(_x, _pmf, color='royalblue', alpha=0.7, label=f'PMF: P(X=k)')
-
-    #  for the PMF values
-    _ax.plot(_x, _pmf, 'ro-', alpha=0.6, label='PMF line')
-
-    # Vertical lines - mean and key values
-    _ax.axvline(x=_mean, color='green', linestyle='--', linewidth=2, 
-               label=f'Mean: {_mean:.2f}')
-
-    # Stdev region
-    _ax.axvspan(_mean - _std_dev, _mean + _std_dev, alpha=0.2, color='green',
-               label=f'±1 Std Dev: {_std_dev:.2f}')
-
-    _ax.set_xlabel('Number of Events (k)')
-    _ax.set_ylabel('Probability: P(X=k)')
-    _ax.set_title(f'Poisson Distribution with λ={_lambda:.1f}')
-
-    # annotations
-    _ax.annotate(f'E[X] = {_mean:.2f}', 
-                xy=(_mean, stats.poisson.pmf(int(_mean), _lambda)), 
-                xytext=(_mean + 1, max(_pmf) * 0.8),
-                arrowprops=dict(facecolor='black', shrink=0.05, width=1))
-
-    _ax.annotate(f'Var(X) = {_variance:.2f}', 
-                xy=(_mean, stats.poisson.pmf(int(_mean), _lambda) / 2), 
-                xytext=(_mean + 1, max(_pmf) * 0.6),
-                arrowprops=dict(facecolor='black', shrink=0.05, width=1))
-
-    _ax.grid(alpha=0.3)
-    _ax.legend()
-
-    plt.tight_layout()
-    plt.gca()
-    return
+    create_poisson_pmf_plot(_lambda)
+    return (create_poisson_pmf_plot,)
 
 
 @app.cell(hide_code=True)
@@ -190,39 +194,44 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(fig_to_image, mo, plt):
-    # Create a visualization of dividing a minute into 60 seconds
-    _fig, _ax = plt.subplots(figsize=(12, 2))
+    def create_time_division_visualization():
+        # vizualization of dividing a minute into 60 seconds
+        fig, ax = plt.subplots(figsize=(12, 2))
 
-    # Example events at 2.75s and 7.12s
-    _events = [2.75, 7.12]
+        # Example events harcoded at 2.75s and 7.12s
+        events = [2.75, 7.12]
 
-    # Create an array of 60 rectangles
-    for i in range(60):
-        _color = 'royalblue' if any(i <= e < i+1 for e in _events) else 'lightgray'
-        _ax.add_patch(plt.Rectangle((i, 0), 0.9, 1, color=_color))
+        # array of 60 rectangles
+        for i in range(60):
+            color = 'royalblue' if any(i <= e < i+1 for e in events) else 'lightgray'
+            ax.add_patch(plt.Rectangle((i, 0), 0.9, 1, color=color))
 
-    # markers for events
-    for e in _events:
-        _ax.plot(e, 0.5, 'ro', markersize=10)
+        # markers for events
+        for e in events:
+            ax.plot(e, 0.5, 'ro', markersize=10)
 
-    # labels
-    _ax.set_xlim(0, 60)
-    _ax.set_ylim(0, 1)
-    _ax.set_yticks([])
-    _ax.set_xticks([0, 15, 30, 45, 60])
-    _ax.set_xticklabels(['0s', '15s', '30s', '45s', '60s'])
-    _ax.set_xlabel('Time (seconds)')
-    _ax.set_title('One Minute Divided into 60 Second Intervals')
+        # labels
+        ax.set_xlim(0, 60)
+        ax.set_ylim(0, 1)
+        ax.set_yticks([])
+        ax.set_xticks([0, 15, 30, 45, 60])
+        ax.set_xticklabels(['0s', '15s', '30s', '45s', '60s'])
+        ax.set_xlabel('Time (seconds)')
+        ax.set_title('One Minute Divided into 60 Second Intervals')
 
-    plt.tight_layout()
+        plt.tight_layout()
+        plt.gca()
+        return fig, events, i
 
-    # Convert plot to image for display
+    # Create visualization and convert to image
+    _fig, _events, i = create_time_division_visualization()
     _img = mo.image(fig_to_image(_fig), width="100%")
 
     # explanation
     _explanation = mo.md(
         r"""
         In this visualization:
+    
         - Each rectangle represents a 1-second interval
         - Blue rectangles indicate intervals where an event occurred
         - Red dots show the actual event times (2.75s and 7.12s)
@@ -230,7 +239,8 @@ def _(fig_to_image, mo, plt):
         If we treat this as a binomial experiment with 60 trials (seconds), we can calculate probabilities using the binomial PMF. But there's a problem: what if multiple events occur within the same second? To address this, we can divide our minute into smaller intervals.
         """
     )
-    return e, i
+    mo.vstack([_fig, _explanation])
+    return create_time_division_visualization, i
 
 
 @app.cell(hide_code=True)
@@ -266,39 +276,41 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(e, fig_to_image, mo, plt):
-    # Create a visualization of dividing a minute into 600 deciseconds
-    # (Just showing the first 100 for clarity)
-    _fig, _ax = plt.subplots(figsize=(12, 2))
+def _(fig_to_image, mo, plt):
+    def create_decisecond_visualization(e_value):
+        # (Just showing the first 100 for clarity)
+        fig, ax = plt.subplots(figsize=(12, 2))
 
-    # Example events at 2.75s and 7.12s (convert to deciseconds)
-    _events = [27.5, 71.2]
+        # Example events at 2.75s and 7.12s (convert to deciseconds)
+        events = [27.5, 71.2]
+    
+        for i in range(100):
+            color = 'royalblue' if any(i <= event_val < i + 1 for event_val in events) else 'lightgray'
+            ax.add_patch(plt.Rectangle((i, 0), 0.9, 1, color=color))
 
-    # Create a representative portion of the 600 rectangles (first 100)
-    for _i in range(100):
-        _color = 'royalblue' if any(_i <= _e < _i + 1 for _e in _events) else 'lightgray'
-        _ax.add_patch(plt.Rectangle((_i, 0), 0.9, 1, color=_color))
+        # Markers for events
+        for event in events:
+            if event < 100:  # Only show events in our visible range
+                ax.plot(event/10, 0.5, 'ro', markersize=10)  # Divide by 10 to convert to deciseconds
 
-    # Add markers for events
-    for _e in _events:
-        if _e < 100:  # Only show events in our visible range
-            _ax.plot(e, 0.5, 'ro', markersize=10)
+        # Add labels
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 1)
+        ax.set_yticks([])
+        ax.set_xticks([0, 20, 40, 60, 80, 100])
+        ax.set_xticklabels(['0s', '2s', '4s', '6s', '8s', '10s'])
+        ax.set_xlabel('Time (first 10 seconds shown)')
+        ax.set_title('One Minute Divided into 600 Decisecond Intervals (first 100 shown)')
 
-    # Add labels
-    _ax.set_xlim(0, 100)
-    _ax.set_ylim(0, 1)
-    _ax.set_yticks([])
-    _ax.set_xticks([0, 20, 40, 60, 80, 100])
-    _ax.set_xticklabels(['0s', '2s', '4s', '6s', '8s', '10s'])
-    _ax.set_xlabel('Time (first 10 seconds shown)')
-    _ax.set_title('One Minute Divided into 600 Decisecond Intervals (first 100 shown)')
+        plt.tight_layout()
+        plt.gca()
+        return fig
 
-    plt.tight_layout()
-
-    # Convert plot to image for display
+    # Create viz and convert to image
+    _fig = create_decisecond_visualization(e_value=5)
     _img = mo.image(fig_to_image(_fig), width="100%")
 
-    # Add explanation
+    # Explanation
     _explanation = mo.md(
         r"""
         With $n=600$ and $p=\frac{5}{600}=\frac{1}{120}$, we can recalculate our probabilities:
@@ -312,7 +324,8 @@ def _(e, fig_to_image, mo, plt):
         As we make our intervals smaller (increasing $n$), our approximation becomes more accurate.
         """
     )
-    return
+    mo.vstack([_fig, _explanation])
+    return (create_decisecond_visualization,)
 
 
 @app.cell(hide_code=True)
@@ -329,7 +342,6 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    # slider for number of intervals
     intervals_slider = mo.ui.slider(
         start = 60, 
         stop = 10000,
@@ -347,47 +359,54 @@ def _(intervals_slider):
 
 @app.cell(hide_code=True)
 def _(intervals_slider, np, pd, plt, stats):
-    # number of intervals from the slider
+    def create_comparison_plot(n, lambda_value):
+        # Calculate probability
+        p = lambda_value / n
+
+        # Binomial probabilities
+        x_values = np.arange(0, 15)
+        binom_pmf = stats.binom.pmf(x_values, n, p)
+
+        # True Poisson probabilities
+        poisson_pmf = stats.poisson.pmf(x_values, lambda_value)
+
+        # DF for comparison
+        df = pd.DataFrame({
+            'Events': x_values,
+            f'Binomial(n={n}, p={p:.6f})': binom_pmf,
+            f'Poisson(λ=5)': poisson_pmf,
+            'Difference': np.abs(binom_pmf - poisson_pmf)
+        })
+
+        # Plot both PMFs
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # Bar plot for the binomial
+        ax.bar(x_values - 0.2, binom_pmf, width=0.4, alpha=0.7, 
+            color='royalblue', label=f'Binomial(n={n}, p={p:.6f})')
+
+        # Bar plot for the Poisson
+        ax.bar(x_values + 0.2, poisson_pmf, width=0.4, alpha=0.7,
+            color='crimson', label='Poisson(λ=5)')
+
+        # Labels and title
+        ax.set_xlabel('Number of Events (k)')
+        ax.set_ylabel('Probability')
+        ax.set_title(f'Comparison of Binomial and Poisson PMFs with n={n}')
+        ax.legend()
+        ax.set_xticks(x_values)
+        ax.grid(alpha=0.3)
+
+        plt.tight_layout()
+        return df, fig, n, p
+
+    # Number of intervals from the slider
     n = intervals_slider.value
     _lambda = 5  # Fixed lambda for our example
-    p = _lambda / n
 
-    # Calculate the binomial probabilities
-    _x_values = np.arange(0, 15)
-    _binom_pmf = stats.binom.pmf(_x_values, n, p)
-
-    # Calculate the true Poisson probabilities
-    _poisson_pmf = stats.poisson.pmf(_x_values, _lambda)
-
-    # Create a DataFrame for comparison
-    df = pd.DataFrame({
-        'Events': _x_values,
-        f'Binomial(n={n}, p={p:.6f})': _binom_pmf,
-        f'Poisson(λ=5)': _poisson_pmf,
-        'Difference': np.abs(_binom_pmf - _poisson_pmf)
-    })
-
-    # Plot both PMFs
-    fig, _ax = plt.subplots(figsize=(10, 6))
-
-    # Bar plot for the binomial
-    _ax.bar(_x_values - 0.2, _binom_pmf, width=0.4, alpha=0.7, 
-           color='royalblue', label=f'Binomial(n={n}, p={p:.6f})')
-
-    # Bar plot for the Poisson
-    _ax.bar(_x_values + 0.2, _poisson_pmf, width=0.4, alpha=0.7,
-           color='crimson', label='Poisson(λ=5)')
-
-    # Add labels and title
-    _ax.set_xlabel('Number of Events (k)')
-    _ax.set_ylabel('Probability')
-    _ax.set_title(f'Comparison of Binomial and Poisson PMFs with n={n}')
-    _ax.legend()
-    _ax.set_xticks(_x_values)
-    _ax.grid(alpha=0.3)
-
-    plt.tight_layout()
-    return df, fig, n, p
+    # Cromparison plot
+    df, fig, n, p = create_comparison_plot(n, _lambda)
+    return create_comparison_plot, df, fig, n, p
 
 
 @app.cell(hide_code=True)
@@ -399,7 +418,7 @@ def _(df, fig, fig_to_image, mo, n, p):
         'Difference': '{:.6f}'
     })
 
-    # Calculate the maximum absolute difference
+    # Calculate the max absolute difference
     _max_diff = df['Difference'].max()
 
     # output
@@ -498,7 +517,6 @@ def _(mo):
 
 @app.cell
 def _(stats):
-    # Set lambda parameter
     _lambda = 5
 
     # Calculate probabilities for X = 1, 2, 3
@@ -528,42 +546,46 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(np, plt, stats):
-    # 1000 random samples from Poisson(lambda=5)
+    def create_samples_plot(lambda_value, sample_size=1000):
+        # Random samples
+        samples = stats.poisson.rvs(lambda_value, size=sample_size)
+
+        # theoretical PMF
+        x_values = np.arange(0, max(samples) + 1)
+        pmf_values = stats.poisson.pmf(x_values, lambda_value)
+
+        # histograms to compare
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # samples as a histogram
+        ax.hist(samples, bins=np.arange(-0.5, max(samples) + 1.5, 1), 
+                alpha=0.7, density=True, label='Random Samples')
+
+        # theoretical PMF
+        ax.plot(x_values, pmf_values, 'ro-', label='Theoretical PMF')
+
+        # labels and title
+        ax.set_xlabel('Number of Events')
+        ax.set_ylabel('Relative Frequency / Probability')
+        ax.set_title(f'1000 Random Samples from Poisson(λ={lambda_value})')
+        ax.legend()
+        ax.grid(alpha=0.3)
+
+        # annotations
+        ax.annotate(f'Sample Mean: {np.mean(samples):.2f}', 
+                    xy=(0.7, 0.9), xycoords='axes fraction',
+                    bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.3))
+        ax.annotate(f'Theoretical Mean: {lambda_value:.2f}', 
+                    xy=(0.7, 0.8), xycoords='axes fraction',
+                    bbox=dict(boxstyle='round,pad=0.5', fc='lightgreen', alpha=0.3))
+
+        plt.tight_layout()
+        return plt.gca()
+
+    # Use a lambda value of 5 for this example
     _lambda = 5
-    _samples = stats.poisson.rvs(_lambda, size=1000)
-
-    # theoretical PMF
-    _x_values = np.arange(0, max(_samples) + 1)
-    _pmf_values = stats.poisson.pmf(_x_values, _lambda)
-
-    # histograms to compare
-    _fig, _ax = plt.subplots(figsize=(10, 6))
-
-    # samples as a histogram
-    _ax.hist(_samples, bins=np.arange(-0.5, max(_samples) + 1.5, 1), 
-            alpha=0.7, density=True, label='Random Samples')
-
-    # theoretical PMF
-    _ax.plot(_x_values, _pmf_values, 'ro-', label='Theoretical PMF')
-
-    # labels and title
-    _ax.set_xlabel('Number of Events')
-    _ax.set_ylabel('Relative Frequency / Probability')
-    _ax.set_title(f'1000 Random Samples from Poisson(λ={_lambda})')
-    _ax.legend()
-    _ax.grid(alpha=0.3)
-
-    # annotations
-    _ax.annotate(f'Sample Mean: {np.mean(_samples):.2f}', 
-                xy=(0.7, 0.9), xycoords='axes fraction',
-                bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.3))
-    _ax.annotate(f'Theoretical Mean: {_lambda:.2f}', 
-                xy=(0.7, 0.8), xycoords='axes fraction',
-                bbox=dict(boxstyle='round,pad=0.5', fc='lightgreen', alpha=0.3))
-
-    plt.tight_layout()
-    plt.gca()
-    return
+    create_samples_plot(_lambda)
+    return (create_samples_plot,)
 
 
 @app.cell(hide_code=True)
@@ -584,7 +606,6 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    # sliders for the rate and time period
     rate_slider = mo.ui.slider(
         start = 0.1,
         stop = 10,
@@ -608,59 +629,74 @@ def _(mo):
     return controls, rate_slider, time_slider
 
 
+@app.cell
+def _(controls):
+    controls.center()
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo, np, plt, rate_slider, stats, time_slider):
+    def create_time_scaling_plot(rate, time_period):
+        # scaled rate parameter
+        lambda_value = rate * time_period
+
+        # PMF for values
+        max_x = max(30, int(lambda_value * 1.5))
+        x = np.arange(0, max_x + 1)
+        pmf = stats.poisson.pmf(x, lambda_value)
+
+        # plot
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # PMF as bars
+        ax.bar(x, pmf, color='royalblue', alpha=0.7, 
+            label=f'PMF: Poisson(λ={lambda_value:.1f})')
+
+        # vertical line for mean
+        ax.axvline(x=lambda_value, color='red', linestyle='--', linewidth=2,
+                label=f'Mean = {lambda_value:.1f}')
+
+        # labels and title
+        ax.set_xlabel('Number of Events')
+        ax.set_ylabel('Probability')
+        ax.set_title(f'Poisson Distribution Over {time_period} Units (Rate = {rate}/unit)')
+
+        # better visualization if lambda is large
+        if lambda_value > 10:
+            ax.set_xlim(lambda_value - 4*np.sqrt(lambda_value), 
+                         lambda_value + 4*np.sqrt(lambda_value))
+
+        ax.legend()
+        ax.grid(alpha=0.3)
+
+        plt.tight_layout()
+
+        # Create relevant info markdown
+        info_text = f"""
+        When the rate is **{rate}** events per unit time and we observe for **{time_period}** units:
+
+        - The expected number of events is **{lambda_value:.1f}**
+        - The variance is also **{lambda_value:.1f}**
+        - The standard deviation is **{np.sqrt(lambda_value):.2f}**
+        - P(X=0) = {stats.poisson.pmf(0, lambda_value):.4f} (probability of no events)
+        - P(X≥10) = {1 - stats.poisson.cdf(9, lambda_value):.4f} (probability of 10 or more events)
+        """
+
+        return plt.gca(), info_text
+
     # parameters from sliders
     _rate = rate_slider.value
     _time = time_slider.value
 
-    # scaled rate parameter
-    _lambda = _rate * _time
+    # store
+    _plot, _info_text = create_time_scaling_plot(_rate, _time)
 
-    # PMF for values
-    _max_x = max(30, int(_lambda * 1.5))
-    _x = np.arange(0, _max_x + 1)
-    _pmf = stats.poisson.pmf(_x, _lambda)
+    # Display info as markdown
+    info = mo.md(_info_text)
 
-    # plot
-    _fig, _ax = plt.subplots(figsize=(10, 6))
-
-    # PMF as bars
-    _ax.bar(_x, _pmf, color='royalblue', alpha=0.7, 
-           label=f'PMF: Poisson(λ={_lambda:.1f})')
-
-    # vertical line for mean
-    _ax.axvline(x=_lambda, color='red', linestyle='--', linewidth=2,
-               label=f'Mean = {_lambda:.1f}')
-
-    # labels and title
-    _ax.set_xlabel('Number of Events')
-    _ax.set_ylabel('Probability')
-    _ax.set_title(f'Poisson Distribution Over {_time} Units (Rate = {_rate}/unit)')
-
-    # better visualization if lambda is large
-    if _lambda > 10:
-        _ax.set_xlim(_lambda - 4*np.sqrt(_lambda), _lambda + 4*np.sqrt(_lambda))
-
-    _ax.legend()
-    _ax.grid(alpha=0.3)
-
-    plt.tight_layout()
-    plt.gca()
-
-    # additional information
-    info = mo.md(
-        f"""
-        When the rate is **{_rate}** events per unit time and we observe for **{_time}** units:
-
-        - The expected number of events is **{_lambda:.1f}**
-        - The variance is also **{_lambda:.1f}**
-        - The standard deviation is **{np.sqrt(_lambda):.2f}**
-        - P(X=0) = {stats.poisson.pmf(0, _lambda):.4f} (probability of no events)
-        - P(X≥10) = {1 - stats.poisson.cdf(9, _lambda):.4f} (probability of 10 or more events)
-        """
-    )
-    return (info,)
+    mo.vstack([_plot, info], justify="center")
+    return create_time_scaling_plot, info
 
 
 @app.cell(hide_code=True)
