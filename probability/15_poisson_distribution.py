@@ -195,10 +195,10 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(fig_to_image, mo, plt):
     def create_time_division_visualization():
-        # vizualization of dividing a minute into 60 seconds
+        # visualization of dividing a minute into 60 seconds
         fig, ax = plt.subplots(figsize=(12, 2))
 
-        # Example events harcoded at 2.75s and 7.12s
+        # Example events hardcoded at 2.75s and 7.12s
         events = [2.75, 7.12]
 
         # array of 60 rectangles
