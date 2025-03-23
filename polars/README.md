@@ -23,3 +23,4 @@ You can also open notebooks in our online playground by appending marimo.app/ to
 Thanks to all our notebook authors!
 
 * [Koushik Khan](https://github.com/koushikkhan)
+* [Péter Gyarmati](https://github.com/peter-gy)

@@ -172,3 +172,6 @@ cython_debug/
 
 # Marimo specific
 __marimo__
+
+# Generated site content
+_site/
