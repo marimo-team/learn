@@ -930,7 +930,7 @@ def _(np, plt, sympy):
         ax2.set_ylabel('Cumulative Probability')
         ax2.grid(alpha=0.3)
 
-        # Mark appopriate (F(1) & F(2)) points)
+        # Mark appropriate (F(1) & F(2)) points)
         ax2.plot(1, cdf[np.abs(x-1).argmin()], 'ro', markersize=8)
         ax2.plot(2, cdf[np.abs(x-2).argmin()], 'ro', markersize=8)
 
