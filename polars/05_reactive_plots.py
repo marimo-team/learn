@@ -15,14 +15,6 @@ __generated_with = "0.11.26"
 app = marimo.App(width="medium")
 
 
-@app.cell
-def _():
-    import marimo as mo
-    import polars as pl
-    import plotly.express as px
-    return mo, pl, px
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -401,8 +393,8 @@ def _(chart2, filtered_duration, mo, pl):
 
 
 @app.cell(hide_code=True)
-def _():
-    # Appendix : Some other examples
+def _(mo):
+    mo.md("""# Appendix : Some other examples""")
     return
 
 
@@ -493,6 +485,19 @@ def _(filter_genre2, filtered_duration, mo, pl):
         artist_combinations.sort("count", descending=True),
     )
     return (artist_combinations,)
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
+@app.cell
+def _():
+    import polars as pl
+    import plotly.express as px
+    return pl, px
 
 
 if __name__ == "__main__":
