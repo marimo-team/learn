@@ -407,7 +407,7 @@ def _(create_range_probability_example, fig_to_image, mo, stats):
 
 @app.cell(hide_code=True)
 def _(create_voltage_example_visualization, fig_to_image, mo):
-    # Create vizualization
+    # Create visualization
     voltage_fig, voltage_error_prob = create_voltage_example_visualization()
 
     # Display
