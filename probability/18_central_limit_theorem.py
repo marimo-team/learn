@@ -79,7 +79,7 @@ def _(mo):
            return total
         ```
 
-        The value returned by this function will be a random variable. Click the button below to run the function and observe the resulting value of →taltotal:
+        The value returned by this function will be a random variable. Click the button below to run the function and observe the resulting value of total:
         """
     )
     return
@@ -116,7 +116,7 @@ def _(mo, random, run_button):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""What does →taltotal look like as a distribution? Let's calculate →taltotal many times and visualize the histogram of values it produces.""")
+    mo.md(r"""What does total look like as a distribution? Let's calculate total many times and visualize the histogram of values it produces.""")
     return
 
 
