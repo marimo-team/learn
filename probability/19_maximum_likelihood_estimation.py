@@ -48,16 +48,11 @@ def _(mo):
 
         Likelihood measures how probable our observed data is, given specific values of the parameters $\theta$.
 
-        - For **discrete** distributions: likelihood is the probability mass function (PMF) of our data
-        - For **continuous** distributions: likelihood is the probability density function (PDF) of our data
-
         /// note
         **Probability vs. Likelihood**
 
         - **Probability**: Given parameters $\theta$, what's the chance of observing data $X$?
         - **Likelihood**: Given observed data $X$, how likely are different parameter values $\theta$?
-
-        They use the same formula but different perspectives!
         ///
 
         To simplify notation, we'll use $f(X=x|\Theta=\theta)$ to represent either the PMF or PDF of our data, conditioned on the parameters.
@@ -687,9 +682,9 @@ def _(
 def _(mo):
     mo.md(
         r"""
-        ## Interactive Concept: Likelihood vs. Probability
+        ## Interactive Concept: Density/Mass Functions vs. Likelihood
 
-        To better understand the distinction between likelihood and probability, let's create an interactive visualization. This concept is crucial for understanding why MLE works.
+        To better understand the distinction between likelihood and density/mass functions, let's create an interactive visualization. This concept is crucial for understanding why MLE works.
         """
     )
     return
@@ -714,7 +709,7 @@ def _(concept_dist_type, mo, np, perspective_selector, plt, stats):
 
     if concept_dist_type_value == "Normal":
         if concept_view_mode == "probability":
-            # probability perspective: fixed parameters, varying data
+            # density function perspective: fixed params, varying data
             concept_mu = 0      # fixed parameter
             concept_sigma = 1   # fixed parameter
 
@@ -733,11 +728,11 @@ def _(concept_dist_type, mo, np, perspective_selector, plt, stats):
                 concept_prob = stats.norm.pdf(concept_data, concept_mu, concept_sigma)
                 concept_ax.plot([concept_data, concept_data], [0, concept_prob], concept_colors[concept_i], linewidth=2)
                 concept_ax.scatter(concept_data, concept_prob, color=concept_colors[concept_i], s=50, 
-                           label=f'P(X={concept_data}|μ=0,σ=1) = {concept_prob:.3f}')
+                           label=f'PDF at x={concept_data}: {concept_prob:.3f}')
 
             concept_ax.set_xlabel('Data (x)')
             concept_ax.set_ylabel('Probability Density')
-            concept_ax.set_title('Probability Perspective: Fixed Parameters (μ=0, σ=1), Different Data Points')
+            concept_ax.set_title('Density Function Perspective: Fixed Parameters (μ=0, σ=1), Different Data Points')
 
         else:  # likelihood perspective
             # likelihood perspective: fixed data, varying parameters
@@ -900,19 +895,19 @@ def _(concept_dist_type, mo, np, perspective_selector, plt, stats):
     if concept_view_mode == "probability":
         concept_explanation = mo.md(
             f"""
-            ### Probability Perspective
+            ### Density/Mass Function Perspective
 
-            In the **probability perspective**, the parameters of the distribution are **fixed and known**, and we calculate the probability (or density) for **different possible data values**.
+            In the **density/mass function perspective**, the parameters of the distribution are **fixed and known**, and we evaluate the function at **different possible data values**.
 
-            For the {concept_dist_type_value} distribution, we've fixed the parameter{'s' if concept_dist_type_value == 'Normal' else ''} and shown the probability of observing different outcomes.
+            For the {concept_dist_type_value} distribution, we've fixed the parameter{'s' if concept_dist_type_value == 'Normal' else ''} and shown the {'density' if concept_dist_type_value == 'Normal' else 'probability mass'} function evaluated at different data points.
 
             This is the typical perspective when:
 
             - We know the true parameters of a distribution
-            - We want to calculate the probability of different outcomes
+            - We want to evaluate the {'density' if concept_dist_type_value == 'Normal' else 'probability mass'} at different observations
             - We make predictions based on our model
 
-            **Mathematical notation**: $P(X = x | \theta)$
+            **Mathematical notation**: $f(x | \theta)$
             """
         )
     else:  # likelihood perspective
@@ -982,12 +977,12 @@ def _(mo):
 
         Which of the following statements about Maximum Likelihood Estimation are correct? Click each statement to check your answer.
 
-        /// details | Probability and likelihood use the same formulas, but probability measures the chance of data given parameters, while likelihood measures how likely parameters are given data.
+        /// details | Probability and likelihood have different interpretations: probability measures the chance of data given parameters, while likelihood measures how likely parameters are given data.
         ✅ **Correct!** 
 
         Probability measures how likely it is to observe particular data when we know the parameters. Likelihood measures how likely particular parameter values are, given observed data.
 
-        Mathematically, probability is $P(X=x|\theta)$ while likelihood is $L(\theta|X=x)$. They use the same formula, but with different perspectives on what's fixed and what varies.
+        Mathematically, probability is $P(X=x|\theta)$ while likelihood is $L(\theta|X=x)$.
         ///
 
         /// details | We use log-likelihood instead of likelihood because it's mathematically simpler and numerically more stable.
