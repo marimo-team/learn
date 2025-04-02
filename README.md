@@ -58,6 +58,21 @@ Here's a contribution checklist:
 If you aren't comfortable adding a new notebook or course, you can also request
 what you'd like to see by [filing an issue](https://github.com/marimo-team/learn/issues/new?template=example_request.yaml).
 
+## Building and Previewing
+
+The site is built using a Python script that exports marimo notebooks to HTML and generates an index page.
+
+```bash
+# Build the site
+python scripts/build.py --output-dir _site
+
+# Preview the site (builds first)
+python scripts/preview.py
+
+# Preview without rebuilding
+python scripts/preview.py --no-build
+```
+
 ## Community
 
 We're building a community. Come hang out with us!
