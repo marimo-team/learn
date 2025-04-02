@@ -1,5 +1,9 @@
 # Changelog of the functional-programming course
 
+## 2025-04-02
+
+* `0.1.0` version of notebook `06_applicatives.py`
+
 ## 2025-03-16
 
 + Use uppercased letters for `Generic` types, e.g. `A = TypeVar("A")`
