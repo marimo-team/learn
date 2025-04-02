@@ -13,6 +13,10 @@ extend-ignore-re = [
     "\\^\\{.*?\\}"
 ]
 
+# Words to explicitly accept
+[default.extend-words]
+pn = "pn"
+
 # You can also exclude specific files or directories if needed
 # [files]
 # extend-exclude = ["*.tex", "docs/*.md"] 
