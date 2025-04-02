@@ -8,7 +8,7 @@
 
 import marimo
 
-__generated_with = "0.11.13"
+__generated_with = "0.12.0"
 app = marimo.App(width="medium")
 
 
@@ -24,15 +24,6 @@ def _(mo):
         """
     )
     return
-
-
-@app.cell
-def _():
-    import csv
-    import marimo as mo
-    import polars as pl
-    from io import StringIO
-    return StringIO, csv, mo, pl
 
 
 @app.cell(hide_code=True)
@@ -64,7 +55,7 @@ def _(mo):
         r"""
         ## Expression expansion
 
-        Expression expansion lets you write a single expression that can expand to multiple different expressions. So rather than repeatedly defining separate expressions, you can avoid redundancy while adhering to clean code principles (Do not Repeat Yourself - DRY). Since expressions are reusable, they aid in writing concise code.
+        Expression expansion lets you write a single expression that can expand to multiple different expressions. So rather than repeatedly defining separate expressions, you can avoid redundancy while adhering to clean code principles (Do not Repeat Yourself - [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)). Since expressions are reusable, they aid in writing concise code.
         """
     )
     return
@@ -599,6 +590,15 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _():
+    import csv
+    import marimo as mo
+    import polars as pl
+    from io import StringIO
+    return StringIO, csv, mo, pl
 
 
 if __name__ == "__main__":

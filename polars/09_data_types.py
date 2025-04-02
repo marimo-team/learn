@@ -26,13 +26,6 @@ def _(mo):
     return
 
 
-@app.cell
-def _():
-    import marimo as mo
-    import polars as pl
-    return mo, pl
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -277,7 +270,6 @@ def _(pl):
     return
 
 
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -288,6 +280,13 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _():
+    import marimo as mo
+    import polars as pl
+    return mo, pl
 
 
 if __name__ == "__main__":
