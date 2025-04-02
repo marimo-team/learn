@@ -479,7 +479,7 @@ def _(mo):
 
         | Operator |       Operation      |
         |:--------:|:--------------------:|
-        | `A \| B`   | Union                |
+        | `A | B`   | Union                |
         | `A & B`    | Intersection         |
         | `A - B`    | Difference           |
         | `A ^ B`    | Symmetric difference |
