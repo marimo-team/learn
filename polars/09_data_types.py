@@ -115,7 +115,7 @@ def _(mo):
         Polars has various functions to explore the data in a dataframe. We will use the dataframe `data` defined above in our examples. Alongside we can also see a view of the dataframe rendered by `marimo` as the cells are executed.
 
         ///note
-        We can also use `marimo`'s built in data-inpection elements/features such as  [`mo.ui.dataframe`](https://docs.marimo.io/api/inputs/dataframe/#marimo.ui.dataframe) & [`mo.ui.data_explorer`](https://docs.marimo.io/api/inputs/data_explorer/). For more check out our Polars tutorials at [`marimo learn`](https://marimo-team.github.io/learn/)!
+        We can also use `marimo`'s built in data-inspection elements/features such as  [`mo.ui.dataframe`](https://docs.marimo.io/api/inputs/dataframe/#marimo.ui.dataframe) & [`mo.ui.data_explorer`](https://docs.marimo.io/api/inputs/data_explorer/). For more check out our Polars tutorials at [`marimo learn`](https://marimo-team.github.io/learn/)!
         """
     )
     return
