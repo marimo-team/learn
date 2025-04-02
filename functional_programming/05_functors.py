@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.13"
 # dependencies = [
 #     "marimo",
 # ]
@@ -7,7 +7,7 @@
 
 import marimo
 
-__generated_with = "0.11.17"
+__generated_with = "0.12.0"
 app = marimo.App(app_title="Category Theory and Functors")
 
 
@@ -37,7 +37,7 @@ def _(mo):
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.1 | last modified: 2025-03-16 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.2 | last modified: 2025-04-02 | author: [métaboulie](https://github.com/metaboulie)<br/>
         reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
@@ -77,13 +77,13 @@ def _(mo):
 
         ```python
         from dataclasses import dataclass
-        from typing import Callable, Generic, TypeVar
+        from typing import Callable, TypeVar
 
         A = TypeVar("A")
         B = TypeVar("B")
 
         @dataclass
-        class Wrapper(Generic[A]):
+        class Wrapper[A]:
             value: A
         ```
 
@@ -97,48 +97,38 @@ def _(mo):
 
         To modify wrapped data while keeping it wrapped, we define an `fmap` method:
 
-        ```python
-        @dataclass
-        class Wrapper(Functor, Generic[A]):
-            value: A
 
-            @classmethod
-            def fmap(cls, f: Callable[[A], B], a: "Wrapper[A]") -> "Wrapper[B]":
-                return Wrapper(f(a.value))
-        ```
 
-        Now, we can apply transformations without unwrapping:
-
-        ```python
-        >>> Wrapper.fmap(lambda x: x + 1, wrapper)
-        Wrapper(value=2)
-
-        >>> Wrapper.fmap(lambda x: [x], wrapper)
-        Wrapper(value=[1])
-        ```
-
-        > Try using the `Wrapper` in the cell below.
         """
     )
     return
 
 
 @app.cell
-def _(A, B, Callable, Functor, Generic, dataclass, pp):
+def _(B, Callable, Functor, dataclass):
     @dataclass
-    class Wrapper(Functor, Generic[A]):
+    class Wrapper[A](Functor):
         value: A
 
         @classmethod
-        def fmap(cls, f: Callable[[A], B], a: "Wrapper[A]") -> "Wrapper[B]":
-            return Wrapper(f(a.value))
+        def fmap(cls, f: Callable[[A], B], fa: "Wrapper[A]") -> "Wrapper[B]":
+            return Wrapper(f(fa.value))
+    return (Wrapper,)
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""> Try with Wrapper below""")
+    return
+
+
+@app.cell
+def _(Wrapper, pp):
     wrapper = Wrapper(1)
 
     pp(Wrapper.fmap(lambda x: x + 1, wrapper))
     pp(Wrapper.fmap(lambda x: [x], wrapper))
-    return Wrapper, wrapper
+    return (wrapper,)
 
 
 @app.cell(hide_code=True)
@@ -148,13 +138,13 @@ def _(mo):
         We can analyze the type signature of `fmap` for `Wrapper`:
 
         * `f` is of type `Callable[[A], B]`
-        * `a` is of type `Wrapper[A]`
+        * `fa` is of type `Wrapper[A]`
         * The return value is of type `Wrapper[B]`
 
         Thus, in Python's type system, we can express the type signature of `fmap` as:
 
         ```python
-        fmap(f: Callable[[A], B], a: Wrapper[A]) -> Wrapper[B]:
+        fmap(f: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]:
         ```
 
         Essentially, `fmap`:
@@ -176,46 +166,35 @@ def _(mo):
         ## The List Wrapper
 
         We can define a `List` class to represent a wrapped list that supports `fmap`:
-
-        ```python
-        @dataclass
-        class List(Functor, Generic[A]):
-            value: list[A]
-
-            @classmethod
-            def fmap(cls, f: Callable[[A], B], a: "List[A]") -> "List[B]":
-                return List([f(x) for x in a.value])
-        ```
-
-        Now, we can apply transformations:
-
-        ```python
-        >>> flist = List([1, 2, 3, 4])
-        >>> List.fmap(lambda x: x + 1, flist)
-        List(value=[2, 3, 4, 5])
-        >>> List.fmap(lambda x: [x], flist)
-        List(value=[[1], [2], [3], [4]])
-        ```
         """
     )
     return
 
 
 @app.cell
-def _(A, B, Callable, Functor, Generic, dataclass, pp):
+def _(B, Callable, Functor, dataclass):
     @dataclass
-    class List(Functor, Generic[A]):
+    class List[A](Functor):
         value: list[A]
 
         @classmethod
-        def fmap(cls, f: Callable[[A], B], a: "List[A]") -> "List[B]":
-            return List([f(x) for x in a.value])
+        def fmap(cls, f: Callable[[A], B], fa: "List[A]") -> "List[B]":
+            return List([f(x) for x in fa.value])
+    return (List,)
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""> Try with List below""")
+    return
+
+
+@app.cell
+def _(List, pp):
     flist = List([1, 2, 3, 4])
     pp(List.fmap(lambda x: x + 1, flist))
     pp(List.fmap(lambda x: [x], flist))
-    return List, flist
+    return (flist,)
 
 
 @app.cell(hide_code=True)
@@ -227,19 +206,19 @@ def _(mo):
         The type signature of `fmap` for `List` is:
 
         ```python
-        fmap(f: Callable[[A], B], a: List[A]) -> List[B]
+        fmap(f: Callable[[A], B], fa: List[A]) -> List[B]
         ```
 
         Similarly, for `Wrapper`:
 
         ```python
-        fmap(f: Callable[[A], B], a: Wrapper[A]) -> Wrapper[B]
+        fmap(f: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]
         ```
 
         Both follow the same pattern, which we can generalize as:
 
         ```python
-        fmap(f: Callable[[A], B], a: Functor[A]) -> Functor[B]
+        fmap(f: Callable[[A], B], fa: Functor[A]) -> Functor[B]
         ```
 
         where `Functor` can be `Wrapper`, `List`, or any other wrapper type that follows the same structure.
@@ -278,17 +257,17 @@ def _(mo):
 
         ```python
         from dataclasses import dataclass
-        from typing import Callable, Generic, TypeVar
+        from typing import Callable, TypeVar
         from abc import ABC, abstractmethod
 
         A = TypeVar("A")
         B = TypeVar("B")
 
         @dataclass
-        class Functor(ABC, Generic[A]):
+        class Functor[A](ABC):
             @classmethod
             @abstractmethod
-            def fmap(f: Callable[[A], B], a: "Functor[A]") -> "Functor[B]":
+            def fmap(f: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
                 raise NotImplementedError
         ```
 
@@ -321,21 +300,21 @@ def _(mo):
 
         ```python
         from dataclasses import dataclass
-        from typing import Callable, Generic, TypeVar
+        from typing import Callable, TypeVar
 
         A = TypeVar("A")
         B = TypeVar("B")
 
         @dataclass
-        class RoseTree(Functor, Generic[a]):
-    
+        class RoseTree[A](Functor):
+
             value: A
             children: list["RoseTree[A]"]
 
             @classmethod
-            def fmap(cls, f: Callable[[A], B], a: "RoseTree[A]") -> "RoseTree[B]":
+            def fmap(cls, f: Callable[[A], B], fa: "RoseTree[A]") -> "RoseTree[B]":
                 return RoseTree(
-                    f(a.value), [cls.fmap(f, child) for child in a.children]
+                    f(fa.value), [cls.fmap(f, child) for child in fa.children]
                 )
 
             def __repr__(self) -> str:
@@ -353,9 +332,9 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(A, B, Callable, Functor, Generic, dataclass, mo):
+def _(B, Callable, Functor, dataclass, mo):
     @dataclass
-    class RoseTree(Functor, Generic[A]):
+    class RoseTree[A](Functor):
         """
         ### Doc: RoseTree
 
@@ -368,7 +347,7 @@ def _(A, B, Callable, Functor, Generic, dataclass, mo):
 
         **Methods:**
 
-        - `fmap(f: Callable[[A], B], a: "RoseTree[A]") -> "RoseTree[B]"`
+        - `fmap(f: Callable[[A], B], fa: "RoseTree[A]") -> "RoseTree[B]"`
 
             Applies a function to each value in the tree, producing a new `RoseTree[b]` with transformed values.
 
@@ -383,9 +362,9 @@ def _(A, B, Callable, Functor, Generic, dataclass, mo):
         children: list["RoseTree[A]"]
 
         @classmethod
-        def fmap(cls, f: Callable[[A], B], a: "RoseTree[A]") -> "RoseTree[B]":
+        def fmap(cls, f: Callable[[A], B], fa: "RoseTree[A]") -> "RoseTree[B]":
             return RoseTree(
-                f(a.value), [cls.fmap(f, child) for child in a.children]
+                f(fa.value), [cls.fmap(f, child) for child in fa.children]
             )
 
         def __repr__(self) -> str:
@@ -549,14 +528,14 @@ def _(mo):
 
         ```python
         @dataclass
-        class EvilFunctor(Functor, Generic[A]):
+        class EvilFunctor[A](Functor):
             value: list[A]
 
             @classmethod
-            def fmap(cls, f: Callable[[A], B], a: "EvilFunctor[A]") -> "EvilFunctor[B]":
+            def fmap(cls, f: Callable[[A], B], fa: "EvilFunctor[A]") -> "EvilFunctor[B]":
                 return (
-                    cls([a.value[0]] * 2 + list(map(f, a.value[1:])))
-                    if a.value
+                    cls([fa.value[0]] * 2 + list(map(f, fa.value[1:])))
+                    if fa.value
                     else []
                 )
         ```
@@ -566,18 +545,18 @@ def _(mo):
 
 
 @app.cell
-def _(A, B, Callable, Functor, Generic, check_functor_law, dataclass, pp):
+def _(B, Callable, Functor, check_functor_law, dataclass, pp):
     @dataclass
-    class EvilFunctor(Functor, Generic[A]):
+    class EvilFunctor[A](Functor):
         value: list[A]
 
         @classmethod
         def fmap(
-            cls, f: Callable[[A], B], a: "EvilFunctor[A]"
+            cls, f: Callable[[A], B], fa: "EvilFunctor[A]"
         ) -> "EvilFunctor[B]":
             return (
-                cls([a.value[0]] * 2 + [f(x) for x in a.value[1:]])
-                if a.value
+                cls([fa.value[0]] * 2 + [f(x) for x in fa.value[1:]])
+                if fa.value
                 else []
             )
 
@@ -597,16 +576,16 @@ def _(mo):
         ```Python
             @classmethod
             @abstractmethod
-            def fmap(cls, f: Callable[[A], B], a: "Functor[A]") -> "Functor[B]":
+            def fmap(cls, f: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
                 return NotImplementedError
 
             @classmethod
-            def const_fmap(cls, a: "Functor[A]", b: B) -> "Functor[B]":
-                return cls.fmap(lambda _: b, a)
+            def const_fmap(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
+                return cls.fmap(lambda _: b, fa)
 
             @classmethod
-            def void(cls, a: "Functor[A]") -> "Functor[None]":
-                return cls.const_fmap(a, None)
+            def void(cls, fa: "Functor[A]") -> "Functor[None]":
+                return cls.const_fmap(fa, None)
         ```
         """
     )
@@ -614,9 +593,9 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(A, ABC, B, Callable, Generic, abstractmethod, dataclass, mo):
+def _(ABC, B, Callable, abstractmethod, dataclass, mo):
     @dataclass
-    class Functor(ABC, Generic[A]):
+    class Functor[A](ABC):
         """
         ### Doc: Functor
 
@@ -624,28 +603,28 @@ def _(A, ABC, B, Callable, Generic, abstractmethod, dataclass, mo):
 
         **Methods:**
 
-        - `fmap(f: Callable[[A], B], a: Functor[A]) -> Functor[B]`
+        - `fmap(f: Callable[[A], B], fa: Functor[A]) -> Functor[B]`
           Abstract method to apply a function to all values inside a functor.
 
-        - `const_fmap(a: "Functor[A]", b: B) -> Functor[B]`
+        - `const_fmap(fa: "Functor[A]", b: B) -> Functor[B]`
           Replaces all values inside a functor with a constant `b`, preserving the original structure.
 
-        - `void(a: "Functor[A]") -> Functor[None]`
-          Equivalent to `const_fmap(a, None)`, transforming all values in a functor into `None`.
+        - `void(fa: "Functor[A]") -> Functor[None]`
+          Equivalent to `const_fmap(fa, None)`, transforming all values in a functor into `None`.
         """
 
         @classmethod
         @abstractmethod
-        def fmap(cls, f: Callable[[A], B], a: "Functor[A]") -> "Functor[B]":
+        def fmap(cls, f: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
             return NotImplementedError
 
         @classmethod
-        def const_fmap(cls, a: "Functor[A]", b: B) -> "Functor[B]":
-            return cls.fmap(lambda _: b, a)
+        def const_fmap(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
+            return cls.fmap(lambda _: b, fa)
 
         @classmethod
-        def void(cls, a: "Functor[A]") -> "Functor[None]":
-            return cls.const_fmap(a, None)
+        def void(cls, fa: "Functor[A]") -> "Functor[None]":
+            return cls.const_fmap(fa, None)
 
 
     mo.md(Functor.__doc__)
@@ -682,35 +661,20 @@ def _(mo):
         One example is the **`Maybe`** type from Haskell, which is used to represent computations that can either result in a value or no value (`Nothing`). 
 
         We can define the `Maybe` functor as below:
-
-        ```python
-        @dataclass
-        class Maybe(Functor, Generic[A]):
-            value: None | A
-
-            @classmethod
-            def fmap(cls, f: Callable[[A], B], a: "Maybe[A]") -> "Maybe[B]":
-                return (
-                    cls(None) if a.value is None else cls(f(a.value))
-                )
-
-            def __repr__(self):
-                return "Nothing" if self.value is None else repr(self.value)
-        ```
         """
     )
     return
 
 
 @app.cell
-def _(A, B, Callable, Functor, Generic, dataclass):
+def _(B, Callable, Functor, dataclass):
     @dataclass
-    class Maybe(Functor, Generic[A]):
+    class Maybe[A](Functor):
         value: None | A
 
         @classmethod
-        def fmap(cls, f: Callable[[A], B], a: "Maybe[A]") -> "Maybe[B]":
-            return cls(None) if a.value is None else cls(f(a.value))
+        def fmap(cls, f: Callable[[A], B], fa: "Maybe[A]") -> "Maybe[B]":
+            return cls(None) if fa.value is None else cls(f(fa.value))
 
         def __repr__(self):
             return "Nothing" if self.value is None else repr(self.value)
@@ -815,7 +779,7 @@ def _(mo):
         Remember that we defined the `id` and `compose` function above as:
 
         ```Python
-        def id(x: Generic[A]) -> Generic[A]:
+        def id(x: A) -> A:
             return x
 
         def compose(f: Callable[[B], C], g: Callable[[A], B]) -> Callable[[A], C]:
@@ -893,14 +857,14 @@ def _(mo):
 
         ```Python
         @dataclass
-        class Functor(ABC, Generic[A])
+        class Functor[A](ABC)
         ```
 
         And RoseTree: 
 
         ```Python
         @dataclass
-        class RoseTree(Functor, Generic[A])
+        class RoseTree[A](Functor)
         ```
 
         **Here's the key part:** the _type constructor_ `RoseTree` takes any type `T` to a new type, `RoseTree[T]`. Also, `fmap` restricted to `RoseTree` types takes a function `Callable[[A], B]` to a function `Callable[[RoseTree[A]], RoseTree[B]]`.
@@ -977,7 +941,7 @@ def _(mo):
 
         ```Python
         @dataclass
-        class Wrapper(Functor, Generic[A]):
+        class Wrapper[A](Functor):
             value: A
 
             @classmethod
@@ -1063,31 +1027,15 @@ def _(mo):
         ### Category of List Concatenation
 
         First, let’s define the category of list concatenation:
-
-        ```python
-        @dataclass
-        class ListConcatenation(Generic[A]):
-            value: list[A]
-
-            @staticmethod
-            def id() -> "ListConcatenation[A]":
-                return ListConcatenation([])
-
-            @staticmethod
-            def compose(
-                this: "ListConcatenation[A]", other: "ListConcatenation[A]"
-            ) -> "ListConcatenation[a]":
-                return ListConcatenation(this.value + other.value)
-        ```
         """
     )
     return
 
 
 @app.cell
-def _(A, Generic, dataclass):
+def _(A, dataclass):
     @dataclass
-    class ListConcatenation(Generic[A]):
+    class ListConcatenation[A]:
         value: list[A]
 
         @staticmethod
@@ -1120,20 +1068,6 @@ def _(mo):
         ### Category of Integer Addition
 
         Now, let's define the category of integer addition:
-
-        ```python
-        @dataclass
-        class IntAddition:
-            value: int
-
-            @staticmethod
-            def id() -> "IntAddition":
-                return IntAddition(0)
-
-            @staticmethod
-            def compose(this: "IntAddition", other: "IntAddition") -> "IntAddition":
-                return IntAddition(this.value + other.value)
-        ```
         """
     )
     return
@@ -1296,9 +1230,9 @@ def _():
 @app.cell(hide_code=True)
 def _():
     from dataclasses import dataclass
-    from typing import Callable, Generic, TypeVar
+    from typing import Callable, TypeVar
     from pprint import pp
-    return Callable, Generic, TypeVar, dataclass, pp
+    return Callable, TypeVar, dataclass, pp
 
 
 @app.cell(hide_code=True)

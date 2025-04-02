@@ -1,5 +1,25 @@
 # Changelog of the functional-programming course
 
+## 2025-04-02
+
++ Migrate to `python3.13` for `05_functors`
+
+    + Replace all occurrences of 
+
+        ```python
+        class Functor(Generic[A])
+        ```
+
+        with
+
+        ```python
+        class Functor[A]
+        ```
+
+        for conciseness
+
++ Use `fa` in function signatures instead of `a` when `fa` is a *Functor*
+
 ## 2025-03-11
 
 * Demo version of notebook `05_functors.py`
