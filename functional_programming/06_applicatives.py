@@ -218,7 +218,7 @@ def _(mo):
                 return curr
         ```
 
-        /// attention | minimal implmentation requirement
+        /// attention | minimal implementation requirement
 
         - `pure`
         - `apply`
@@ -317,7 +317,7 @@ def _(mo):
             ```
 
         - `apply` should apply a list of functions to a list of values
-            - you can think of this as cartesian product, concating the result of applying every function to every value
+            - you can think of this as cartesian product, concatenating the result of applying every function to every value
 
         The implementation is:
         """
@@ -817,7 +817,7 @@ def _(IO):
             return ""
         return IO.lift(
             lambda: lambda s1: lambda: lambda s2: s1 + "\n" + s2,
-            IO.pure(input(f"input line")),
+            IO.pure(input("input line")),
             IO.pure(get_chars(n - 1)),
         )
     return (get_chars,)
@@ -881,7 +881,7 @@ def _(mo):
 def _(IO, sequenceL):
     def get_chars_sequenceL(n: int = 3):
         return sequenceL(
-            [IO.pure(input(f"input the {i}nd str") for i in range(1, n + 1))], IO
+            [IO.pure(input(f"input the {i}th str") for i in range(1, n + 1))], IO
         )
     return (get_chars_sequenceL,)
 
@@ -1015,7 +1015,7 @@ def _(mo):
         r"""
         ## Instance: ListMonoidal
 
-        - `unit` should simply return a emtpy tuple wrapper in a list
+        - `unit` should simply return a empty tuple wrapper in a list
 
             ```haskell
             ListMonoidal.unit() => [()]
