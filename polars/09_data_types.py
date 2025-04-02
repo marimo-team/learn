@@ -112,7 +112,7 @@ def _(mo):
         r"""
         ### Inspecting a dataframe
 
-        Polars has various functions to explore the data in a dataframe. We will use the dataframe `data` defined above in our examples. Alongside we can also see a view of the dataframe rendered by Marimo as the cells are executed.
+        Polars has various functions to explore the data in a dataframe. We will use the dataframe `data` defined above in our examples. Alongside we can also see a view of the dataframe rendered by `marimo` as the cells are executed.
         """
     )
     return
