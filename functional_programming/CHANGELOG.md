@@ -1,14 +1,8 @@
 # Changelog of the functional-programming course
 
-## 2025-03-11
+## 2025-04-02
 
-* Demo version of notebook `05_functors.py`
-
-## 2025-03-13
-
-* `0.1.0` version of notebook `05_functors`
-
-Thank [Akshay](https://github.com/akshayka) and [Haleshot](https://github.com/Haleshot) for reviewing
+* `0.1.0` version of notebook `06_applicatives.py`
 
 ## 2025-03-16
 
@@ -34,3 +28,13 @@ Thank [Akshay](https://github.com/akshayka) and [Haleshot](https://github.com/Ha
 - Rename `ListWrapper` to `List` for simplicity
 - Remove the `Just` class
 + Rewrite proofs
+
+## 2025-03-13
+
+* `0.1.0` version of notebook `05_functors`
+
+Thank [Akshay](https://github.com/akshayka) and [Haleshot](https://github.com/Haleshot) for reviewing
+
+## 2025-03-11
+
+* Demo version of notebook `05_functors.py`
