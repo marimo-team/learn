@@ -615,6 +615,57 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
+        ## 🤔 Key Takeaways
+
+        Click on the statements below that you think are correct to verify your understanding:
+
+        /// details | Logistic regression tries to find parameters (θ) that minimize the error between predicted and actual values using ordinary least squares.
+        ❌ **Incorrect.** Logistic regression uses maximum likelihood estimation (MLE), not ordinary least squares. It finds parameters that maximize the probability of observing the training data, which is different from minimizing squared errors as in linear regression.
+        ///
+
+        /// details | The sigmoid function maps any real number to a value between 0 and 1, which allows logistic regression to output probabilities.
+        ✅ **Correct!** The sigmoid function σ(z) = 1/(1+e^(-z)) takes any real number as input and outputs a value between 0 and 1. This is perfect for representing probabilities and is a key component of logistic regression.
+        ///
+
+        /// details | The decision boundary in logistic regression is always a straight line, regardless of the data's complexity.
+        ✅ **Correct!** Standard logistic regression produces a linear decision boundary (a straight line in 2D or a hyperplane in higher dimensions). This is why it works well for linearly separable data but struggles with more complex patterns, like concentric circles (as you might've noticed from the interactive demo).
+        ///
+
+        /// details | The logistic regression model params are typically initialized to random values and refined through gradient descent.
+        ✅ **Correct!** Parameters are often initialized to zeros or small random values, then updated iteratively using gradient descent (or ascent for maximizing likelihood) until convergence.
+        ///
+
+        /// details | Logistic regression can naturally handle multi-class classification problems without any modifications.
+        ❌ **Incorrect.** Standard logistic regression is inherently a binary classifier. To handle multi-class classification, techniques like one-vs-rest or softmax regression are typically used.
+        ///
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Summary
+
+        So we've just explored logistic regression. Despite its name (seriously though, why not call it "logistic classification"?), it's actually quite elegant in how it transforms a simple linear model into a powerful decision _boundary_ maker.
+
+        The training process boils down to finding the values of θ that maximize the likelihood of seeing our training data. What's super cool is that even though the math looks _scary_ at first, the gradient has this surprisingly simple form: just the error (y - predicted) multiplied by the feature values.
+
+        Two key insights to remember:
+
+        - Logistic regression creates a _linear_ decision boundary, so it works great for linearly separable classes but struggles with more _complex_ patterns
+        - It directly gives you probabilities, not just classifications, which is incredibly useful when you need confidence measures
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
         Additional resources referred to:
 
         - [Logistic Regression Tutorial by _Koushik Khan_](https://koushikkhan.github.io/resources/pdf/tutorials/logistic_regression_tutorial.pdf)
