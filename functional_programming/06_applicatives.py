@@ -7,8 +7,9 @@
 
 import marimo
 
-__generated_with = "0.12.0"
+__generated_with = "0.12.4"
 app = marimo.App(app_title="Applicative programming with effects")
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -33,10 +34,9 @@ def _(mo):
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.0 | last modified: 2025-04-02 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.1 | last modified: 2025-04-06 | author: [métaboulie](https://github.com/metaboulie)<br/>
 
         ///
-
         """
     )
     return
@@ -74,7 +74,7 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Defining multifunctor
+        ## Defining Multifunctor
 
         As a result, we may want to define a single `Multifunctor` such that:
 
@@ -263,7 +263,7 @@ def _(mo):
 
         - `apply` should apply a *wrapped* function to a *wrapper* value
 
-        The implementation is: 
+        The implementation is:
         """
     )
     return
@@ -379,7 +379,7 @@ def _(mo):
             - if the function is `None`, apply returns `None`
             - else apply the function to the value and wrap the result in `Just`
 
-        The implementation is: 
+        The implementation is:
         """
     )
     return
@@ -560,6 +560,10 @@ def _(mo):
     mo.md(
         r"""
         ## Utility functions
+
+        /// attention
+        `fmap` is defined automatically using `pure` and `apply`, so you can use `fmap` with any `Applicative`
+        ///
 
         ```python
         @dataclass
@@ -748,7 +752,7 @@ def _(
 def _(mo):
     mo.md(
         r"""
-        # Effectful Programming
+        # Effectful programming
 
         Our original motivation for applicatives was the desire the generalise the idea of mapping to functions with multiple arguments. This is a valid interpretation of the concept of applicatives, but from the three instances we have seen it becomes clear that there is also another, more abstract view.
 
@@ -777,7 +781,7 @@ def _(mo):
 
         - `apply` should perform an action that produces a function and perform an action that produces a value, then call the function with the value
 
-        The implementation is: 
+        The implementation is:
         """
     )
     return
@@ -831,69 +835,6 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Collect the sequence of response with sequenceL""")
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        One often wants to execute a sequence of commands and collect the sequence of their response, and we can define a function `sequenceL` for this
-
-        /// admonition
-        sequenceL actually means that 
-
-        > execute a list of commands and collect the list of their response
-        ///
-        """
-    )
-    return
-
-
-@app.cell
-def _(A, Applicative):
-    def sequenceL(actions: list[Applicative[A]], ap) -> Applicative[list[A]]:
-        if not actions:
-            return ap.pure([])
-
-        return ap.lift(
-            lambda: lambda l1: lambda: lambda l2: list(l1) + list(l2),
-            actions[0],
-            sequenceL(actions[1:], ap),
-        )
-    return (sequenceL,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        This function transforms a list of applicative actions into a single such action that returns a list of result values, and captures a common pattern of applicative programming.
-
-        And we can rewrite the `get_chars` more concisely: 
-        """
-    )
-    return
-
-
-@app.cell
-def _(IO, sequenceL):
-    def get_chars_sequenceL(n: int = 3):
-        return sequenceL(
-            [IO.pure(input(f"input the {i}th str") for i in range(1, n + 1))], IO
-        )
-    return (get_chars_sequenceL,)
-
-
-@app.cell
-def _():
-    # print(get_chars_sequenceL()())
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
     mo.md(r"""# From the perspective of category theory""")
     return
 
@@ -904,7 +845,7 @@ def _(mo):
         r"""
         ## Lax Monoidal Functor
 
-        An alternative, equivalent formulation of `Applicative` is given by 
+        An alternative, equivalent formulation of `Applicative` is given by
         """
     )
     return
@@ -928,12 +869,6 @@ def _(ABC, Functor, abstractmethod, dataclass):
     return (Monoidal,)
 
 
-@app.cell
-def _(mo):
-    mo.md(r"""fmap g fa = fmap (g . snd) (unit ** fa)""")
-    return
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
@@ -943,7 +878,7 @@ def _(mo):
         - `unit` provides the identity element
         - `tensor` combines two contexts into a product context
 
-        More technically, the idea is that `monoidal functor` preserves the "monoidal structure" given by the pairing constructor `(,)` and unit type `()`. 
+        More technically, the idea is that `monoidal functor` preserves the "monoidal structure" given by the pairing constructor `(,)` and unit type `()`.
         """
     )
     return
@@ -991,7 +926,7 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Mutual Definability of Monoidal and Applicative
+        ## Mutual definability of Monoidal and Applicative
 
         We can implement `pure` and `apply` in terms of `unit` and `tensor`, and vice versa.
 

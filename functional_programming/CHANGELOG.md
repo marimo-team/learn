@@ -1,5 +1,9 @@
 # Changelog of the functional-programming course
 
+## 2025-04-06
+
+- remove `sequenceL` from `Applicative` because it should be a classmethod but can't be generically implemented
+
 ## 2025-04-02
 
 * `0.1.0` version of notebook `06_applicatives.py`
