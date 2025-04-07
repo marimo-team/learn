@@ -1,5 +1,14 @@
 # Changelog of the functional-programming course
 
+## 2025-04-07
+
+* the `apply` method of `Maybe` *Applicative* should return `None` when `fg` or `fa` is `None`
++ add `sequenceL` as a classmethod for `Applicative` and add examples for `Wrapper`, `Maybe`, `List`
++ add description for utility functions of `Applicative`
+* refine the implementation of `IO` *Applicative*
+* reimplement `get_chars` with `IO.sequenceL`
++ add an example to show that `ListMonoidal` is equivalent to `List` *Applicative*
+
 ## 2025-04-06
 
 - remove `sequenceL` from `Applicative` because it should be a classmethod but can't be generically implemented

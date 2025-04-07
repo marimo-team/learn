@@ -29,12 +29,12 @@ def _(mo):
         1. How to view `applicative` as multi-functor.
         2. How to use `lift` to simplify chaining application.
         3. How to bring *effects* to the functional pure world.
-        4. How to view `applicative` as lax monoidal functor
+        4. How to view `applicative` as lax monoidal functor.
 
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.1 | last modified: 2025-04-06 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.2 | last modified: 2025-04-07 | author: [métaboulie](https://github.com/metaboulie)<br/>
 
         ///
         """
@@ -76,12 +76,15 @@ def _(mo):
         r"""
         ## Defining Multifunctor
 
+        /// admonition
+        we use prefix `f` rather than `ap` to indicate *Applicative Functor* 
+        ///
+
         As a result, we may want to define a single `Multifunctor` such that:
 
         1. Lift a regular n-argument function into the context of functors
 
             ```python
-            # we use prefix `f` here to indicate `Functor`
             # lift a regular 3-argument function `g`
             g: Callable[[A, B, C], D]
             # into the context of functors
@@ -119,7 +122,7 @@ def _(mo):
 
         Traditionally, applicative functors are presented through two core operations:
 
-        1. `pure`: embeds an object (value or function) into the functor
+        1. `pure`: embeds an object (value or function) into the applicative functor
 
             ```python
             # a -> F a
@@ -134,7 +137,7 @@ def _(mo):
             fg: Applicative[Callable[[A], B]] = pure(g) 
             ```
 
-        2. `apply`: applies a function inside a functor to a value inside a functor
+        2. `apply`: applies a function inside an applicative functor to a value inside an applicative functor
 
             ```python
             # F (a -> b) -> F a -> F b
@@ -174,9 +177,9 @@ def _(mo):
         /// attention | You can suppress the chaining application of `apply` and `pure` as: 
 
         ```python
-        apply(pure(f), fa) -> lift(f, fa)
-        apply(apply(pure(f), fa), fb) -> lift(f, fa, fb)
-        apply(apply(apply(pure(f), fa), fb), fc) -> lift(f, fa, fb, fc)
+        apply(pure(g), fa) -> lift(g, fa)
+        apply(apply(pure(g), fa), fb) -> lift(g, fa, fb)
+        apply(apply(apply(pure(g), fa), fb), fc) -> lift(g, fa, fb, fc)
         ```
 
         ///
@@ -240,7 +243,7 @@ def _(mo):
         r"""
         ## Applicative instances
 
-        When we are actually implementing an *Applicative* instance, we can keep in mind that `pure` and `apply` are fundamentally:
+        When we are actually implementing an *Applicative* instance, we can keep in mind that `pure` and `apply` fundamentally:
 
         - embed an object (value or function) to the computational context
         - apply a function inside the computation context to a value inside the computational context
@@ -261,7 +264,7 @@ def _(mo):
             Wrapper.pure(1) => Wrapper(value=1)
             ```
 
-        - `apply` should apply a *wrapped* function to a *wrapper* value
+        - `apply` should apply a *wrapped* function to a *wrapped* value
 
         The implementation is:
         """
@@ -376,7 +379,7 @@ def _(mo):
             ```
 
         - `apply` should apply a function maybe exist to a value maybe exist
-            - if the function is `None`, apply returns `None`
+            - if the function is `None` or the value is `None`, simply returns `None`
             - else apply the function to the value and wrap the result in `Just`
 
         The implementation is:
@@ -399,12 +402,13 @@ def _(Applicative, dataclass):
         def apply(
             cls, fg: "Maybe[Callable[[A], B]]", fa: "Maybe[A]"
         ) -> "Maybe[B]":
-            if fg.value is None:
+            if fg.value is None or fa.value is None:
                 return cls(None)
+
             return cls(fg.value(fa.value))
 
         def __repr__(self):
-            return "Nothing" if self.value is None else repr(f"Just {self.value}")
+            return "Nothing" if self.value is None else f"Just({self.value!r})"
     return (Maybe,)
 
 
@@ -438,7 +442,82 @@ def _(Maybe):
 def _(mo):
     mo.md(
         r"""
+        ## Collect the list of response with sequenceL
+
+        One often wants to execute a list of commands and collect the list of their response, and we can define a function `sequenceL` for this
+
+        /// admonition
+        In a further notebook about `Traversable`, we will have a more generic `sequence` that execute a **sequence** of commands and collect the **sequence** of their response, which is not limited to `list`.
+        ///
+
+        ```python
+        @classmethod
+        def sequenceL(cls, fas: list["Applicative[A]"]) -> "Applicative[list[A]]":
+            if not fas:
+                return cls.pure([])
+
+            return cls.apply(
+                cls.fmap(lambda v: lambda vs: [v] + vs, fas[0]),
+                cls.sequenceL(fas[1:]),
+            )
+        ```
+
+        Let's try `sequenceL` with the instances.
+        """
+    )
+    return
+
+
+@app.cell
+def _(Wrapper):
+    Wrapper.sequenceL([Wrapper(1), Wrapper(2), Wrapper(3)])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        /// attention
+        For the `Maybe` Applicative, the presence of any `Nothing` causes the entire computation to return Nothing.
+        ///
+        """
+    )
+    return
+
+
+@app.cell
+def _(Maybe):
+    Maybe.sequenceL([Maybe(1), Maybe(2), Maybe(None), Maybe(3)])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""The result of `sequenceL` for `List Applicative`  is the Cartesian product of the input lists, yielding all possible ordered combinations of elements from each list.""")
+    return
+
+
+@app.cell
+def _(List):
+    List.sequenceL([List([1, 2]), List([3]), List([5, 6, 7])])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
         ## Applicative laws
+
+        /// admonition | id and compose
+
+        Remember that
+
+        - `id = lambda x: x`
+        - `compose = lambda f: lambda g: lambda x: f(g(x))`
+
+        ///
 
         Traditionally, there are four laws that `Applicative` instances should satisfy. In some sense, they are all concerned with making sure that `pure` deserves its name:
 
@@ -468,16 +547,7 @@ def _(mo):
           # fa: Applicative[A]
           apply(fg, apply(fh, fa)) = lift(compose, fg, fh, fa)
           ```
-          This one is the trickiest law to gain intuition for. In some sense it is expressing a sort of associativity property of (<*>).
-
-        /// admonition | id and compose
-
-        Remember that
-
-        - id = lambda x: x
-        - compose = lambda f: lambda g: lambda x: f(g(x))
-
-        ///
+          This one is the trickiest law to gain intuition for. In some sense it is expressing a sort of associativity property of `apply`.
 
         We can add 4 helper functions to `Applicative` to check whether an instance respects the laws or not: 
 
@@ -561,7 +631,7 @@ def _(mo):
         r"""
         ## Utility functions
 
-        /// attention
+        /// attention | using `fmap`
         `fmap` is defined automatically using `pure` and `apply`, so you can use `fmap` with any `Applicative`
         ///
 
@@ -599,21 +669,11 @@ def _(mo):
                 return cls.lift(lambda a: lambda f: f(a), fa, fg)
         ```
 
-        We can have a sense of how `skip` and `keep` work by trying out sequencing the effects of `Maybe`, where one computation is `None`
+        - `skip` sequences the effects of two Applicative computations, but **discards the result of the first**. For example, if `m1` and `m2` are instances of type `Maybe[Int]`, then `Maybe.skip(m1, m2)` is `Nothing` whenever either `m1` or `m2` is `Nothing`; but if not, it will have the same value as `m2`.
+        - Likewise, `keep` sequences the effects of two computations, but **keeps only the result of the first**.
+        - `revapp` is similar to `apply`, but where the first computation produces value(s) which are provided as input to the function(s) produced by the second computation. 
         """
     )
-    return
-
-
-@app.cell
-def _(Maybe):
-    print("Maybe.skip")
-    print(Maybe.skip(Maybe(1), Maybe(None)))
-    print(Maybe.skip(Maybe(None), Maybe(1)))
-
-    print("\nMaybe.keep")
-    print(Maybe.keep(Maybe(1), Maybe(None)))
-    print(Maybe.keep(Maybe(None), Maybe(1)))
     return
 
 
@@ -679,6 +739,7 @@ def _(
 
             for arg in args:
                 curr = cls.apply(curr, arg)
+
             return curr
 
         @classmethod
@@ -686,6 +747,19 @@ def _(
             cls, f: Callable[[A], B], fa: "Applicative[A]"
         ) -> "Applicative[B]":
             return cls.lift(f, fa)
+
+        @classmethod
+        def sequenceL(cls, fas: list["Applicative[A]"]) -> "Applicative[list[A]]":
+            """
+            Execute a list of commands and collect the list of their response.
+            """
+            if not fas:
+                return cls.pure([])
+
+            return cls.apply(
+                cls.fmap(lambda v: lambda vs: [v] + vs, fas[0]),
+                cls.sequenceL(fas[1:]),
+            )
 
         @classmethod
         def skip(
@@ -754,9 +828,9 @@ def _(mo):
         r"""
         # Effectful programming
 
-        Our original motivation for applicatives was the desire the generalise the idea of mapping to functions with multiple arguments. This is a valid interpretation of the concept of applicatives, but from the three instances we have seen it becomes clear that there is also another, more abstract view.
+        Our original motivation for applicatives was the desire to generalise the idea of mapping to functions with multiple arguments. This is a valid interpretation of the concept of applicatives, but from the three instances we have seen it becomes clear that there is also another, more abstract view.
 
-         the arguments are no longer just plain values but may also have effects, such as the possibility of failure, having many ways to succeed, or performing input/output actions. In this manner, applicative functors can also be viewed as abstracting the idea of applying pure functions to effectful arguments, with the precise form of effects that are permitted depending on the nature of the underlying functor.
+         the arguments are no longer just plain values but may also have effects, such as the possibility of failure, having many ways to succeed, or performing input/output actions. In this manner, applicative functors can also be viewed as abstracting the idea of **applying pure functions to effectful arguments**, with the precise form of effects that are permitted depending on the nature of the underlying functor.
         """
     )
     return
@@ -779,7 +853,7 @@ def _(mo):
             IO.pure(f) => IO(effect=f)
             ```
 
-        - `apply` should perform an action that produces a function and perform an action that produces a value, then call the function with the value
+        - `apply` should perform an action that produces a value, then apply the function with the value
 
         The implementation is:
         """
@@ -798,13 +872,11 @@ def _(Applicative, Callable, dataclass):
 
         @classmethod
         def pure(cls, a):
-            """Lift a value into the IO context"""
             return cls(a) if isinstance(a, Callable) else IO(lambda: a)
 
         @classmethod
-        def apply(cls, f, a):
-            """Applicative apply implementation"""
-            return cls.pure(f()(a()))
+        def apply(cls, fg, fa):
+            return cls.pure(fg.effect(fa.effect()))
     return (IO,)
 
 
@@ -817,19 +889,15 @@ def _(mo):
 @app.cell
 def _(IO):
     def get_chars(n: int = 3):
-        if n <= 0:
-            return ""
-        return IO.lift(
-            lambda: lambda s1: lambda: lambda s2: s1 + "\n" + s2,
-            IO.pure(input("input line")),
-            IO.pure(get_chars(n - 1)),
+        return IO.sequenceL(
+            [IO.pure(input(f"input the {i}th str")) for i in range(1, n + 1)]
         )
     return (get_chars,)
 
 
 @app.cell
 def _():
-    # print(get_chars()())
+    # get_chars()()
     return
 
 
@@ -932,12 +1000,12 @@ def _(mo):
 
         ```python
         pure(a) = fmap((lambda _: a), unit)
-        apply(mf, mx) = fmap((lambda pair: pair[0](pair[1])), tensor(mf, mx))
+        apply(fg, fa) = fmap((lambda pair: pair[0](pair[1])), tensor(fg, fa))
         ```
 
         ```python
         unit() = pure(())
-        tensor(fa, fb) = lift( ,fa, fb)
+        tensor(fa, fb) = lift(lambda fa: lambda fb: (fa, fb), fa, fb)
         ```
         """
     )
@@ -985,15 +1053,12 @@ def _(B, Callable, Monoidal, dataclass, product):
             cls, f: Callable[[A], B], ma: "ListMonoidal[A]"
         ) -> "ListMonoidal[B]":
             return cls([f(a) for a in ma.items])
-
-        def __repr__(self):
-            return repr(self.items)
     return (ListMonoidal,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""> try with Maybe below""")
+    mo.md(r"""> try with `ListMonoidal` below""")
     return
 
 
@@ -1003,6 +1068,18 @@ def _(ListMonoidal):
     ys = ListMonoidal(["a", "b"])
     ListMonoidal.tensor(xs, ys)
     return xs, ys
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""and we can prove that `tensor(fa, fb) = lift(lambda fa: lambda fb: (fa, fb), fa, fb)`:""")
+    return
+
+
+@app.cell
+def _(List, xs, ys):
+    List.lift(lambda fa: lambda fb: (fa, fb), List(xs.items), List(ys.items))
+    return
 
 
 @app.cell(hide_code=True)
