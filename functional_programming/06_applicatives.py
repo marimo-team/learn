@@ -830,7 +830,7 @@ def _(mo):
 
         Our original motivation for applicatives was the desire to generalise the idea of mapping to functions with multiple arguments. This is a valid interpretation of the concept of applicatives, but from the three instances we have seen it becomes clear that there is also another, more abstract view.
 
-         the arguments are no longer just plain values but may also have effects, such as the possibility of failure, having many ways to succeed, or performing input/output actions. In this manner, applicative functors can also be viewed as abstracting the idea of **applying pure functions to effectful arguments**, with the precise form of effects that are permitted depending on the nature of the underlying functor.
+         The arguments are no longer just plain values but may also have effects, such as the possibility of failure, having many ways to succeed, or performing input/output actions. In this manner, applicative functors can also be viewed as abstracting the idea of **applying pure functions to effectful arguments**, with the precise form of effects that are permitted depending on the nature of the underlying functor.
         """
     )
     return
