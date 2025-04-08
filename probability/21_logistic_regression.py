@@ -172,7 +172,7 @@ def _(mo):
 
         Where $\theta$ represents the model parameters that need to be learned from data, and $x$ is the feature vector (with $x_0=1$ to account for the intercept term).
 
-        > **Note:** For the detailed mathematical derivation of how these parameters are learned through Maximum Likelihood Estimation (MLE) and Gradient Descent (GD), please refer to [Chris Piech's original material](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/). The mathematical details are elegant but beyond the scope of this topic (which is confined to Logistic Regression).
+        > **Note:** For the detailed mathematical derivation of how these parameters are learned through Maximum Likelihood Estimation (MLE) and Gradient Descent (GD), please refer to [Chris Piech's original material](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/). The mathematical details are elegant but beyond the scope of this notebook topic (which is confined to Logistic Regression).
         """
     )
     return
