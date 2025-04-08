@@ -6,6 +6,9 @@
 
 * restructure the notebook
 * replace `f` in the function signatures with `g` to indicate regular functions and distinguish from functors
+* move `Maybe` funtor to section `More Functor instances`
++ add `Either` functor
++ add `unzip` utility function for functors
 
 ## 2025-04-02
 

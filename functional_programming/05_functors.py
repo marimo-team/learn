@@ -40,7 +40,7 @@ def _(mo):
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.3 | last modified: 2025-04-08 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.4 | last modified: 2025-04-08 | author: [métaboulie](https://github.com/metaboulie)<br/>
         reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
@@ -293,7 +293,21 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## The Maybe Functor
+        # More Functor instances (optional)
+
+        In this section, we will explore more *Functor* instances to help you build up a better comprehension.
+
+        The main reference is [Data.Functor](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Functor.html)
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## The [Maybe](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Maybe.html#t:Maybe) Functor
 
         **`Maybe`** is a functor that can either hold a value (`Just(value)`) or be `Nothing` (equivalent to `None` in Python). 
 
@@ -304,7 +318,7 @@ def _(mo):
         By using `Maybe` as a functor, we gain the ability to apply transformations (`fmap`) to potentially absent values, without having to explicitly handle the `None` case every time.
         ///
 
-        We can implement the `Maybe` functor as: 
+        We can implement the `Maybe` functor as:
         """
     )
     return
@@ -336,13 +350,54 @@ def _(Maybe, pp):
 def _(mo):
     mo.md(
         r"""
-        ## More Functor instances (optional)
+        ## The [Either](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Either.html#t:Either) Functor
 
-        In this section, we will explore more *Functor* instances to help you build up a better comprehension.
+        The `Either` type represents values with two possibilities: a value of type `Either a b` is either `Left a` or `Right b`.
 
-        The main reference is [Data.Functor](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Functor.html)
+        The `Either` type is sometimes used to represent a value which is **either correct or an error**; by convention, the `left` attribute is used to hold an error value and the `right` attribute is used to hold a correct value.
+
+        `fmap` for `Either` will ignore Left values, but will apply the supplied function to values contained in the Right.
+
+        The implementation is: 
         """
     )
+    return
+
+
+@app.cell
+def _(B, Callable, Functor, Union, dataclass):
+    @dataclass
+    class Either[A](Functor):
+        left: A = None
+        right: A = None
+
+        def __post_init__(self):
+            if (self.left is not None and self.right is not None) or (
+                self.left is None and self.right is None
+            ):
+                raise TypeError(
+                    "Provide either the value of the left or the value of the right."
+                )
+
+        @classmethod
+        def fmap(
+            cls, g: Callable[[A], B], fa: "Either[A]"
+        ) -> Union["Either[A]", "Either[B]"]:
+            if fa.left is not None:
+                return cls(left=fa.left)
+            return cls(right=g(fa.right))
+
+        def __repr__(self):
+            if self.left is not None:
+                return f"Left({self.left!r})"
+            return f"Right({self.right!r})"
+    return (Either,)
+
+
+@app.cell
+def _(Either):
+    print(Either.fmap(lambda x: x + 1, Either(left=TypeError("Parse Error"))))
+    print(Either.fmap(lambda x: x + 1, Either(right=1)))
     return
 
 
@@ -350,7 +405,7 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ### The [RoseTree](https://en.wikipedia.org/wiki/Rose_tree) Functor
+        ## The [RoseTree](https://en.wikipedia.org/wiki/Rose_tree) Functor
 
         A **RoseTree** is a tree where:
 
@@ -363,7 +418,7 @@ def _(mo):
         - File system directories
         - Recursive computations
 
-        The implementation is: 
+        The implementation is:
         """
     )
     return
@@ -498,7 +553,7 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ### Functor Law Verification
+        ### Functor laws verification
 
         We can define `id` and `compose` in `Python` as:
         """
@@ -576,11 +631,59 @@ def _(mo):
         r"""
         ## Utility functions
 
-        - `const(fa: "Functor[A]", b: B) -> Functor[B]`
-          Replaces all values inside a functor with a constant `b`, preserving the original structure.
+        ```python
+        @classmethod
+        def const(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
+            return cls.fmap(lambda _: b, fa)
 
-        - `void(fa: "Functor[A]") -> Functor[None]`
-          Equivalent to `const(fa, None)`, transforming all values in a functor into `None`.
+        @classmethod
+        def void(cls, fa: "Functor[A]") -> "Functor[None]":
+            return cls.const(fa, None)
+
+        @classmethod
+        def unzip(
+            cls, fab: "Functor[tuple[A, B]]"
+        ) -> tuple["Functor[A]", "Functor[B]"]:
+            return cls.fmap(lambda p: p[0], fab), cls.fmap(lambda p: p[1], fab)
+        ```
+
+        - `const` replaces all values inside a functor with a constant `b`
+        - `void` is equivalent to `const(fa, None)`, transforming all values in a functor into `None`
+        - `unzip` is a generalization of the regular *unzip* on a list of pairs
+        """
+    )
+    return
+
+
+@app.cell
+def _(List, Maybe):
+    print(Maybe.const(Maybe(0), 1))
+    print(Maybe.const(Maybe(None), 1))
+    print(List.const(List([1, 2, 3, 4]), 1))
+    return
+
+
+@app.cell
+def _(List, Maybe):
+    print(Maybe.void(Maybe(1)))
+    print(List.void(List([1, 2, 3])))
+    return
+
+
+@app.cell
+def _(List, Maybe):
+    print(Maybe.unzip(Maybe(("Hello", "World"))))
+    print(List.unzip(List([("I", "love"), ("really", "λ")])))
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        /// admonition
+        You can always override these utility functions with a more efficient implementation for specific instances.
+        ///
         """
     )
     return
@@ -617,6 +720,12 @@ def _(ABC, B, Callable, abstractmethod, dataclass):
         @classmethod
         def void(cls, fa: "Functor[A]") -> "Functor[None]":
             return cls.const(fa, None)
+
+        @classmethod
+        def unzip(
+            cls, fab: "Functor[tuple[A, B]]"
+        ) -> tuple["Functor[A]", "Functor[B]"]:
+            return cls.fmap(lambda p: p[0], fab), cls.fmap(lambda p: p[1], fab)
     return (Functor,)
 
 
@@ -1138,9 +1247,9 @@ def _():
 @app.cell(hide_code=True)
 def _():
     from dataclasses import dataclass
-    from typing import Callable, TypeVar
+    from typing import Callable, TypeVar, Union
     from pprint import pp
-    return Callable, TypeVar, dataclass, pp
+    return Callable, TypeVar, Union, dataclass, pp
 
 
 @app.cell(hide_code=True)
