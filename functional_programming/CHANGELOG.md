@@ -1,8 +1,17 @@
 # Changelog of the functional-programming course
 
+## 2025-04-08
+
+**functors.py**
+
+* restructure the notebook
+* replace `f` in the function signatures with `g` to indicate regular functions and distinguish from functors
+
 ## 2025-04-02
 
-+ Migrate to `python3.13` for `05_functors`
+**functors.py**
+
++ Migrate to `python3.13`
 
     + Replace all occurrences of 
 
