@@ -1,0 +1,22 @@
+[default]
+extend-ignore-re = [
+    # LaTeX math expressions
+    "\\\\\\[.*?\\\\\\]",
+    "\\\\\\(.*?\\\\\\)",
+    "\\$\\$.*?\\$\\$",
+    "\\$.*?\\$",
+    # LaTeX commands
+    "\\\\[a-zA-Z]+\\{.*?\\}",
+    "\\\\[a-zA-Z]+",
+    # LaTeX subscripts and superscripts
+    "_\\{.*?\\}",
+    "\\^\\{.*?\\}"
+]
+
+# Words to explicitly accept
+[default.extend-words]
+pn = "pn"
+
+# You can also exclude specific files or directories if needed
+# [files]
+# extend-exclude = ["*.tex", "docs/*.md"] 
