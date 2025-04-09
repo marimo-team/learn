@@ -133,6 +133,8 @@ def _(mo):
         r"""
         ## MLE for Bernoulli Distribution
 
+        > _Note:_ The following derivation is included as reference material. The credit for this mathematical formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/mle/) by Chris Piech.
+
         Let's start with a simple example: estimating the parameter $p$ of a Bernoulli distribution.
 
         ### The Model
