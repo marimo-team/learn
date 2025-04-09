@@ -170,5 +170,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Marimo specific
+__marimo__
+
 # Generated site content
 _site/
