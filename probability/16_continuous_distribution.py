@@ -765,11 +765,11 @@ def _(mo):
 
         Some key points to remember:
 
-        • PDFs give us relative likelihood, not actual probabilities - that's why they can exceed 1
-        • The probability between two points is the area under the PDF curve
-        • CDFs offer a convenient shortcut to find probabilities without integrating
-        • Expectation and variance work similarly to discrete variables, just with integrals instead of sums
-        • Constants in PDFs are determined by ensuring the total probability equals 1
+        - PDFs give us relative likelihood, not actual probabilities - that's why they can exceed 1
+        - The probability between two points is the area under the PDF curve
+        - CDFs offer a convenient shortcut to find probabilities without integrating
+        - Expectation and variance work similarly to discrete variables, just with integrals instead of sums
+        - Constants in PDFs are determined by ensuring the total probability equals 1
 
         This foundation will serve you well as we explore specific continuous distributions like normal, exponential, and beta in future notebooks. These distributions are the workhorses of probability theory and statistics, appearing everywhere from quality control to financial modeling.
 
