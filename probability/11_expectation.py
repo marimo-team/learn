@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.19"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Expectation")
 
 
@@ -22,9 +22,9 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/expectation/), by Stanford professor Chris Piech._
 
-        A random variable is fully represented by its Probability Mass Function (PMF), which describes each value the random variable can take on and the corresponding probabilities. However, a PMF can contain a lot of information. Sometimes it's useful to summarize a random variable with a single value!
+        Expectations are fascinating — they represent the "center of mass" of a probability distribution. while they're often called "expected values" or "averages," they don't always match our intuition about what's "expected" to happen.
 
-        The most common, and arguably the most useful, summary of a random variable is its **Expectation** (also called the expected value or mean).
+        For me, the most interesting part about expectations is how they quantify what happens "on average" in the long run, even if that average isn't a possible outcome (like expecting 3.5 on a standard die roll).
         """
     )
     return
@@ -36,11 +36,11 @@ def _(mo):
         r"""
         ## Definition of Expectation
 
-        The expectation of a random variable $X$, written $E[X]$, is the average of all the values the random variable can take on, each weighted by the probability that the random variable will take on that value.
+        Expectation (written as $E[X]$) is basically the "average outcome" of a random variable, but with a twist - we weight each possible value by how likely it is to occur. I like to think of it as the "center of gravity" for probability.
 
         $$E[X] = \sum_x x \cdot P(X=x)$$
 
-        Expectation goes by many other names: Mean, Weighted Average, Center of Mass, 1st Moment. All of these are calculated using the same formula.
+        People call this concept by different names - mean, weighted average, center of mass, or 1st moment if you're being fancy. They're all calculated the same way, though: multiply each value by its probability, then add everything up.
         """
     )
     return

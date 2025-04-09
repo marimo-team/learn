@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.17"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Probability Mass Functions")
 
 
@@ -22,9 +22,9 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/pmf/), by Stanford professor Chris Piech._
 
-        For a random variable, the most important thing to know is: how likely is each outcome? For a discrete random variable, this information is called the "**Probability Mass Function**". The probability mass function (PMF) provides the "mass" (i.e. amount) of "probability" for each possible assignment of the random variable.
+        PMFs are really important in discrete probability. They tell us how likely each possible outcome is for a discrete random variable.
 
-        Formally, the Probability Mass Function is a mapping between the values that the random variable could take on and the probability of the random variable taking on said value. In mathematics, we call these associations functions. There are many different ways of representing functions: you can write an equation, you can make a graph, you can even store many samples in a list.
+        What's interesting about PMFs is that they can be represented in multiple ways - equations, graphs, or even empirical data. The core idea is simple: they map each possible value to its probability.
         """
     )
     return
@@ -36,18 +36,12 @@ def _(mo):
         r"""
         ## Properties of a PMF
 
-        For a function $p_X(x)$ to be a valid PMF, it must satisfy:
+        For a function $p_X(x)$ to be a valid PMF:
 
-        1. **Non-negativity**: $p_X(x) \geq 0$ for all $x$
-        2. **Unit total probability**: $\sum_x p_X(x) = 1$
+        1. **Non-negativity**: probability can't be negative, so $p_X(x) \geq 0$ for all $x$
+        2. **Unit total probability**: all probabilities sum to 1, i.e., $\sum_x p_X(x) = 1$
 
-        ### Probabilities Must Sum to 1
-
-        For a variable (call it $X$) to be a proper random variable, it must be the case that if you summed up the values of $P(X=x)$ for all possible values $x$ that $X$ can take on, the result must be 1:
-
-        $$\sum_x P(X=x) = 1$$
-
-        This is because a random variable taking on a value is an event (for example $X=3$). Each of those events is mutually exclusive because a random variable will take on exactly one value. Those mutually exclusive cases define an entire sample space. Why? Because $X$ must take on some value.
+        The second property makes intuitive sense - a random variable must take some value, and the sum of all possibilities should be 100%.
         """
     )
     return
@@ -125,11 +119,11 @@ def _(np, plt):
 def _(mo):
     mo.md(
         r"""
-        The information provided in these graphs shows the likelihood of a random variable taking on different values.
+        These graphs really show us how likely each value is when we roll the dice.
 
-        In the graph on the right, the value "6" on the $x$-axis is associated with the probability $\frac{5}{36}$ on the $y$-axis. This $x$-axis refers to the event "the sum of two dice is 6" or $Y = 6$. The $y$-axis tells us that the probability of that event is $\frac{5}{36}$. In full: $P(Y = 6) = \frac{5}{36}$.
+        looking at the right graph, when we see "6" on the $x$-axis with probability $\frac{5}{36}$ on the $y$-axis, that's telling us there's a $\frac{5}{36}$ chance of rolling a sum of 6 with two dice. or more formally: $P(Y = 6) = \frac{5}{36}$.
 
-        The value "2" is associated with "$\frac{1}{36}$" which tells us that, $P(Y = 2) = \frac{1}{36}$, the probability that two dice sum to 2 is $\frac{1}{36}$. There is no value associated with "1" because the sum of two dice cannot be 1.
+        Similarly, the value "2" has probability "$\frac{1}{36}$" - that's because there's only one way to get a sum of 2 (rolling 1 on both dice). and you'll notice there's no value for "1" since you can't get a sum of 1 with two dice - the minimum possible is 2.
         """
     )
     return
@@ -220,7 +214,7 @@ def _(mo):
         r"""
         ## Data to Histograms to Probability Mass Functions
 
-        One surprising way to store a likelihood function (recall that a PMF is the name of the likelihood function for discrete random variables) is simply a list of data. Let's simulate summing two dice many times to create an empirical PMF:
+        Here's something I find interesting — one way to represent a likelihood function is just through raw data. instead of mathematical formulas, we can actually approximate a PMF by collecting data points. let's see this in action by simulating lots of dice rolls and building an empirical PMF:
         """
     )
     return
@@ -323,9 +317,9 @@ def _(collections, np, plt, sim_dice_sums):
 def _(mo):
     mo.md(
         r"""
-        A normalized histogram (where each value is divided by the length of your data list) is an approximation of the PMF. For a dataset of discrete numbers, a histogram shows the count of each value. By the definition of probability, if you divide this count by the number of experiments run, you arrive at an approximation of the probability of the event $P(Y=y)$.
+        When we normalize a histogram (divide each count by total sample size), we get a pretty good approximation of the true PMF. it's a simple yet powerful idea - count how many times each value appears, then divide by the total number of trials.
 
-        Let's look at a specific example. If we want to approximate $P(Y=3)$ (the probability that the sum of two dice is 3), we can count the number of times that "3" occurs in our data and divide by the total number of trials:
+        let's make this concrete. say we want to estimate $P(Y=3)$ - the probability of rolling a sum of 3 with two dice. we just count how many 3's show up in our simulated rolls and divide by the total number of rolls:
         """
     )
     return

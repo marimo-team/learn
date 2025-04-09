@@ -14,7 +14,7 @@
 
 import marimo
 
-__generated_with = "0.11.26"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium")
 
 
@@ -26,7 +26,9 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/continuous/), by Stanford professor Chris Piech._
 
-        So far, all the random variables we've explored have been discrete, taking on only specific values (usually integers). Now we'll move into the world of **continuous random variables**, which can take on any real number value. Continuous random variables are used to model measurements with arbitrary precision like height, weight, time, and many natural phenomena.
+        Continuous distributions are what we need when dealing with random variables that can take any value in a range, rather than just discrete values. 
+
+        The key difference here is that we work with probability density functions (PDFs) instead of probability mass functions (PMFs). It took me a while to really get this - the PDF at a point isn't actually a probability, but rather a density.
         """
     )
     return
@@ -38,20 +40,17 @@ def _(mo):
         r"""
         ## From Discrete to Continuous
 
-        To make the transition from discrete to continuous random variables, let's start with a thought experiment:
+        Making the jump from discrete to continuous random variables requires a fundamental shift in thinking. Let me walk you through a thought experiment:
 
-        > Imagine you're running to catch a bus. You know you'll arrive at 2:15pm, but you don't know exactly when the bus will arrive. You want to model the bus arrival time (in minutes past 2pm) as a random variable $T$ so you can calculate the probability that you'll wait more than five minutes: $P(15 < T < 20)$.
+        > You're rushing to catch a bus. You know you'll arrive at 2:15pm, but the bus arrival time is uncertain. If you model the bus arrival time (in minutes past 2pm) as a random variable $T$, how would you calculate the probability of waiting more than five minutes: $P(15 < T < 20)$?
 
-        This immediately highlights a key difference from discrete distributions. For discrete distributions, we described the probability that a random variable takes on exact values. But this doesn't make sense for continuous values like time.
+        This highlights a crucial difference from discrete distributions. With discrete distributions, we calculated probabilities for exact values, but this approach breaks down with continuous values like time.
 
-        For example:
-
+        Consider these questions:
         - What's the probability the bus arrives at exactly 2:17pm and 12.12333911102389234 seconds?
-        - What's the probability of a child being born weighing exactly 3.523112342234 kilograms?
+        - What's the probability a newborn weighs exactly 3.523112342234 kilograms?
 
-        These questions don't have meaningful answers because real-world measurements can have infinite precision. The probability of a continuous random variable taking on any specific exact value is actually zero!
-
-        ### Visualizing the Transition
+        These questions have no meaningful answers because continuous measurements can have infinite precision. In the continuous world, the probability of a random variable taking any specific exact value is actually zero!
 
         Let's visualize this transition from discrete to continuous:
         """
@@ -150,44 +149,43 @@ def _(mo):
         r"""
         ## Probability Density Functions
 
-        In the world of discrete random variables, we used **Probability Mass Functions (PMFs)** to describe the probability of a random variable taking on specific values. In the continuous world, we need a different approach.
+        While discrete random variables use Probability Mass Functions (PMFs), continuous random variables require a different approach — Probability Density Functions (PDFs).
 
-        For continuous random variables, we use a **Probability Density Function (PDF)** which defines the relative likelihood that a random variable takes on a particular value. We traditionally denote the PDF with the symbol $f$ and write it as:
+        A PDF defines the relative likelihood of a continuous random variable taking particular values. We typically denote this with $f$ and write it as:
 
         $$f(X=x) \quad \text{or simply} \quad f(x)$$
 
-        Where the lowercase $x$ implies that we're talking about the relative likelihood of a continuous random variable which is the uppercase $X$.
+        Where the lowercase $x$ represents a specific value our random variable $X$ might take.
 
         ### Key Properties of PDFs
 
-        A **Probability Density Function (PDF)** $f(x)$ for a continuous random variable $X$ has these key properties:
+        For a PDF $f(x)$ to be valid, it must satisfy these properties:
 
-        1. The probability that $X$ takes a value in the interval $[a, b]$ is:
+        1. The probability that $X$ falls within interval $[a, b]$ is:
 
            $$P(a \leq X \leq b) = \int_a^b f(x) \, dx$$
 
-        2. The PDF must be non-negative everywhere:
+        2. Non-negativity — the PDF can't be negative:
 
            $$f(x) \geq 0 \text{ for all } x$$
 
-        3. The total probability must sum to 1:
+        3. Total probability equals 1:
 
            $$\int_{-\infty}^{\infty} f(x) \, dx = 1$$
 
-        4. The probability that $X$ takes any specific exact value is 0:
+        4. The probability of any exact value is zero:
 
            $$P(X = a) = \int_a^a f(x) \, dx = 0$$
 
-        This last property highlights a key difference from discrete distributions: the probability of a continuous random variable taking on an exact value is always 0. Probabilities only make sense when talking about ranges of values.
+        This last property reveals a fundamental difference from discrete distributions — with continuous random variables, probabilities only make sense for ranges, not specific points.
 
-        ### Caution: Density ≠ Probability
+        ### Important Distinction: Density ≠ Probability
 
-        A common misconception is to think of $f(x)$ as a probability. It is instead a **probability density**, representing probability per unit of $x$. The values of $f(x)$ can actually exceed 1, as long as the total area under the curve equals 1.
+        One common mistake is interpreting $f(x)$ as a probability. It's actually a **density** — representing probability per unit of $x$. This is why $f(x)$ values can exceed 1, provided the total area under the curve equals 1.
 
-        The interpretation of $f(x)$ is only meaningful when:
-
-        1. We integrate over a range to get a probability, or
-        2. We compare densities at different points to determine relative likelihoods.
+        The true meaning of $f(x)$ emerges only when:
+        1. We integrate over a range to obtain an actual probability, or
+        2. We compare densities at different points to understand relative likelihoods.
         """
     )
     return
@@ -665,16 +663,18 @@ def _(fig_to_image, mo, np, plt, sympy):
     # Detailed calculations for our example
     _calculations = mo.md(
         f"""
-        ### Calculating Expectation and Variance for Our Example
+        ### Computing Expectation and Variance
 
-        Let's calculate the expectation and variance for the PDF:
+        > _Note:_ The following mathematical derivation is included as reference material. The credit for this approach belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/continuous/) by Chris Piech.
+
+        Let's work through the calculations for our PDF:
 
         $$f(x) = \\begin{{cases}} 
         \\frac{{3}}{{8}}(4x - 2x^2) & \\text{{when }} 0 < x < 2 \\\\ 
         0 & \\text{{otherwise}} 
         \\end{{cases}}$$
 
-        #### Expectation Calculation
+        #### Finding the Expectation
 
         $$E[X] = \\int_{{-\\infty}}^{{\\infty}} x \\cdot f(x) \\, dx = \\int_0^2 x \\cdot \\frac{{3}}{{8}}(4x - 2x^2) \\, dx$$
 
@@ -684,9 +684,9 @@ def _(fig_to_image, mo, np, plt, sympy):
 
         $$E[X] = \\frac{{3}}{{8}} \\cdot \\frac{{32 - 12}}{{3}} = \\frac{{3}}{{8}} \\cdot \\frac{{20}}{{3}} = \\frac{{20}}{{8}} = {E_X}$$
 
-        #### Variance Calculation
+        #### Computing the Variance
 
-        First, we need $E[X^2]$:
+        We first need $E[X^2]$:
 
         $$E[X^2] = \\int_{{-\\infty}}^{{\\infty}} x^2 \\cdot f(x) \\, dx = \\int_0^2 x^2 \\cdot \\frac{{3}}{{8}}(4x - 2x^2) \\, dx$$
 
@@ -696,11 +696,11 @@ def _(fig_to_image, mo, np, plt, sympy):
 
         $$E[X^2] = \\frac{{3}}{{8}} \\cdot \\frac{{20 - 64/5}}{{1}} = {E_X2}$$
 
-        Now we can calculate the variance:
+        Now we calculate variance using the formula $Var(X) = E[X^2] - (E[X])^2$:
 
         $$\\text{{Var}}(X) = E[X^2] - (E[X])^2 = {E_X2} - ({E_X})^2 = {Var_X}$$
 
-        Therefore, the standard deviation is $\\sqrt{{\\text{{Var}}(X)}} = {Std_X}$.
+        This gives us a standard deviation of $\\sqrt{{\\text{{Var}}(X)}} = {Std_X}$.
         """
     )
     mo.vstack([_img, _calculations])
@@ -765,11 +765,11 @@ def _(mo):
 
         Some key points to remember:
 
-        • PDFs give us relative likelihood, not actual probabilities - that's why they can exceed 1
-        • The probability between two points is the area under the PDF curve
-        • CDFs offer a convenient shortcut to find probabilities without integrating
-        • Expectation and variance work similarly to discrete variables, just with integrals instead of sums
-        • Constants in PDFs are determined by ensuring the total probability equals 1
+        - PDFs give us relative likelihood, not actual probabilities - that's why they can exceed 1
+        - The probability between two points is the area under the PDF curve
+        - CDFs offer a convenient shortcut to find probabilities without integrating
+        - Expectation and variance work similarly to discrete variables, just with integrals instead of sums
+        - Constants in PDFs are determined by ensuring the total probability equals 1
 
         This foundation will serve you well as we explore specific continuous distributions like normal, exponential, and beta in future notebooks. These distributions are the workhorses of probability theory and statistics, appearing everywhere from quality control to financial modeling.
 
@@ -779,7 +779,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""Appendix code (helper functions, variables, etc.):""")
     return
@@ -971,7 +971,6 @@ def _(np, plt, sympy):
         1. Total probability: ∫₀² {C}(4x - 2x²) dx = {total_prob}
         2. P(X > 1): ∫₁² {C}(4x - 2x²) dx = {prob_gt_1}
         """
-
     return create_example_pdf_visualization, symbolic_calculation
 
 

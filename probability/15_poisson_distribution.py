@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.11.25"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Poisson Distribution")
 
 
@@ -25,7 +25,9 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/), by Stanford professor Chris Piech._
 
-        A Poisson random variable gives the probability of a given number of events in a fixed interval of time (or space). It makes the Poisson assumption that events occur with a known constant mean rate and independently of the time since the last event.
+        The Poisson distribution is my go-to for modeling random events occurring over time or space. What makes it cool is that it only needs a single parameter λ (lambda), which represents both the mean and variance.
+
+        I find it particularly useful when events happen rarely but the opportunities for them to occur are numerous — like modeling website visits, dust/particle emissions or even typos in a document.
         """
     )
     return
@@ -180,11 +182,11 @@ def _(mo):
         r"""
         ## Poisson Intuition: Relation to Binomial Distribution
 
-        The Poisson distribution can be derived as a limiting case of the [binomial distribution](http://marimo.app/https://github.com/marimo-team/learn/blob/main/probability/14_binomial_distribution.py). 
+        The Poisson distribution can be derived as a limiting case of the binomial distribution. I find this connection fascinating because it shows how seemingly different distributions are actually related.
 
-        Let's work on a practical example: predicting the number of ride-sharing requests in a specific area over a one-minute interval. From historical data, we know that the average number of requests per minute is $\lambda = 5$.
+        Let's work through a practical example: predicting ride-sharing requests in a specific area over a one-minute interval. From historical data, we know that the average number of requests per minute is $\lambda = 5$.
 
-        We could approximate this using a binomial distribution by dividing our minute into smaller intervals. For example, we can divide a minute into 60 seconds and treat each second as a [Bernoulli trial](http://marimo.app/https://github.com/marimo-team/learn/blob/main/probability/13_bernoulli_distribution.py) - either there's a request (success) or there isn't (failure).
+        We could model this using a binomial distribution by dividing our minute into smaller intervals. For example, splitting a minute into 60 seconds, where each second is a Bernoulli trial — either a request arrives (success) or it doesn't (failure).
 
         Let's visualize this concept:
         """
@@ -231,7 +233,7 @@ def _(fig_to_image, mo, plt):
     _explanation = mo.md(
         r"""
         In this visualization:
-    
+
         - Each rectangle represents a 1-second interval
         - Blue rectangles indicate intervals where an event occurred
         - Red dots show the actual event times (2.75s and 7.12s)
@@ -247,9 +249,9 @@ def _(fig_to_image, mo, plt):
 def _(mo):
     mo.md(
         r"""
-        The total number of requests received over the minute can be approximated as the sum of the sixty indicator variables, which conveniently matches the description of a binomial — a sum of Bernoullis. 
+        The total number of requests received over the minute can be approximated as the sum of sixty indicator variables, which aligns perfectly with the binomial distribution — a sum of Bernoullis. 
 
-        Specifically, if we define $X$ to be the number of requests in a minute, $X$ is a binomial with $n=60$ trials. What is the probability, $p$, of a success on a single trial? To make the expectation of $X$ equal the observed historical average $\lambda$, we should choose $p$ so that:
+        If we define $X$ as the number of requests in a minute, $X$ follows a binomial with $n=60$ trials. To determine the success probability $p$, we need to match the expected value with our historical average $\lambda$:
 
         \begin{align}
         \lambda &= E[X] && \text{Expectation matches historical average} \\
@@ -257,7 +259,7 @@ def _(mo):
         p &= \frac{\lambda}{n} && \text{Solving for $p$}
         \end{align}
 
-        In this case, since $\lambda=5$ and $n=60$, we should choose $p=\frac{5}{60}=\frac{1}{12}$ and state that $X \sim \text{Bin}(n=60, p=\frac{5}{60})$. Now we can calculate the probability of different numbers of requests using the binomial PMF:
+        With $\lambda=5$ and $n=60$, we get $p=\frac{5}{60}=\frac{1}{12}$, so $X \sim \text{Bin}(n=60, p=\frac{5}{60})$. Using the binomial PMF:
 
         $P(X = x) = {n \choose x} p^x (1-p)^{n-x}$
 
@@ -269,7 +271,7 @@ def _(mo):
         P(X=3) &= {60 \choose 3} (5/60)^3 (55/60)^{60-3} \approx 0.1389
         \end{align}
 
-        This is a good approximation, but it doesn't account for the possibility of multiple events in a single second. One solution is to divide our minute into even more fine-grained intervals. Let's try 600 deciseconds (tenths of a second):
+        This approximation works well, but it doesn't account for multiple events occurring in a single second. To address this limitation, we can use even finer intervals — perhaps 600 deciseconds (tenths of a second):
         """
     )
     return
@@ -283,7 +285,7 @@ def _(fig_to_image, mo, plt):
 
         # Example events at 2.75s and 7.12s (convert to deciseconds)
         events = [27.5, 71.2]
-    
+
         for i in range(100):
             color = 'royalblue' if any(i <= event_val < i + 1 for event_val in events) else 'lightgray'
             ax.add_patch(plt.Rectangle((i, 0), 0.9, 1, color=color))
@@ -434,21 +436,23 @@ def _(df, fig, fig_to_image, mo, n, p):
 def _(mo):
     mo.md(
         r"""
-        As you can see from the interactive comparison above, as the number of intervals increases, the binomial distribution approaches the Poisson distribution! This is not a coincidence - the Poisson distribution is actually the limiting case of the binomial distribution when:
+        As our interactive comparison demonstrates, the binomial distribution converges to the Poisson distribution as we increase the number of intervals! This remarkable relationship exists because the Poisson distribution is actually the limiting case of the binomial when:
 
         - The number of trials $n$ approaches infinity
         - The probability of success $p$ approaches zero
         - The product $np = \lambda$ remains constant
 
-        This relationship is why the Poisson distribution is so useful - it's easier to work with than a binomial with a very large number of trials and a very small probability of success.
+        This elegance is why I find the Poisson distribution so powerful — it simplifies what would otherwise be a cumbersome binomial with numerous trials and tiny success probabilities.
 
         ## Derivation of the Poisson PMF
 
-        Let's derive the Poisson PMF by taking the limit of the binomial PMF as $n \to \infty$. We start with:
+        > _Note:_ The following mathematical derivation is included as reference material. The credit for this formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/) by Chris Piech.
+
+        The Poisson PMF can be derived by taking the limit of the binomial PMF as $n \to \infty$:
 
         $P(X=x) = \lim_{n \rightarrow \infty} {n \choose x} (\lambda / n)^x(1-\lambda/n)^{n-x}$
 
-        While this expression looks intimidating, it simplifies nicely:
+        Through a series of algebraic manipulations:
 
         \begin{align}
         P(X=x) 
@@ -495,7 +499,7 @@ def _(mo):
             && \text{Simplifying}\\
         \end{align}
 
-        This gives us our elegant Poisson PMF formula: $P(X=x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$
+        This gives us the elegant Poisson PMF formula: $P(X=x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$
         """
     )
     return

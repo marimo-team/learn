@@ -6,12 +6,13 @@
 #     "scipy==1.15.2",
 #     "numpy==2.2.4",
 #     "plotly==5.18.0",
+#     "wigglystuff==0.1.13",
 # ]
 # ///
 
 import marimo
 
-__generated_with = "0.11.30"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Central Limit Theorem")
 
 
@@ -23,7 +24,20 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part4/clt/), by Stanford professor Chris Piech._
 
-        The Central Limit Theorem (CLT) is one of the most important concepts in probability theory and statistics. It explains why many real-world distributions tend to be normal, even when the underlying processes are not.
+        The central limit theorem is honestly mind-blowing — it's like magic that no matter what distribution you start with, the sampling distribution of means approaches a normal distribution as sample size increases.
+
+        Mathematically, if we have:
+
+        $X_1, X_2, \ldots, X_n$ as independent, identically distributed random variables with:
+
+        - Mean: $\mu$
+        - Variance: $\sigma^2 < \infty$
+
+        Then as $n \to \infty$:
+
+        $$\sqrt{n}\left(\frac{1}{n}\sum_{i=1}^{n}X_i - \mu\right) \xrightarrow{d} \mathcal{N}(0, \sigma^2)$$
+
+        > _Note:_ The above LaTeX derivation is included as a reference. Credit for this formulation goes to the original source linked at the top of the notebook.
         """
     )
     return
@@ -41,7 +55,7 @@ def _(mo):
 
         Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The sum of these random variables approaches a normal distribution as $n \rightarrow \infty$:
 
-        $n∑i=1Xi∼N(n⋅μ,n⋅σ2)\sum_{i=1}^{n}X_i \sim \mathcal{N}(n \cdot \mu, n \cdot \sigma^2)$
+        $\sum_{i=1}^{n}X_i \sim \mathcal{N}(n \cdot \mu, n \cdot \sigma^2)$
 
         Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$. Since each $X_i$ is identically distributed, they share the same expectation and variance.
 
@@ -49,7 +63,7 @@ def _(mo):
 
         Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The average of these random variables approaches a normal distribution as $n \rightarrow \infty$:
 
-        $\frac{1}{n} ∑i=1Xi∼N(μ,σ2n)\frac{1}{n}\sum_{i=1}^{n}X_i \sim \mathcal{N}(\mu, \frac{\sigma^2}{n})$
+        $\frac{1}{n}\sum_{i=1}^{n}X_i \sim \mathcal{N}(\mu, \frac{\sigma^2}{n})$
 
         Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$.
 
@@ -311,41 +325,37 @@ def _(mo):
         r"""
         ### Example 1: Dice Game
 
-        You will roll a 6-sided dice 10 times. Let $X$ be the total value of all 10 dice: $X = X_1 + X_2 + \dots + X_{10}$. You win the game if $X \leq 25$ or $X \geq 45$. Use the central limit theorem to calculate the probability that you win.
+        > _Note:_ The following application demonstrates the practical use of the Central Limit Theorem. The mathematical derivation is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
 
-        Recall that for a single die roll $X_i$:
+        Let's solve a fun probability problem: You roll a 6-sided die 10 times and let $X$ represent the total value of all 10 dice: $X = X_1 + X_2 + \dots + X_{10}$. You win if $X \leq 25$ or $X \geq 45$. What's your probability of winning?
 
+        For a single die roll $X_i$, we know:
         - $E[X_i] = 3.5$
         - $\text{Var}(X_i) = \frac{35}{12}$
 
-        **Solution:**
+        **Solution Approach:**
 
-        Let $Y$ be the approximating normal distribution. By the Central Limit Theorem:
+        This is where the Central Limit Theorem shines! Since we're summing 10 independent, identically distributed random variables, we can approximate this sum with a normal distribution $Y$:
 
-        $Y∼N(10⋅E[Xi],10⋅Var(Xi))Y \sim \mathcal{N}(10 \cdot E[X_i], 10 \cdot \text{Var}(X_i))$
+        $Y \sim \mathcal{N}(10 \cdot E[X_i], 10 \cdot \text{Var}(X_i)) = \mathcal{N}(35, 29.2)$
 
-        Substituting in the known values:
+        Now calculating our winning probability:
 
-        $Y∼N(10⋅3.5,10⋅3512)=N(35,29.2)Y \sim \mathcal{N}(10 \cdot 3.5, 10 \cdot \frac{35}{12}) = \mathcal{N}(35, 29.2)$
+        $P(X \leq 25 \text{ or } X \geq 45) = P(X \leq 25) + P(X \geq 45)$
 
-        Now we calculate the probability:
+        Since we're approximating a discrete distribution with a continuous one, we apply a continuity correction:
 
-        $P(X≤25 or X≥45)P(X \leq 25 \text{ or } X \geq 45)$
+        $\approx P(Y < 25.5) + P(Y > 44.5) = P(Y < 25.5) + [1 - P(Y < 44.5)]$
 
-        $=P(X≤25)+P(X≥45)= P(X \leq 25) + P(X \geq 45)$
+        Converting to standard normal form:
 
-        $≈P(Y<25.5)+P(Y>44.5) (Continuity Correction)\approx P(Y < 25.5) + P(Y > 44.5) \text{ (Continuity Correction)}$
+        $\approx \Phi\left(\frac{25.5 - 35}{\sqrt{29.2}}\right) + \left[1 - \Phi\left(\frac{44.5 - 35}{\sqrt{29.2}}\right)\right]$
 
-        $≈P(Y<25.5)+[1−P(Y<44.5)]\approx P(Y < 25.5) + [1 - P(Y < 44.5)]$
+        $\approx \Phi(-1.76) + [1 - \Phi(1.76)]$
 
-        $≈Φ(25.5−35√29.2)+[1−Φ(44.5−35√29.2)]\approx \Phi\left(\frac{25.5 - 35}{\sqrt{29.2}}\right) + \left[1 - \Phi\left(\frac{44.5 - 35}{\sqrt{29.2}}\right)\right]$
+        $\approx 0.039 + (1 - 0.961) \approx 0.078$
 
-        $≈Φ(−1.76)+[1−Φ(1.76)]\approx \Phi(-1.76) + [1 - \Phi(1.76)]$
-
-        $≈0.039+(1−0.961)\approx 0.039 + (1 - 0.961)$
-
-        $≈0.078\approx 0.078$
-        So, the probability of winning the game is approximately 7.8%.
+        So your chance of winning is about 7.8% — not great odds, but that's probability for you!
         """
     )
     return
@@ -359,17 +369,17 @@ def _(create_dice_game_visualization, fig_to_image, mo):
 
     dice_explanation = mo.md(
         r"""
-        **Visualization Explanation:**
+        **Understanding the Visualization:**
 
-        The graph shows the distribution of the sum of 10 dice rolls. The blue bars represent the actual probability mass function (PMF), while the red curve shows the normal approximation using the Central Limit Theorem.
+        This graph shows our dice game in action. The blue bars represent the exact probability distribution for summing 10 dice, while the red curve shows our normal approximation from the Central Limit Theorem.
 
-        The winning regions are shaded in orange:
+        I've highlighted the winning regions in orange:
         - The left region where $X \leq 25$
         - The right region where $X \geq 45$
 
-        The total probability of these regions is approximately 0.078 or 7.8%.
+        Together these regions cover about 7.8% of the total probability.
 
-        Notice how the normal approximation provides a good fit to the discrete distribution, demonstrating the power of the Central Limit Theorem.
+        What's fascinating here is how closely the normal curve approximates the actual discrete distribution — this is the Central Limit Theorem working its magic, even with just 10 random variables.
         """
     )
 
@@ -383,50 +393,45 @@ def _(mo):
         r"""
         ### Example 2: Algorithm Runtime Estimation
 
-        Say you have a new algorithm and you want to test its running time. You know the variance of the algorithm's run time is $\sigma^2 = 4 \text{ sec}^2$, but you want to estimate the mean run time $t$ in seconds.
+        > _Note:_ The following derivation demonstrates the practical application of the Central Limit Theorem for experimental design. The mathematical approach is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
 
-        You can run the algorithm repeatedly (IID trials). How many trials do you have to run so that your estimated runtime is within ±0.5 seconds of $t$ with 95% certainty?
+        Here's a practical problem I encounter in performance testing: You've developed a new algorithm and want to measure its average runtime. You know the variance is $\sigma^2 = 4 \text{ sec}^2$, but need to estimate the true mean runtime $t$.
 
-        Let $X_i$ be the run time of the $i$-th run (for $1 \leq i \leq n$).
+        The question: How many test runs do you need to be 95% confident your estimated mean is within ±0.5 seconds of the true value?
+
+        Let $X_i$ represent the runtime of the $i$-th test (for $1 \leq i \leq n$).
 
         **Solution:**
 
         We need to find $n$ such that:
 
-        $0.95=P(−0.5≤∑ni=1Xin−t≤0.5)0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right)$
+        $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right)$
 
-        By the central limit theorem, the sample mean follows a normal distribution. 
-        We can standardize this to work with the standard normal:
+        The Central Limit Theorem tells us that as $n$ increases, the sample mean approaches a normal distribution. Let's standardize this to work with the standard normal distribution:
 
-        $Z=(∑ni=1Xi)−nμσ√nZ = \frac{\left(\sum_{i=1}^n X_i\right) - n\mu}{\sigma \sqrt{n}}$
+        $Z = \frac{\left(\sum_{i=1}^n X_i\right) - n\mu}{\sigma \sqrt{n}} = \frac{\left(\sum_{i=1}^n X_i\right) - nt}{2 \sqrt{n}}$
 
-        $=(∑ni=1Xi)−nt2√n= \frac{\left(\sum_{i=1}^n X_i\right) - nt}{2 \sqrt{n}}$
+        Rewriting our probability constraint in terms of $Z$:
 
-        Rewriting our probability inequality so that the central term is $Z$:
+        $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right) = P\left(\frac{-0.5 \sqrt{n}}{2} \leq Z \leq \frac{0.5 \sqrt{n}}{2}\right)$
 
-        $0.95=P(−0.5≤∑ni=1Xin−t≤0.5)0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right)$
+        Using the properties of the standard normal CDF:
 
-        $=P(−0.5√n2≤Z≤0.5√n2)= P\left(\frac{-0.5 \sqrt{n}}{2} \leq Z \leq \frac{0.5 \sqrt{n}}{2}\right)$
-
-        And now we find the value of $n$ that makes this equation hold:
-
-        $0.95=Φ(√n4)−Φ(−√n4)0.95 = \Phi\left(\frac{\sqrt{n}}{4}\right) - \Phi\left(-\frac{\sqrt{n}}{4}\right)$
-
-        $4=Φ(√n4)−(1−Φ(√n4))= \Phi\left(\frac{\sqrt{n}}{4}\right) - \left(1 - \Phi\left(\frac{\sqrt{n}}{4}\right)\right)$
-
-        $=2Φ(√n4)−1= 2\Phi\left(\frac{\sqrt{n}}{4}\right) - 1$
+        $0.95 = \Phi\left(\frac{\sqrt{n}}{4}\right) - \Phi\left(-\frac{\sqrt{n}}{4}\right) = 2\Phi\left(\frac{\sqrt{n}}{4}\right) - 1$
 
         Solving for $\Phi\left(\frac{\sqrt{n}}{4}\right)$:
 
-        $0.975=Φ(√n4)0.975 = \Phi\left(\frac{\sqrt{n}}{4}\right)$
+        $0.975 = \Phi\left(\frac{\sqrt{n}}{4}\right)$
 
-        $Φ−1(0.975)=√n4\Phi^{-1}(0.975) = \frac{\sqrt{n}}{4}$
+        Using the inverse CDF:
 
-        $1.96=√n41.96 = \frac{\sqrt{n}}{4}$
+        $\Phi^{-1}(0.975) = \frac{\sqrt{n}}{4}$
 
-        $n=61.4n = 61.4$
+        $1.96 = \frac{\sqrt{n}}{4}$
 
-        Therefore, we need to run the algorithm 62 times to estimate the mean runtime within ±0.5 seconds with 95% confidence.
+        $n = 61.4$
+
+        Rounding up, we need 62 test runs to achieve our desired confidence interval — a practical result we can immediately apply to our testing protocol.
         """
     )
     return
@@ -929,7 +934,6 @@ def _(mo):
         mo.vstack([distribution_type, sample_size, sim_count_slider]),
         run_explorer_button
     ], justify='space-around')
-
     return (
         controls,
         distribution_type,
