@@ -81,7 +81,7 @@ def _(mo):
 
         Let's explore what happens when you add random variables together. For example, what if we add 100 different uniform random variables?
 
-        `python
+        ```python
         from random import random 
 
         def add_100_uniforms():
@@ -91,7 +91,7 @@ def _(mo):
                x_i = random()    
                total += x_i
            return total
-        `
+        ```
 
         The value returned by this function will be a random variable. Click the button below to run the function and observe the resulting value of total:
         """
