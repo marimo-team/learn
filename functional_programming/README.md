@@ -56,8 +56,8 @@ structure.
 
 | Notebook | Title | Key Concepts | Prerequisites |
 |----------|-------|--------------|---------------| 
-| [05. Functors](https://github.com/marimo-team/learn/blob/main/functional_programming/05_functors.py) | Category Theory and Functors | Category Theory, Functors, fmap | Basic Python, Functions | 
-| [06. Applicatives](https://github.com/marimo-team/learn/blob/main/functional_programming/06_applicatives.py) | Applicative programming with effects | Applicative Functors, pure, apply, Effectful programming, Alternatives | Functors |
+| [05. Functors](https://github.com/marimo-team/learn/blob/main/functional_programming/05_functors.py) | Category Theory and Functors | Category Theory, Functor, fmap, Bifunctor | Basic Python, Functions | 
+| [06. Applicatives](https://github.com/marimo-team/learn/blob/main/functional_programming/06_applicatives.py) | Applicative programming with effects | Applicative Functor, pure, apply, Effectful programming, Alternative | Functors |
 
 **Authors.**
 
