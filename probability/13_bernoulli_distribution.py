@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.22"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Bernoulli Distribution")
 
 
@@ -20,15 +20,15 @@ def _(mo):
         r"""
         # Bernoulli Distribution
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/), by Stanford professor Chris Piech._
+        > _Note:_ This notebook builds on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
 
         ## Parametric Random Variables
 
-        There are many classic and commonly-seen random variable abstractions that show up in the world of probability. At this point, we'll learn about several of the most significant parametric discrete distributions.
+        Probability has a bunch of classic random variable patterns that show up over and over. Let's explore some of the most important parametric discrete distributions.
 
-        When solving problems, if you can recognize that a random variable fits one of these formats, then you can use its pre-derived Probability Mass Function (PMF), expectation, variance, and other properties. Random variables of this sort are called **parametric random variables**. If you can argue that a random variable falls under one of the studied parametric types, you simply need to provide parameters.
+        Bernoulli is honestly the simplest distribution you'll ever see, but it's ridiculously powerful in practice. What makes it fascinating to me is how it captures any yes/no scenario: success/failure, heads/tails, 1/0.
 
-        > A good analogy is a `class` in programming. Creating a parametric random variable is very similar to calling a constructor with input parameters.
+        I think of these distributions as the atoms of probability — they're the fundamental building blocks that everything else is made from.
         """
     )
     return
@@ -40,18 +40,16 @@ def _(mo):
         r"""
         ## Bernoulli Random Variables
 
-        A **Bernoulli random variable** (also called a boolean or indicator random variable) is the simplest kind of parametric random variable. It can take on two values: 1 and 0.
+        A Bernoulli random variable boils down to just two possible values: 1 (success) or 0 (failure). dead simple, but incredibly useful.
 
-        It takes on a 1 if an experiment with probability $p$ resulted in success and a 0 otherwise. 
+        Some everyday examples where I see these:
 
-        Some example uses include:
+        - Coin flip (heads=1, tails=0)
+        - Whether that sketchy email is spam  
+        - If someone actually clicks my ad
+        - Whether my code compiles first try (almost always 0 for me)
 
-        - A coin flip (heads = 1, tails = 0)
-        - A random binary digit
-        - Whether a disk drive crashed
-        - Whether someone likes a Netflix movie
-
-        Here $p$ is the parameter, but different instances of Bernoulli random variables might have different values of $p$.
+        All you need (the classic expression) is a single parameter $p$ - the probability of success.
         """
     )
     return
@@ -167,9 +165,11 @@ def _(expected_value, p_slider, plt, probabilities, values, variance):
 def _(mo):
     mo.md(
         r"""
-        ## Proof: Expectation of a Bernoulli
+        ## Expectation and Variance of a Bernoulli
 
-        If $X$ is a Bernoulli with parameter $p$, $X \sim \text{Bern}(p)$:
+        > _Note:_ The following derivations are included as reference material. The credit for these mathematical formulations belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
+
+        Let's work through why $E[X] = p$ for a Bernoulli:
 
         \begin{align}
         E[X] &= \sum_x x \cdot (X=x) && \text{Definition of expectation} \\
@@ -178,11 +178,7 @@ def _(mo):
         &= p && \text{Remove the 0 term}
         \end{align}
 
-        ## Proof: Variance of a Bernoulli
-
-        If $X$ is a Bernoulli with parameter $p$, $X \sim \text{Bern}(p)$:
-
-        To compute variance, first compute $E[X^2]$:
+        And for variance, we first need $E[X^2]$:
 
         \begin{align}
         E[X^2]
@@ -206,18 +202,16 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Indicator Random Variable
+        ## Indicator Random Variables
 
-        > **Definition**: An indicator variable is a Bernoulli random variable which takes on the value 1 if an **underlying event occurs**, and 0 _otherwise_.
+        Indicator variables are a clever trick I like to use — they turn events into numbers. Instead of dealing with "did the event happen?" (yes/no), we get "1" if it happened and "0" if it didn't.
 
-        Indicator random variables are a convenient way to convert the "true/false" outcome of an event into a number. That number may be easier to incorporate into an equation.
+        Formally: an indicator variable $I$ for event $A$ equals 1 when $A$ occurs and 0 otherwise. These are just bernoulli variables where $p = P(A)$. people often use notation like $I_A$ to name them.
 
-        A random variable $I$ is an indicator variable for an event $A$ if $I = 1$ when $A$ occurs and $I = 0$ if $A$ does not occur. Indicator random variables are Bernoulli random variables, with $p = P(A)$. $I_A$ is a common choice of name for an indicator random variable.
+        Two key properties that make them super useful:
 
-        Here are some properties of indicator random variables:
-
-        - $P(I=1)=P(A)$
-        - $E[I]=P(A)$
+        - $P(I=1)=P(A)$ - probability of getting a 1 is just the probability of the event
+        - $E[I]=P(A)$ - the expected value equals the probability (this one's a game-changer!)
         """
     )
     return

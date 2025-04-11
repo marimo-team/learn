@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.11.24"
+__generated_with = "0.12.6"
 app = marimo.App(width="medium", app_title="Binomial Distribution")
 
 
@@ -25,11 +25,9 @@ def _(mo):
 
         _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/binomial/), by Stanford professor Chris Piech._
 
-        In this section, we will discuss the binomial distribution. To start, imagine the following example:
+        The binomial distribution is essentially what happens when you run multiple Bernoulli trials and count the successes. I love this distribution because it appears everywhere in practical scenarios.
 
-        Consider $n$ independent trials of an experiment where each trial is a "success" with probability $p$. Let $X$ be the number of successes in $n$ trials.
-
-        This situation is truly common in the natural world, and as such, there has been a lot of research into such phenomena. Random variables like $X$ are called **binomial random variables**. If you can identify that a process fits this description, you can inherit many already proved properties such as the PMF formula, expectation, and variance!
+        Think about it: whenever you're counting how many times something happens across multiple attempts, you're likely dealing with a binomial. Website conversions, A/B testing results, even counting heads in multiple coin flips — all binomial!
         """
     )
     return
@@ -197,11 +195,11 @@ def _(mo):
         r"""
         ## Relationship to Bernoulli Random Variables
 
-        One way to think of the binomial is as the sum of $n$ Bernoulli variables. Say that $Y_i$ is an indicator Bernoulli random variable which is 1 if experiment $i$ is a success. Then if $X$ is the total number of successes in $n$ experiments, $X \sim \text{Bin}(n, p)$:
+        One way I like to think about the binomial: it's just adding up a bunch of Bernoullis. If each $Y_i$ is a Bernoulli that tells us if the $i$-th trial succeeded, then:
 
         $$X = \sum_{i=1}^n Y_i$$
 
-        Recall that the outcome of $Y_i$ will be 1 or 0, so one way to think of $X$ is as the sum of those 1s and 0s.
+        This makes the distribution really intuitive to me - we're just counting 1s across our $n$ experiments.
         """
     )
     return
