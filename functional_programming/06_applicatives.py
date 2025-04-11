@@ -35,6 +35,7 @@ def _(mo):
             type: info
 
         version: 0.1.2 | last modified: 2025-04-07 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
         """
