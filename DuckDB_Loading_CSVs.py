@@ -2,7 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "plotly.express"
+#     "plotly.express",
+#     "plotly==6.0.1",
+#     "duckdb==1.2.1",
+#     "sqlglot==26.11.1",
 # ]
 # ///
 
