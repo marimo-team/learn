@@ -8,10 +8,7 @@
 import marimo
 
 __generated_with = "0.12.8"
-app = marimo.App(
-    app_title="Category Theory and Functors",
-    css_file="/Users/chanhuizhihou/Library/Application Support/mtheme/themes/gruvbox.css",
-)
+app = marimo.App(app_title="Category Theory and Functors")
 
 
 @app.cell(hide_code=True)
