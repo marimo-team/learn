@@ -1,5 +1,12 @@
 # Changelog of the functional-programming course
 
+## 2025-04-11
+
+**functors.py**
+
++ add `Bifunctor` section
+* replace `return NotImplementedError` with `raise NotImplementedError`
+
 ## 2025-04-08
 
 **functors.py**

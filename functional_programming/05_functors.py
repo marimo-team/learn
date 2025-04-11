@@ -7,8 +7,12 @@
 
 import marimo
 
-__generated_with = "0.12.5"
-app = marimo.App(app_title="Category Theory and Functors")
+__generated_with = "0.12.8"
+app = marimo.App(
+    app_title="Category Theory and Functors",
+    css_file="/Users/chanhuizhihou/Library/Application Support/mtheme/themes/gruvbox.css",
+)
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -36,7 +40,7 @@ def _(mo):
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.4 | last modified: 2025-04-08 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.5 | last modified: 2025-04-11 | author: [métaboulie](https://github.com/metaboulie)<br/>
         reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
@@ -354,7 +358,7 @@ def _(mo):
 
         `fmap` for `Either` will ignore Left values, but will apply the supplied function to values contained in the Right.
 
-        The implementation is: 
+        The implementation is:
         """
     )
     return
@@ -707,7 +711,7 @@ def _(ABC, B, Callable, abstractmethod, dataclass):
         @classmethod
         @abstractmethod
         def fmap(cls, g: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
-            return NotImplementedError
+            raise NotImplementedError("Subclasses must implement fmap")
 
         @classmethod
         def const(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
@@ -912,8 +916,13 @@ def _(mo):
 
         Once again there are a few axioms that functors have to obey. 
 
-        1. Given an identity morphism $id_A$ on an object $A$, $F ( id_A )$ must be the identity morphism on $F ( A )$, i.e.: $F({id} _{A})={id} _{F(A)}$
-        2. Functors must distribute over morphism composition, i.e. $F(f\circ g)=F(f)\circ F(g)$
+        1. Given an identity morphism $id_A$ on an object $A$, $F ( id_A )$ must be the identity morphism on $F ( A )$.:
+
+        $$F({id} _{A})={id} _{F(A)}$$
+
+        3. Functors must distribute over morphism composition.
+
+        $$F(f\circ g)=F(f)\circ F(g)$$
         """
     )
     return
@@ -1208,6 +1217,187 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
+        r"""
+        # Bifunctor
+
+        A `Bifunctor` is a type constructor that takes two type arguments and **is a functor in both arguments.** 
+
+        For example, think about `Either`'s usual `Functor` instance. It only allows you to fmap over the second type parameter: `right` values get mapped, `left` values stay as they are.
+
+        However, its `Bifunctor` instance allows you to map both halves of the sum.
+
+        There are three core methods for `Bifunctor`: 
+
+        - `bimap` allows mapping over both type arguments at once.
+        - `first` and `second` are also provided for mapping over only one type argument at a time.
+
+
+        The abstraction of `Bifunctor` is: 
+        """
+    )
+    return
+
+
+@app.cell
+def _(ABC, B, Callable, D, dataclass, f, id):
+    @dataclass
+    class Bifunctor[A, C](ABC):
+        @classmethod
+        def bimap(
+            cls, g: Callable[[A], B], h: Callable[[C], D], fa: "Bifunctor[A, C]"
+        ) -> "Bifunctor[B, D]":
+            return cls.first(f, cls.second(g, fa))
+
+        @classmethod
+        def first(
+            cls, g: Callable[[A], B], fa: "Bifunctor[A, C]"
+        ) -> "Bifunctor[B, C]":
+            return cls.bimap(g, id, fa)
+
+        @classmethod
+        def second(
+            cls, g: Callable[[B], C], fa: "Bifunctor[A, B]"
+        ) -> "Bifunctor[A, C]":
+            return cls.bimap(id, g, fa)
+    return (Bifunctor,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        /// admonition | minimal implementation requirement
+        - `bimap` or both `first` and `second`
+        ///
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""## Instances of Bifunctor""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### The Either Bifunctor
+
+        For the `Either Bifunctor`, we allow it to map a function over the `left` value as well.
+
+        Notice that, the `Either Bifunctor`  still only contains the `left` value or the `right` value.
+        """
+    )
+    return
+
+
+@app.cell
+def _(B, Bifunctor, Callable, D, dataclass):
+    @dataclass
+    class BiEither[A, C](Bifunctor):
+        left: A = None
+        right: C = None
+
+        def __post_init__(self):
+            if (self.left is not None and self.right is not None) or (
+                self.left is None and self.right is None
+            ):
+                raise TypeError(
+                    "Provide either the value of the left or the value of the right."
+                )
+
+        @classmethod
+        def bimap(
+            cls, g: Callable[[A], B], h: Callable[[C], D], fa: "BiEither[A, C]"
+        ) -> "BiEither[B, D]":
+            if fa.left is not None:
+                return cls(left=g(fa.left))
+            return cls(right=h(fa.right))
+
+        def __repr__(self):
+            if self.left is not None:
+                return f"Left({self.left!r})"
+            return f"Right({self.right!r})"
+    return (BiEither,)
+
+
+@app.cell
+def _(BiEither):
+    print(BiEither.bimap(lambda x: x + 1, lambda x: x * 2, BiEither(left=1)))
+    print(BiEither.bimap(lambda x: x + 1, lambda x: x * 2, BiEither(right=2)))
+    print(BiEither.first(lambda x: x + 1, BiEither(left=1)))
+    print(BiEither.first(lambda x: x + 1, BiEither(right=2)))
+    print(BiEither.second(lambda x: x + 1, BiEither(left=1)))
+    print(BiEither.second(lambda x: x + 1, BiEither(right=2)))
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### The 2d Tuple Bifunctor
+
+        For 2d tuples, we simply expect `bimap` to map 2 functions to the 2 elements in the tuple respectively.
+        """
+    )
+    return
+
+
+@app.cell
+def _(B, Bifunctor, Callable, D, dataclass):
+    @dataclass
+    class BiTuple[A, C](Bifunctor):
+        value: tuple[A, C]
+
+        @classmethod
+        def bimap(
+            cls, g: Callable[[A], B], h: Callable[[C], D], fa: "BiTuple[A, C]"
+        ) -> "BiTuple[B, D]":
+            return cls((g(fa.value[0]), h(fa.value[1])))
+    return (BiTuple,)
+
+
+@app.cell
+def _(BiTuple):
+    print(BiTuple.bimap(lambda x: x + 1, lambda x: x * 2, BiTuple((1, 2))))
+    print(BiTuple.first(lambda x: x + 1, BiTuple((1, 2))))
+    print(BiTuple.second(lambda x: x + 1, BiTuple((1, 2))))
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Bifunctor laws
+
+        The only law we need to follow is
+
+        ```python
+        bimap(id, id, fa) == id(fa)
+        ```
+
+        and then other laws are followed automatically.
+        """
+    )
+    return
+
+
+@app.cell
+def _(BiEither, BiTuple, id):
+    print(BiEither.bimap(id, id, BiEither(left=1)) == id(BiEither(left=1)))
+    print(BiEither.bimap(id, id, BiEither(right=1)) == id(BiEither(right=1)))
+    print(BiTuple.bimap(id, id, BiTuple((1, 2))) == id(BiTuple((1, 2))))
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
         """
         # Further reading
 
@@ -1253,7 +1443,8 @@ def _(TypeVar):
     A = TypeVar("A")
     B = TypeVar("B")
     C = TypeVar("C")
-    return A, B, C
+    D = TypeVar("D")
+    return A, B, C, D
 
 
 if __name__ == "__main__":
