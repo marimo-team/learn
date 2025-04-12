@@ -4,14 +4,14 @@
 #     "marimo",
 #     "numpy==2.2.3",
 #     "plotly[express]==6.0.0",
-#     "polars==1.26.0",
+#     "polars==1.27.1",
 #     "statsmodels==0.14.4",
 # ]
 # ///
 
 import marimo
 
-__generated_with = "0.11.26"
+__generated_with = "0.12.8"
 app = marimo.App(width="medium")
 
 
@@ -19,9 +19,16 @@ app = marimo.App(width="medium")
 def _(mo):
     mo.md(
         """
-        For this tutorial, we will be using the a [Spotify Tracks dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset).
+        # Reactive Plots
 
-        Note that it does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size managable for most users.
+        _By [etrotta](https://github.com/etrotta)._
+
+        This tutorial covers Data Visualisation basics using marimo, [polars](https://docs.pola.rs/) and [plotly](https://plotly.com/python/plotly-express/).
+        It shows how to load data, explore and visualise it, then use User Interface elements (including the plots themselves) to filter and select data for more refined analysis.
+
+        We will be using a [Spotify Tracks dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset). Before you write any code yourself, I recommend taking some time to understand the data you're working with, from which columns are available to what are their possible values, as well as more abstract details such as the scope, coverage and intended uses of the dataset.
+
+        Note that this dataset does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size managable for most users.
         """
     )
     return
@@ -47,11 +54,12 @@ def _(pl):
 def _(mo):
     mo.md(
         """
-        You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle you may want to look in their websites, then filter or do some transformations before downloading.
 
-        The Polars Lazy engine allows for you define operations before loading the data, and polars will optimize the plan in order to avoid doing unnecessary operations
+        You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle can preview it via their websites, and optionally filter or do some transformations before downloading.
 
-        Let's say that looking at it in the Data Viewer, we decided we do not want the Unnamed column (which appears to be the row index), nor do we care about the original ID, and we only want non-explicit tracks.
+        The [Polars Lazy API](https://docs.pola.rs/user-guide/lazy/) allows for you define operations before loading the data, and polars will optimize the plan in order to avoid doing unnecessary operations or loading data we do not care about.
+
+        Let's say that looking at the dataset's preview in the Data Viewer, we decided we do not want the Unnamed column (which appears to be the row index), nor do we care about the original ID, and we only want non-explicit tracks.
         """
     )
     return
@@ -82,12 +90,13 @@ def _(lz, pl):
 def _(mo):
     mo.md(
         r"""
+
         When you start exploring a dataset, some of the first things to do may include:
 
         - investigating any values that seem weird
         - verifying if there could be issues in the data
         - checking for potential bugs in our pipelines
-        - ensuring you understand the data correctly, includign its relationships and edge cases
+        - ensuring you understand the data correctly, including its relationships and edge cases
 
         For example, the "min" value for the duration column is zero, and the max is over an hour. Why is that?
         """
@@ -95,7 +104,7 @@ def _(mo):
     return
 
 
-@app.cell(disabled=True)
+@app.cell(disabled=True, hide_code=True)
 def _(df, pl):
     # We *could* just filter some of the rows and look at them as a table, for example...
     pl.concat([df.sort("duration_ms").head(5), df.sort("duration_ms", descending=True).head(5)])
@@ -107,7 +116,7 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        For this Notebook we will be using [plotly](https://plotly.com/python), but Marimo also supports some other plotting libraries, read the documentation to learn more later.
+        For this Notebook we will be using [plotly](https://plotly.com/python), but Marimo also [supports other plotting libraries](https://docs.marimo.io/guides/working_with_data/plotting/).
 
         Let's visualize it using a [bar chart](https://plotly.com/python/bar-charts/) and get a feel for which region makes sense to focus on for our analysis
         """
@@ -139,9 +148,9 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(disabled=True, hide_code=True)
 def _(pl, plot):
-    # Taking a look at the selection:
+    # If you want to see the selection itself
     pl.DataFrame(plot.value)
     return
 
@@ -176,7 +185,7 @@ def _(df, pl, plot):
 def _(mo):
     mo.md(
         r"""
-        Now that our data is clean, let's start coming up with and answering some questions about it. Some examples:
+        Now that our data is 'clean', let's start coming up with and answering some questions about it. Some examples:
 
         - Which tracks or artists are the most popular? (Both globally as well as for each genre)
         - Which genres are the most popular? The loudest?
@@ -323,7 +332,7 @@ def _(filtered_duration, mo):
         searchable=True,
         label="Filter by Track Genre:",
     )
-    x_axis, y_axis, color, alpha, include_trendline, filter_genre2
+    mo.vstack([x_axis, y_axis, color, alpha, include_trendline, filter_genre2])
     return (
         alpha,
         color,
@@ -392,6 +401,20 @@ def _(chart2, filtered_duration, mo, pl):
     return active_columns, column_order, out
 
 
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        Reviewing what we have covered in this Notebook:
+
+        - Understand the data you're working with first and foremost
+        - Creating plots can help you understand patterns, identify outliers and observe trends
+        - Thanks to marimo interactive UI elements we can explore multiple facets of the data without changing the code
+        """
+    )
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""# Appendix : Some other examples""")
@@ -457,7 +480,7 @@ def _(filter_artist, filter_track, filtered_duration, mo, pl):
         .sort("match_score", descending=True)
     )
 
-    mo.md("Filter a track based on its name or artist"), filter_artist, filter_track, filtered_artist_track
+    mo.vstack([mo.md("Filter a track based on its name or artist"), filter_artist, filter_track, filtered_artist_track])
     return filtered_artist_track, score_match_text
 
 
@@ -479,10 +502,13 @@ def _(filter_genre2, filtered_duration, mo, pl):
         .len("count")
         .collect()
     )
-    (
-        mo.md("Check which artists collaborate with others most often (reuses the last genre filter)"),
-        filter_genre2,
-        artist_combinations.sort("count", descending=True),
+    mo.vstack(
+        [
+            mo.md("Check which artists collaborate with others most often (reuses the last genre filter)"),
+            filter_genre2,
+            artist_combinations.sort("count", descending=True),
+        ],
+        align="center",
     )
     return (artist_combinations,)
 
