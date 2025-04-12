@@ -61,10 +61,10 @@ def _(mo):
         f"""
         /* Another way to load the CSV could be 
         SELECT * 
-        FROM read_csv('AI_Research_Data.csv')
+        FROM read_csv('https://github.com/Mustjaab/Loading_CSVs_in_DuckDB/blob/main/AI_Research_Data.csv')
         */
         SELECT * 
-        FROM "AI_Research_Data.csv"
+        FROM "https://github.com/Mustjaab/Loading_CSVs_in_DuckDB/blob/main/AI_Research_Data.csv"
         LIMIT 5;
         """
     )
@@ -83,7 +83,7 @@ def _(mo):
         f"""
         -- Build a table based on the CSV where it just contains the specified columns
         CREATE TABLE Domain_Analysis AS
-            SELECT Year, Concept, publications FROM "AI_Research_Data.csv"
+            SELECT Year, Concept, publications FROM "https://github.com/Mustjaab/Loading_CSVs_in_DuckDB/blob/main/AI_Research_Data.csv"
         """
     )
     return Discipline_Analysis, Domain_Analysis
