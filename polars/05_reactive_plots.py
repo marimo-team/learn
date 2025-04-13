@@ -54,8 +54,7 @@ def _(pl):
 def _(mo):
     mo.md(
         """
-
-        You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle can preview it via their websites, and optionally filter or do some transformations before downloading.
+        You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle you can preview it via their websites, and optionally filter or do some transformations before downloading.
 
         The [Polars Lazy API](https://docs.pola.rs/user-guide/lazy/) allows for you define operations before loading the data, and polars will optimize the plan in order to avoid doing unnecessary operations or loading data we do not care about.
 
@@ -90,7 +89,6 @@ def _(lz, pl):
 def _(mo):
     mo.md(
         r"""
-
         When you start exploring a dataset, some of the first things to do may include:
 
         - investigating any values that seem weird
@@ -150,7 +148,7 @@ def _(mo):
 
 @app.cell
 def _(pl, plot):
-    # The format of `plot.value` may vary depending on which kind of plot you are working with, let's see what we have for this case:
+    # The format of plot.value may vary depending on which kind of plot you are working with, let's see what we have for this case:
     pl.DataFrame(plot.value)
     return
 
@@ -307,7 +305,7 @@ def _(
         opacity=alpha.value,
         trendline="lowess" if include_trendline.value else None,
         render_mode="webgl",
-        # strings on `hover` get fairly heavy when there are too many rows, but you can try using it after applying a few filters
+        # strings on hover get fairly heavy when there are too many rows, but you can try using it after applying a few filters
         # hover_name="track_name",
         # hover_data=("artists", "album_name"),
     )
@@ -352,8 +350,8 @@ def _(mo):
         Reviewing what we have covered in this Notebook:
 
         - Understand the data you're working with first and foremost
-        - Creating plots can help you understand patterns, identify outliers and observe trends
-        - Thanks to marimo interactive UI elements we can explore multiple facets of the data without changing the code
+        - Creating plots can help you find and explain patterns, identify outliers and observe trends
+        - Thanks to marimo's interactive UI elements, we can explore multiple facets of the data without changing the code
         """
     )
     return
