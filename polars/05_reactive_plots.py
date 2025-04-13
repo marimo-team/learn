@@ -104,7 +104,7 @@ def _(mo):
     return
 
 
-@app.cell(disabled=True, hide_code=True)
+@app.cell(disabled=True)
 def _(df, pl):
     # We *could* just filter some of the rows and look at them as a table, for example...
     pl.concat([df.sort("duration_ms").head(5), df.sort("duration_ms", descending=True).head(5)])
@@ -148,27 +148,19 @@ def _(mo):
     return
 
 
-@app.cell(disabled=True, hide_code=True)
+@app.cell
 def _(pl, plot):
-    # If you want to see the selection itself
+    # The format of `plot.value` may vary depending on which kind of plot you are working with, let's see what we have for this case:
     pl.DataFrame(plot.value)
     return
 
 
 @app.cell
-def _(df, pl, plot):
-    if plot.value is None or len(plot.value) == 0:
-        print(
-            "Could not find a selected region. Using default values instead, try clicking and dragging in the above plot to change them."
-        )
-        min_dur, max_dur = 120, 360
-    else:
-        # We can retrieve it and use it as a filter:
-        min_dur, max_dur = (
-            min(row["duration_seconds"] for row in plot.value),
-            max(row["duration_seconds"] for row in plot.value),
-        )
-
+def _(df, get_extremes, pl, plot):
+    # Now, we want to filter to only include tracks whose duration falls inside of our selection - we will need to first identify the extremes, then filter based on them
+    min_dur, max_dur = get_extremes(
+        plot.value, col="duration_seconds", defaults_if_missing=(120, 360)
+    )  # Utlity function defined in the bottom of the Notebook
     # Calculate how many we are keeping vs throwing away with the filter
     duration_in_range = pl.col("duration_seconds").is_between(min_dur, max_dur)
     print(
@@ -202,13 +194,15 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(filter_genre, filtered_duration, mo, pl):
-    # Now, if you saw the Dataset description or looked closely at the Artists column you may notice there are some rows with multiple artists separated by ;;. We will have to separate each of these.
     most_popular_artists = (
         filtered_duration.lazy()
+        # If you saw the Dataset description or looked closely at the Artists column you may notice there are some rows with multiple artists separated by ;;. We will have to separate each of these.
         .with_columns(pl.col("artists").str.split(";"))
-        # Spoiler for a future cell! Remember that in marimo you can do things 'out of order'
+        # Similarly to the utility function you saw before, filter_genre is also defined in a later cell.
+        # While developing, you can add things out of order then go back to old cells and edit them
+        # it's up to you whenever to put them in whichever order makes the most sense to you.
         .filter(True if filter_genre.value is None else pl.col("track_genre").eq(filter_genre.value))
         .explode("artists")
         .group_by("artists")
@@ -228,33 +222,22 @@ def _(filter_genre, filtered_duration, mo, pl):
             # And for good measure, see how many total tracks they have
             pl.col("track_name").n_unique().alias("tracks_count"),
         )
+        .sort("popularity", descending=True)
         .collect()
     )
-    mo.md("Let's start with the Most popular artists")
-    return (most_popular_artists,)
-
-
-@app.cell
-def _(most_popular_artists, pl):
-    # Just adjust the formatting for displaying columns that include multiple values in the same line
-    most_popular_artists.with_columns(pl.col(pl.List(pl.String())).list.join("\n")).sort("popularity", descending=True)
-    return
-
-
-@app.cell
-def _(filtered_duration, mo):
-    # Recognize any of your favourite songs? Me neither. Let's try adding a filter by genre
-    # While developing, you can add things out of order then go back to old cells and edit them,
-    # it's up to you whenever to re-order them later or keep in whichever order visually makes the most sense to you.
-    filter_genre = mo.ui.dropdown(
-        options=filtered_duration["track_genre"].unique().sort().to_list(),
-        allow_select_none=True,
-        value=None,
-        searchable=True,
-        label="Filter by Track Genre:",
+    mo.vstack(
+        [
+            mo.md("Let's start by taking a look at the most popular artists"),
+            # Also adjust the formatting for displaying columns that include multiple values in the same line
+            most_popular_artists.with_columns(pl.col(pl.List(pl.String())).list.join("\n")),
+            mo.md("Recognize any of your favourite songs? Me neither. Let's try adding a filter by genre"),
+            filter_genre,
+            mo.md(
+                "(the code is omitted for brevity, but you can click the eye icon to see it)",
+            ),
+        ],
     )
-    filter_genre
-    return (filter_genre,)
+    return (most_popular_artists,)
 
 
 @app.cell(hide_code=True)
@@ -301,50 +284,7 @@ def _(mo):
     return
 
 
-@app.cell
-def _(filtered_duration, mo):
-    # Let's start by making some comparisons, scatter plots are a nice way to get a feel for how dependent a variable is on another
-    options = [
-        "duration_seconds",
-        "popularity",
-        "danceability",
-        "energy",
-        "key",
-        "loudness",
-        "mode",
-        "speechiness",
-        "acousticness",
-        "instrumentalness",
-        "liveness",
-        "valence",
-        "tempo",
-    ]
-    x_axis = mo.ui.dropdown(options, value="energy", label="X")
-    y_axis = mo.ui.dropdown(options, value="danceability", label="Y")
-    color = mo.ui.dropdown(options, value="loudness", allow_select_none=True, searchable=True, label="Color column")
-    alpha = mo.ui.slider(start=0.01, stop=1.0, step=0.01, value=0.1, label="Alpha", show_value=True)
-    include_trendline = mo.ui.checkbox(label="Trendline")
-    # We *could* reuse the same filter_genre as above, but it would cause marimo to rerun both the table and the graph whenever we change it
-    filter_genre2 = mo.ui.dropdown(
-        options=filtered_duration["track_genre"].unique().sort().to_list(),
-        allow_select_none=True,
-        value=None,
-        searchable=True,
-        label="Filter by Track Genre:",
-    )
-    mo.vstack([x_axis, y_axis, color, alpha, include_trendline, filter_genre2])
-    return (
-        alpha,
-        color,
-        filter_genre2,
-        include_trendline,
-        options,
-        x_axis,
-        y_axis,
-    )
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _(
     alpha,
     color,
@@ -367,9 +307,13 @@ def _(
         opacity=alpha.value,
         trendline="lowess" if include_trendline.value else None,
         render_mode="webgl",
+        # strings on `hover` get fairly heavy when there are too many rows, but you can try using it after applying a few filters
+        # hover_name="track_name",
+        # hover_data=("artists", "album_name"),
     )
     chart2 = mo.ui.plotly(fig2)
-    chart2
+
+    mo.vstack([mo.hstack([x_axis, y_axis, color, alpha, include_trendline, filter_genre2]), chart2])
     return chart2, fig2
 
 
@@ -401,7 +345,7 @@ def _(chart2, filtered_duration, mo, pl):
     return active_columns, column_order, out
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -413,6 +357,83 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""# Utility Functions and UI Elements""")
+    return
+
+
+@app.cell
+def get_extremes():
+    def get_extremes(selection, col, defaults_if_missing):
+        "Get the minimum and maximum values for a given column within the selection"
+        if selection is None or len(selection) == 0:
+            print(
+                f"Could not find a selected region. Using default values {defaults_if_missing} instead, try clicking and dragging in the plot to change them."
+            )
+            return defaults_if_missing
+        else:
+            return (
+                min(row[col] for row in selection),
+                max(row[col] for row in selection),
+            )
+    return (get_extremes,)
+
+
+@app.cell
+def _(filtered_duration, mo):
+    filter_genre = mo.ui.dropdown(
+        options=filtered_duration["track_genre"].unique().sort().to_list(),
+        allow_select_none=True,
+        value=None,
+        searchable=True,
+        label="Filter by Track Genre:",
+    )
+    return (filter_genre,)
+
+
+@app.cell
+def _(filtered_duration, mo):
+    # Columns that make sense for the scatterplot and the corresponding UI elements
+    options = [
+        "duration_seconds",
+        "popularity",
+        "danceability",
+        "energy",
+        "key",
+        "loudness",
+        "mode",
+        "speechiness",
+        "acousticness",
+        "instrumentalness",
+        "liveness",
+        "valence",
+        "tempo",
+    ]
+    x_axis = mo.ui.dropdown(options, value="energy", label="X")
+    y_axis = mo.ui.dropdown(options, value="danceability", label="Y")
+    color = mo.ui.dropdown(options, value="loudness", allow_select_none=True, searchable=True, label="Color column")
+    alpha = mo.ui.slider(start=0.01, stop=1.0, step=0.01, value=0.1, label="Alpha", show_value=True)
+    include_trendline = mo.ui.checkbox(label="Trendline")
+    # We *could* reuse the same filter_genre from above, but it would cause marimo to rerun both the table and the graph whenever we change it
+    filter_genre2 = mo.ui.dropdown(
+        options=filtered_duration["track_genre"].unique().sort().to_list(),
+        allow_select_none=True,
+        value=None,
+        searchable=True,
+        label="Filter by Track Genre:",
+    )
+    return (
+        alpha,
+        color,
+        filter_genre2,
+        include_trendline,
+        options,
+        x_axis,
+        y_axis,
+    )
 
 
 @app.cell(hide_code=True)
