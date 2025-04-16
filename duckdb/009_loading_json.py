@@ -16,17 +16,11 @@
 #     "polars[pyarrow]==1.25.2",
 # ]
 # ///
+
 import marimo
 
-__generated_with = "0.11.20"
+__generated_with = "0.12.8"
 app = marimo.App(width="medium")
-
-
-@app.cell
-def _():
-    import marimo as mo
-    from pathlib import Path
-    return Path, mo
 
 
 @app.cell(hide_code=True)
@@ -175,8 +169,9 @@ def _(mo):
 @app.cell
 def _(Path):
     from tempfile import TemporaryDirectory
+
     TMP_DIR = TemporaryDirectory()
-    COPY_PATH = Path(TMP_DIR.name) / 'cars_mpg.jsonl'
+    COPY_PATH = Path(TMP_DIR.name) / "cars_mpg.jsonl"
     print(COPY_PATH)
     return COPY_PATH, TMP_DIR, TemporaryDirectory
 
@@ -217,7 +212,7 @@ def _(mo):
 
 @app.cell
 def _(Path, TMP_DIR):
-    EXPORT_PATH = Path(TMP_DIR.name) / 'cars_export'
+    EXPORT_PATH = Path(TMP_DIR.name) / "cars_export"
     print(EXPORT_PATH)
     return (EXPORT_PATH,)
 
@@ -273,6 +268,13 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    from pathlib import Path
+    return Path, mo
 
 
 if __name__ == "__main__":
