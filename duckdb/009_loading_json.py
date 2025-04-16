@@ -129,7 +129,7 @@ def _(mo):
         r"""
         ## Using `COPY`
 
-        `COPY` is for useful both for importing and exporting data in a variety of formats including JSON. For example we can import data into an existing table from a JSON file.
+        `COPY` is for useful both for importing and exporting data in a variety of formats including JSON. For example, we can import data into an existing table from a JSON file.
         """
     )
     return
