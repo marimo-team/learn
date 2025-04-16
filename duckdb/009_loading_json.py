@@ -76,7 +76,7 @@ def _(mo):
         r"""
         ## Using `read_json`
 
-        For greater control over how the JSON is read, we can directly call the [`read_json`](https://duckdb.org/docs/stable/data/json/loading_json#the-read_json-function) function. It supports a few different arguments some common ones are:
+        For greater control over how the JSON is read, we can directly call the [`read_json`](https://duckdb.org/docs/stable/data/json/loading_json#the-read_json-function) function. It supports a few different arguments — some common ones are:
 
         - `format='array'` or `format='newline_delimited'` - the former tells DuckDB that the rows should be read from a top-level JSON array while latter means the rows should be read from JSON objects separated by a newline (JSONL/NDJSON).
         - `ignore_errors=true` - skips lines with parse errors when reading newline delimited JSON.
