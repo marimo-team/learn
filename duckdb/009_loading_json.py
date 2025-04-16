@@ -7,6 +7,15 @@
 #     "sqlglot==26.11.1",
 # ]
 # ///
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "marimo",
+#     "duckdb==1.2.1",
+#     "sqlglot==26.11.1",
+#     "polars[pyarrow]==1.25.2",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.11.20"
