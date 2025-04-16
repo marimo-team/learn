@@ -117,7 +117,7 @@ def _(mo):
     return (cars_df,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""Other than singular files we can read [multiple files](https://duckdb.org/docs/stable/data/multiple_files/overview.html) at a time by either passing a list of files or a UNIX glob pattern.""")
     return
