@@ -35,7 +35,7 @@ def _(mo):
         r"""
         # Loading JSON
 
-        DuckDB supports reading and writing JSON through the `json` extension that should be present in most distributions and is autoloaded on first-use. If it's not you can [install and load](https://duckdb.org/docs/stable/data/json/installing_and_loading.html) it manually like any other extension.
+        DuckDB supports reading and writing JSON through the `json` extension that should be present in most distributions and is autoloaded on first-use. If it's not, you can [install and load](https://duckdb.org/docs/stable/data/json/installing_and_loading.html) it manually like any other extension.
 
         In this tutorial we'll cover 4 different ways we can transfer JSON data in and out of DuckDB:
 
