@@ -54,7 +54,7 @@ def _(mo):
         r"""
         ## Using `FROM`
 
-        Loading data using `FROM` is simple and straightforward. We use a path or URL to the file we want to load where we'd normally put a table name. When we do this DuckDB attempts to infer the right way to read the file including the correct format and column types. In most cases this is all we need to load data into DuckDB.
+        Loading data using `FROM` is simple and straightforward. We use a path or URL to the file we want to load where we'd normally put a table name. When we do this, DuckDB attempts to infer the right way to read the file including the correct format and column types. In most cases this is all we need to load data into DuckDB.
         """
     )
     return
