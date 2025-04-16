@@ -168,7 +168,7 @@ def _(cars2, mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Similarly, we can write data from a table or select statement to a JSON file. For example we create a new JSONL file with just the car names and miles per gallon. We first create a temporary directory to avoid cluttering our project directory.""")
+    mo.md(r"""Similarly, we can write data from a table or select statement to a JSON file. For example, we create a new JSONL file with just the car names and miles per gallon. We first create a temporary directory to avoid cluttering our project directory.""")
     return
 
 
