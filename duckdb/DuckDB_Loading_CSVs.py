@@ -30,7 +30,7 @@ def _(mo):
         <p> I remember when I first learnt about DuckDB, it was a gamechanger — I used to load the data I wanted to work on to a database software like MS SQL Server, and then build a bridge to an IDE with the language I wanted to use like Python, or R; it was quite the hassle. DuckDB changed my whole world — now I could just import the data file into the IDE, or notebook, make a duckdb connection, and there we go! But then, I realized I didn't even need the step of first importing the file using python. I could just query the csv file directly using SQL through a DuckDB connection.</p> 
 
         ##Introduction
-        <p> I found this dataset on the evolution of AI research by disclipine from <a href= "https://oecd.ai/en/data?selectedArea=ai-research&selectedVisualization=16731"> OECD</a>, and it piqued my interest. I feel like publications in natural language processing drastically jumped in the mid 2010s, and I'm excited to find out if that's the case. </p> 
+        <p> I found this dataset on the evolution of AI research by discipline from <a href= "https://oecd.ai/en/data?selectedArea=ai-research&selectedVisualization=16731"> OECD</a>, and it piqued my interest. I feel like publications in natural language processing drastically jumped in the mid 2010s, and I'm excited to find out if that's the case. </p> 
 
         <p> In this notebook, we'll: </p>
         <ul>
