@@ -137,9 +137,7 @@ def _(NLP_Analysis, px):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""<p> We can see there's a significant increase in NLP publications 2020 and onwards which definitely makes sense provided the rapid emergence of commercial large langage models, and AI assistants. </p>""")
-    return
-
+    mo.md(r"""<p> We can see there's a significant increase in NLP publications 2020 and onwards which definitely makes sense provided the rapid emergence of commercial large language models, and AI assistants. </p>""")
 
 @app.cell(hide_code=True)
 def _(mo):
