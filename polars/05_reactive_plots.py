@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.12.8"
+__generated_with = "0.12.10"
 app = marimo.App(width="medium")
 
 
@@ -347,11 +347,14 @@ def _(chart2, filtered_duration, mo, pl):
 def _(mo):
     mo.md(
         r"""
-        Reviewing what we have covered in this Notebook:
+        In this notebook, we've focused on a few key aspects. First, it's essential to *understand* the data you're working with — this forms the foundation of any analysis. 
 
-        - Understand the data you're working with first and foremost
-        - Creating plots can help you find and explain patterns, identify outliers and observe trends
-        - Thanks to marimo's interactive UI elements, we can explore multiple facets of the data without changing the code
+        Creating plots is a powerful way to identify patterns, outliers, and trends. These visualizations are not just for _presentation_; they are tools for deeper insight.
+
+        /// NOTE
+        With marimo's `interactive` UI elements, exploring different _facets_ of the data becomes seamless, allowing for dynamic analysis without altering the code.
+
+        Keep these points in mind as you continue to work with data.
         """
     )
     return
