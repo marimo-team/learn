@@ -270,7 +270,7 @@ def _(filtered_duration, pl, px):
 def _(mo):
     mo.md(
         r"""
-        Now, why don't we play a bit with morimo's UI elements?
+        Now, why don't we play a bit with marimo's UI elements?
 
         We will use Dropdowns to allow for the user to select any column to use for the visualisation, and throw in some extras
 
