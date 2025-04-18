@@ -35,7 +35,7 @@ def _(mo):
 
         - [`FROM`](https://duckdb.org/docs/stable/sql/query_syntax/from.html) statement.
         - [`read_json`](https://duckdb.org/docs/stable/data/json/loading_json#the-read_json-function) function.
-        - [`COPY`](https://duckdb.org/docs/stable/sql/statements/copy#copy--from) statment.
+        - [`COPY`](https://duckdb.org/docs/stable/sql/statements/copy#copy--from) statement.
         - [`IMPORT DATABASE`](https://duckdb.org/docs/stable/sql/statements/export.html) statement.
         """
     )
