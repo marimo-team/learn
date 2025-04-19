@@ -741,7 +741,7 @@ def _(mo) -> None:
 def _(mo) -> None:
     mo.md(
         r"""
-        /// admonition | exercise
+        /// admonition | Exercise
         Try to use utility functions with different instances
         ///
         """
