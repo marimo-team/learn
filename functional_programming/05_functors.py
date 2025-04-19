@@ -622,7 +622,7 @@ def _(EvilFunctor, check_functor_law, pp):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
