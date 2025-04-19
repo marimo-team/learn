@@ -49,7 +49,7 @@ Open the notebooks in our landing page page [here](https://marimo-team.github.io
 If you're interested in collaborating or have questions, please reach out to me
 on Discord (@eugene.hs).
 
-# Description of notebooks
+## Description of notebooks
 
 Check [here](https://github.com/marimo-team/learn/issues/51) for current series
 structure. 
