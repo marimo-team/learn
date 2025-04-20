@@ -28,7 +28,7 @@ def _(mo):
 
         We will be using a [Spotify Tracks dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset). Before you write any code yourself, I recommend taking some time to understand the data you're working with, from which columns are available to what are their possible values, as well as more abstract details such as the scope, coverage and intended uses of the dataset.
 
-        Note that this dataset does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size managable for most users.
+        Note that this dataset does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size manageable for most users.
         """
     )
     return
@@ -73,7 +73,7 @@ def _(lz, pl):
         .drop("Unnamed: 0", "track_id", "explicit")
         .with_columns(
             # Perform whichever transformations you want  (again somewhat arbitrary in this example)
-            # Convert the duration from miliseconds to seconds (int)
+            # Convert the duration from milliseconds to seconds (int)
             pl.col("duration_ms").floordiv(1_000).alias("duration_seconds"),
             # Convert the popularity from an integer 0 ~ 100 to a percentage 0 ~ 1.0
             pl.col("popularity").truediv(100),
@@ -158,7 +158,7 @@ def _(df, get_extremes, pl, plot):
     # Now, we want to filter to only include tracks whose duration falls inside of our selection - we will need to first identify the extremes, then filter based on them
     min_dur, max_dur = get_extremes(
         plot.value, col="duration_seconds", defaults_if_missing=(120, 360)
-    )  # Utlity function defined in the bottom of the Notebook
+    )  # Utility function defined in the bottom of the Notebook
     # Calculate how many we are keeping vs throwing away with the filter
     duration_in_range = pl.col("duration_seconds").is_between(min_dur, max_dur)
     print(
