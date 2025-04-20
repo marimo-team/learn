@@ -7,12 +7,12 @@
 
 import marimo
 
-__generated_with = "0.12.4"
+__generated_with = "0.12.9"
 app = marimo.App(app_title="Applicative programming with effects")
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         # Applicative programming with effects
@@ -26,24 +26,25 @@ def _(mo):
 
         In this notebook, you will learn:
 
-        1. How to view `applicative` as multi-functor.
+        1. How to view `Applicative` as multi-functor intuitively.
         2. How to use `lift` to simplify chaining application.
         3. How to bring *effects* to the functional pure world.
-        4. How to view `applicative` as lax monoidal functor.
+        4. How to view `Applicative` as a lax monoidal functor.
+        5. How to use `Alternative` to amalgamate multiple computations into a single computation.
 
         /// details | Notebook metadata
             type: info
 
-        version: 0.1.2 | last modified: 2025-04-07 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        version: 0.1.3 | last modified: 2025-04-16 | author: [métaboulie](https://github.com/metaboulie)<br/>
+        reviewer: [Haleshot](https://github.com/Haleshot)
 
         ///
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         # The intuition: [Multifunctor](https://arxiv.org/pdf/2401.14286)
@@ -67,17 +68,16 @@ def _(mo):
         And we have to declare a special version of the functor class for each case.
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Defining Multifunctor
 
         /// admonition
-        we use prefix `f` rather than `ap` to indicate *Applicative Functor* 
+        we use prefix `f` rather than `ap` to indicate *Applicative Functor*
         ///
 
         As a result, we may want to define a single `Multifunctor` such that:
@@ -111,11 +111,10 @@ def _(mo):
         ```
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Pure, apply and lift
@@ -134,7 +133,7 @@ def _(mo):
             # or if we have a regular function `g`
             g: Callable[[A], B]
             # then we can have `fg` as
-            fg: Applicative[Callable[[A], B]] = pure(g) 
+            fg: Applicative[Callable[[A], B]] = pure(g)
             ```
 
         2. `apply`: applies a function inside an applicative functor to a value inside an applicative functor
@@ -154,11 +153,10 @@ def _(mo):
         ```
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         /// admonition | How to use *Applicative* in the manner of *Multifunctor*
@@ -174,7 +172,7 @@ def _(mo):
 
         ///
 
-        /// attention | You can suppress the chaining application of `apply` and `pure` as: 
+        /// attention | You can suppress the chaining application of `apply` and `pure` as:
 
         ```python
         apply(pure(g), fa) -> lift(g, fa)
@@ -185,11 +183,10 @@ def _(mo):
         ///
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Abstracting applicatives
@@ -202,14 +199,14 @@ def _(mo):
             @classmethod
             @abstractmethod
             def pure(cls, a: A) -> "Applicative[A]":
-                return NotImplementedError
+                raise NotImplementedError("Subclasses must implement pure")
 
             @classmethod
             @abstractmethod
             def apply(
                 cls, fg: "Applicative[Callable[[A], B]]", fa: "Applicative[A]"
             ) -> "Applicative[B]":
-                return NotImplementedError
+                raise NotImplementedError("Subclasses must implement apply")
 
             @classmethod
             def lift(cls, f: Callable, *args: "Applicative") -> "Applicative":
@@ -228,17 +225,15 @@ def _(mo):
         ///
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""# Instances, laws and utility functions""")
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Applicative instances
@@ -249,16 +244,15 @@ def _(mo):
         - apply a function inside the computation context to a value inside the computational context
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        ### Wrapper
+        ### The Wrapper Applicative
 
-        - `pure` should simply *wrap* an object, in the sense that: 
+        - `pure` should simply *wrap* an object, in the sense that:
 
             ```haskell
             Wrapper.pure(1) => Wrapper(value=1)
@@ -269,7 +263,6 @@ def _(mo):
         The implementation is:
         """
     )
-    return
 
 
 @app.cell
@@ -291,27 +284,25 @@ def _(Applicative, dataclass):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""> try with Wrapper below""")
-    return
 
 
 @app.cell
-def _(Wrapper):
+def _(Wrapper) -> None:
     Wrapper.lift(
         lambda a: lambda b: lambda c: a + b * c,
         Wrapper(1),
         Wrapper(2),
         Wrapper(3),
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        ### List
+        ### The List Applicative
 
         - `pure` should wrap the object in a list, in the sense that:
 
@@ -325,7 +316,6 @@ def _(mo):
         The implementation is:
         """
     )
-    return
 
 
 @app.cell
@@ -345,31 +335,28 @@ def _(Applicative, dataclass, product):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""> try with List below""")
-    return
 
 
 @app.cell
-def _(List):
+def _(List) -> None:
     List.apply(
         List([lambda a: a + 1, lambda a: a * 2]),
         List([1, 2]),
     )
-    return
 
 
 @app.cell
-def _(List):
+def _(List) -> None:
     List.lift(lambda a: lambda b: a + b, List([1, 2]), List([3, 4, 5]))
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        ### Maybe
+        ### The Maybe Applicative
 
         - `pure` should wrap the object in a Maybe, in the sense that:
 
@@ -385,7 +372,6 @@ def _(mo):
         The implementation is:
         """
     )
-    return
 
 
 @app.cell
@@ -413,33 +399,116 @@ def _(Applicative, dataclass):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""> try with Maybe below""")
-    return
 
 
 @app.cell
-def _(Maybe):
+def _(Maybe) -> None:
     Maybe.lift(
         lambda a: lambda b: a + b,
         Maybe(1),
         Maybe(2),
     )
-    return
 
 
 @app.cell
-def _(Maybe):
+def _(Maybe) -> None:
     Maybe.lift(
         lambda a: lambda b: None,
         Maybe(1),
         Maybe(2),
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
+    mo.md(
+        r"""
+        ### The Either Applicative
+
+        - `pure` should wrap the object in `Right`, in the sense that:
+
+            ```haskell
+            Either.pure(1) => Right(1)
+            ```
+
+        - `apply` should apply a function that is either on Left or Right to a value that is either on Left or Right
+            - if the function is `Left`, simply returns the `Left` of the function
+            - else `fmap` the `Right` of the function to the value
+
+        The implementation is:
+        """
+    )
+
+
+@app.cell
+def _(Applicative, B, Callable, Union, dataclass):
+    @dataclass
+    class Either[A](Applicative):
+        left: A = None
+        right: A = None
+
+        def __post_init__(self):
+            if (self.left is not None and self.right is not None) or (
+                self.left is None and self.right is None
+            ):
+                msg = "Provide either the value of the left or the value of the right."
+                raise TypeError(
+                    msg
+                )
+
+        @classmethod
+        def pure(cls, a: A) -> "Either[A]":
+            return cls(right=a)
+
+        @classmethod
+        def apply(
+            cls, fg: "Either[Callable[[A], B]]", fa: "Either[A]"
+        ) -> "Either[B]":
+            if fg.left is not None:
+                return cls(left=fg.left)
+            return cls.fmap(fg.right, fa)
+
+        @classmethod
+        def fmap(
+            cls, g: Callable[[A], B], fa: "Either[A]"
+        ) -> Union["Either[A]", "Either[B]"]:
+            if fa.left is not None:
+                return cls(left=fa.left)
+            return cls(right=g(fa.right))
+
+        def __repr__(self):
+            if self.left is not None:
+                return f"Left({self.left!r})"
+            return f"Right({self.right!r})"
+    return (Either,)
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(r"""> try with `Either` below""")
+
+
+@app.cell
+def _(Either) -> None:
+    Either.apply(Either(left=TypeError("Parse Error")), Either(right=2))
+
+
+@app.cell
+def _(Either) -> None:
+    Either.apply(
+        Either(right=lambda x: x + 1), Either(left=TypeError("Parse Error"))
+    )
+
+
+@app.cell
+def _(Either) -> None:
+    Either.apply(Either(right=lambda x: x + 1), Either(right=1))
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
     mo.md(
         r"""
         ## Collect the list of response with sequenceL
@@ -465,17 +534,15 @@ def _(mo):
         Let's try `sequenceL` with the instances.
         """
     )
-    return
 
 
 @app.cell
-def _(Wrapper):
+def _(Wrapper) -> None:
     Wrapper.sequenceL([Wrapper(1), Wrapper(2), Wrapper(3)])
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         /// attention
@@ -483,29 +550,25 @@ def _(mo):
         ///
         """
     )
-    return
 
 
 @app.cell
-def _(Maybe):
+def _(Maybe) -> None:
     Maybe.sequenceL([Maybe(1), Maybe(2), Maybe(None), Maybe(3)])
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""The result of `sequenceL` for `List Applicative`  is the Cartesian product of the input lists, yielding all possible ordered combinations of elements from each list.""")
-    return
 
 
 @app.cell
-def _(List):
+def _(List) -> None:
     List.sequenceL([List([1, 2]), List([3]), List([5, 6, 7])])
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Applicative laws
@@ -549,7 +612,7 @@ def _(mo):
           ```
           This one is the trickiest law to gain intuition for. In some sense it is expressing a sort of associativity property of `apply`.
 
-        We can add 4 helper functions to `Applicative` to check whether an instance respects the laws or not: 
+        We can add 4 helper functions to `Applicative` to check whether an instance respects the laws or not:
 
         ```python
         @dataclass
@@ -588,7 +651,6 @@ def _(mo):
         > Try to validate applicative laws below
         """
     )
-    return
 
 
 @app.cell
@@ -600,7 +662,7 @@ def _():
 
 
 @app.cell
-def _(List, Wrapper):
+def _(List, Wrapper) -> None:
     print("Checking Wrapper")
     print(Wrapper.check_identity(Wrapper.pure(1)))
     print(Wrapper.check_homomorphism(1, lambda x: x + 1))
@@ -622,11 +684,10 @@ def _(List, Wrapper):
             List.pure(lambda x: x * 2), List.pure(lambda x: x + 0.1), List.pure(1)
         )
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Utility functions
@@ -663,34 +724,32 @@ def _(mo):
                 cls, fa: "Applicative[A]", fg: "Applicative[Callable[[A], [B]]]"
             ) -> "Applicative[B]":
                 '''
-                The first computation produces values which are provided 
-                as input to the function(s) produced by the second computation. 
+                The first computation produces values which are provided
+                as input to the function(s) produced by the second computation.
                 '''
                 return cls.lift(lambda a: lambda f: f(a), fa, fg)
         ```
 
         - `skip` sequences the effects of two Applicative computations, but **discards the result of the first**. For example, if `m1` and `m2` are instances of type `Maybe[Int]`, then `Maybe.skip(m1, m2)` is `Nothing` whenever either `m1` or `m2` is `Nothing`; but if not, it will have the same value as `m2`.
         - Likewise, `keep` sequences the effects of two computations, but **keeps only the result of the first**.
-        - `revapp` is similar to `apply`, but where the first computation produces value(s) which are provided as input to the function(s) produced by the second computation. 
+        - `revapp` is similar to `apply`, but where the first computation produces value(s) which are provided as input to the function(s) produced by the second computation.
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        /// admonition | exercise
+        /// admonition | Exercise
         Try to use utility functions with different instances
         ///
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         # Formal implementation of Applicative
@@ -698,7 +757,6 @@ def _(mo):
         Now, we can give the formal implementation of `Applicative`
         """
     )
-    return
 
 
 @app.cell
@@ -719,7 +777,8 @@ def _(
         @abstractmethod
         def pure(cls, a: A) -> "Applicative[A]":
             """Lift a value into the Structure."""
-            return NotImplementedError
+            msg = "Subclasses must implement pure"
+            raise NotImplementedError(msg)
 
         @classmethod
         @abstractmethod
@@ -727,7 +786,8 @@ def _(
             cls, fg: "Applicative[Callable[[A], B]]", fa: "Applicative[A]"
         ) -> "Applicative[B]":
             """Sequential application."""
-            return NotImplementedError
+            msg = "Subclasses must implement apply"
+            raise NotImplementedError(msg)
 
         @classmethod
         def lift(cls, f: Callable, *args: "Applicative") -> "Applicative":
@@ -757,7 +817,7 @@ def _(
                 return cls.pure([])
 
             return cls.apply(
-                cls.fmap(lambda v: lambda vs: [v] + vs, fas[0]),
+                cls.fmap(lambda v: lambda vs: [v, *vs], fas[0]),
                 cls.sequenceL(fas[1:]),
             )
 
@@ -792,21 +852,24 @@ def _(
             return cls.lift(lambda a: lambda f: f(a), fa, fg)
 
         @classmethod
-        def check_identity(cls, fa: "Applicative[A]"):
+        def check_identity(cls, fa: "Applicative[A]") -> bool:
             if cls.lift(id, fa) != fa:
-                raise ValueError("Instance violates identity law")
+                msg = "Instance violates identity law"
+                raise ValueError(msg)
             return True
 
         @classmethod
-        def check_homomorphism(cls, a: A, f: Callable[[A], B]):
+        def check_homomorphism(cls, a: A, f: Callable[[A], B]) -> bool:
             if cls.lift(f, cls.pure(a)) != cls.pure(f(a)):
-                raise ValueError("Instance violates homomorphism law")
+                msg = "Instance violates homomorphism law"
+                raise ValueError(msg)
             return True
 
         @classmethod
-        def check_interchange(cls, a: A, fg: "Applicative[Callable[[A], B]]"):
+        def check_interchange(cls, a: A, fg: "Applicative[Callable[[A], B]]") -> bool:
             if cls.apply(fg, cls.pure(a)) != cls.lift(lambda g: g(a), fg):
-                raise ValueError("Instance violates interchange law")
+                msg = "Instance violates interchange law"
+                raise ValueError(msg)
             return True
 
         @classmethod
@@ -815,15 +878,16 @@ def _(
             fg: "Applicative[Callable[[B], C]]",
             fh: "Applicative[Callable[[A], B]]",
             fa: "Applicative[A]",
-        ):
+        ) -> bool:
             if cls.apply(fg, cls.apply(fh, fa)) != cls.lift(compose, fg, fh, fa):
-                raise ValueError("Instance violates composition law")
+                msg = "Instance violates composition law"
+                raise ValueError(msg)
             return True
     return (Applicative,)
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         # Effectful programming
@@ -833,11 +897,10 @@ def _(mo):
          The arguments are no longer just plain values but may also have effects, such as the possibility of failure, having many ways to succeed, or performing input/output actions. In this manner, applicative functors can also be viewed as abstracting the idea of **applying pure functions to effectful arguments**, with the precise form of effects that are permitted depending on the nature of the underlying functor.
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## The IO Applicative
@@ -846,7 +909,7 @@ def _(mo):
 
         As before, we first abstract how `pure` and `apply` should function.
 
-        - `pure` should wrap the object in an IO action, and make the object *callable* if it's not because we want to perform the action later: 
+        - `pure` should wrap the object in an IO action, and make the object *callable* if it's not because we want to perform the action later:
 
             ```haskell
             IO.pure(1) => IO(effect=lambda: 1)
@@ -858,7 +921,6 @@ def _(mo):
         The implementation is:
         """
     )
-    return
 
 
 @app.cell
@@ -881,34 +943,32 @@ def _(Applicative, Callable, dataclass):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""For example, a function that reads a given number of lines from the keyboard can be defined in applicative style as follows:""")
-    return
 
 
 @app.cell
 def _(IO):
     def get_chars(n: int = 3):
-        return IO.sequenceL(
-            [IO.pure(input(f"input the {i}th str")) for i in range(1, n + 1)]
-        )
+        return IO.sequenceL([
+            IO.pure(input(f"input the {i}th str")) for i in range(1, n + 1)
+        ])
     return (get_chars,)
 
 
 @app.cell
-def _():
+def _() -> None:
     # get_chars()()
     return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""# From the perspective of category theory""")
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Lax Monoidal Functor
@@ -916,7 +976,6 @@ def _(mo):
         An alternative, equivalent formulation of `Applicative` is given by
         """
     )
-    return
 
 
 @app.cell
@@ -938,10 +997,10 @@ def _(ABC, Functor, abstractmethod, dataclass):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        Intuitively, this states that a *monoidal functor* is one which has some sort of "default shape" and which supports some sort of "combining" operation. 
+        Intuitively, this states that a *monoidal functor* is one which has some sort of "default shape" and which supports some sort of "combining" operation.
 
         - `unit` provides the identity element
         - `tensor` combines two contexts into a product context
@@ -949,14 +1008,13 @@ def _(mo):
         More technically, the idea is that `monoidal functor` preserves the "monoidal structure" given by the pairing constructor `(,)` and unit type `()`.
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
-        Furthermore, to deserve the name "monoidal", instances of Monoidal ought to satisfy the following laws, which seem much more straightforward than the traditional Applicative laws: 
+        Furthermore, to deserve the name "monoidal", instances of Monoidal ought to satisfy the following laws, which seem much more straightforward than the traditional Applicative laws:
 
         - Left identity
 
@@ -971,11 +1029,10 @@ def _(mo):
             `tensor(u, tensor(v, w)) ≅ tensor(tensor(u, v), w)`
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         /// admonition | ≅ indicates isomorphism
@@ -987,11 +1044,10 @@ def _(mo):
         ///
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Mutual definability of Monoidal and Applicative
@@ -1009,11 +1065,10 @@ def _(mo):
         ```
         """
     )
-    return
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(
         r"""
         ## Instance: ListMonoidal
@@ -1029,7 +1084,6 @@ def _(mo):
         The implementation is:
         """
     )
-    return
 
 
 @app.cell
@@ -1057,9 +1111,8 @@ def _(B, Callable, Monoidal, dataclass, product):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""> try with `ListMonoidal` below""")
-    return
 
 
 @app.cell
@@ -1071,15 +1124,13 @@ def _(ListMonoidal):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
     mo.md(r"""and we can prove that `tensor(fa, fb) = lift(lambda fa: lambda fb: (fa, fb), fa, fb)`:""")
-    return
 
 
 @app.cell
-def _(List, xs, ys):
+def _(List, xs, ys) -> None:
     List.lift(lambda fa: lambda fb: (fa, fb), List(xs.items), List(ys.items))
-    return
 
 
 @app.cell(hide_code=True)
@@ -1089,7 +1140,8 @@ def _(ABC, B, Callable, abstractmethod, dataclass):
         @classmethod
         @abstractmethod
         def fmap(cls, f: Callable[[A], B], a: "Functor[A]") -> "Functor[B]":
-            return NotImplementedError
+            msg = "Subclasses must implement fmap"
+            raise NotImplementedError(msg)
 
         @classmethod
         def const(cls, a: "Functor[A]", b: B) -> "Functor[B]":
@@ -1109,10 +1161,10 @@ def _():
 
 @app.cell(hide_code=True)
 def _():
-    from dataclasses import dataclass
     from abc import ABC, abstractmethod
-    from typing import TypeVar, Union
     from collections.abc import Callable
+    from dataclasses import dataclass
+    from typing import TypeVar, Union
     return ABC, Callable, TypeVar, Union, abstractmethod, dataclass
 
 
@@ -1131,7 +1183,309 @@ def _(TypeVar):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _(mo) -> None:
+    mo.md(
+        r"""
+        # From Applicative to Alternative
+
+        ## Abstracting Alternative
+
+        In our studies so far, we saw that both `Maybe` and `List` can represent computations with a varying number of results.
+
+        We use `Maybe` to indicate a computation can fail somehow and `List` for computations that can have many possible results. In both of these cases, one useful operation is amalgamating all possible results from multiple computations into a single computation.
+
+        `Alternative` formalizes computations that support:
+
+        - **Failure** (empty result)
+        - **Choice** (combination of results)
+        - **Repetition** (multiple results)
+
+        It extends `Applicative` with monoidal structure, where:
+
+        ```python
+        @dataclass
+        class Alternative[A](Applicative, ABC):
+            @classmethod
+            @abstractmethod
+            def empty(cls) -> "Alternative[A]":
+                '''Identity element for alternative computations'''
+
+            @classmethod
+            @abstractmethod
+            def alt(
+                cls, fa: "Alternative[A]", fb: "Alternative[A]"
+            ) -> "Alternative[A]":
+                '''Binary operation combining computations'''
+        ```
+
+        - `empty` is the identity element (e.g., `Maybe(None)`, `List([])`)
+        - `alt` is a combination operator (e.g., `Maybe` fallback, list concatenation)
+
+        `empty` and `alt` should satisfy the following **laws**:
+
+        ```python
+        # Left identity
+        alt(empty, fa) == fa
+        # Right identity
+        alt(fa, empty) == fa
+        # Associativity
+        alt(fa, alt(fb, fc)) == alt(alt(fa, fb), fc)
+        ```
+
+        /// admonition
+        Actually, `Alternative` is a *monoid* on `Applicative Functors`. We will talk about *monoid* and review these laws in the next notebook about `Monads`.
+        ///
+
+        /// attention | minimal implementation requirement
+        - `empty`
+        - `alt`
+        ///
+        """
+    )
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(
+        r"""
+        ## Instances of Alternative
+
+        ### The Maybe Alternative
+
+        - `empty`: the identity element of `Maybe` is `Maybe(None)`
+        - `alt`: return the first element if it's not `None`, else return the second element
+        """
+    )
+
+
+@app.cell
+def _(Alternative, Maybe, dataclass):
+    @dataclass
+    class AltMaybe[A](Maybe, Alternative):
+        @classmethod
+        def empty(cls) -> "AltMaybe[A]":
+            return cls(None)
+
+        @classmethod
+        def alt(cls, fa: "AltMaybe[A]", fb: "AltMaybe[A]") -> "AltMaybe[A]":
+            if fa.value is not None:
+                return cls(fa.value)
+            return cls(fb.value)
+
+        def __repr__(self):
+            return "Nothing" if self.value is None else f"Just({self.value!r})"
+    return (AltMaybe,)
+
+
+@app.cell
+def _(AltMaybe) -> None:
+    print(AltMaybe.empty())
+    print(AltMaybe.alt(AltMaybe(None), AltMaybe(1)))
+    print(AltMaybe.alt(AltMaybe(None), AltMaybe(None)))
+    print(AltMaybe.alt(AltMaybe(1), AltMaybe(None)))
+    print(AltMaybe.alt(AltMaybe(1), AltMaybe(2)))
+
+
+@app.cell
+def _(AltMaybe) -> None:
+    print(AltMaybe.check_left_identity(AltMaybe(1)))
+    print(AltMaybe.check_right_identity(AltMaybe(1)))
+    print(AltMaybe.check_associativity(AltMaybe(1), AltMaybe(2), AltMaybe(None)))
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(
+        r"""
+        ### The List Alternative
+
+        - `empty`: the identity element of `List` is `List([])`
+        - `alt`: return the concatenation of 2 input lists
+        """
+    )
+
+
+@app.cell
+def _(Alternative, List, dataclass):
+    @dataclass
+    class AltList[A](List, Alternative):
+        @classmethod
+        def empty(cls) -> "AltList[A]":
+            return cls([])
+
+        @classmethod
+        def alt(cls, fa: "AltList[A]", fb: "AltList[A]") -> "AltList[A]":
+            return cls(fa.value + fb.value)
+    return (AltList,)
+
+
+@app.cell
+def _(AltList) -> None:
+    print(AltList.empty())
+    print(AltList.alt(AltList([1, 2, 3]), AltList([4, 5])))
+
+
+@app.cell
+def _(AltList) -> None:
+    AltList([1])
+
+
+@app.cell
+def _(AltList) -> None:
+    AltList([1])
+
+
+@app.cell
+def _(AltList) -> None:
+    print(AltList.check_left_identity(AltList([1, 2, 3])))
+    print(AltList.check_right_identity(AltList([1, 2, 3])))
+    print(
+        AltList.check_associativity(
+            AltList([1, 2]), AltList([3, 4, 5]), AltList([6])
+        )
+    )
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(
+        r"""
+        ## some and many
+
+
+        /// admonition | This section mainly refers to
+
+        - https://stackoverflow.com/questions/7671009/some-and-many-functions-from-the-alternative-type-class/7681283#7681283
+
+        ///
+
+        First let's have a look at the implementation of `some` and `many`:
+
+        ```python
+        @classmethod
+        def some(cls, fa: "Alternative[A]") -> "Alternative[list[A]]":
+            # Short-circuit if input is empty
+            if fa == cls.empty():
+                return cls.empty()
+
+            return cls.apply(
+                cls.fmap(lambda a: lambda b: [a] + b, fa), cls.many(fa)
+            )
+
+        @classmethod
+        def many(cls, fa: "Alternative[A]") -> "Alternative[list[A]]":
+            # Directly return empty list if input is empty
+            if fa == cls.empty():
+                return cls.pure([])
+
+            return cls.alt(cls.some(fa), cls.pure([]))
+        ```
+
+        So `some f` runs `f` once, then *many* times, and conses the results. `many f` runs f *some* times, or *alternatively* just returns the empty list.
+
+        The idea is that they both run `f` as often as possible until it **fails**, collecting the results in a list. The difference is that `some f` immediately fails if `f` fails, while `many f` will still succeed and *return* the empty list in such a case. But what all this exactly means depends on how `alt` is defined.
+
+        Let's see what it does for the instances `AltMaybe` and `AltList`.
+        """
+    )
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(r"""For `AltMaybe`. `None` means failure, so some `None` fails as well and evaluates to `None` while many `None` succeeds and evaluates to `Just []`. Both `some (Just ())` and `many (Just ())` never return, because `Just ()` never fails.""")
+
+
+@app.cell
+def _(AltMaybe) -> None:
+    print(AltMaybe.some(AltMaybe.empty()))
+    print(AltMaybe.many(AltMaybe.empty()))
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(r"""For `AltList`, `[]` means failure, so `some []` evaluates to `[]` (no answers) while `many []` evaluates to `[[]]` (there's one answer and it is the empty list). Again `some [()]` and `many [()]` don't return.""")
+
+
+@app.cell
+def _(AltList) -> None:
+    print(AltList.some(AltList.empty()))
+    print(AltList.many(AltList.empty()))
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(r"""## Formal implementation of Alternative""")
+
+
+@app.cell
+def _(ABC, Applicative, abstractmethod, dataclass):
+    @dataclass
+    class Alternative[A](Applicative, ABC):
+        """A monoid on applicative functors."""
+
+        @classmethod
+        @abstractmethod
+        def empty(cls) -> "Alternative[A]":
+            msg = "Subclasses must implement empty"
+            raise NotImplementedError(msg)
+
+        @classmethod
+        @abstractmethod
+        def alt(
+            cls, fa: "Alternative[A]", fb: "Alternative[A]"
+        ) -> "Alternative[A]":
+            msg = "Subclasses must implement alt"
+            raise NotImplementedError(msg)
+
+        @classmethod
+        def some(cls, fa: "Alternative[A]") -> "Alternative[list[A]]":
+            # Short-circuit if input is empty
+            if fa == cls.empty():
+                return cls.empty()
+
+            return cls.apply(
+                cls.fmap(lambda a: lambda b: [a, *b], fa), cls.many(fa)
+            )
+
+        @classmethod
+        def many(cls, fa: "Alternative[A]") -> "Alternative[list[A]]":
+            # Directly return empty list if input is empty
+            if fa == cls.empty():
+                return cls.pure([])
+
+            return cls.alt(cls.some(fa), cls.pure([]))
+
+        @classmethod
+        def check_left_identity(cls, fa: "Alternative[A]") -> bool:
+            return cls.alt(cls.empty(), fa) == fa
+
+        @classmethod
+        def check_right_identity(cls, fa: "Alternative[A]") -> bool:
+            return cls.alt(fa, cls.empty()) == fa
+
+        @classmethod
+        def check_associativity(
+            cls, fa: "Alternative[A]", fb: "Alternative[A]", fc: "Alternative[A]"
+        ) -> bool:
+            return cls.alt(fa, cls.alt(fb, fc)) == cls.alt(cls.alt(fa, fb), fc)
+    return (Alternative,)
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
+    mo.md(
+        r"""
+        /// admonition
+
+        We will explore more about `Alternative` in a future notebooks about [Monadic Parsing](https://www.cambridge.org/core/journals/journal-of-functional-programming/article/monadic-parsing-in-haskell/E557DFCCE00E0D4B6ED02F3FB0466093)
+
+        ///
+        """
+    )
+
+
+@app.cell(hide_code=True)
+def _(mo) -> None:
     mo.md(
         r"""
         # Further reading
@@ -1154,7 +1508,6 @@ def _(mo):
         - [Applicative Functors](https://bartoszmilewski.com/2017/02/06/applicative-functors/)
         """
     )
-    return
 
 
 if __name__ == "__main__":

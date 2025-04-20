@@ -1,26 +1,90 @@
 # Changelog of the functional-programming course
 
+## 2025-04-16
+
+**applicatives.py**
+
+- replace `return NotImplementedError` with `raise NotImplementedError`
+
+- add `Either` applicative
+- Add `Alternative`
+
+## 2025-04-11
+
+**functors.py**
+
+- add `Bifunctor` section
+
+- replace `return NotImplementedError` with `raise NotImplementedError`
+
+## 2025-04-08
+
+**functors.py**
+
+- restructure the notebook
+- replace `f` in the function signatures with `g` to indicate regular functions and
+  distinguish from functors
+- move `Maybe` funtor to section `More Functor instances`
+
+- add `Either` functor
+
+- add `unzip` utility function for functors
+
 ## 2025-04-07
 
-* the `apply` method of `Maybe` *Applicative* should return `None` when `fg` or `fa` is `None`
-+ add `sequenceL` as a classmethod for `Applicative` and add examples for `Wrapper`, `Maybe`, `List`
-+ add description for utility functions of `Applicative`
-* refine the implementation of `IO` *Applicative*
-* reimplement `get_chars` with `IO.sequenceL`
-+ add an example to show that `ListMonoidal` is equivalent to `List` *Applicative*
+**applicatives.py**
+
+- the `apply` method of `Maybe` _Applicative_ should return `None` when `fg` or `fa` is
+  `None`
+
+- add `sequenceL` as a classmethod for `Applicative` and add examples for `Wrapper`,
+  `Maybe`, `List`
+- add description for utility functions of `Applicative`
+
+- refine the implementation of `IO` _Applicative_
+- reimplement `get_chars` with `IO.sequenceL`
+
+- add an example to show that `ListMonoidal` is equivalent to `List` _Applicative_
 
 ## 2025-04-06
 
-- remove `sequenceL` from `Applicative` because it should be a classmethod but can't be generically implemented
+**applicatives.py**
+
+- remove `sequenceL` from `Applicative` because it should be a classmethod but can't be
+  generically implemented
 
 ## 2025-04-02
 
-* `0.1.0` version of notebook `06_applicatives.py`
+**functors.py**
+
+- Migrate to `python3.13`
+
+    - Replace all occurrences of
+
+        ```python
+        class Functor(Generic[A])
+        ```
+
+        with
+
+        ```python
+        class Functor[A]
+        ```
+
+        for conciseness
+
+- Use `fa` in function signatures instead of `a` when `fa` is a _Functor_
+
+**applicatives.py**
+
+- `0.1.0` version of notebook `06_applicatives.py`
 
 ## 2025-03-16
 
-+ Use uppercased letters for `Generic` types, e.g. `A = TypeVar("A")`
-+ Refactor the `Functor` class, changing `fmap` and utility methods to `classmethod`
+**functors.py**
+
+- Use uppercased letters for `Generic` types, e.g. `A = TypeVar("A")`
+- Refactor the `Functor` class, changing `fmap` and utility methods to `classmethod`
 
     For example:
 
@@ -37,17 +101,24 @@
     Wrapper(value=2)
     ```
 
-+ Move the `check_functor_law` method from `Functor` class to a standard function
+- Move the `check_functor_law` method from `Functor` class to a standard function
+
 - Rename `ListWrapper` to `List` for simplicity
 - Remove the `Just` class
-+ Rewrite proofs
+
+- Rewrite proofs
 
 ## 2025-03-13
 
-* `0.1.0` version of notebook `05_functors`
+**functors.py**
 
-Thank [Akshay](https://github.com/akshayka) and [Haleshot](https://github.com/Haleshot) for reviewing
+- `0.1.0` version of notebook `05_functors`
+
+Thank [Akshay](https://github.com/akshayka) and [Haleshot](https://github.com/Haleshot)
+for reviewing
 
 ## 2025-03-11
 
-* Demo version of notebook `05_functors.py`
+**functors.py**
+
+- Demo version of notebook `05_functors.py`
