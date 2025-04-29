@@ -1,7 +1,5 @@
 # Learn probability
 
-🚧 _This collection is a work in progress. Check back later for new noteboks._
-
 This collection of marimo notebooks teaches the fundamentals of probability,
 with an emphasis on computation with Python.
 
