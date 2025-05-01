@@ -36,6 +36,7 @@ def _(mo):
 def _(mo):
     mo.accordion({
         "### TLDR":"""You can identify and manage missing values using specific methods: [```.is_null```](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.is_null.html) to check for missing values, [```fill_null```](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.fill_null.html) replaces them with specified values, and [`drop`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.drop.html) removes rows or columns containing null values, applicable to all data types including strings. Taking special care of variables with String cases see the Strings notebook for more."""
+
     })
     return
 
