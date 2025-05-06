@@ -2,11 +2,15 @@
 # requires-python = ">=3.11"
 # dependencies = [
 #     "marimo",
+#     "numpy==2.2.5",
+#     "pandas==2.2.3",
+#     "polars==1.29.0",
 # ]
 # ///
+
 import marimo
 
-__generated_with = "0.12.5"
+__generated_with = "0.13.6"
 app = marimo.App(width="medium")
 
 
@@ -23,13 +27,13 @@ def _():
 def _(mo):
     mo.md(
         r"""
-        # DataFrames
-        Author: Raine Hoang
+    # DataFrames
+    Author: Raine Hoang
 
-        In this tutorial, we will go over the central data structure for structured data, DataFrames. There are a multitude of packages that work with DataFrames, but we will be focusing on the way Polars uses them the different options it provides.
+    In this tutorial, we will go over the central data structure for structured data, DataFrames. There are a multitude of packages that work with DataFrames, but we will be focusing on the way Polars uses them the different options it provides.
 
-        **Note**: The following tutorial has been adapted from the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/index.html).
-        """
+    **Note**: The following tutorial has been adapted from the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/index.html).
+    """
     )
     return
 
@@ -38,10 +42,10 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ## Defining a DataFrame
+    ## Defining a DataFrame
 
-        At the most basic level, all that you need to do in order to create a DataFrame in Polars is to use the .DataFrame() method and pass in some data into the data parameter. However, there are restrictions as to what exactly you can pass into this method.
-        """
+    At the most basic level, all that you need to do in order to create a DataFrame in Polars is to use the .DataFrame() method and pass in some data into the data parameter. However, there are restrictions as to what exactly you can pass into this method.
+    """
     )
     return
 
@@ -56,14 +60,14 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        There are 5 data types that can be converted into a DataFrame.
+    There are 5 data types that can be converted into a DataFrame.
 
-        1. Dictionary
-        2. Sequence
-        3. NumPy Array
-        4. Series
-        5. Pandas DataFrame
-        """
+    1. Dictionary
+    2. Sequence
+    3. NumPy Array
+    4. Series
+    5. Pandas DataFrame
+    """
     )
     return
 
@@ -72,10 +76,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        #### Dictionary
+    #### Dictionary
 
-        Dictionaries are structures that store data as key:value pairs. Let's say we have the following dictionary:
-        """
+    Dictionaries are structures that store data as key:value pairs. Let's say we have the following dictionary:
+    """
     )
     return
 
@@ -104,10 +108,10 @@ def _(dct_data, pl):
 def _(mo):
     mo.md(
         r"""
-        In this case, Polars turned each of the lists in the dictionary into a column in the DataFrame. 
+    In this case, Polars turned each of the lists in the dictionary into a column in the DataFrame. 
 
-        The other data structures will follow a similar pattern when converting them to DataFrames.
-        """
+    The other data structures will follow a similar pattern when converting them to DataFrames.
+    """
     )
     return
 
@@ -116,10 +120,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ##### Sequence
+    ##### Sequence
 
-        Sequences are data structures that contain collections of items, which can be accessed using its index. Examples of sequences are lists, tuples, and strings. We will be using a list of lists in order to demonstrate how to convert a sequence in a DataFrame.
-        """
+    Sequences are data structures that contain collections of items, which can be accessed using its index. Examples of sequences are lists, tuples, and strings. We will be using a list of lists in order to demonstrate how to convert a sequence in a DataFrame.
+    """
     )
     return
 
@@ -148,10 +152,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ##### NumPy Array
+    ##### NumPy Array
 
-        NumPy arrays are considered a sequence of items that can also be accessed using its index. An important thing to note is that all of the items in an array must have the same data type.
-        """
+    NumPy arrays are considered a sequence of items that can also be accessed using its index. An important thing to note is that all of the items in an array must have the same data type.
+    """
     )
     return
 
@@ -180,10 +184,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ##### Series
+    ##### Series
 
-        Series are a way to store a single column in a DataFrame and all entries in a series must have the same data type. You can combine these series together to form one DataFrame.
-        """
+    Series are a way to store a single column in a DataFrame and all entries in a series must have the same data type. You can combine these series together to form one DataFrame.
+    """
     )
     return
 
@@ -199,17 +203,17 @@ def _(pl):
 def _(pl, pl_series):
     series_df = pl.DataFrame(data = pl_series)
     series_df
-    return (series_df,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-        ##### Pandas DataFrame
+    ##### Pandas DataFrame
 
-        Another popular package that utilizes DataFrames is pandas. By passing in a pandas DataFrame into .DataFrame(), you can easily convert it into a Polars DataFrame.
-        """
+    Another popular package that utilizes DataFrames is pandas. By passing in a pandas DataFrame into .DataFrame(), you can easily convert it into a Polars DataFrame.
+    """
     )
     return
 
@@ -229,7 +233,7 @@ def _(pd_df, pl):
     pl_df = pl.DataFrame(data = pd_df)
 
     pl_df
-    return (pl_df,)
+    return
 
 
 @app.cell(hide_code=True)
@@ -242,10 +246,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## DataFrame Structure
+    ## DataFrame Structure
 
-        Let's recall one of the DataFrames we defined earlier.
-        """
+    Let's recall one of the DataFrames we defined earlier.
+    """
     )
     return
 
@@ -266,17 +270,17 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Parameters
+    ## Parameters
 
-        On top of the "data" parameter, there are 6 additional parameters you can specify:
+    On top of the "data" parameter, there are 6 additional parameters you can specify:
 
-        1. schema
-        2. schema_overrides
-        3. strict
-        4. orient
-        5. infer_schema_length
-        6. nan_to_null
-        """
+    1. schema
+    2. schema_overrides
+    3. strict
+    4. orient
+    5. infer_schema_length
+    6. nan_to_null
+    """
     )
     return
 
@@ -285,10 +289,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        #### Schema
+    #### Schema
 
-        Let's recall the DataFrame we created using a sequence.
-        """
+    Let's recall the DataFrame we created using a sequence.
+    """
     )
     return
 
@@ -345,10 +349,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        #### Schema_Overrides
+    #### Schema_Overrides
 
-        If you only wanted to specify the data type of specific columns and let Polars infer the rest, you can use the schema_overrides parameter for that. This parameter requires that you pass in a dictionary where the key value pair is column name:data type. Unlike the schema parameter, the column name must match the name already present in the DataFrame as that is how Polars will identify which column you want to specify the data type. If you use a column name that doesn't already exist, Polars won't be able to change the data type.
-        """
+    If you only wanted to specify the data type of specific columns and let Polars infer the rest, you can use the schema_overrides parameter for that. This parameter requires that you pass in a dictionary where the key value pair is column name:data type. Unlike the schema parameter, the column name must match the name already present in the DataFrame as that is how Polars will identify which column you want to specify the data type. If you use a column name that doesn't already exist, Polars won't be able to change the data type.
+    """
     )
     return
 
@@ -363,10 +367,10 @@ def _(pl, seq_data):
 def _(mo):
     mo.md(
         r"""
-        Notice here that only the data type in the first column changed while Polars inferred the rest.
+    Notice here that only the data type in the first column changed while Polars inferred the rest.
 
-        It is important to note that if you only use the schema_overrides parameter, you are limited to how much you can change the data type. In the example above, we were able to change the data type from int32 to int16 without any further parameters since the data type is still an integer. However, if we wanted to change the first column to be a string, we would get an error as Polars has already strictly set the schema to only take in integer values.
-        """
+    It is important to note that if you only use the schema_overrides parameter, you are limited to how much you can change the data type. In the example above, we were able to change the data type from int32 to int16 without any further parameters since the data type is still an integer. However, if we wanted to change the first column to be a string, we would get an error as Polars has already strictly set the schema to only take in integer values.
+    """
     )
     return
 
@@ -387,10 +391,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        #### Strict
+    #### Strict
 
-        The strict parameter allows you to specify if you want a column's data type to be enforced with flexibility or not. When set to `True`, Polars will raise an error if there is a data type that doesn't match the data type the column is expecting. It will not attempt to type cast it to the correct data type as Polars prioritizes that all the data can be converted without any loss or error. When set to `False`, Polars will attempt to type cast the data into the data type the column wants. If it is unable to successfully convert the data type, the value will be replaced with a null value.
-        """
+    The strict parameter allows you to specify if you want a column's data type to be enforced with flexibility or not. When set to `True`, Polars will raise an error if there is a data type that doesn't match the data type the column is expecting. It will not attempt to type cast it to the correct data type as Polars prioritizes that all the data can be converted without any loss or error. When set to `False`, Polars will attempt to type cast the data into the data type the column wants. If it is unable to successfully convert the data type, the value will be replaced with a null value.
+    """
     )
     return
 
@@ -406,7 +410,7 @@ def _(pl):
     data = [[1, "a", 2]]
 
     pl.DataFrame(data = data, strict = True)
-    return (data,)
+    return
 
 
 @app.cell
@@ -431,10 +435,10 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        #### Orient
+    #### Orient
 
-        Let's recall the DataFrame we made by using an array and the data used to make it.
-        """
+    Let's recall the DataFrame we made by using an array and the data used to make it.
+    """
     )
     return
 
@@ -485,10 +489,10 @@ def _(pl, seq_data):
 def _(mo):
     mo.md(
         r"""
-        #### Infer_Schema_Length
+    #### Infer_Schema_Length
 
-        Without setting the schema ourselves, Polars uses the data provided to infer the data types of the columns. It does this by looking at each of the rows in the data provided. You can specify to Polars how many rows to look at by using the infer_schema_length parameter. For example, if you were to set this parameter to 5, then Polars would use the first 5 rows to infer the schema.
-        """
+    Without setting the schema ourselves, Polars uses the data provided to infer the data types of the columns. It does this by looking at each of the rows in the data provided. You can specify to Polars how many rows to look at by using the infer_schema_length parameter. For example, if you were to set this parameter to 5, then Polars would use the first 5 rows to infer the schema.
+    """
     )
     return
 
@@ -497,10 +501,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        #### NaN_To_Null
+    #### NaN_To_Null
 
-        If there are np.nan values in the data, you can convert them to null values by setting the nan_to_null parameter to `True`.
-        """
+    If there are np.nan values in the data, you can convert them to null values by setting the nan_to_null parameter to `True`.
+    """
     )
     return
 
