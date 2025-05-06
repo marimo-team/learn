@@ -9,6 +9,7 @@
 #     "pandas==2.2.3",
 #     "sqlglot==26.12.1",
 #     "plotly==5.23.1",
+#     "statsmodels==0.14.4",
 # ]
 # ///
 
@@ -104,13 +105,12 @@ def _(mo):
     | Performance | Faster for most operations | Slightly slower but provides persistence |
     | Creation | duckdb.connect(':memory:') | duckdb.connect('filename.db') |
     | Multiple Connection Access | Limited to single connection | Multiple connections can access the same database |
-
     """
     )
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(os):
     # Remove previous database if it exists
     if os.path.exists("example.db"):
@@ -121,7 +121,7 @@ def _(os):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     _df = mo.sql(
         f"""
@@ -149,7 +149,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(duckdb):
     # Create an in-memory DuckDB connection
     memory_db = duckdb.connect(":memory:")
@@ -159,7 +159,7 @@ def _(duckdb):
     return file_db, memory_db
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db, memory_db):
     # Test both connections
     memory_db.execute(
@@ -196,7 +196,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mem_test, memory_db, mo):
     _df = mo.sql(
         f"""
@@ -207,7 +207,7 @@ def _(mem_test, memory_db, mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db, file_test, mo):
     _df = mo.sql(
         f"""
@@ -226,12 +226,12 @@ def _():
 
 
 @app.cell(hide_code=True)
-def _file_query(mo):
+def _(mo):
     mo.md(rf"""## 🔄 Simulating Application Restart...""")
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(duckdb):
     # Create new connections (simulating restart)
     new_memory_db = duckdb.connect(":memory:")
@@ -239,7 +239,7 @@ def _(duckdb):
     return new_file_db, new_memory_db
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     # Try to query tables in the new memory connection
     try:
@@ -252,7 +252,7 @@ def _(new_memory_db):
     return memory_data_available, memory_persistence
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_file_db):
     # Try to query tables in the new file connection
     try:
@@ -266,7 +266,7 @@ def _(new_file_db):
     return file_data, file_data_available, file_persistence
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(
     file_data_available,
     file_persistence,
@@ -285,18 +285,23 @@ def _(
             ],
         }
     )
-
-    mo.md("### Persistence Test Results")
     return (persistence_results,)
 
 
-@app.cell
-def _(persistence_results):
-    persistence_results
+@app.cell(hide_code=True)
+def _(mo, persistence_results):
+    mo.vstack(
+        [
+            mo.vstack([mo.md(f"""## Persistence Test Results""")], align="center"),
+            persistence_results,
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_data, file_data_available, mo):
     if file_data_available:
         mo.md("### Persisted File-Based Data:")
@@ -326,8 +331,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _create_users_tables(file_db, new_memory_db):
+@app.cell(hide_code=True)
+def _(file_db, new_memory_db):
     # For the memory database
     try:
         new_memory_db.execute("DROP TABLE IF EXISTS users_memory")
@@ -342,7 +347,7 @@ def _create_users_tables(file_db, new_memory_db):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db, new_memory_db):
     # Create advanced users table in memory database with primary key
     new_memory_db.execute("""
@@ -372,8 +377,8 @@ def _(file_db, new_memory_db):
     return
 
 
-@app.cell
-def _(mo, new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     # Get table schema information using DuckDB's internal system tables
     memory_schema = new_memory_db.execute("""
         SELECT column_name, data_type, is_nullable 
@@ -381,15 +386,21 @@ def _(mo, new_memory_db):
         WHERE table_name = 'users_memory'
         ORDER BY ordinal_position
     """).df()
-
-    # Display the schema using marimo's UI components
-    mo.md("### 🔍 Table Schema Information")
     return (memory_schema,)
 
 
 @app.cell(hide_code=True)
 def _(memory_schema, mo):
-    mo.ui.table(memory_schema)
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## 🔍 Table Schema Information """)], align="center"
+            ),
+            mo.ui.table(memory_schema),
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
@@ -412,8 +423,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _insert_user_data(date):
+@app.cell(hide_code=True)
+def _(date):
     today = date.today()
 
 
@@ -458,7 +469,7 @@ def _insert_user_data(date):
     return (safe_insert,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     # Prepare the data
     user_data = [
@@ -520,31 +531,17 @@ def _():
     return (user_data,)
 
 
-@app.cell
-def _(mo, new_memory_db, safe_insert, user_data):
+@app.cell(hide_code=True)
+def _(file_db, new_memory_db, safe_insert, user_data):
     # Safely insert data into memory database
-    records_inserted = safe_insert(new_memory_db, "users_memory", user_data)
-    mo.md(
-        f"""
-        Inserted {records_inserted} new records into users_memory.
-        """
-    )
+    safe_insert(new_memory_db, "users_memory", user_data)
+
+    # Safely insert data into file database
+    safe_insert(file_db, "users_file", user_data)
     return
 
 
-@app.cell
-def _(file_db, safe_insert, user_data):
-    def _():
-        # Safely insert data into file database
-        records_inserted = safe_insert(file_db, "users_file", user_data)
-        return print(f"Inserted {records_inserted} new records into users_file")
-
-
-    _()
-    return
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _():
     # If you need to add just one record, you can use a similar approach:
     new_user = (
@@ -559,7 +556,7 @@ def _():
     return (new_user,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db, new_user):
     # Check if the ID exists before inserting
     if not new_memory_db.execute(
@@ -578,7 +575,7 @@ def _(new_memory_db, new_user):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db, new_user):
     # Do the same for the file database
     if not file_db.execute(
@@ -597,7 +594,7 @@ def _(file_db, new_user):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     # First try to update
     cursor = new_memory_db.execute(
@@ -620,7 +617,7 @@ def _(new_memory_db):
     return (cursor,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(cursor, mo, new_memory_db):
     # If no rows were updated, perform an insert
     if cursor.rowcount == 0:
@@ -649,7 +646,7 @@ def _(cursor, mo, new_memory_db):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db, mo):
     # For DuckDB using ON CONFLICT, we need to specify the conflict target column
     file_db.execute(
@@ -683,8 +680,8 @@ def _(file_db, mo):
     return
 
 
-@app.cell
-def _view_tables_after_insert(new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     # Display memory data using DuckDB's query capabilities
     memory_results = new_memory_db.execute("""
         SELECT 
@@ -701,7 +698,7 @@ def _view_tables_after_insert(new_memory_db):
     return (memory_results,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(file_db):
     # Display file data with formatting
     file_results = file_db.execute("""
@@ -719,17 +716,6 @@ def _(file_db):
     return (file_results,)
 
 
-@app.cell
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Create an interactive display with tabs using marimo components -->
-    ## 📊 Database Contents After Insertion
-    """
-    )
-    return
-
-
 @app.cell(hide_code=True)
 def _(file_results, memory_results, mo):
     tabs = mo.ui.tabs(
@@ -738,7 +724,18 @@ def _(file_results, memory_results, mo):
             "File-Based Database": mo.ui.table(file_results),
         }
     )
-    tabs
+
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## 📊 Database Contents After Insertion""")],
+                align="center",
+            ),
+            tabs,
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
@@ -746,12 +743,12 @@ def _(file_results, memory_results, mo):
 def _(mo):
     mo.md(
         r"""
-    # [4. Using SQL Directly in Marimo](https://duckdb.org/docs/stable/sql/query_syntax/select)
+    # [4. Using SQL Directly in marimo](https://duckdb.org/docs/stable/sql/query_syntax/select)
 
     There are multiple ways to leverage DuckDB's SQL capabilities in marimo:
 
     1. **Direct execution**: Using DuckDB connections to execute SQL
-    2. **Marimo SQL**: Using Marimo's built-in SQL engine
+    2. **marimo SQL**: Using marimo's built-in SQL engine
     3. **Interactive queries**: Combining UI elements with SQL execution
 
     Let's explore these approaches:
@@ -761,46 +758,38 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _sql_with_marimo(mo):
-    mo.md(
-        rf"""
-    <!-- Using Marimo's SQL engine with direct SQL on memory_results DataFrame -->
-    ## 🔍 Query with Marimo SQL
-    """
+def _(mo):
+    mo.vstack(
+        [
+            mo.vstack([mo.md(f"""## 🔍 Query with marimo SQL""")], align="center"),
+            mo.md(
+                "### marimo has its own [built-in SQL engine](https://docs.marimo.io/guides/working_with_data/sql/) that can work with DataFrames."
+            ),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        rf"""
-    ## Marimo has its own built-in SQL engine that can work with DataFrames. 
-    Let's use it to filter our users:
-    """
-    )
-    return
-
-
-@app.cell
-def _(mo):
+def _(memory_results, mo):
     # Create a SQL selector for users with age threshold
-    age_threshold = mo.ui.slider(25, 50, value=30, label="Minimum Age")
-    return (age_threshold,)
+    age_threshold = mo.ui.slider(
+        25, 50, value=30, label="Minimum Age", full_width=True, show_value=True
+    )
 
 
-@app.cell
-def _(age_threshold, memory_results, mo):
     # Create a function to filter users based on the slider value
     def filtered_users():
         # Use DuckDB directly instead of mo.sql with users param
         filtered_df = memory_results[memory_results["age"] >= age_threshold.value]
         filtered_df = filtered_df.sort_values("age")
         return mo.ui.table(filtered_df)
-    return (filtered_users,)
+    return age_threshold, filtered_users
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(age_threshold, filtered_users, mo):
     layout = mo.vstack(
         [
@@ -809,8 +798,10 @@ def _(age_threshold, filtered_users, mo):
             mo.md("### Users meeting age criteria:"),
             filtered_users(),
         ],
-        gap=1.5,
+        gap=2,
+        justify="space-between",
     )
+
     layout
     return
 
@@ -821,8 +812,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _polars_integration(pl):
+@app.cell(hide_code=True)
+def _(pl):
     # Create a Polars DataFrame
     polars_df = pl.DataFrame(
         {
@@ -835,24 +826,22 @@ def _polars_integration(pl):
     return (polars_df,)
 
 
-@app.cell
-def _(mo):
-    mo.md(
-        rf"""
-    <!-- Display the Polars DataFrame -->
-    ## Original Polars DataFrame:
-    """
+@app.cell(hide_code=True)
+def _(mo, polars_df):
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Original Polars DataFrame:""")], align="center"
+            ),
+            mo.ui.table(polars_df),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
-@app.cell
-def _(mo, polars_df):
-    mo.ui.table(polars_df)
-    return
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db, polars_df):
     # Register the Polars DataFrame as a DuckDB table in memory connection
     new_memory_db.register("products_polars", polars_df)
@@ -865,24 +854,23 @@ def _(new_memory_db, polars_df):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Display the query result -->
-    ## DuckDB Query Result (From Polars Data):
-    """
+def _(mo, polars_query_result):
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## DuckDB Query Result (From Polars Data):""")],
+                align="center",
+            ),
+            mo.ui.table(polars_query_result),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
-@app.cell
-def _(mo, polars_query_result):
-    mo.ui.table(polars_query_result)
-    return
-
-
-@app.cell
-def _(mo, new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     # Demonstrate a more complex query
     complex_query_result = new_memory_db.execute("""
         SELECT 
@@ -895,14 +883,22 @@ def _(mo, new_memory_db):
         GROUP BY category
         ORDER BY avg_price DESC
     """).df()
-
-    mo.md("## Aggregated Product Data by Category:")
     return (complex_query_result,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(complex_query_result, mo):
-    mo.ui.table(complex_query_result)
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Aggregated Product Data by Category:""")],
+                align="center",
+            ),
+            mo.ui.table(complex_query_result),
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
@@ -912,8 +908,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _join_operations(new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     # Create another table to join with
     new_memory_db.execute("""
     CREATE TABLE IF NOT EXISTS departments (
@@ -925,7 +921,7 @@ def _join_operations(new_memory_db):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     new_memory_db.execute("""
     INSERT INTO departments VALUES
@@ -936,7 +932,7 @@ def _(new_memory_db):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     # Execute a join query
     join_result = new_memory_db.execute("""
@@ -980,7 +976,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     # Inner join
     inner_join = new_memory_db.execute("""
@@ -1002,21 +998,125 @@ def _(new_memory_db):
     FROM users_memory u
     FULL OUTER JOIN departments d ON u.id = d.manager_id
     """).df()
-    return full_join, inner_join, right_join
+
+    # Cross join
+    cross_join = new_memory_db.execute("""
+    SELECT u.id, u.name, d.department_name
+    FROM users_memory u
+    CROSS JOIN departments d
+    """).df()
+
+    # Self join (Joining user table with itself to find users with the same age)
+    self_join = new_memory_db.execute("""
+    SELECT u1.id, u1.name, u2.name AS same_age_user
+    FROM users_memory u1
+    JOIN users_memory u2 ON u1.age = u2.age AND u1.id <> u2.id
+    """).df()
+
+    # Semi join (Finding users who are also managers)
+    semi_join = new_memory_db.execute("""
+    SELECT u.id, u.name, u.age
+        FROM users_memory u
+        WHERE EXISTS (
+            SELECT 1 FROM departments d 
+            WHERE u.id = d.manager_id
+    )
+    """).df()
+
+    # Anti join (Finding users who are not managers)
+    anti_join = new_memory_db.execute("""
+    SELECT u.id, u.name, u.age
+        FROM users_memory u
+        WHERE NOT EXISTS (
+            SELECT 1 FROM departments d 
+            WHERE u.id = d.manager_id
+    )
+    """).df()
+    return (
+        anti_join,
+        cross_join,
+        full_join,
+        inner_join,
+        right_join,
+        self_join,
+        semi_join,
+    )
 
 
-@app.cell
-def _(full_join, inner_join, join_result, mo, right_join):
+@app.cell(hide_code=True)
+def _(mo, new_memory_db):
+    # Display base table side by side
+    users = new_memory_db.execute("SELECT * FROM users_memory").df()
+    departments = new_memory_db.execute("SELECT * FROM departments").df()
+
+    base_tables = mo.vstack(
+        [
+            mo.vstack([mo.md(f"""# Base Tables""")], align="center"),
+            mo.ui.tabs(
+                {
+                    "User Table": mo.ui.table(users),
+                    "Departments Table": mo.ui.table(departments),
+                }
+            ),
+        ]
+    )
+    base_tables
+    return
+
+
+@app.cell(hide_code=True)
+def _(
+    anti_join,
+    cross_join,
+    full_join,
+    inner_join,
+    join_result,
+    mo,
+    right_join,
+    self_join,
+    semi_join,
+):
+    join_description = {
+        "Left Join": "Shows all records from the left table and matching records from the right table. Non-matches filled with NULL.",
+        "Inner Join": "Shows only the records where there's a match in both tables.",
+        "Right Join": "Shows all records from the right table and matching records from the left table. Non-matches filled with NULL.",
+        "Full Outer Join": "Shows all records from both tables, with NULL values where there's no match.",
+        "Cross Join": "Returns the Cartesian product - all possible combinations of rows from both tables.",
+        "Self Join": "Joins a table with itself, used to compare rows within the same table.",
+        "Semi Join": "Returns rows from the first table where one or more matches exist in the second table.",
+        "Anti Join": "Returns rows from the first table where no matches exist in the second table.",
+    }
+
+
     join_tabs = mo.ui.tabs(
         {
             "Left Join": mo.ui.table(join_result),
             "Inner Join": mo.ui.table(inner_join),
             "Right Join": mo.ui.table(right_join),
             "Full Outer Join": mo.ui.table(full_join),
+            "Cross Join": mo.ui.table(cross_join),
+            "Self Join": mo.ui.table(self_join),
+            "Semi Join": mo.ui.table(semi_join),
+            "Anti Join": mo.ui.table(anti_join),
         }
     )
+    return join_description, join_tabs
 
-    join_tabs
+
+@app.cell(hide_code=True)
+def _(join_description, join_tabs, mo):
+    join_display = mo.vstack(
+        [
+            mo.vstack([mo.md(f"""# SQL Join Operations""")], align="center"),
+            mo.md(f"**{join_tabs.value}**: {join_description[join_tabs.value]}"),
+            mo.md("## Join Results"),
+            join_tabs,
+        ],
+        gap=2,
+        justify="space-between",
+    )
+
+    join_display
     return
 
 
@@ -1026,8 +1126,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _aggregate_operations(new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     # Execute an aggregate query
     agg_result = new_memory_db.execute("""
     SELECT 
@@ -1042,34 +1142,21 @@ def _aggregate_operations(new_memory_db):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        rf"""
-    <!-- Display the aggregate result -->
-    ## Aggregate Results (All Users):
-    """
-    )
-    return
-
-
-@app.cell
 def _(agg_result, mo):
-    mo.ui.table(agg_result)
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Aggregate Results (All Users):""")], align="center"
+            ),
+            mo.ui.table(agg_result),
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        rf"""
-    <!-- More complex aggregate query with grouping -->
-    ## Aggregate Results (Grouped by Age Range):
-    """
-    )
-    return
-
-
-@app.cell
 def _(new_memory_db):
     age_groups = new_memory_db.execute("""
     SELECT 
@@ -1088,25 +1175,25 @@ def _(new_memory_db):
     return (age_groups,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(age_groups, mo):
     mo.ui.table(age_groups)
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Window functions demo -->
-    ### Window Functions Example:
-    """
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Aggregate Results (Grouped by Age Range):""")],
+                align="center",
+            ),
+            mo.ui.table(age_groups),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
-@app.cell
-def _(mo, new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     window_result = new_memory_db.execute("""
     SELECT 
         id,
@@ -1119,8 +1206,19 @@ def _(mo, new_memory_db):
     FROM users_memory
     ORDER BY balance_rank
     """).df()
+    return (window_result,)
 
-    mo.ui.table(window_result)
+
+@app.cell(hide_code=True)
+def _(mo, window_result):
+    mo.vstack(
+        [
+            mo.vstack([mo.md(f"""## Window Functions Example""")], align="center"),
+            mo.ui.table(window_result),
+        ],
+        gap=2,
+        justify="space-between",
+    )
     return
 
 
@@ -1130,8 +1228,8 @@ def _(mo):
     return
 
 
-@app.cell
-def _convert_results(new_memory_db):
+@app.cell(hide_code=True)
+def _(new_memory_db):
     polars_result = new_memory_db.execute(
         """SELECT * FROM users_memory WHERE age > 25 ORDER BY age"""
     ).pl()
@@ -1139,23 +1237,22 @@ def _convert_results(new_memory_db):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Display the converted results -->
-    ## Query Result as Polars DataFrame:
-    """
+def _(mo, polars_result):
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Query Result as Polars DataFrame:""")],
+                align="center",
+            ),
+            mo.ui.table(polars_result),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
-@app.cell
-def _(mo, polars_result):
-    mo.ui.table(polars_result)
-    return
-
-
-@app.cell
+@app.cell(hide_code=True)
 def _(new_memory_db):
     pandas_result = new_memory_db.execute(
         """SELECT * FROM users_memory WHERE age > 25 ORDER BY age"""
@@ -1164,40 +1261,44 @@ def _(new_memory_db):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""## Same Query Result as Pandas DataFrame:""")
-    return
-
-
-@app.cell
 def _(mo, pandas_result):
-    mo.ui.table(pandas_result)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Demonstrate the differences in handling -->
-    ## Differences in DataFrame Handling
-    """
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Same Query Result as Pandas DataFrame:""")],
+                align="center",
+            ),
+            mo.ui.table(pandas_result),
+        ],
+        gap=2,
+        justify="space-between",
     )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    <!-- Polars operation -->
-    ## Polars: Filter users over 35 and calculate average balance
-    """
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Differences in DataFrame Handling""")],
+                align="center",
+            ),
+            mo.vstack(
+                [
+                    mo.md(
+                        f"""## Polars: Filter users over 35 and calculate average balance"""
+                    )
+                ],
+                align="start",
+            ),
+        ],
+        gap=2, justify="space-between",
     )
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo, pl, polars_result):
     def _():
         polars_filtered = polars_result.filter(pl.col("age") > 35)
@@ -1212,7 +1313,7 @@ def _(mo, pl, polars_result):
                 mo.md("### Average Account Balance:"),
                 mo.ui.table(polars_avg),
             ],
-            gap=1.5,
+            gap=2,
         )
         return layout
 
@@ -1222,30 +1323,30 @@ def _(mo, pl, polars_result):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-    <!-- Pandas equivalent (using pandas style) -->
-    ## Pandas: Same operation in pandas style
-    """
-    )
-    return
-
-
-@app.cell
 def _(mo, pandas_result):
     pandas_avg = pandas_result[pandas_result["age"] > 35]["account_balance"].mean()
-    mo.md(f"Average balance: {pandas_avg:.2f}")
+    mo.vstack(
+        [
+            mo.vstack(
+                [mo.md(f"""## Pandas: Same operation in pandas style""")],
+                align="center",
+            ),
+            mo.vstack(
+                [mo.md(f"""### Average balance: {pandas_avg:.2f}""")],
+                align="start",
+            ),
+        ]
+    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""## 9. Data Visualization with DuckDB and Plotly""")
+    mo.md("""# 9. Data Visualization with DuckDB and Plotly""")
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(age_groups, mo, new_memory_db, plotly_express):
     # User distribution by age group
     fig1 = plotly_express.bar(
@@ -1261,7 +1362,12 @@ def _(age_groups, mo, new_memory_db, plotly_express):
         text=age_groups["count"],
         textposition="outside",
     )
-    fig1.update_layout(height=450, margin=dict(t=50, b=50))
+    fig1.update_layout(
+        height=450,
+        margin=dict(t=50, b=50, l=50, r=25),
+        hoverlabel=dict(bgcolor="white", font_size=12),
+        template="plotly_white",
+    )
 
 
     # Average balance by age group
@@ -1278,7 +1384,12 @@ def _(age_groups, mo, new_memory_db, plotly_express):
         text=[f"${val:.2f}" for val in age_groups["avg_balance"]],
         textposition="outside",
     )
-    fig2.update_layout(height=450, margin=dict(t=50, b=50))
+    fig2.update_layout(
+        height=450,
+        margin=dict(t=50, b=50, l=50, r=25),
+        hoverlabel=dict(bgcolor="white", font_size=12),
+        template="plotly_white",
+    )
 
 
     # Age vs Account Balance scatter plot
@@ -1305,7 +1416,12 @@ def _(age_groups, mo, new_memory_db, plotly_express):
         size_max=15,
     )
     fig3.update_traces(marker=dict(size=12))
-    fig3.update_layout(height=450, margin=dict(t=50, b=50))
+    fig3.update_layout(
+        height=450,
+        margin=dict(t=50, b=50, l=50, r=25),
+        hoverlabel=dict(bgcolor="white", font_size=12),
+        template="plotly_white",
+    )
 
 
     # Distribution of account balances
@@ -1328,7 +1444,12 @@ def _(age_groups, mo, new_memory_db, plotly_express):
         color_discrete_sequence=plotly_express.colors.qualitative.Pastel,
     )
     fig4.update_traces(textinfo="percent+label", textposition="inside")
-    fig4.update_layout(height=450, margin=dict(t=50, b=50))
+    fig4.update_layout(
+        height=450,
+        margin=dict(t=50, b=50, l=50, r=25),
+        hoverlabel=dict(bgcolor="white", font_size=12),
+        template="plotly_white",
+    )
 
 
     category_tabs = mo.ui.tabs(
@@ -1341,7 +1462,9 @@ def _(age_groups, mo, new_memory_db, plotly_express):
                             "Average Balance": mo.ui.plotly(fig2),
                         }
                     )
-                ]
+                ],
+                gap=2,
+                justify="space-between",
             ),
             "Financial Analysis": mo.vstack(
                 [
@@ -1351,7 +1474,9 @@ def _(age_groups, mo, new_memory_db, plotly_express):
                             "Balance Distribution": mo.ui.plotly(fig4),
                         }
                     )
-                ]
+                ],
+                gap=2,
+                justify="space-between",
             ),
         },
         lazy=True,
@@ -1359,10 +1484,14 @@ def _(age_groups, mo, new_memory_db, plotly_express):
 
     mo.vstack(
         [
-            mo.md("### Select a visualization category:"),
+            mo.vstack(
+                [mo.md(f"""## Select a visualization category:""")],
+                align="start",
+            ),
             category_tabs,
         ],
-        gap=1.5,
+        gap=2,
+        justify="space-between",
     )
     return
 
@@ -1371,7 +1500,9 @@ def _(age_groups, mo, new_memory_db, plotly_express):
 def _(mo):
     mo.md(
         r"""
-    # [9. Database Management Best Practices]
+    /// admonition |
+    ## Database Management Best Practices
+    ///
 
     ### Closing Connections
 
@@ -1413,12 +1544,12 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _interactive_dashboard(mo):
-    mo.md(rf"""## 10. Interactive DuckDB Dashboard with Marimo and Plotly""")
+def _(mo):
+    mo.md(rf"""## 10. Interactive DuckDB Dashboard with marimo and Plotly""")
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     # Create an interactive filter for age range
     min_age = mo.ui.slider(20, 50, value=25, label="Minimum Age")
@@ -1426,7 +1557,7 @@ def _(mo):
     return max_age, min_age
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(max_age, min_age, new_memory_db):
     # Create a function to filter data and update visualizations
     def get_filtered_data(min_val=min_age.value, max_val=max_age.value):
@@ -1449,7 +1580,7 @@ def _(max_age, min_age, new_memory_db):
     return (get_filtered_data,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(get_filtered_data):
     def get_metrics(data=get_filtered_data()):
         return {
@@ -1460,7 +1591,7 @@ def _(get_filtered_data):
     return (get_metrics,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(get_metrics, mo):
     def metrics_display(metrics=get_metrics()):
         return mo.hstack(
@@ -1488,12 +1619,12 @@ def _(get_metrics, mo):
                 ),
             ],
             justify="space-between",
-            gap=1.5,
+            gap=2,
         )
     return (metrics_display,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(get_filtered_data, max_age, min_age, mo, plotly_express):
     def create_visualization(
         data=get_filtered_data(), min_val=min_age.value, max_val=max_age.value
@@ -1516,6 +1647,8 @@ def _(get_filtered_data, max_age, min_age, mo, plotly_express):
             height=400,
             xaxis_tickangle=-45,
             margin=dict(t=50, b=70, l=50, r=30),
+            hoverlabel=dict(bgcolor="white", font_size=12),
+            template="plotly_white",
         )
         fig1.update_traces(
             textposition="outside",
@@ -1534,6 +1667,8 @@ def _(get_filtered_data, max_age, min_age, mo, plotly_express):
             height=400,
             margin=dict(t=50, b=70, l=50, r=30),
             bargap=0.1,
+            hoverlabel=dict(bgcolor="white", font_size=12),
+            template="plotly_white",
         )
 
         fig3 = plotly_express.scatter(
@@ -1551,6 +1686,8 @@ def _(get_filtered_data, max_age, min_age, mo, plotly_express):
         fig3.update_layout(
             height=400,
             margin=dict(t=50, b=70, l=50, r=30),
+            hoverlabel=dict(bgcolor="white", font_size=12),
+            template="plotly_white",
         )
 
         return mo.ui.tabs(
@@ -1563,7 +1700,7 @@ def _(get_filtered_data, max_age, min_age, mo, plotly_express):
     return (create_visualization,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(
     create_visualization,
     get_filtered_data,
@@ -1573,11 +1710,11 @@ def _(
     mo,
 ):
     def dashboard(
-        min_val=min_age.value, 
-        max_val=max_age.value, 
-        metrics=metrics_display(), 
-        data=get_filtered_data(), 
-        visualization=create_visualization()
+        min_val=min_age.value,
+        max_val=max_age.value,
+        metrics=metrics_display(),
+        data=get_filtered_data(),
+        visualization=create_visualization(),
     ):
         return mo.vstack(
             [
@@ -1588,14 +1725,17 @@ def _(
                 mo.md("### Visualizations"),
                 visualization,
             ],
-            gap=2
+            gap=2,
+            justify="space-between",
         )
+
+
     dashboard()
     return
 
 
 @app.cell(hide_code=True)
-def _conclusion(mo):
+def _(mo):
     mo.md(
         rf"""
     # Summary and Key Takeaways
@@ -1608,7 +1748,7 @@ def _conclusion(mo):
 
     3. **Data insertion**: We demonstrated different ways to insert data, including single inserts and bulk loading.
 
-    4. **SQL queries**: We executed various SQL queries directly and through Marimo's UI components.
+    4. **SQL queries**: We executed various SQL queries directly and through marimo's UI components.
 
     5. **Integration with Polars**: We showed how DuckDB can work seamlessly with Polars DataFrames.
 
@@ -1620,7 +1760,7 @@ def _conclusion(mo):
 
     9. **Best practices**: We reviewed best practices for managing DuckDB connections and transactions.
 
-    10. **Visualization**: We created interactive visualizations and dashboards with Plotly and Marimo.
+    10. **Visualization**: We created interactive visualizations and dashboards with Plotly and marimo.
 
     DuckDB is an excellent tool for data analysis, especially for analytical workloads. Its in-process nature makes it fast and easy to use, while its SQL compatibility makes it accessible for anyone familiar with SQL databases.
 
@@ -1629,7 +1769,7 @@ def _conclusion(mo):
     - Try loading larger datasets into DuckDB
     - Experiment with more complex queries and window functions
     - Use DuckDB's COPY functionality to import/export data from/to files
-    - Create more advanced interactive dashboards with Marimo and Plotly
+    - Create more advanced interactive dashboards with marimo and Plotly
     """
     )
     return
