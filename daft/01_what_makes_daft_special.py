@@ -35,14 +35,10 @@ def _(mo):
     Daft is a distributed query engine designed to handle a wide array of data tasks, from data engineering and analytics to powering ML/AI workflows. It provides both a Python DataFrame API, familiar to users of libraries like Pandas, and a SQL interface, allowing you to choose the interaction style that best suits your needs or the task at hand.
 
     The main goal of Daft is to provide a robust and versatile platform for processing data, whether it's gigabytes on your laptop or petabytes on a cluster.
+
+    Let's go ahead and `pip install daft` to see it in action!
     """
     )
-    return
-
-
-@app.cell(hide_code=True)
-def _(daft, mo):
-    mo.md(f"""You're running Daft version: `{daft.__version__}`""")
     return
 
 
@@ -122,9 +118,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!"""
-    )
+    mo.md(r"""A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!""")
     return
 
 
@@ -141,9 +135,7 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:"""
-    )
+    mo.md(r"""With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:""")
     return
 
 
@@ -155,9 +147,7 @@ def _(mo, trillion_rows_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow."""
-    )
+    mo.md(r"""This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow.""")
     return
 
 
@@ -227,17 +217,13 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""> Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog."""
-    )
+    mo.md(r"""> Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog.""")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers."""
-    )
+    mo.md(r"""In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers.""")
     return
 
 
