@@ -48,10 +48,12 @@ def _(daft, mo):
 
 @app.cell(hide_code=True)
 def _(df_with_discount, discount_slider, mo):
-    mo.vstack([
-        discount_slider,
-        df_with_discount.collect(),
-    ])
+    mo.vstack(
+        [
+            discount_slider,
+            df_with_discount.collect(),
+        ]
+    )
     return
 
 
@@ -120,7 +122,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!""")
+    mo.md(
+        r"""A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!"""
+    )
     return
 
 
@@ -137,19 +141,23 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:""")
+    mo.md(
+        r"""With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:"""
+    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo, trillion_rows_df):
-    mo.mermaid(trillion_rows_df.explain(format='mermaid').split('\nSet')[0][11:-3])
+    mo.mermaid(trillion_rows_df.explain(format="mermaid").split("\nSet")[0][11:-3])
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow.""")
+    mo.md(
+        r"""This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow."""
+    )
     return
 
 
@@ -219,13 +227,17 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""> Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog.""")
+    mo.md(
+        r"""> Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog."""
+    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers.""")
+    mo.md(
+        r"""In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers."""
+    )
     return
 
 
@@ -261,21 +273,27 @@ def _(daft):
 @app.cell
 def _(df_simple):
     # Pandas-flavored API
-    df_simple.where((df_simple["quantity"] > 0) & (df_simple["region"] == "North")).collect()
+    df_simple.where(
+        (df_simple["quantity"] > 0) & (df_simple["region"] == "North")
+    ).collect()
     return
 
 
 @app.cell
 def _(daft, df_simple):
     # Polars-flavored API
-    df_simple.where((daft.col("quantity") > 0) & (daft.col("region") == "North")).collect()
+    df_simple.where(
+        (daft.col("quantity") > 0) & (daft.col("region") == "North")
+    ).collect()
     return
 
 
 @app.cell
 def _(daft):
     # SQL Interface
-    daft.sql("SELECT * FROM df_simple WHERE quantity > 0 AND region = 'North'").collect()
+    daft.sql(
+        "SELECT * FROM df_simple WHERE quantity > 0 AND region = 'North'"
+    ).collect()
     return
 
 
@@ -283,7 +301,7 @@ def _(daft):
 def _(mo):
     mo.md(
         r"""
-    ## 🟣 The Daft Advantage: Putting It All Together
+    ## 🟣 Daft's Value Proposition
 
     So, what makes Daft special? It's the combination of these design choices:
 
@@ -304,6 +322,7 @@ def _(mo):
 def _():
     import daft
     import marimo as mo
+
     return daft, mo
 
 
