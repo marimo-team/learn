@@ -30,6 +30,7 @@ notebooks for educators, students, and practitioners.
 - ❄️ Polars
 - 🔥 Pytorch
 - 🗄️ Duckdb
+- 💜 Daft
 - 📈 Altair
 - 📈 Plotly
 - 📈 matplotlib
