@@ -3,6 +3,8 @@
 This collection of marimo notebooks teaches the fundamentals of probability,
 with an emphasis on computation with Python.
 
+Much of the structure and many explanations here are adapted from Chris Piech's [Probability for Computer Scientists](https://chrispiech.github.io/probabilityForComputerScientists/en/index.html) course reader.
+
 
 **Running notebooks.** To run a notebook locally, use
 
