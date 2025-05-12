@@ -32,7 +32,8 @@ def _(mo):
 
     In this tutorial, we will go over the central data structure for structured data, DataFrames. There are a multitude of packages that work with DataFrames, but we will be focusing on the way Polars uses them the different options it provides.
 
-    **Note**: The following tutorial has been adapted from the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/index.html).
+    /// Note
+    The following tutorial has been adapted from the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/dataframe/index.html).
     """
     )
     return
@@ -60,7 +61,7 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    There are 5 data types that can be converted into a DataFrame.
+    There are [5 data types](https://github.com/pola-rs/polars/blob/py-1.29.0/py-polars/polars/dataframe/frame.py#L197) that can be converted into a DataFrame.
 
     1. Dictionary
     2. Sequence
@@ -78,7 +79,7 @@ def _(mo):
         r"""
     #### Dictionary
 
-    Dictionaries are structures that store data as key:value pairs. Let's say we have the following dictionary:
+    Dictionaries are structures that store data as `key:value` pairs. Let's say we have the following dictionary:
     """
     )
     return
@@ -93,7 +94,7 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""In order to convert this dictionary into a DataFrame, we simply need to pass it into the data parameter in the .DataFrame() method like so.""")
+    mo.md(r"""In order to convert this dictionary into a DataFrame, we simply need to pass it into the data parameter in the `.DataFrame()` method like so.""")
     return
 
 
@@ -144,7 +145,7 @@ def _(pl, seq_data):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Notice that since we didn't specify the column names, Polars automatically named them "column_0", "column_1", and "column_2". Later, we will show you how to specify the names of the columns.""")
+    mo.md(r"""Notice that since we didn't specify the column names, Polars automatically named them `column_0`, `column_1`, and `column_2`. Later, we will show you how to specify the names of the columns.""")
     return
 
 
@@ -242,7 +243,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -387,7 +388,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -413,7 +414,7 @@ def _(pl):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""Now let's try setting strict to `False`.""")
     return
