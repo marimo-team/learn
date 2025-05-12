@@ -23,4 +23,5 @@ You can also open notebooks in our online playground by appending marimo.app/ to
 
 **Authors.**
 
+* [Péter Gyarmati](https://github.com/peter-gy)
 Thanks to all our notebook authors!
