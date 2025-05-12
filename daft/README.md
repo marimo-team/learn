@@ -21,7 +21,6 @@ uvx marimo edit <file_url>
 
 You can also open notebooks in our online playground by appending marimo.app/ to a notebook's URL.
 
-**Authors.**
+**Thanks to all our notebook authors!**
 
 * [Péter Gyarmati](https://github.com/peter-gy)
-Thanks to all our notebook authors!
