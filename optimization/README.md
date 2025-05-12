@@ -28,8 +28,6 @@ uvx marimo edit https://github.com/marimo-team/learn/blob/main/optimization/01_l
 You can also open notebooks in our online playground by appending `marimo.app/`
 to a notebook's URL: [marimo.app/github.com/marimo-team/learn/blob/main/optimization/01_least_squares.py](https://marimo.app/https://github.com/marimo-team/learn/blob/main/optimization/01_least_squares.py).
 
-**Authors.**
-
-Thanks to all our notebook authors!
+**Thanks to all our notebook authors!**
 
 * [Akshay Agrawal](https://github.com/akshayka)

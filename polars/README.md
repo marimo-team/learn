@@ -18,9 +18,10 @@ You can also open notebooks in our online playground by appending marimo.app/ to
 
 [https://marimo.app/github.com/marimo-team/learn/blob/main/polars/01_why_polars.py](https://marimo.app/github.com/marimo-team/learn/blob/main/polars/01_why_polars.py).
 
-**Authors.**
-
-Thanks to all our notebook authors!
+**Thanks to all our notebook authors!**
 
 * [Koushik Khan](https://github.com/koushikkhan)
 * [Péter Gyarmati](https://github.com/peter-gy)
+* [Joram Mutenge](https://github.com/jorammutenge)
+* [etrotta](https://github.com/etrotta)
+* [Debajyoti Das](https://github.com/debajyotid2)
