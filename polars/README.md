@@ -24,3 +24,6 @@ Thanks to all our notebook authors!
 
 * [Koushik Khan](https://github.com/koushikkhan)
 * [Péter Gyarmati](https://github.com/peter-gy)
+* [Joram Mutenge](https://github.com/jorammutenge)
+* [Emilio Trotta](https://github.com/etrotta)
+* [Debajyoti Das](https://github.com/debajyotid2)
