@@ -26,3 +26,6 @@ You can also open notebooks in our online playground by appending marimo.app/ to
 **Authors.**
 
 Thanks to all our notebook authors!
+
+* [Mustjaab](https://github.com/Mustjaab)
+* [julius383](https://github.com/julius383)
