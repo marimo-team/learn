@@ -41,9 +41,9 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
-    mo.md("""Polars datatype specific features for missing data are NaN(for float values) and null(for everything else).""")
+    mo.md("""Polars datatype specific features for missing data are NaN (for float values) and null (for everything else).""")
     return
 
 
