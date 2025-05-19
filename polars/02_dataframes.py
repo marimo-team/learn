@@ -10,17 +10,8 @@
 
 import marimo
 
-__generated_with = "0.13.6"
-app = marimo.App(width="medium")
-
-
-@app.cell
-def _():
-    import marimo as mo
-    import polars as pl
-    import numpy as np
-    import pandas as pd
-    return mo, np, pd, pl
+__generated_with = "0.13.10"
+app = marimo.App()
 
 
 @app.cell(hide_code=True)
@@ -28,7 +19,7 @@ def _(mo):
     mo.md(
         r"""
     # DataFrames
-    Author: Raine Hoang
+    Author: [*Raine Hoang*](https://github.com/Jystine)
 
     In this tutorial, we will go over the central data structure for structured data, DataFrames. There are a multitude of packages that work with DataFrames, but we will be focusing on the way Polars uses them the different options it provides.
 
@@ -378,7 +369,10 @@ def _(mo):
 
 @app.cell
 def _(pl, seq_data):
-    pl.DataFrame(seq_data, schema_overrides = {"column_0": pl.String})
+    try:
+        pl.DataFrame(seq_data, schema_overrides = {"column_0": pl.String})
+    except Exception as e:
+        print(f"Error: {e}")
     return
 
 
@@ -410,7 +404,10 @@ def _(mo):
 def _(pl):
     data = [[1, "a", 2]]
 
-    pl.DataFrame(data = data, strict = True)
+    try:
+        pl.DataFrame(data = data, strict = True)
+    except Exception as e:
+        print(f"Error: {e}")
     return
 
 
@@ -508,6 +505,15 @@ def _(mo):
     """
     )
     return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    import polars as pl
+    import numpy as np
+    import pandas as pd
+    return mo, np, pd, pl
 
 
 if __name__ == "__main__":
