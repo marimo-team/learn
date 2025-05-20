@@ -507,6 +507,20 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Summary
+
+    DataFrames are a useful data structure that can be used to organize and perform additional analysis on your data. In this notebook, we have learned how to define DataFrames, what can be a DataFrame, the structure of it, and additional parameters you can set while creating it. 
+
+    In order to create a DataFrame, you pass your data into the .DataFrame() method through the data parameter. The data you pass through must be either a dictionary, sequence, array, series, or pandas DataFrame. Once defined, the DataFrame will separate the data into different columns and the data within the column must have the same data type. There exists additional parameters besides data that allows you to further customize the ending DataFrame. Some examples of these are orient, strict, and infer_schema_length.
+    """
+    )
+    return
+
+
 @app.cell
 def _():
     import marimo as mo
