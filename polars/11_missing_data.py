@@ -95,7 +95,7 @@ def _(df, pl):
     # Show where nulls are
     mask = df.select([pl.col(c).is_null().alias(f"{c}_is_null") for c in df.columns])
     counts = df.null_count()
-    mask, counts
+    mo.vstack([mask, counts])
     return counts, mask
 
 
