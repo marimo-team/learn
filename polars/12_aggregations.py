@@ -8,7 +8,7 @@
 
 import marimo
 
-__generated_with = "0.11.14"
+__generated_with = "0.12.9"
 app = marimo.App(width="medium")
 
 
@@ -208,7 +208,7 @@ def _(mo):
         r"""
         We had more sales in 2014.
 
-        Now let's perform the above operation by groupin with time. This requires sorting the dataframe first.
+        Now let's perform the above operation by grouping with time. This requires sorting the dataframe first.
         """
     )
     return
