@@ -11,28 +11,22 @@
 
 import marimo
 
-__generated_with = "0.12.9"
+__generated_with = "0.13.11"
 app = marimo.App(width="medium", app_title="Window Functions")
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-        # Window Functions
-        _By [Henry Harbeck](https://github.com/henryharbeck)._
+    # Window Functions
+    _By [Henry Harbeck](https://github.com/henryharbeck)._
 
-        In this notebook, you'll learn how to perform different types of window functions in Polars.
-        You'll work with partitions, ordering and Polars' available "mapping strategies".
+    In this notebook, you'll learn how to perform different types of window functions in Polars.
+    You'll work with partitions, ordering and Polars' available "mapping strategies".
 
-        We'll use a dataset with a few days of paid and organic digital revenue data.
-        """
+    We'll use a dataset with a few days of paid and organic digital revenue data.
+    """
     )
     return
 
@@ -54,23 +48,23 @@ def _():
     )
 
     df
-    return date, dates, df, pl
+    return date, df, pl
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-        ## What is a window function?
+    ## What is a window function?
 
-        A window function performs a calculation across a set of rows that are related to the current row.
-        They allow you to perform aggregations and other calculations within a group without collapsing
-        the number of rows (opposed to a group by aggregation, which does collapse the number of rows). Typically the result of a
-        window function is assigned back to rows within the group, but Polars also offers additional alternatives.
+    A window function performs a calculation across a set of rows that are related to the current row.
+    They allow you to perform aggregations and other calculations within a group without collapsing
+    the number of rows (opposed to a group by aggregation, which does collapse the number of rows). Typically the result of a
+    window function is assigned back to rows within the group, but Polars also offers additional alternatives.
 
-        Window functions can be used by specifying the [`over`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.over.html)
-        method on an expression.
-        """
+    Window functions can be used by specifying the [`over`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.over.html)
+    method on an expression.
+    """
     )
     return
 
@@ -79,10 +73,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Partitions
-        Partitions are the "group by" columns. We will have one "window" of data per unique value in the partition column(s), to
-        which the function will be applied.
-        """
+    ## Partitions
+    Partitions are the "group by" columns. We will have one "window" of data per unique value in the partition column(s), to
+    which the function will be applied.
+    """
     )
     return
 
@@ -91,10 +85,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ### Partitioning by a single column
+    ### Partitioning by a single column
 
-        Let's get the total revenue per date...
-        """
+    Let's get the total revenue per date...
+    """
     )
     return
 
@@ -109,7 +103,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""And then see what percentage of the daily total was Paid and what percentage was Organic.""")
+    mo.md(
+        r"""And then see what percentage of the daily total was Paid and what percentage was Organic."""
+    )
     return
 
 
@@ -123,9 +119,9 @@ def _(daily_revenue, df, pl):
 def _(mo):
     mo.md(
         r"""
-        Let's now calculate the maximum revenue, cumulative revenue, rank the revenue and calculate the day-on-day change,
-        all partitioned (split) by channel.
-        """
+    Let's now calculate the maximum revenue, cumulative revenue, rank the revenue and calculate the day-on-day change,
+    all partitioned (split) by channel.
+    """
     )
     return
 
@@ -145,10 +141,10 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        Note that aggregation functions such as `sum` and `max` have their value applied back to each row in the partition
-        (group). Non-aggregate functions such as `cum_sum`, `rank` and `diff` can produce different values per row, but
-        still only consider rows within their partition.
-        """
+    Note that aggregation functions such as `sum` and `max` have their value applied back to each row in the partition
+    (group). Non-aggregate functions such as `cum_sum`, `rank` and `diff` can produce different values per row, but
+    still only consider rows within their partition.
+    """
     )
     return
 
@@ -157,13 +153,13 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ### Partitioning by multiple columns
+    ### Partitioning by multiple columns
 
-        We can also partition by multiple columns.
+    We can also partition by multiple columns.
 
-        Let's add a column to see whether it is a weekday (business day), then get the maximum revenue by that and
-        the channel.
-        """
+    Let's add a column to see whether it is a weekday (business day), then get the maximum revenue by that and
+    the channel.
+    """
     )
     return
 
@@ -184,12 +180,12 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        ### Partitioning by expressions
+    ### Partitioning by expressions
 
-        Polars also lets you partition by expressions without needing to create them as columns first.
+    Polars also lets you partition by expressions without needing to create them as columns first.
 
-        So, we could re-write the previous window function as...
-        """
+    So, we could re-write the previous window function as...
+    """
     )
     return
 
@@ -208,10 +204,10 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        Window functions fit into Polars' composable [expressions API](https://docs.pola.rs/user-guide/concepts/expressions-and-contexts/#expressions),
-        so can be combined with all [aggregation methods](https://docs.pola.rs/api/python/stable/reference/expressions/aggregation.html)
-        and methods that consider more than 1 row (e.g., `cum_sum`, `rank` and `diff` as we just saw).
-        """
+    Window functions fit into Polars' composable [expressions API](https://docs.pola.rs/user-guide/concepts/expressions-and-contexts/#expressions),
+    so can be combined with all [aggregation methods](https://docs.pola.rs/api/python/stable/reference/expressions/aggregation.html)
+    and methods that consider more than 1 row (e.g., `cum_sum`, `rank` and `diff` as we just saw).
+    """
     )
     return
 
@@ -220,14 +216,14 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Ordering
+    ## Ordering
 
-        The `order_by` parameter controls how to order the data within the window. The function is applied to the data in this
-        order.
+    The `order_by` parameter controls how to order the data within the window. The function is applied to the data in this
+    order.
 
-        Up until this point, we have been letting Polars do the window function calculations based on the order of the rows in the
-        DataFrame. There can be times where we would like order of the calculation and the order of the output itself to differ.
-        """
+    Up until this point, we have been letting Polars do the window function calculations based on the order of the rows in the
+    DataFrame. There can be times where we would like order of the calculation and the order of the output itself to differ.
+    """
     )
     return
 
@@ -236,11 +232,11 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ### Ordering in a window function
+    ### Ordering in a window function
 
-        Let's say we want the DataFrame ordered by day of week, but we still want cumulative revenue and the first revenue observation, both
-        ordered by date and partitioned by channel...
-        """
+    Let's say we want the DataFrame ordered by day of week, but we still want cumulative revenue and the first revenue observation, both
+    ordered by date and partitioned by channel...
+    """
     )
     return
 
@@ -269,13 +265,13 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        ### Note about window function ordering compared to SQL
+    ### Note about window function ordering compared to SQL
 
-        It is worth noting that traditionally in SQL, many more functions require an `ORDER BY` within `OVER` than in
-        equivalent functions in Polars.
+    It is worth noting that traditionally in SQL, many more functions require an `ORDER BY` within `OVER` than in
+    equivalent functions in Polars.
 
-        For example, an SQL `RANK()` expression like...
-        """
+    For example, an SQL `RANK()` expression like...
+    """
     )
     return
 
@@ -301,9 +297,9 @@ def _(df, mo):
 def _(mo):
     mo.md(
         r"""
-        ...does not require an `order_by` in Polars as the column and the function are already bound (including with the
-        `descending=True` argument).
-        """
+    ...does not require an `order_by` in Polars as the column and the function are already bound (including with the
+    `descending=True` argument).
+    """
     )
     return
 
@@ -323,10 +319,10 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        ### Descending order
+    ### Descending order
 
-        We can also order in descending order by passing `descending=True`...
-        """
+    We can also order in descending order by passing `descending=True`...
+    """
     )
     return
 
@@ -356,13 +352,13 @@ def _(df_sorted, pl):
 def _(mo):
     mo.md(
         """
-        ## Mapping Strategies
+    ## Mapping Strategies
 
-        Mapping Strategies control how Polars maps the result of the window function back to the original DataFrame
+    Mapping Strategies control how Polars maps the result of the window function back to the original DataFrame
 
-        Generally (by default) the result of a window function is assigned back to rows within the group. Through Polars' mapping
-        strategies, we will explore other possibilities.
-        """
+    Generally (by default) the result of a window function is assigned back to rows within the group. Through Polars' mapping
+    strategies, we will explore other possibilities.
+    """
     )
     return
 
@@ -371,11 +367,11 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        ### Group to rows
+    ### Group to rows
 
-        "group_to_rows" is the default mapping strategy and assigns the result of the window function back to the rows in the
-        window.
-        """
+    "group_to_rows" is the default mapping strategy and assigns the result of the window function back to the rows in the
+    window.
+    """
     )
     return
 
@@ -392,10 +388,10 @@ def _(df, pl):
 def _(mo):
     mo.md(
         """
-        ### Join
+    ### Join
 
-        The "join" mapping strategy aggregates the resulting values in a list and repeats the list for all rows in the group.
-        """
+    The "join" mapping strategy aggregates the resulting values in a list and repeats the list for all rows in the group.
+    """
     )
     return
 
@@ -412,14 +408,14 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-        ### Explode
+    ### Explode
 
-        The "explode" mapping strategy is similar to "group_to_rows", but is typically faster and does not preserve the order of
-        rows. Due to this, it requires sorting columns (including those not in the window function) for the result to make sense.
-        It should also only be used in a `select` context and not `with_columns`.
+    The "explode" mapping strategy is similar to "group_to_rows", but is typically faster and does not preserve the order of
+    rows. Due to this, it requires sorting columns (including those not in the window function) for the result to make sense.
+    It should also only be used in a `select` context and not `with_columns`.
 
-        The result of "explode" is similar to a `group_by` followed by an `agg` followed by an `explode`.
-        """
+    The result of "explode" is similar to a `group_by` followed by an `agg` followed by an `explode`.
+    """
     )
     return
 
@@ -451,11 +447,11 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ### Reusing a window
+    ### Reusing a window
 
-        In SQL there is a `WINDOW` keyword, which easily allows the re-use of the same window specification across expressions
-        without needing to repeat it. In Polars, this can be achieved by using `dict` unpacking to pass arguments to `over`.
-        """
+    In SQL there is a `WINDOW` keyword, which easily allows the re-use of the same window specification across expressions
+    without needing to repeat it. In Polars, this can be achieved by using `dict` unpacking to pass arguments to `over`.
+    """
     )
     return
 
@@ -474,21 +470,21 @@ def _(df_sorted, pl):
         daily_revenue_rank=pl.col("revenue").rank().over(**window),
         cumulative_daily_revenue=pl.col("revenue").cum_sum().over(**window),
     )
-    return (window,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
-        ### Rolling Windows
+    ### Rolling Windows
 
-        Much like in SQL, Polars also gives you the ability to do rolling window computations. In Polars, the rolling calculation
-        is also aware of temporal data, making it easy to express if the data is not contiguous (i.e., observations are missing).
+    Much like in SQL, Polars also gives you the ability to do rolling window computations. In Polars, the rolling calculation
+    is also aware of temporal data, making it easy to express if the data is not contiguous (i.e., observations are missing).
 
-        Let's look at an example of that now by filtering out one day of our data and then calculating both a 3-day and 3-row
-        max revenue split by channel...
-        """
+    Let's look at an example of that now by filtering out one day of our data and then calculating both a 3-day and 3-row
+    max revenue split by channel...
+    """
     )
     return
 
@@ -524,14 +520,20 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Additional References
+    ## Additional References
 
-        - [Polars User guide - Window functions](https://docs.pola.rs/user-guide/expressions/window-functions/)
-        - [Polars over method API reference](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.over.html)
-        - [PostgreSQL window function documentation](https://www.postgresql.org/docs/current/tutorial-window.html)
-        """
+    - [Polars User guide - Window functions](https://docs.pola.rs/user-guide/expressions/window-functions/)
+    - [Polars over method API reference](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.over.html)
+    - [PostgreSQL window function documentation](https://www.postgresql.org/docs/current/tutorial-window.html)
+    """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":
