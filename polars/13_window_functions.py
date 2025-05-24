@@ -103,9 +103,7 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""And then see what percentage of the daily total was Paid and what percentage was Organic."""
-    )
+    mo.md(r"""And then see what percentage of the daily total was Paid and what percentage was Organic.""")
     return
 
 
@@ -243,8 +241,8 @@ def _(mo):
 
 @app.cell
 def _(df, pl):
-    # Monday = 1, Sunday = 7
     df_sorted = (
+        # Monday = 1, Sunday = 7
         df.sort(pl.col("date").dt.weekday())
         # Show the weekday for transparency
         .with_columns(pl.col("date").dt.to_string("%a").alias("weekday"))
@@ -468,7 +466,6 @@ def _(df_sorted, pl):
         pct_daily_revenue=(pl.col("revenue") / pl.col("revenue").sum()).over(**window),
         highest_revenue_channel=pl.col("channel").top_k_by("revenue", k=1).first().over(**window),
         daily_revenue_rank=pl.col("revenue").rank().over(**window),
-        cumulative_daily_revenue=pl.col("revenue").cum_sum().over(**window),
     )
     return
 
@@ -516,7 +513,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
