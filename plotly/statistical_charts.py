@@ -37,7 +37,7 @@ def _(mo):
     - **Histograms:** Analyze frequency distributions and experiment with different bin sizes.  
     - **Error Bars:** Visualize measurement uncertainties and variability.
 
-    We will use the built-in tipstips dataset from Plotly for our examples. This dataset contains real-world information about restaurant bills, tips, and customer attributes, making it perfect for exploring statistical visualizations. Here are the first few rows of this dataset displayed below:
+    We will use the built-in [tips dataset](https://github.com/plotly/datasets/blob/master/tips.csv) from Plotly for our examples. This dataset contains real-world information about restaurant bills, tips, and customer attributes, making it perfect for exploring statistical visualizations. Here are the first few rows of this dataset displayed below:
     """
     )
     return
