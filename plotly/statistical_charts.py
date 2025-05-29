@@ -239,7 +239,7 @@ def _(slider2, update_error_bars):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
