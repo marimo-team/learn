@@ -171,7 +171,7 @@ def _(mo, px, tips):
 
 @app.cell
 def _(mo, slider):
-    mo.hstack([slider, mo.md(f"Bin Size: {slider.value}")])
+    mo.hstack([slider, mo.md(f"Bin Size: {slider.value}")], justify='space-around')
     return
 
 
