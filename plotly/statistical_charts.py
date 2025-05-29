@@ -181,7 +181,7 @@ def _(slider, update_histogram):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
