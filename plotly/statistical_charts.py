@@ -229,7 +229,7 @@ def _(go, mo, np, tips):
 
 @app.cell
 def _(mo, slider2):
-    mo.hstack([slider2, mo.md(f"Error Scale: {slider2.value}")])
+    mo.hstack([slider2, mo.md(f"Error Scale: {slider2.value}")], justify='space-around')
     return
 
 
