@@ -13,22 +13,12 @@ import marimo
 __generated_with = "0.13.6"
 app = marimo.App(width="medium")
 
-
-@app.cell
-def _():
-    import marimo as mo
-    import pandas as pd
-    import numpy as np
-    import plotly.express as px
-    import plotly.graph_objects as go
-    return go, mo, np, px
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     # Statistical Charts
+    By [Bryan Zhang](https://github.com/BryanZhang938)
 
     Welcome to this lesson on statistical charts with Plotly. In this lesson, you will learn to create and interact with four key chart types:
 
@@ -253,6 +243,14 @@ def _(mo):
     )
     return
 
+@app.cell
+def _():
+    import marimo as mo
+    import pandas as pd
+    import numpy as np
+    import plotly.express as px
+    import plotly.graph_objects as go
+    return go, mo, np, px
 
 
 if __name__ == "__main__":
