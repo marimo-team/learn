@@ -27,7 +27,7 @@ def _(mo):
 
     This tutorial covers how to load data of varying formats and from different sources using [polars](https://docs.pola.rs/).
 
-    It includes examples of how to load and write to a variety of formats, shows how to convert data from other libraries to support formats not supported directly by polars, includes relevants links for users that need to connect with external sources, and explains how to deal with custom formats via plugins.
+    It includes examples of how to load and write to a variety of formats, shows how to convert data from other libraries to support formats not supported directly by polars, includes relevant links for users that need to connect with external sources, and explains how to deal with custom formats via plugins.
     """
     )
     return
@@ -60,7 +60,7 @@ def _(mo, pl):
                 "notes": None,
             },
             {"format": "Arrow", "lazy": False, "notes": "You can load XML and HTML files via pandas"},
-            {"format": "Plugins", "lazy": True, "notes": "The most flexibile, but takes some effort to implement"},
+            {"format": "Plugins", "lazy": True, "notes": "The most flexible, but takes some effort to implement"},
             {"format": "Feather / IPC", "lazy": True, "notes": None},
             {"format": "Avro", "lazy": False, "notes": None},
             {"format": "Delta", "lazy": True, "notes": "No Lazy writing"},
@@ -104,7 +104,7 @@ def _(mo):
     ## CSV
     A classic and common format that has been widely used for decades.
 
-    The API is almost identic to Parquet - You can just replace `parquet` by `csv` and it will work with the default settings, but polars also allows for you to customize some settings such as the delimiter and quoting rules.
+    The API is almost identical to Parquet - You can just replace `parquet` by `csv` and it will work with the default settings, but polars also allows for you to customize some settings such as the delimiter and quoting rules.
     """
     )
     return
