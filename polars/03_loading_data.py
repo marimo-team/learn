@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.13.6"
+__generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 
@@ -257,7 +257,6 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-
     ## Hive Partitions
 
     There is also support for [Hive](https://docs.pola.rs/user-guide/io/hive/) partitioned data, but parts of the API are still unstable (may change in future polars versions
@@ -339,9 +338,30 @@ def _(mo):
 
     The API is the same for all three storage providers, check the [User Guide](https://docs.pola.rs/user-guide/io/cloud-storage/) if you need of any of them.
 
-    Examples are not included in this Notebook as it would require setting up authentication.
+    Runnable examples are not included in this Notebook as it would require setting up authentication, but the disabled cell below shows an example using Azure.
     """
     )
+    return
+
+
+@app.cell(disabled=True)
+def _(adlfs, df, os, pl):
+    fs = adlfs.AzureBlobFileSystem(connection_string=os.environ["AZURE_STORAGE_CONNECTION_STRING"])
+    destination = f"abfs://{os.environ['AZURE_CONTAINER_NAME']}/file.parquet"
+
+    # Writing
+    with fs.open(destination, mode="wb") as f:
+        df.write_parquet(f)
+
+    # Reading
+    pl.read_parquet(
+        destination, storage_options={"account_name": os.environ["AZURE_STORAGE_ACCOUNT"], "use_azure_cli": "True"}
+    )
+
+    # Deleting
+    fs.delete(destination)
+
+    # If you get an error saying that the account does not exists, double check you logged in the correct account and subscription via `az login`
     return
 
 
@@ -349,6 +369,14 @@ def _(mo):
 def _():
     import marimo as mo
     return (mo,)
+
+
+@app.cell(disabled=True)
+def _():
+    # You may need to install `fsspec ` and `adlfs ` beyond the dependencies included in the notebook
+    import os
+    import adlfs
+    return adlfs, os
 
 
 @app.cell
