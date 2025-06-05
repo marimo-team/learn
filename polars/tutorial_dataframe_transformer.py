@@ -1,6 +1,8 @@
 # /// script
 # dependencies = [
 #     "marimo",
+#     "numpy==2.2.3",
+#     "plotly[express]==6.0.0",
 #     "polars==1.28.1",
 #     "requests==2.32.3",
 # ]
@@ -10,17 +12,22 @@
 
 import marimo
 
-__generated_with = "0.13.2"
+__generated_with = "0.13.15"
 app = marimo.App(width="medium")
 
 
 @app.cell
-def _():
-    import marimo as mo
-    import polars as pl
-    import requests
-    import json
-    return mo, pl, requests
+def _(mo):
+    mo.md(
+        r"""
+    # Polars with Marimo's Dataframe Transformer
+
+    *By [jesshart](https://github.com/jesshart)*
+
+    The goal of this notebook is to explore Marimo's data explore capabilities alonside the power of polars. Feel free to reference the latest about this Marimo feature here: https://docs.marimo.io/api/inputs/data_explorer/
+    """
+    )
+    return
 
 
 @app.cell
@@ -35,11 +42,11 @@ def _(requests):
 def _(mo):
     mo.md(
         r"""
-        # Loading Data
-        Let's start by loading our data and getting into the `.lazy()` format so our transformations and queries are speedy.
+    # Loading Data
+    Let's start by loading our data and getting into the `.lazy()` format so our transformations and queries are speedy.
 
-        Read more about `.lazy()` here: https://docs.pola.rs/user-guide/lazy/
-        """
+    Read more about `.lazy()` here: https://docs.pola.rs/user-guide/lazy/
+    """
     )
     return
 
@@ -55,11 +62,11 @@ def _(json_data, pl):
 def _(mo):
     mo.md(
         r"""
-        Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenince from `marimo`. You have the `Table` and `Query Plan` options to choose from. 
+    Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenince from `marimo`. You have the `Table` and `Query Plan` options to choose from. 
 
-        - 💡 Try out the `Table` view! You can click the `Preview data` button to get a quick view of your data.
-        - 💡 Take a look at the `Query plan`. Learn more about Polar's query plan here: https://docs.pola.rs/user-guide/lazy/query-plan/
-        """
+    - 💡 Try out the `Table` view! You can click the `Preview data` button to get a quick view of your data.
+    - 💡 Take a look at the `Query plan`. Learn more about Polar's query plan here: https://docs.pola.rs/user-guide/lazy/query-plan/
+    """
     )
     return
 
@@ -68,15 +75,15 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        # marimo's Native Dataframe UI
+    ## marimo's Native Dataframe UI
 
-        There are a few ways to leverage marimo's native dataframe UI. One is by doing what we saw above—by referencing a `pl.LazyFrame` directly. You can also try,
+    There are a few ways to leverage marimo's native dataframe UI. One is by doing what we saw above—by referencing a `pl.LazyFrame` directly. You can also try,
 
-        - Reference a `pl.LazyFrame` (we already did this!)
-        - Referencing a `pl.DataFrame` and see how it different from its corresponding lazy version
-        - Use `mo.ui.table`
-        - Use `mo.ui.dataframe`
-        """
+    - Reference a `pl.LazyFrame` (we already did this!)
+    - Referencing a `pl.DataFrame` and see how it different from its corresponding lazy version
+    - Use `mo.ui.table`
+    - Use `mo.ui.dataframe`
+    """
     )
     return
 
@@ -85,15 +92,15 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Reference a pl.DataFrame
-        Let's reference the same frame as before, but this time as a `pl.DataFrame` by calling `.collect()` on it.
-        """
+    ## Reference a `pl.DataFrame`
+    Let's reference the same frame as before, but this time as a `pl.DataFrame` by calling `.collect()` on it.
+    """
     )
     return
 
 
 @app.cell
-def _(demand):
+def _(demand: "pl.LazyFrame"):
     demand.collect()
     return
 
@@ -102,12 +109,12 @@ def _(demand):
 def _(mo):
     mo.md(
         r"""
-        Note how much functionality we have right out-of-the-box. Click on column names to see rich features like sorting, freezing, filtering, searching, and more!
+    Note how much functionality we have right out-of-the-box. Click on column names to see rich features like sorting, freezing, filtering, searching, and more!
 
-        Notice how `order_quantity` has a green bar chart under it indicating the ditribution of values for the field!
+    Notice how `order_quantity` has a green bar chart under it indicating the ditribution of values for the field!
 
-        Don't miss the `Download` feature as well which supports downloading in CSV, json, or parquet format!
-        """
+    Don't miss the `Download` feature as well which supports downloading in CSV, json, or parquet format!
+    """
     )
     return
 
@@ -116,15 +123,15 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Use `mo.ui.table`
-        The `mo.ui.table` allows you to select rows for use downstream. You can select the rows you want, and then use these as filtered rows downstream.
-        """
+    ## Use `mo.ui.table`
+    The `mo.ui.table` allows you to select rows for use downstream. You can select the rows you want, and then use these as filtered rows downstream.
+    """
     )
     return
 
 
 @app.cell
-def _(demand, mo):
+def _(demand: "pl.LazyFrame", mo):
     demand_table = mo.ui.table(demand, label="Demand Table")
     return (demand_table,)
 
@@ -137,12 +144,14 @@ def _(demand_table):
 
 @app.cell
 def _(mo):
-    mo.md(r"""I like to use this feature to select groupings based on summary statistics so I can quickly explore subsets of categories. Let me show you what I mean.""")
+    mo.md(
+        r"""I like to use this feature to select groupings based on summary statistics so I can quickly explore subsets of categories. Let me show you what I mean."""
+    )
     return
 
 
 @app.cell
-def _(demand, pl):
+def _(demand: "pl.LazyFrame", pl):
     summary: pl.LazyFrame = demand.group_by("product_family").agg(
         pl.mean("order_quantity").alias("mean"),
         pl.sum("order_quantity").alias("sum"),
@@ -155,7 +164,7 @@ def _(demand, pl):
 
 
 @app.cell
-def _(mo, summary):
+def _(mo, summary: "pl.LazyFrame"):
     summary_table = mo.ui.table(summary)
     return (summary_table,)
 
@@ -170,16 +179,16 @@ def _(summary_table):
 def _(mo):
     mo.md(
         r"""
-        Now, instead of manually creatinga filter for what I want to take a closer look at, I simply select from the ui and do a simple join to get that aggregated level with more detail.
+    Now, instead of manually creatinga filter for what I want to take a closer look at, I simply select from the ui and do a simple join to get that aggregated level with more detail.
 
-        The following cell uses the output of the `mo.ui.table` selection, selects its unique keys, and uses that to join for the selected subset of the original table.
-        """
+    The following cell uses the output of the `mo.ui.table` selection, selects its unique keys, and uses that to join for the selected subset of the original table.
+    """
     )
     return
 
 
 @app.cell
-def _(demand, pl, summary_table):
+def _(demand: "pl.LazyFrame", pl, summary_table):
     selection_keys: pl.LazyFrame = (
         summary_table.value.lazy().select("product_family").unique()
     )
@@ -192,25 +201,155 @@ def _(demand, pl, summary_table):
 
 @app.cell
 def _(mo):
+    mo.md(
+        """You can learn more about joins in Polars by checking out my other interactive notebook here: https://marimo.io/p/@jesshart/basic-polars-joins"""
+    )
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""## Use `mo.ui.dataframe`""")
     return
 
 
 @app.cell
-def _(demand, mo):
-    mo_dateframe = mo.ui.dataframe(demand.collect())
-    return (mo_dateframe,)
+def _(demand: "pl.LazyFrame", mo):
+    demand_cached = demand.collect()
+    mo_dataframe = mo.ui.dataframe(demand_cached)
+    return demand_cached, mo_dataframe
 
 
 @app.cell
-def _(mo_dateframe):
-    mo_dateframe
+def _(mo):
+    mo.md(
+        r"""Below I simply call the object into view. We will play with it in the following cells."""
+    )
+    return
+
+
+@app.cell
+def _(mo_dataframe):
+    mo_dataframe
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""One way to group this data in polars code directly would be to group by product family to get the mean. This is how it is done in polars:"""
+    )
+    return
+
+
+@app.cell
+def _(demand_cached, pl):
+    demand_agg: pl.DataFrame = demand_cached.group_by("product_family").agg(
+        pl.mean("order_quantity").name.suffix("_mean")
+    )
+    demand_agg
+    return (demand_agg,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        f"""
+    ## Try Before You Buy
+
+    1. Now try to do the same summary using Marimo's `mo.ui.dataframe` object above. Also, note how your aggregated column is already renamed! Nice touch!
+    2. Try (1) again but use select statements first (This is actually better polars practice anyway since it reduces the frame as you move to aggregation.)
+
+    *When you are ready, check the `Python Code` tab at the top of the table to compare your output to the answer below.*
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _():
+    mean_code = """
+    This may seem verbose compared to what I came up with, but quick and dirty outputs like this are really helpful for quickly exploring the data and learning the polars library at the same time.
+    ```python
+    df_next = df
+    df_next = df_next.group_by(
+        [pl.col("product_family")], maintain_order=True
+    ).agg(
+        [
+            pl.col("order_date").mean().alias("order_date_mean"),
+            pl.col("order_quantity").mean().alias("order_quantity_mean"),
+            pl.col("product").mean().alias("product_mean"),
+        ]
+    )
+    ```
+    """
+
+    mean_again_code = """
+    ```python
+    df_next = df
+    df_next = df_next.select(["product_family", "order_quantity"])
+    df_next = df_next.group_by(
+        [pl.col("product_family")], maintain_order=True
+    ).agg(
+        [
+            pl.col("order_date").mean().alias("order_date_mean"),
+            pl.col("order_quantity").mean().alias("order_quantity_mean"),
+            pl.col("product").mean().alias("product_mean"),
+        ]
+    )
+    ```
+    """
+    return mean_again_code, mean_code
+
+
+@app.cell
+def _(mean_again_code, mean_code, mo):
+    mo.accordion(
+        {
+            "Show Code (1)": mean_code,
+            "Show Code (2)": mean_again_code,
+        }
+    )
+    return
+
+
+@app.cell
+def _(demand_agg: "pl.DataFrame", mo, px):
+    bar_graph = px.bar(
+        demand_agg,
+        x="product_family",
+        y="order_quantity_mean",
+        title="Mean Quantity over Product Family",
+    )
+
+    note: str = """
+    Note: This graph will only show if the above mo_dataframe is correct!
+
+    If you want more on interactive graphs, check out https://github.com/marimo-team/learn/blob/main/polars/05_reactive_plots.py
+    """
+
+    mo.vstack(
+        [
+            mo.md(note),
+            bar_graph,
+        ]
+    )
     return
 
 
 @app.cell
 def _():
-    return
+    import marimo as mo
+    return (mo,)
+
+
+@app.cell
+def _():
+    import polars as pl
+    import requests
+    import json
+    import plotly.express as px
+    return pl, px, requests
 
 
 if __name__ == "__main__":
