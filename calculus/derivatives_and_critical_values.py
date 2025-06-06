@@ -79,7 +79,6 @@ def _(mo):
     | **Quotient Rule** | For differentiating one function divided by another | Rational expressions, modeling change ratios | \( \frac{d}{dx} \left( \frac{u}{v} \right) = \frac{u'v - uv'}{v^2} \) | 1. \( \frac{d}{dx} \left( \frac{x^2}{x+1} \right) \) <br> 2. \( \frac{d}{dx} \left( \frac{\sin x}{x^2} \right) \) |
     | **Chain Rule** | Used for differentiating composite (nested) functions | Growth/decay models, trig and log functions | \( \frac{d}{dx}(g(h(x))) = g'(h(x)) \cdot h'(x) \) | 1. \( \frac{d}{dx}(\sin(x^2)) \) <br> 2. \( \frac{d}{dx}(e^{3x^2 + 2}) \) <br> 3. \( \frac{d}{dx}(\ln(\sqrt{x})) \) |
     | **Higher-Order Derivatives** | Derivatives of derivatives, e.g., \( f''(x), f^{(3)}(x) \) | Physics: velocity, acceleration, concavity in graphs | Compute derivatives multiple times: \( f''(x) = \frac{d^2f}{dx^2} \) | 1. \( f(x) = x^3 - 3x + 2 \Rightarrow f''(x) \)? <br> 2. \( \frac{d^3}{dx^3}(\sin x) \)? |
-
     """
     )
     return
@@ -252,7 +251,25 @@ def _(go, np, sp):
 
 
 @app.cell
-def _():
+def _(mo):
+    mo.md(
+        r"""
+    ## Differentiability and Continuity
+
+    **Objective**: Understand the relationship between differentiability and continuity, identify where a function fails to be differentiable, and visualize these concepts graphically.
+
+    **Key Questions**:
+
+    - What does it mean for a function to be differentiable?
+    - How is differentiability related to continuity?
+    - What are the common cases where a function is not differentiable?
+
+    ### Differentiability vs. Continuity
+    #### Definitions
+    - Continuity: A function f(x) is continuous at x = a if:
+    - (No jumps, holes, or asymptotes at x = a.)
+    """
+    )
     return
 
 
