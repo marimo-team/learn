@@ -1,3 +1,13 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "numpy"="2.2.6",
+#     "plotly"="0.1.2",
+#     "sympy"="1.14.0",
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -85,17 +95,16 @@ def _(mo):
 def _():
     import marimo as mo
     import numpy as np
-    import sympy as sp
     import plotly.graph_objects as go
-    from plotly.subplots import make_subplots
-    import matplotlib.pyplot as plt
+    import sympy as sp
+
     return go, mo, np, sp
 
 
 @app.cell
 def _(go, np, sp):
     def best_differentiation_plot():
-        x = sp.Symbol('x')
+        x = sp.Symbol("x")
 
         expressions = {
             "Addition Rule": sp.sympify("x**2 + sin(x)"),
@@ -103,7 +112,7 @@ def _(go, np, sp):
             "Power Rule": sp.sympify("x**4"),
             "Product Rule": sp.sympify("x**2 * sin(x)"),
             "Quotient Rule": sp.sympify("x**2 / (x + 1)"),
-            "Chain Rule": sp.sympify("sin(x**2)")
+            "Chain Rule": sp.sympify("sin(x**2)"),
         }
 
         x_vals = np.linspace(-10, 10, 1000)
@@ -115,8 +124,8 @@ def _(go, np, sp):
             derivative = sp.diff(expr, x)
 
             # Prepare numerical functions
-            f = sp.lambdify(x, expr, 'numpy')
-            f_prime = sp.lambdify(x, derivative, 'numpy')
+            f = sp.lambdify(x, expr, "numpy")
+            f_prime = sp.lambdify(x, derivative, "numpy")
 
             try:
                 y_vals = f(x_vals)
@@ -127,18 +136,22 @@ def _(go, np, sp):
 
             # Plot traces (function and derivative)
             func_trace = go.Scatter(
-                x=x_vals, y=y_vals, mode='lines',
-                line=dict(color='blue'),
-                name='f(x)',
+                x=x_vals,
+                y=y_vals,
+                mode="lines",
+                line=dict(color="blue"),
+                name="f(x)",
                 hovertemplate="x: %{x:.2f}<br>f(x): %{y:.2f}",
-                visible=(i == 0)
+                visible=(i == 0),
             )
             deriv_trace = go.Scatter(
-                x=x_vals, y=y_prime_vals, mode='lines',
-                line=dict(color='red', dash='dash'),
+                x=x_vals,
+                y=y_prime_vals,
+                mode="lines",
+                line=dict(color="red", dash="dash"),
                 name="f'(x)",
                 hovertemplate="x: %{x:.2f}<br>f'(x): %{y:.2f}",
-                visible=(i == 0)
+                visible=(i == 0),
             )
 
             traces.extend([func_trace, deriv_trace])
@@ -150,26 +163,32 @@ def _(go, np, sp):
             visibilities.append(vis)
 
             # Annotations in the lower right corner
-            annotations.append([
-                dict(
-                    text=f" $f(x) = {sp.latex(expr)}$",
-                    xref="paper", yref="paper",
-                    x=0.95, y=0.15,
-                    showarrow=False,
-                    font=dict(size=14),
-                    align='left',
-                    bgcolor='rgba(255,255,255,0.7)'
-                ),
-                dict(
-                    text=f"f'(x) = $f'(x) = {sp.latex(derivative)}$",
-                    xref="paper", yref="paper",
-                    x=0.95, y=0.05,
-                    showarrow=False,
-                    font=dict(size=14),
-                    align='left',
-                    bgcolor='rgba(255,255,255,0.7)'
-                )
-            ])
+            annotations.append(
+                [
+                    dict(
+                        text=f" $f(x) = {sp.latex(expr)}$",
+                        xref="paper",
+                        yref="paper",
+                        x=0.95,
+                        y=0.15,
+                        showarrow=False,
+                        font=dict(size=14),
+                        align="left",
+                        bgcolor="rgba(255,255,255,0.7)",
+                    ),
+                    dict(
+                        text=f"f'(x) = $f'(x) = {sp.latex(derivative)}$",
+                        xref="paper",
+                        yref="paper",
+                        x=0.95,
+                        y=0.05,
+                        showarrow=False,
+                        font=dict(size=14),
+                        align="left",
+                        bgcolor="rgba(255,255,255,0.7)",
+                    ),
+                ]
+            )
 
         # Create figure and add all traces
         fig = go.Figure(data=traces)
@@ -177,17 +196,19 @@ def _(go, np, sp):
         # Dropdown menu for rule selection
         dropdown_buttons = []
         for i, (rule_name, vis) in enumerate(zip(expressions.keys(), visibilities)):
-            dropdown_buttons.append(dict(
-                label=rule_name,
-                method="update",
-                args=[
-                    {"visible": vis},
-                    {
-                        "title": f"📘 {rule_name}: Function & Derivative",
-                        "annotations": annotations[i]
-                    }
-                ]
-            ))
+            dropdown_buttons.append(
+                dict(
+                    label=rule_name,
+                    method="update",
+                    args=[
+                        {"visible": vis},
+                        {
+                            "title": f"📘 {rule_name}: Function & Derivative",
+                            "annotations": annotations[i],
+                        },
+                    ],
+                )
+            )
 
         # Layout
         fig.update_layout(
@@ -201,7 +222,7 @@ def _(go, np, sp):
                     xanchor="center",
                     yanchor="top",
                     direction="down",
-                    showactive=True
+                    showactive=True,
                 )
             ],
             annotations=annotations[0],
@@ -209,15 +230,17 @@ def _(go, np, sp):
             height=600,
             template="plotly_white",
             hovermode="closest",
-            margin=dict(t=100, r=100),  # Reduced right margin since annotations are now inside
+            margin=dict(
+                t=100, r=100
+            ),  # Reduced right margin since annotations are now inside
             legend=dict(
                 x=0.11,
                 y=0.99,
                 xanchor="right",
                 yanchor="top",
                 bgcolor="rgba(255,255,255,0.6)",  # Optional: background for clarity
-                bordercolor="gray",               # Optional: border for legend box
-                borderwidth=1
+                bordercolor="gray",  # Optional: border for legend box
+                borderwidth=1,
             ),
         )
 
