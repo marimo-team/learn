@@ -179,7 +179,7 @@ def _(summary_table):
 def _(mo):
     mo.md(
         r"""
-    Now, instead of manually creatinga filter for what I want to take a closer look at, I simply select from the ui and do a simple join to get that aggregated level with more detail.
+    Now, instead of manually creating a filter for what I want to take a closer look at, I simply select from the ui and do a simple join to get that aggregated level with more detail.
 
     The following cell uses the output of the `mo.ui.table` selection, selects its unique keys, and uses that to join for the selected subset of the original table.
     """
