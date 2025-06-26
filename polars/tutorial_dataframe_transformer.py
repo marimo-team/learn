@@ -38,7 +38,7 @@ def _(requests):
     return (json_data,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
