@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.14.7"
 app = marimo.App(width="medium")
 
 
@@ -244,13 +244,93 @@ def _(mo):
 
     You can also write [IO Plugins](https://docs.pola.rs/user-guide/plugins/io_plugins/) for Polars in order to support any format you need.
 
-    TODO UPDATE THIS SECTION
-
-    - Consider whenever we want to include a full example
-    - Link an example of a real production-grade plugin
+    Efficiently parsing the filter expressions is out of the scope for this notebook, but the simplest form of plugins are essentially generators that yield DataFrames. Even just this can help in many cases as it allows for polars to optimize the query and request data in batches as opposed to always loading everything in memory.
     """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    Below is a example plugin which just takes the product between multiple iterables, some highlights are that:
+
+    - You must use `register_io_source` for polars to create the LazyFrame which will consume the Generator
+    - You are expected to provide a Schema before the Generator starts
+    - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function 
+    - Ideally you should parse some of the filters and column selectors to avoid unnecessary work, but it is possible to delegate that to polars after loading the data in order to keep it simpler (at the cost of efficiency)
+
+    """
+    )
+    return
+
+
+@app.cell
+def _(my_custom_input_plugin):
+    my_custom_input_plugin(int, range(3), range(5))
+    return
+
+
+@app.cell
+def _(my_custom_input_plugin, pl):
+    my_custom_input_plugin(bool, [True, False], [True, False]).with_columns(
+        (pl.col("A") & pl.col("B")).alias("AND"),
+        (pl.col("A") & pl.col("B")).not_().alias("NAND"),
+        (pl.col("A") | pl.col("B")).alias("OR"),
+        (pl.col("A") ^ pl.col("B")).alias("XOR"),
+    ).collect()
+    return
+
+
+@app.cell
+def _(Iterator, get_positional_names, itertools, pl, register_io_source):
+    def my_custom_input_plugin(dtype, *iterables) -> pl.LazyFrame:
+        schema = pl.Schema({key: dtype for key in get_positional_names(len(iterables))})
+
+        def source_generator(
+            with_columns: list[str] | None,
+            predicate: pl.Expr | None,
+            n_rows: int | None,
+            batch_size: int | None,
+        ) -> Iterator[pl.DataFrame]:
+            """
+            Generator function that creates the source.
+            This function will be registered as IO source.
+            """
+            if batch_size is None:
+                batch_size = 100
+            if n_rows is not None:
+                batch_size = min(batch_size, n_rows)
+
+            generator = itertools.product(*iterables)
+            while n_rows is None or n_rows > 0:
+                rows = []
+                try:
+                    while len(rows) < batch_size:
+                        rows.append(next(generator))
+                except StopIteration:
+                    n_rows = -1
+
+                df = pl.from_records(rows, schema=schema, orient="row")
+                if n_rows is not None:
+                    n_rows -= df.height
+                    batch_size = min(batch_size, n_rows)
+
+                # If we would make a performant reader, we would not read these
+                # columns at all.
+                if with_columns is not None:
+                    df = df.select(with_columns)
+
+                # If the source supports predicate pushdown, the expression can be parsed
+                # to skip rows/groups.
+                if predicate is not None:
+                    df = df.filter(predicate)
+
+                yield df
+
+        return register_io_source(io_source=source_generator, schema=schema)
+    return (my_custom_input_plugin,)
 
 
 @app.cell(hide_code=True)
@@ -391,9 +471,38 @@ def _():
 
 @app.cell
 def _():
+    import math
+    import string
+    import itertools
+    from typing import Iterator
+    return Iterator, itertools, string
+
+
+@app.cell
+def _():
     import polars as pl
     import pandas as pd
     return pd, pl
+
+
+@app.cell
+def _():
+    from polars.io.plugins import register_io_source
+    return (register_io_source,)
+
+
+@app.cell
+def _(itertools, string):
+    def get_positional_names(count: int) -> list[str]:
+        out = []
+        size = 0
+        while True:
+            size += 1  # number of characters in each column name
+            for column in itertools.product(*itertools.repeat(string.ascii_uppercase, size)):
+                if len(out) >= count:
+                    return out
+                out.append("".join(column))
+    return (get_positional_names,)
 
 
 if __name__ == "__main__":
