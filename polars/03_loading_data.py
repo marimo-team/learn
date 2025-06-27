@@ -2,10 +2,11 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "adbc-driver-sqlite==1.6.0",
-#     "lxml==5.4.0",
+#     "duckdb==1.3.1",
+#     "lxml==6.0.0",
 #     "marimo",
-#     "pandas==2.2.3",
-#     "polars==1.30.0",
+#     "pandas==2.3.0",
+#     "polars==1.31.0",
 #     "pyarrow==20.0.0",
 #     "sqlalchemy==2.0.41",
 # ]
@@ -13,7 +14,7 @@
 
 import marimo
 
-__generated_with = "0.14.7"
+__generated_with = "0.14.8"
 app = marimo.App(width="medium")
 
 
@@ -260,7 +261,6 @@ def _(mo):
     - You are expected to provide a Schema before the Generator starts
     - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function 
     - Ideally you should parse some of the filters and column selectors to avoid unnecessary work, but it is possible to delegate that to polars after loading the data in order to keep it simpler (at the cost of efficiency)
-
     """
     )
     return
@@ -331,6 +331,53 @@ def _(Iterator, get_positional_names, itertools, pl, register_io_source):
 
         return register_io_source(io_source=source_generator, schema=schema)
     return (my_custom_input_plugin,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### DuckDB
+
+    In addition to Arrow interoperability support, [DuckDB](https://duckdb.org/) has also added support for loading query results into a polars LazyFrame
+
+    You can read more about polars and duckdb integrations in
+
+    - https://docs.pola.rs/user-guide/ecosystem/#duckdb
+    - https://duckdb.org/docs/stable/guides/python/polars.html
+
+    You can learn more about DuckDB in the marimo course about it as well, including Marimo SQL related features
+    """
+    )
+    return
+
+
+@app.cell
+def _():
+    # Amazing if you need of features not yet supported by Polars such as geospatial data
+    duckdb_query = """
+        SELECT 
+            id,
+            name,
+            ST_X(geometry) as longitude,
+            ST_Y(geometry) as latitude
+        FROM locations
+    """
+    return (duckdb_query,)
+
+
+@app.cell
+def _(duckdb_conn, duckdb_query):
+    # Eager (default):
+    duckdb_conn.execute(duckdb_query).pl()
+    return
+
+
+@app.cell(disabled=True)
+def _(duckdb_conn, duckdb_query):
+    # Lazy (merged but not yet released as of the time I am writing this, requires > 1.3.1):
+    duckdb_conn.execute(duckdb_query).pl(lazy=True)
+    return
 
 
 @app.cell(hide_code=True)
@@ -445,6 +492,32 @@ def _(adlfs, df, os, pl):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Conclusion
+    As you have seen, polars makes it easy to work with a variety of formats and different data sources.
+
+    From natively supported formats such as Parquet and CSV files, to using other libraries as an intermediary for XML or geospatial data, and plugins for newly emerging or proprietary formats, as long as your data can fit in a table then odds are you can turn it into a polars DataFrame.
+
+    Combined with loading directly from remote sources, including public data platforms such as Hugging Face and Kaggle as well as private data in your cloud, you can import datasets for almost anything you can imagine.
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Utilities
+    Imports, utility functions and alike used through the Notebook
+    """
+    )
+    return
+
+
 @app.cell
 def _():
     import marimo as mo
@@ -482,13 +555,9 @@ def _():
 def _():
     import polars as pl
     import pandas as pd
-    return pd, pl
-
-
-@app.cell
-def _():
     from polars.io.plugins import register_io_source
-    return (register_io_source,)
+    import duckdb
+    return duckdb, pd, pl, register_io_source
 
 
 @app.cell
@@ -503,6 +572,35 @@ def _(itertools, string):
                     return out
                 out.append("".join(column))
     return (get_positional_names,)
+
+
+@app.cell
+def _(duckdb):
+    # Connect to an ephemeral in-memory DuckDB database
+    duckdb_conn = duckdb.connect(":memory:")
+
+    # Install and load the spatial extension for geometry support
+    duckdb_conn.load_extension("spatial")
+
+    # Create a table with geometry column
+    duckdb_conn.execute("""
+        CREATE TABLE locations (
+            id INTEGER,
+            name VARCHAR,
+            geometry GEOMETRY
+        )
+    """)
+
+    # Insert some sample data with geometry points
+    duckdb_conn.execute("""
+        INSERT INTO locations VALUES
+        (1, 'New York', ST_Point(-74.0059, 40.7128)),
+        (2, 'Los Angeles', ST_Point(-118.2437, 34.0522)),
+        (3, 'Chicago', ST_Point(-87.6298, 41.8781)),
+        (4, 'Houston', ST_Point(-95.3698, 29.7604)),
+        (5, 'Phoenix', ST_Point(-112.0740, 33.4484))
+    """)
+    return (duckdb_conn,)
 
 
 if __name__ == "__main__":
