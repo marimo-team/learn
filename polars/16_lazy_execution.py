@@ -141,11 +141,11 @@ def _(Faker, datetime, np, random, timedelta, timezone):
             uri += str(rng.integers(1000, 10000))
 
         resp = rng.choice(list(responses.keys()), p=list(responses.values()))
-        byt = int(rng.normal(5000, 50))
+        byte_size = int(rng.normal(5000, 50))
         useragent = rng.choice(list(user_agents.keys()), p=list(user_agents.values()))()
         latency = rng.lognormal(-3, 0.8) + 0.5 * rng.uniform()
 
-        return f'{ip} - - [{dt} {tz}] "{vrb} {uri} HTTP/1.0" {resp} {byt} {latency:.3f} "{referer}" "{useragent}"'
+        return f'{ip} - - [{dt} {tz}] "{vrb} {uri} HTTP/1.0" {resp} {byte_size} {latency:.3f} "{referer}" "{useragent}"'
     return (generate_log_line,)
 
 
