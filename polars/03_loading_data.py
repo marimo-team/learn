@@ -113,7 +113,7 @@ def _(mo):
 @app.cell
 def _(df, folder, lz, pl):
     lz.sink_csv(folder / "data.csv")  # Lazy API - Writing to a file
-    df.write_csv(folder / "data_no_head.csv", include_header=False, separator=",")  # Eager API - Writing to a file
+    df.write_csv(folder / "data_no_head.csv", include_header=False, separator=";")  # Eager API - Writing to a file
 
     _ = pl.scan_csv(folder / "data.csv")  # Lazy API - Reading from a file
     _ = pl.read_csv(folder / "data_no_head.csv", has_header=False, separator=";")  # Eager API - Reading from a file
@@ -136,7 +136,7 @@ def _(mo):
 
         Polars supports Lists with variable length, Arrays with fixed length, and Structs with well defined fields, but not mappings with arbitrary keys.
 
-        You might want to transform data using by unnested structs and exploding lists after loading from complex JSON files.
+        You might want to transform data by unnesting structs and exploding lists after loading from complex JSON files.
     """
     )
     return
@@ -152,8 +152,8 @@ def _(df, folder, lz, pl):
     _ = pl.read_ndjson(folder / "data.ndjson")  # Eager API - Reading from a file
 
     # Normal JSON
-    df.write_json(folder / "data_no_head.json")  # Eager API - Writing to a file
-    _ = pl.read_json(folder / "data_no_head.json")  # Eager API - Reading from a file
+    df.write_json(folder / "data.json")  # Eager API - Writing to a file
+    _ = pl.read_json(folder / "data.json")  # Eager API - Reading from a file
 
     # Note that there are no Lazy methods for normal JSON files,
     # either use NDJSON instead or use `lz.collect().write_json()` to collect into memory before writing, and `pl.read_json().lazy()` to read into memory before operating in lazy mode
@@ -166,7 +166,7 @@ def _(mo):
         r"""
     ## Databases
 
-    Polars doesn't supports any _directly_, but rather uses other libraries as Engines. Reading and writing to databases does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
+    Polars doesn't supports any databases _directly_, but rather uses other libraries as Engines. Reading and writing to databases does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
 
     Using the Arrow Database Connectivity SQLite support as an example:
     """
