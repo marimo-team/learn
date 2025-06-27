@@ -12,7 +12,7 @@
 
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.14.8"
 app = marimo.App(width="medium")
 
 
@@ -24,7 +24,7 @@ def _(mo):
 
     *By [jesshart](https://github.com/jesshart)*
 
-    The goal of this notebook is to explore Marimo's data explore capabilities alonside the power of polars. Feel free to reference the latest about this Marimo feature here: https://docs.marimo.io/api/inputs/data_explorer/
+    The goal of this notebook is to explore Marimo's data explore capabilities alonside the power of polars. Feel free to reference the latest about these Marimo features here: https://docs.marimo.io/guides/working_with_data/dataframes/?h=dataframe#transforming-dataframes
     """
     )
     return
