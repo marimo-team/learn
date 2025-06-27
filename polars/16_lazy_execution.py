@@ -267,7 +267,7 @@ def _(log_data):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -286,6 +286,12 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""The `log_data_erroneous` query below throws an `InvalidOperationError` because Polars finds inconsistencies between the timestamps we parsed from the logs and the timestamp format specified. It turns out that the time stamps in string format still have trailing whitespace which leads to errors during conversion to `datetime[μs]` objects.""")
+    return
+
+
 @app.cell
 def _(log_data, pl):
     log_data_erroneous = log_data.with_columns(
@@ -300,12 +306,6 @@ def _(log_data, pl):
 @app.cell
 def _(log_data_erroneous):
     log_data_erroneous.collect()
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""The `log_data_erroneous` query throws an `InvalidOperationError` because Polars finds inconsistencies between the timestamps we parsed from the logs and the timestamp format specified. It turns out that the time stamps in string format still have trailing whitespace which leads to errors during conversion to `datetime[μs]` objects.""")
     return
 
 
