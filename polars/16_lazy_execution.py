@@ -271,10 +271,10 @@ def _(log_data):
 def _(mo):
     mo.md(
         r"""
-        Unless specified, Polars defaults to the `pl.String` datatype for all data. This, however, is not the most space or computation efficient form of data storage, so we would like to convert the datatypes of some of the columns in our LazyFrame.
+        Unless specified, Polars defaults to the `pl.String` datatype while reading in the data from the generator. This, however, is not the most space or computation efficient form of data storage, so we would like to convert the datatypes of some of the columns in our LazyFrame.
 
         ///Note
-        The data type conversion can also be done by specifying it in the schema when creating the LazyFrame or DataFrame. We are skipping doing this for demonstration.
+        The data type conversion can also be done by specifying it in the schema when creating the LazyFrame or DataFrame. We are skipping doing this for demonstration. For more details on specifying data types in LazyFrames, please refer to the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/lazyframe/index.html).
         """
     )
     return
@@ -424,12 +424,6 @@ def _(mo):
         For fast iterative development running `.collect` on the entire dataset is not a good idea due to slow runtimes. If your dataset is partitioned, you can use a few of them for testing. Another option is to use `.head` to limit the number of records processed, and `.collect` as few times as possible and toward the end of your query, as shown below.
         """
     )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r""" """)
     return
 
 
