@@ -271,7 +271,7 @@ def _(log_data):
 def _(mo):
     mo.md(
         r"""
-        Unless specified, Polars defaults to the `pl.String` datatype while reading in the data from the generator. This, however, is not the most space or computation efficient form of data storage, so we would like to convert the datatypes of some of the columns in our LazyFrame.
+        Since our generator yields strings, Polars defaults to the `pl.String` datatype while reading in the data from the generator, unless specified. This, however, is not the most space or computation efficient form of data storage, so we would like to convert the datatypes of some of the columns in our LazyFrame.
 
         ///Note
         The data type conversion can also be done by specifying it in the schema when creating the LazyFrame or DataFrame. We are skipping doing this for demonstration. For more details on specifying data types in LazyFrames, please refer to the Polars [documentation](https://docs.pola.rs/api/python/stable/reference/lazyframe/index.html).
