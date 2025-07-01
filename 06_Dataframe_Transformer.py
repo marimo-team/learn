@@ -330,6 +330,34 @@ def _(demand_agg: "pl.DataFrame", mo, px):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    # About this Notebook
+    Polars and Marimo are both relatively new to the data wrangling space, but their power (and the thrill of their use) cannot be overstated—well, I suppose it could, but you get the meaning. In this notebook, you learn how to leverage basic Polars skills to load-in and explore your data in concert with Marimo's powerful UI elements.
+
+    ## 📚 Documentation References
+
+    - **Marimo: Dataframe Transformation Guide**  
+      https://docs.marimo.io/guides/working_with_data/dataframes/?h=dataframe#transforming-dataframes
+
+    - **Polars: Lazy API Overview**  
+      https://docs.pola.rs/user-guide/lazy/
+
+    - **Polars: Query Plan Explained**  
+      https://docs.pola.rs/user-guide/lazy/query-plan/
+
+    - **Marimo Notebook: Basic Polars Joins (by jesshart)**  
+      https://marimo.io/p/@jesshart/basic-polars-joins
+
+    - **Marimo Learn: Interactive Graphs with Polars**  
+      https://github.com/marimo-team/learn/blob/main/polars/05_reactive_plots.py
+    """
+    )
+    return
+
+
+@app.cell
 def _():
     import marimo as mo
     return (mo,)
