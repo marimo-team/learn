@@ -12,11 +12,11 @@
 
 import marimo
 
-__generated_with = "0.14.8"
+__generated_with = "0.14.9"
 app = marimo.App(width="medium")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -58,7 +58,7 @@ def _(json_data, pl):
     return (demand,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -71,7 +71,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -88,7 +88,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -105,7 +105,7 @@ def _(demand: "pl.LazyFrame"):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -119,7 +119,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -142,7 +142,7 @@ def _(demand_table):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""I like to use this feature to select groupings based on summary statistics so I can quickly explore subsets of categories. Let me show you what I mean."""
@@ -175,7 +175,7 @@ def _(summary_table):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -199,7 +199,7 @@ def _(demand: "pl.LazyFrame", pl, summary_table):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """You can learn more about joins in Polars by checking out my other interactive notebook here: https://marimo.io/p/@jesshart/basic-polars-joins"""
@@ -207,7 +207,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""## Use `mo.ui.dataframe`""")
     return
@@ -220,7 +220,7 @@ def _(demand: "pl.LazyFrame", mo):
     return demand_cached, mo_dataframe
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""Below I simply call the object into view. We will play with it in the following cells."""
@@ -234,7 +234,7 @@ def _(mo_dataframe):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""One way to group this data in polars code directly would be to group by product family to get the mean. This is how it is done in polars:"""
@@ -251,7 +251,7 @@ def _(demand_cached, pl):
     return (demand_agg,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         f"""
