@@ -62,7 +62,7 @@ def _(json_data, pl):
 def _(mo):
     mo.md(
         r"""
-    Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenince from `marimo`. You have the `Table` and `Query Plan` options to choose from. 
+    Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenience from `marimo`. You have the `Table` and `Query Plan` options to choose from. 
 
     - 💡 Try out the `Table` view! You can click the `Preview data` button to get a quick view of your data.
     - 💡 Take a look at the `Query plan`. Learn more about Polar's query plan here: https://docs.pola.rs/user-guide/lazy/query-plan/
@@ -111,7 +111,7 @@ def _(mo):
         r"""
     Note how much functionality we have right out-of-the-box. Click on column names to see rich features like sorting, freezing, filtering, searching, and more!
 
-    Notice how `order_quantity` has a green bar chart under it indicating the ditribution of values for the field!
+    Notice how `order_quantity` has a green bar chart under it indicating the distribution of values for the field!
 
     Don't miss the `Download` feature as well which supports downloading in CSV, json, or parquet format!
     """
