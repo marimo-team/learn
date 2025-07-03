@@ -12,7 +12,7 @@
 
 import marimo
 
-__generated_with = "0.14.9"
+__generated_with = "0.14.10"
 app = marimo.App(width="medium")
 
 
@@ -294,7 +294,7 @@ def _():
     return mean_again_code, mean_code
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mean_again_code, mean_code, mo):
     mo.accordion(
         {
@@ -329,7 +329,7 @@ def _(demand_agg: "pl.DataFrame", mo, px):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
