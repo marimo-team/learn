@@ -1,0 +1,37 @@
+name: Check for Empty Cells
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.py'
+
+jobs:
+  check-empty-cells:
+    name: Check for empty cells in marimo notebooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: 🔍 Check for empty cells
+        run: |
+          python scripts/check_empty_cells.py
+
+      - name: 📊 Report results
+        if: failure()
+        run: |
+          echo "❌ Empty cells found in marimo notebooks!"
+          echo "Please remove or add content to empty cells before merging."
+          echo "Empty cells look like:"
+          echo "@app.cell"
+          echo "def _():"
+          echo "    return" 
