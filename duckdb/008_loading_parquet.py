@@ -5,6 +5,7 @@
 #     "duckdb==1.2.1",
 #     "pyarrow==19.0.1",
 #     "plotly.express",
+#     "sqlglot==27.0.0",
 # ]
 # ///
 
@@ -16,7 +17,13 @@ app = marimo.App(width="medium")
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""# Loading Parquet files with DuckDB""")
+    mo.md(
+        r"""
+    # Loading Parquet files with DuckDB
+    *By [Thomas Liang](https://github.com/thliang01)*
+    #
+    """
+    )
     return
 
 
@@ -39,10 +46,11 @@ def _(mo):
     )
     return
 
+
 @app.cell
 def _():
     AIRBNB_URL = 'https://huggingface.co/datasets/BatteRaquette58/airbnb-stock-price/resolve/main/data/airbnb-stock.parquet'
-    return AIRBNB_URL,
+    return (AIRBNB_URL,)
 
 
 @app.cell(hide_code=True)
@@ -64,7 +72,7 @@ def _(mo):
 
 
 @app.cell
-def _(AIRBNB_URL, mo):
+def _(AIRBNB_URL, mo, null):
     mo.sql(
         f"""
         SELECT *
@@ -86,8 +94,8 @@ def _(mo):
     mo.md(
         r"""
         For more control, you can use the `read_parquet` table function. This is useful when you need to specify options, for example, when dealing with multiple files or specific data types.
-
         Some useful options for `read_parquet` include:
+
         - `binary_as_string=True`: Reads `BINARY` columns as `VARCHAR`.
         - `filename=True`: Adds a `filename` column with the path of the file for each row.
         - `hive_partitioning=True`: Enables reading of Hive-partitioned datasets.
@@ -148,23 +156,23 @@ def _(AIRBNB_URL, mo):
         SELECT * FROM read_parquet('{AIRBNB_URL}');
         """
     )
-    return stock_table,
+    return airbnb_stock, stock_table
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo, stock_table):
     mo.md(
         f"""
-        {stock_table}
+    {stock_table}
 
-        Now that the `airbnb_stock` table is created, we can query it like any other SQL table.
-        """
+    Now that the `airbnb_stock` table is created, we can query it like any other SQL table.
+    """
     )
     return
 
 
 @app.cell
-def _(mo):
+def _(airbnb_stock, mo):
     mo.sql(
         f"""
         SELECT * FROM airbnb_stock LIMIT 5;
@@ -181,15 +189,12 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Let's perform a simple analysis: plotting the closing stock price over time.
-        """
-    )
+    mo.md(r"""Let's perform a simple analysis: plotting the closing stock price over time.""")
     return
 
+
 @app.cell
-def _(mo):
+def _(airbnb_stock, mo):
     stock_data = mo.sql(
         f"""
         SELECT
@@ -199,16 +204,12 @@ def _(mo):
         ORDER BY "Date";
         """
     )
-    return stock_data,
+    return (stock_data,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Now we can easily visualize this result using marimo's integration with plotting libraries like Plotly.
-        """
-    )
+    mo.md(r"""Now we can easily visualize this result using marimo's integration with plotting libraries like Plotly.""")
     return
 
 
@@ -234,16 +235,16 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        In this notebook, we've seen how easy it is to work with Parquet files in DuckDB. We learned how to:
-        <ul>
-            <li>Query Parquet files directly from a URL using a simple `FROM` clause.</li>
-            <li>Use the `read_parquet` function for more fine-grained control and efficiency.</li>
-            <li>Load data from a Parquet file into a DuckDB table.</li>
-            <li>Seamlessly analyze and visualize the data using SQL and Python.</li>
-        </ul>
+    In this notebook, we've seen how easy it is to work with Parquet files in DuckDB. We learned how to:
+    <ul>
+        <li>Query Parquet files directly from a URL using a simple `FROM` clause.</li>
+        <li>Use the `read_parquet` function for more fine-grained control and efficiency.</li>
+        <li>Load data from a Parquet file into a DuckDB table.</li>
+        <li>Seamlessly analyze and visualize the data using SQL and Python.</li>
+    </ul>
 
-        DuckDB's native Parquet support makes it a powerful tool for interactive data analysis on large datasets without complex ETL pipelines.
-        """
+    DuckDB's native Parquet support makes it a powerful tool for interactive data analysis on large datasets without complex ETL pipelines.
+    """
     )
     return
 
@@ -258,9 +259,8 @@ def _():
 @app.cell
 def _():
     import pyarrow
-    return pyarrow,
+    return
 
 
 if __name__ == "__main__":
     app.run()
-
