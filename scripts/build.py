@@ -268,6 +268,16 @@ def main() -> None:
     # Generate landing page using Tailwind CSS
     generate_clean_tailwind_landing_page(courses, args.output_dir)
     
+    # cp assets folder to o/p directory
+    import shutil
+    assets_src = "assets"
+    assets_dst = os.path.join(args.output_dir, "assets")
+    if os.path.exists(assets_src):
+        if os.path.exists(assets_dst):
+            shutil.rmtree(assets_dst)
+        shutil.copytree(assets_src, assets_dst)
+        print(f"Copied assets from {assets_src} to {assets_dst}")
+    
     # Save course data as JSON for potential use by other tools
     courses_json_path = os.path.join(args.output_dir, "courses.json")
     with open(courses_json_path, "w", encoding="utf-8") as f:
