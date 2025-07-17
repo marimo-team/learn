@@ -3,12 +3,12 @@
 # dependencies = [
 #     "marimo",
 #     "duckdb==1.3.2",
-#     "polars==1.27.0",
+#     "polars==1.17.1",
 #     "numpy==2.2.4",
 #     "pyarrow==19.0.1",
 #     "pandas==2.2.3",
 #     "sqlglot==26.12.1",
-#     "plotly==5.23.1",
+#     "plotly==5.24.1",
 #     "statsmodels==0.14.4",
 # ]
 # ///
