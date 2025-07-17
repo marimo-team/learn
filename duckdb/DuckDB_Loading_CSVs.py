@@ -4,7 +4,7 @@
 #     "marimo",
 #     "plotly.express",
 #     "plotly==6.0.1",
-#     "duckdb==1.2.1",
+#     "duckdb==1.3.2",
 #     "sqlglot==26.11.1",
 #     "pyarrow==19.0.1",
 #     "polars==1.27.1",

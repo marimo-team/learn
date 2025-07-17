@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = [
 #     "marimo",
-#     "duckdb==1.2.1",
+#     "duckdb==1.3.2",
 #     "sqlglot==26.11.1",
 #     "polars[pyarrow]==1.25.2",
 # ]
