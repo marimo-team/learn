@@ -14,7 +14,7 @@
 
 import marimo
 
-__generated_with = "0.14.11"
+__generated_with = "0.14.12"
 app = marimo.App(width="medium")
 
 
@@ -300,16 +300,14 @@ def _(mo):
         ### Key Benefits:
 
         - **Memory Efficiency**: Arrow's columnar format uses 20-40% less memory than traditional DataFrames through compact columnar representation and better compression ratios
-        - **Zero-Copy Operations**: Data can be shared between DuckDB and Arrow-compatible systems (Polars, Pandas) without any data copying, eliminating redundant memory usage 
+        - **Zero-Copy Operations**: Data can be shared between DuckDB and Arrow-compatible systems (Polars, Pandas) without any data copying, eliminating redundant memory usage
         - **Query Performance**: 2-10x faster queries compared to traditional approaches that require data copying
-        - **Larger-than-Memory Analysis**: Since both libraries support streaming query results, you can execute queries on data bigger than available memory by processing one batch at a time 
+        - **Larger-than-Memory Analysis**: Both DuckDB and Arrow-compatible libraries support streaming query results, allowing you to execute queries on data larger than available memory by processing data in batches.
         - **Advanced Query Optimization**: DuckDB's optimizer can push down filters and projections directly into Arrow scans, reading only relevant columns and partitions 
         Let's demonstrate these benefits with concrete examples:
         """
     )
     return
-
-
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -529,7 +527,6 @@ def _(mo):
 
 @app.cell
 def _(polars_data, time):
-    import psutil
     import os
     import pyarrow.compute as pc  # Add this import
 
@@ -554,14 +551,14 @@ def _(polars_data, time):
     # Compare with traditional copy-based operations
     latest_start_time = time.time()
 
-    # These operations create copies
+    # These operations may create copies depending on Pandas' Copy-on-Write (CoW) behavior
     pandas_copy = polars_data.to_pandas()
     pandas_sliced = pandas_copy.iloc[:100000].copy()
     pandas_filtered = pandas_copy[pandas_copy['value'] > 500000].copy()
 
     copy_ops_time = time.time() - latest_start_time
     memory_after_copy = process.memory_info().rss / 1024 / 1024  # MB
-
+ 
     print("Memory Usage Comparison:")
     print(f"Initial memory: {memory_before:.2f} MB")
     print(f"After Arrow operations: {memory_after_arrow:.2f} MB (diff: +{memory_after_arrow - memory_before:.2f} MB)")
@@ -606,6 +603,7 @@ def _():
     import pandas as pd
     import duckdb
     import sqlglot
+    import psutil
     return duckdb, mo, pa, pd, pl
 
 
