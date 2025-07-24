@@ -6,7 +6,7 @@
 #     "starlette",
 #     "python-dotenv",
 #     "pydantic",
-#     "duckdb",
+#     "duckdb==1.3.2",
 #     "altair==5.5.0",
 #     "beautifulsoup4==4.13.3",
 #     "httpx==0.28.1",
