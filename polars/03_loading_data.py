@@ -1,20 +1,20 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "adbc-driver-sqlite==1.6.0",
-#     "duckdb==1.3.1",
+#     "adbc-driver-sqlite==1.7.0",
+#     "duckdb==1.4.0.dev2673",
 #     "lxml==6.0.0",
 #     "marimo",
-#     "pandas==2.3.0",
-#     "polars==1.31.0",
-#     "pyarrow==20.0.0",
-#     "sqlalchemy==2.0.41",
+#     "pandas==2.3.2",
+#     "polars==1.32.3",
+#     "pyarrow==21.0.0",
+#     "sqlalchemy==2.0.43",
 # ]
 # ///
 
 import marimo
 
-__generated_with = "0.14.8"
+__generated_with = "0.15.0"
 app = marimo.App(width="medium")
 
 
@@ -167,7 +167,9 @@ def _(mo):
         r"""
     ## Databases
 
-    Polars doesn't supports any databases _directly_, but rather uses other libraries as Engines. Reading and writing to databases does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
+    Polars doesn't supports any databases _directly_, but rather uses other libraries as Engines. Reading and writing to databases using polars methods does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
+
+    You can also use other libraries with [arrow support](#arrow-support) or [polars plugins](#plugin-support) to read from databases before loading into polars, some of which support lazy reading.
 
     Using the Arrow Database Connectivity SQLite support as an example:
     """
@@ -243,11 +245,17 @@ def _(mo):
         r"""
     ## Plugin Support
 
-    You can also write [IO Plugins](https://docs.pola.rs/user-guide/plugins/io_plugins/) for Polars in order to support any format you need.
-
-    Efficiently parsing the filter expressions is out of the scope for this notebook, but the simplest form of plugins are essentially generators that yield DataFrames. Even just this can help in many cases as it allows for polars to optimize the query and request data in batches as opposed to always loading everything in memory.
+    You can also write [IO Plugins](https://docs.pola.rs/user-guide/plugins/io_plugins/) for Polars in order to support any format you need, or use other libraries that support polars via their own plugins such as DuckDB.
     """
     )
+    return
+
+
+@app.cell
+def _(duckdb, folder):
+    # Requires duckdb >= 1.4.0
+    conn = duckdb.connect(folder / "db.sqlite")
+    conn.sql("SELECT * FROM quick_reference").pl(lazy=True)
     return
 
 
@@ -255,12 +263,20 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
+    ### Creating your own Plugin
+
+    The simplest form of plugins are essentially generators that yield DataFrames.
+
+    Without parsing filters you will be missing on performance improvements, but even just this can help improve your performance in many cases as it allows for polars to optimize the query and request data in batches as opposed to always loading everything in memory.
+
     Below is a example plugin which just takes the product between multiple iterables, some highlights are that:
 
     - You must use `register_io_source` for polars to create the LazyFrame which will consume the Generator
     - You are expected to provide a Schema before the Generator starts
     - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function 
     - Ideally you should parse some of the filters and column selectors to avoid unnecessary work, but it is possible to delegate that to polars after loading the data in order to keep it simpler (at the cost of efficiency)
+
+    Efficiently parsing the filter expressions is out of the scope for this notebook.
     """
     )
     return
@@ -339,7 +355,7 @@ def _(mo):
         r"""
     ### DuckDB
 
-    In addition to Arrow interoperability support, [DuckDB](https://duckdb.org/) has also added support for loading query results into a polars LazyFrame
+    As demonstrated above, in addition to Arrow interoperability support, [DuckDB](https://duckdb.org/) also has added support for loading query results into a polars DataFrame or LazyFrame via a polars plugin.
 
     You can read more about polars and duckdb integrations in
 
@@ -369,14 +385,14 @@ def _():
 @app.cell
 def _(duckdb_conn, duckdb_query):
     # Eager (default):
-    duckdb_conn.execute(duckdb_query).pl()
+    duckdb_conn.sql(duckdb_query).pl()
     return
 
 
-@app.cell(disabled=True)
+@app.cell
 def _(duckdb_conn, duckdb_query):
-    # Lazy (merged but not yet released as of the time I am writing this, requires > 1.3.1):
-    duckdb_conn.execute(duckdb_query).pl(lazy=True)
+    # Lazy (requires >= 1.4.0):
+    duckdb_conn.sql(duckdb_query).pl(lazy=True)
     return
 
 
@@ -580,10 +596,11 @@ def _(duckdb):
     duckdb_conn = duckdb.connect(":memory:")
 
     # Install and load the spatial extension for geometry support
+    duckdb_conn.install_extension("spatial")
     duckdb_conn.load_extension("spatial")
 
     # Create a table with geometry column
-    duckdb_conn.execute("""
+    duckdb_conn.sql("""
         CREATE TABLE locations (
             id INTEGER,
             name VARCHAR,
@@ -592,7 +609,7 @@ def _(duckdb):
     """)
 
     # Insert some sample data with geometry points
-    duckdb_conn.execute("""
+    duckdb_conn.sql("""
         INSERT INTO locations VALUES
         (1, 'New York', ST_Point(-74.0059, 40.7128)),
         (2, 'Los Angeles', ST_Point(-118.2437, 34.0522)),
