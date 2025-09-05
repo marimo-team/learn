@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "adbc-driver-sqlite==1.7.0",
-#     "duckdb==1.4.0.dev2673",
+#     "duckdb>=1.4.0.dev",
 #     "lxml==6.0.0",
 #     "marimo",
 #     "pandas==2.3.2",
@@ -14,7 +14,7 @@
 
 import marimo
 
-__generated_with = "0.15.0"
+__generated_with = "0.15.2"
 app = marimo.App(width="medium")
 
 
@@ -505,6 +505,62 @@ def _(adlfs, df, os, pl):
     fs.delete(destination)
 
     # If you get an error saying that the account does not exists, double check you logged in the correct account and subscription via `az login`
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    # Multiplexing
+
+    You can also split a query into multiple sinks via [multiplexing](https://docs.pola.rs/user-guide/lazy/multiplexing/), to avoid reading multiple times, repeating the same operations for each sink or collecting intermediary results into memory.
+    """
+    )
+    return
+
+
+@app.cell
+def _(folder, lz, pl):
+    lz2 = lz.with_columns(pl.col(pl.String).str.to_uppercase())
+    lz3 = lz.with_columns(pl.col(pl.String).str.to_lowercase())
+
+    # Collecting multiple LazyFrames into memory
+    _df, _df2, _df3 = pl.collect_all([lz, lz2, lz3])
+
+    # Sinking multiple LazyFrames into different destinations
+    sinks = [
+        lz.sink_csv(folder / "data_1.csv", lazy=True),
+        lz2.sink_csv(folder / "data_2.csv", lazy=True),
+        lz3.sink_csv(folder / "data_3.csv", lazy=True),
+    ]
+    _ = pl.collect_all(sinks)
+    return (sinks,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    # Async Execution
+
+    Polars also has experimental support for running lazy queries in `async` mode, letting you `await` operations inside of async functions.
+    """
+    )
+    return
+
+
+@app.cell
+async def _(lz):
+    await lz.collect_async()
+    return
+
+
+@app.cell
+async def _(folder, lz, pl, sinks):
+    # If you want to write to a file, use `lz.sink_format(lazy=True)` followed by `...collect_async()` or `pl.collect_all_async(...)`
+    _ = await lz.sink_csv(folder / "data_from_async.csv", lazy=True).collect_async()
+    _ = await pl.collect_all_async(sinks)
     return
 
 
