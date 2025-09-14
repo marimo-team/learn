@@ -784,8 +784,8 @@ def _(mo):
 
 @app.cell
 def _(pl):
-    raw_stations = pl.read_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_stations.csv")
-    raw_weather = pl.read_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_weather_2020_to_2022.csv")
+    raw_stations = pl.scan_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_stations.csv")
+    raw_weather = pl.scan_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_weather_2020_to_2022.csv")
     return raw_stations, raw_weather
 
 
@@ -801,7 +801,7 @@ def _(pl, raw_stations):
         pl.col("endereco").alias("address"),
         pl.col("data_inicio_operacao").alias("operation_start_date"),
         pl.col("data_fim_operacao").alias("operation_end_date"),
-    )
+    ).collect()
     return (dirty_stations,)
 
 
@@ -811,7 +811,7 @@ def _(pl, raw_weather):
         pl.col("id_estacao").alias("station"),
         pl.col("acumulado_chuva_15_min").alias("accumulated_rain_15_minutes"),
         pl.concat_str("data_particao", pl.lit("T"), "horario").str.to_datetime(time_zone=None).alias("datetime"),
-    )
+    ).collect()
     return (dirty_weather_naive,)
 
 
