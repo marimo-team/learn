@@ -99,7 +99,7 @@ def _(df):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -108,10 +108,10 @@ def _(mo):
     To filter in polars, you'll typically use `df.filter(expression)` or `df.remove(expression)` methods.
 
     Filter will only keep rows in which the expression evaluates to True.
-    It will remove not only rows in which it evalutes to False, but also those in which the expression evaluates to None.
+    It will remove not only rows in which it evaluates to False, but also those in which the expression evaluates to None.
 
     Remove will only remove rows in which the expression evaluates to True.
-    It will keep rows in which it evalutes to None.
+    It will keep rows in which it evaluates to None.
     """
     )
     return
@@ -133,7 +133,7 @@ def _(df, pl):
 def _(mo):
     mo.md(
         r"""
-    You may also be tempted to use `== None` or `!= None`, but comparison operators in polars will generally pass null values through.
+    You may also be tempted to use `== None` or `!= None`, but operators in polars will generally propagate null values.
 
     You can use `.eq_missing()` or `.ne_missing()` methods if you want to be strict about it, but there are also `.is_null()` and `.is_not_null()` methods you can use.
     """
@@ -163,6 +163,8 @@ def _(mo):
     You can also fill in the values with constants, calculations or by consulting external data sources.
 
     Be careful not to treat estimated or guessed values as if they a ground truth however, otherwise you may end up making conclusions about a reality that does not exists.
+
+    As an excercise, let's guess some values to fill in nulls, then try giving names to the animals with `null` by editing the cells
     """
     )
     return
@@ -177,7 +179,6 @@ def _(df, mo, pl):
     guesstimates = mo.ui.data_editor(
         guesstimates,
         editable_columns=["name"],
-        label="Let's guess some values to fill in nulls, then try giving names to the animals with `null` by editing the cells",
     )
     guesstimates
     return (guesstimates,)
@@ -201,7 +202,7 @@ def _(mo):
     - you could just drop rows with values missing in any columns or a subset of them with `df.drop_nulls()`, but for most cases you'll want to be more careful about it
     - take into consideration whenever you want to preserve null values or remove them when choosing between `df.filter()` or `df.remove()`
     - if you don't want to propagate null values, use `_missing` variations of methods such as `eq` vs `eq_missing`
-    - you may want to fill in missing values based on calculations via `fill_null`, or manually edit the data based on external documents
+    - you may want to fill in missing values based on calculations via `fill_null`, join and coalesce based on other datasets, or manually edit the data based on external documents
 
     You can also refer to the polars [User Guide](https://docs.pola.rs/user-guide/expressions/missing-data/) more more information.
 
@@ -220,7 +221,7 @@ def _(mo):
     We will be using a dataset from `alertario` about the weather in Rio de Janeiro, originally available in Google Big Query under `datario.clima_pluviometro`. What you need to know about it: 
 
     - Contains multiple stations covering the Municipality of Rio de Janeiro
-    - Measures the precipitation as milimeters, with a granularity of 15 minutes
+    - Measures the precipitation as millimeters, with a granularity of 15 minutes
     - We filtered to only include data about 2020, 2021 and 2022
     """
     )
@@ -441,8 +442,6 @@ def _(mo):
     ### Example App
 
     Let's display the amount of precipitation each station measured within a timeframe, aggregated to a lower granularity.
-
-    First we'll filter by day
     """
     )
     return
@@ -481,7 +480,9 @@ def _(filters, mo, pl, rain, stations, weather):
     mo.stop(filters.value is None)
 
     _range_seconds = map(lambda hour: hour * 3600, filters.value["hour"])
-    _df_seconds = pl.col("datetime").dt.hour() + pl.col("datetime").dt.minute().mul(60)
+    _df_seconds = pl.col("datetime").dt.hour().cast(pl.Float64()).mul(3600) + pl.col("datetime").dt.minute().cast(
+        pl.Float64()
+    ).mul(60)
 
     animation_data = (
         weather.lazy()
@@ -535,7 +536,7 @@ def _(animation_data, pl, px):
 def _(mo):
     mo.md(
         r"""
-    If we were missing some rows, we would have circles popping in and out of existince instead of a smooth animation!
+    If we were missing some rows, we would have circles popping in and out of existence instead of a smooth animation!
 
     In many scenarios, missing data can also lead to wrong results overall, for example if we were to estimate the total amount of rainfall during the observed period:
     """
@@ -547,7 +548,7 @@ def _(mo):
 def _(dirty_weather, mo, rain, weather):
     old_estimate = dirty_weather.select(rain.sum()).item()
     new_estimate = weather.select(rain.sum()).item()
-    # Note: The aggregation used to calculate these variables (taking a sum across all stations) is not very meaningful, but the relative diference between them scales across many potentially useful aggregations
+    # Note: The aggregation used to calculate these variables (taking a sum across all stations) is not very meaningful, but the relative difference between them scales across many potentially useful aggregations
 
     mo.md(f"Our estimates may change by roughly {(new_estimate - old_estimate) / old_estimate:.2%}")
     return
@@ -648,10 +649,6 @@ def _(mo):
 def _(dirty_weather_naive, pl):
     dirty_weather = dirty_weather_naive.with_columns(pl.col("datetime").dt.replace_time_zone("America/Sao_Paulo"))
 
-    # Also get rid of some of the other variables to economize memory
-    # del raw_weather
-    # del dirty_weather_naive
-
     dirty_weather.head(3)
     return (dirty_weather,)
 
@@ -662,9 +659,9 @@ def _(mo):
         r"""
     ## Appendix B: Not a Number
 
-    While some other tools without proper support for missing values, as well as datasets made to work with them, may use `NaN` as a way to indicate a value is missing, in polars it is treated exclusively as a float value, much like `0.0`, `1.0` or `infinity`.
+    While some other tools without proper support for missing values may use `NaN` as a way to indicate a value is missing, in polars it is treated exclusively as a float value, much like `0.0`, `1.0` or `infinity`.
 
-    You can use `.fill_null(float('nan'))` if you need to convert to a format such tools accept, or use `.fill_nan(None)` if you are importing data from them, assuming that there are no values which really are supposed to be the float NaN.
+    You can use `.fill_null(float('nan'))` if you need to convert floats to a format such tools accept, or use `.fill_nan(None)` if you are importing data from them, assuming that there are no values which really are supposed to be the float NaN.
 
     Remember that many calculations can result in NaN, for example dividing by zero:
     """
@@ -686,11 +683,14 @@ def _(dirty_weather, pl, rain):
 
 @app.cell(hide_code=True)
 def _(day_perc, mo, perc_col):
-    mo.md(f"""It is null for {day_perc.select(perc_col.is_null().mean()).item():.4%} of the rows, but is NaN for {day_perc.select(perc_col.is_nan().mean()).item():.4%} of them.
-    If we use the cleaned weather dataframe to calculate it instead of the dirty_weather, we will have no Nulls, but note how for this calculation we can end up with both, with each having a different meaning.
+    mo.md(
+        f"""
+    It is null for {day_perc.select(perc_col.is_null().mean()).item():.4%} of the rows, but is NaN for {day_perc.select(perc_col.is_nan().mean()).item():.4%} of them.
+    If we use the cleaned weather dataframe to calculate it instead of the dirty_weather, we will have no nulls, but note how for this calculation we can end up with both, with each having a different meaning.
 
     In this case it makes sense to fill in NaNs as 0 to indicate there was no rain during that period, but treating the nulls the same could lead to a different interpretation of the data, so remember to handle NaNs and nulls separately.
-    """)
+    """
+    )
     return
 
 
@@ -745,13 +745,15 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(pl):
-    age_groups = pl.DataFrame([
-        {"age": None, "stage": "Unknown"},
-        {"age": [0, 1], "stage": "Baby"},
-        {"age": [2, 3, 4, 5, 6, 7, 8, 9, 10], "stage": "Adult"},
-        {"age": [11, 12, 13, 14], "stage": "Senior"},
-        {"age": [15, 16, 17, 18, 19, 20], "stage": "Geriatric"},
-    ])
+    age_groups = pl.DataFrame(
+        [
+            {"age": None, "stage": "Unknown"},
+            {"age": [0, 1], "stage": "Baby"},
+            {"age": [2, 3, 4, 5, 6, 7, 8, 9, 10], "stage": "Adult"},
+            {"age": [11, 12, 13, 14], "stage": "Senior"},
+            {"age": [15, 16, 17, 18, 19, 20], "stage": "Geriatric"},
+        ]
+    )
     age_groups
     return (age_groups,)
 
@@ -782,8 +784,8 @@ def _(mo):
 
 @app.cell
 def _(pl):
-    raw_stations = pl.read_csv("/mnt/c/Users/Etrot/Downloads/datario_alertario_stations.csv")
-    raw_weather = pl.read_csv("/mnt/c/Users/Etrot/Downloads/datario_alertario_weather_2020_to_2022.csv")
+    raw_stations = pl.read_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_stations.csv")
+    raw_weather = pl.read_csv("hf://datasets/etrotta/weather-alertario/datario_alertario_weather_2020_to_2022.csv")
     return raw_stations, raw_weather
 
 
