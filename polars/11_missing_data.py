@@ -203,7 +203,9 @@ def _(mo):
     - if you don't want to propagate null values, use `_missing` variations of methods such as `eq` vs `eq_missing`
     - you may want to fill in missing values based on calculations via `fill_null`, or manually edit the data based on external documents
 
-    Whichever approach you take, remember to document how you handled them!
+    You can also refer to the polars [User Guide](https://docs.pola.rs/user-guide/expressions/missing-data/) more more information.
+
+    Whichever approach you take, remember to document how you handled it!
     """
     )
     return
@@ -689,6 +691,80 @@ def _(day_perc, mo, perc_col):
 
     In this case it makes sense to fill in NaNs as 0 to indicate there was no rain during that period, but treating the nulls the same could lead to a different interpretation of the data, so remember to handle NaNs and nulls separately.
     """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ## Appendix C: Everything else
+
+    As long as this Notebook is, it cannot reasonably cover ***everything*** that may have to deal with missing values, as that is literally everything that may have to deal with data.
+
+    This section very briefly covers some other features not mentioned above
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Missing values in Aggregations
+
+    Many aggregations methods will ignore/skip missing values, while others take them into consideration.
+
+    Always check the documentation of the method you're using, much of the time docstrings will explain their behaviour.
+    """
+    )
+    return
+
+
+@app.cell
+def _(df, pl):
+    df.group_by("species").agg(
+        pl.col("height").len().alias("len"),
+        pl.col("height").count().alias("count"),
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Missing values in Joins
+
+    By default null values will never produce matches using [join](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.join.html), but you can specify `nulls_equal=True` to join Null values with each other.
+    """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(pl):
+    age_groups = pl.DataFrame([
+        {"age": None, "stage": "Unknown"},
+        {"age": [0, 1], "stage": "Baby"},
+        {"age": [2, 3, 4, 5, 6, 7, 8, 9, 10], "stage": "Adult"},
+        {"age": [11, 12, 13, 14], "stage": "Senior"},
+        {"age": [15, 16, 17, 18, 19, 20], "stage": "Geriatric"},
+    ])
+    age_groups
+    return (age_groups,)
+
+
+@app.cell
+def _(age_groups, df):
+    df.join(age_groups.explode("age"), on="age")
+    return
+
+
+@app.cell
+def _(age_groups, df):
+    df.join(age_groups.explode("age"), on="age", nulls_equal=True)
     return
 
 
