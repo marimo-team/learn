@@ -164,7 +164,7 @@ def _(mo):
 
     Be careful not to treat estimated or guessed values as if they a ground truth however, otherwise you may end up making conclusions about a reality that does not exists.
 
-    As an excercise, let's guess some values to fill in nulls, then try giving names to the animals with `null` by editing the cells
+    As an exercise, let's guess some values to fill in nulls, then try giving names to the animals with `null` by editing the cells
     """
     )
     return
