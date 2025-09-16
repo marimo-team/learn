@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "adbc-driver-sqlite==1.7.0",
-#     "duckdb>=1.4.0.dev",
+#     "duckdb==1.4.0",
 #     "lxml==6.0.0",
 #     "marimo",
 #     "pandas==2.3.2",
