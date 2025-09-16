@@ -18,7 +18,7 @@ def _(mo):
         r"""
     # Dealing with Missing Data
 
-    _by [etrotta](https://github.com/etrotta)_
+    _by [etrotta](https://github.com/etrotta) and [Felix Najera](https://github.com/folicks)_
 
     This notebook covers some common problems you may face when dealing with real datasets and techniques used to solve deal with them, showcasing polars functionalities to handle missing data.
 
