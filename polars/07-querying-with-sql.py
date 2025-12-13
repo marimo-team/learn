@@ -83,7 +83,7 @@ def _(cached_file, sqlalchemy):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    After creating the Engine, you should be able to see it in the **Data Sources** pannel in the sidebar. Whenever you create an SQLAlchemy engine as a global variable, Marimo picks up on it and makes it available for use in SQL Cells
+    After creating the Engine, you should be able to see it in the **Data Sources** panel in the sidebar. Whenever you create an SQLAlchemy engine as a global variable, Marimo picks up on it and makes it available for use in SQL Cells
 
     You can use it to consult all tables and their columns, as well as click "Add table to notebook" to get the code to use it, creating our first SQL Cell:
     """)
