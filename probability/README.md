@@ -1,3 +1,8 @@
+---
+title: Readme
+marimo-version: 0.18.4
+---
+
 # Learn probability
 
 This collection of marimo notebooks teaches the fundamentals of probability,

@@ -8,28 +8,25 @@
 
 import marimo
 
-__generated_with = "0.13.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # What Makes Daft Special?
 
     > _By [Péter Ferenc Gyarmati](http://github.com/peter-gy)_.
 
     Welcome to the course on [Daft](https://www.getdaft.io/), the distributed dataframe library! In this first chapter, we'll explore what Daft is and what makes it a noteworthy tool in the landscape of data processing. We'll look at its core design choices and how they aim to help you work with data more effectively, whether you're a data engineer, data scientist, or analyst.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🎯 Introducing Daft: A Unified Data Engine
 
     Daft is a distributed query engine designed to handle a wide array of data tasks, from data engineering and analytics to powering ML/AI workflows. It provides both a Python DataFrame API, familiar to users of libraries like Pandas, and a SQL interface, allowing you to choose the interaction style that best suits your needs or the task at hand.
@@ -37,8 +34,7 @@ def _(mo):
     The main goal of Daft is to provide a robust and versatile platform for processing data, whether it's gigabytes on your laptop or petabytes on a cluster.
 
     Let's go ahead and `pip install daft` to see it in action!
-    """
-    )
+    """)
     return
 
 
@@ -86,8 +82,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🦀 Built with Rust: Performance and Simplicity
 
     One of Daft's key characteristics is that its core engine is written in Rust. This choice has several implications for users:
@@ -97,8 +92,7 @@ def _(mo):
     *   **Simplified Developer Experience**: Rust-based systems typically require less configuration tuning compared to JVM-based systems. You don't need to worry about JVM heap sizes, garbage collection parameters, or managing Java dependencies.
 
     Daft also leverages [Apache Arrow](https://arrow.apache.org/) for its in-memory data format. This allows for efficient data exchange between Daft's Rust core and Python, often with zero-copy data sharing, further enhancing performance.
-    """
-    )
+    """)
     return
 
 
@@ -118,7 +112,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!""")
+    mo.md(r"""
+    A cornerstone of Daft's design is **lazy execution**. Imagine defining a DataFrame with a trillion rows on your laptop – usually not a great prospect for your device's memory!
+    """)
     return
 
 
@@ -135,7 +131,9 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:""")
+    mo.md(r"""
+    With Daft, this is perfectly fine. Operations like `with_column` or `filter` don't compute results immediately. Instead, Daft builds a *logical plan* – a blueprint of the transformations you've defined. You can inspect this plan:
+    """)
     return
 
 
@@ -147,14 +145,15 @@ def _(mo, trillion_rows_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow.""")
+    mo.md(r"""
+    This plan is only executed (and data materialized) when you explicitly request it (e.g., with `.show()`, `.collect()`, or by writing to a file). Before execution, Daft's optimizer works to make your query run as efficiently as possible. This approach allows you to define complex operations on massive datasets without immediate computational cost or memory overflow.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🌐 Scale Your Work: From Laptop to Cluster
 
     Daft is designed with scalability in mind. As the trillion-row dataframe example above illustrates, you can write your data processing logic using Daft's Python API, and this same code can run:
@@ -163,15 +162,13 @@ def _(mo):
     *   **On a Cluster**: By integrating with [Ray](https://www.ray.io/), a framework for distributed computing. This allows Daft to scale out to process very large datasets across many machines.
 
     This "write once, scale anywhere" approach means you don't need to significantly refactor your code when moving from local development to large-scale distributed execution. We'll delve into distributed computing with Ray in a later chapter.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🖼️ Handling More Than Just Tables: Multimodal Data Support
 
     Modern datasets often contain more than just numbers and text. They might include images, audio clips, URLs pointing to external files, tensor data from machine learning models, or complex nested structures like JSON.
@@ -179,8 +176,7 @@ def _(mo):
     Daft is built to accommodate these **multimodal data types** as integral parts of a DataFrame. This means you can have columns containing image data, embeddings, or other complex Python objects, and Daft provides mechanisms to process them. This is particularly useful for ML/AI pipelines and advanced analytics where diverse data sources are common.
 
     As an example of how Daft simplifies working with such complex data, let's see how we can process image URLs. With just a few lines of Daft code, we can pull open data from the [National Gallery of Art](https://github.com/NationalGalleryOfArt/opendata), then directly fetch, decode, and even resize the images within our DataFrame:
-    """
-    )
+    """)
     return
 
 
@@ -217,20 +213,23 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""> Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog.""")
+    mo.md(r"""
+    > Example inspired by the great post [Exploring Art with TypeScript, Jupyter, Polars, and Observable Plot](https://deno.com/blog/exploring-art-with-typescript-and-jupyter) published on Deno's blog.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers.""")
+    mo.md(r"""
+    In later chapters, we'll explore in more detail how to work with these image objects and other complex types, including applying User-Defined Functions (UDFs) for custom processing. Until then, you can [take a look at a more complex example](https://blog.getdaft.io/p/we-cloned-over-15000-repos-to-find), in which Daft is used to clone over 15,000 GitHub repos to find the best developers.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🧑‍💻 Designed for Developers: Python and SQL Interfaces
 
     Daft aims to be developer-friendly by offering flexible ways to interact with your data:
@@ -239,8 +238,7 @@ def _(mo):
     *   **SQL Interface**: For those who prefer SQL or have existing SQL-based logic, Daft allows you to write queries using SQL syntax. Daft can execute SQL queries directly or even translate SQL expressions into its native expression system.
 
     This dual-interface approach allows developers to choose the most appropriate tool for their specific task or leverage existing skills.
-    """
-    )
+    """)
     return
 
 
@@ -285,8 +283,7 @@ def _(daft):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## 🟣 Daft's Value Proposition
 
     So, what makes Daft special? It's the combination of these design choices:
@@ -299,8 +296,7 @@ def _(mo):
     These elements combine to make Daft a versatile tool for tackling modern data challenges.
 
     And this is just scratching the surface. Daft is a growing data engine with an ambitious vision: to unify data engineering, analytics, and ML/AI workflows 🚀.
-    """
-    )
+    """)
     return
 
 
@@ -308,7 +304,6 @@ def _(mo):
 def _():
     import daft
     import marimo as mo
-
     return daft, mo
 
 

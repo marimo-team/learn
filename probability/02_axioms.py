@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.11.2"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
@@ -21,49 +21,43 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Axioms of Probability
+    mo.md(r"""
+    # Axioms of Probability
 
-        Probability theory is built on three fundamental axioms, known as the [Kolmogorov axioms](https://en.wikipedia.org/wiki/Probability_axioms). These axioms form 
-        the mathematical foundation for all of probability theory[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability).
+    Probability theory is built on three fundamental axioms, known as the [Kolmogorov axioms](https://en.wikipedia.org/wiki/Probability_axioms). These axioms form
+    the mathematical foundation for all of probability theory[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability).
 
-        Let's explore each axiom and understand why they make intuitive sense:
-        """
-    )
+    Let's explore each axiom and understand why they make intuitive sense:
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Three Axioms
+    mo.md(r"""
+    ## The Three Axioms
 
-        | Axiom | Mathematical Form | Meaning |
-        |-------|------------------|----------|
-        | **Axiom 1** | $0 \leq P(E) \leq 1$ | All probabilities are between 0 and 1 |
-        | **Axiom 2** | $P(S) = 1$ | The probability of the sample space is 1 |
-        | **Axiom 3** | $P(E \cup F) = P(E) + P(F)$ | For mutually exclusive events, probabilities add |
+    | Axiom | Mathematical Form | Meaning |
+    |-------|------------------|----------|
+    | **Axiom 1** | $0 \leq P(E) \leq 1$ | All probabilities are between 0 and 1 |
+    | **Axiom 2** | $P(S) = 1$ | The probability of the sample space is 1 |
+    | **Axiom 3** | $P(E \cup F) = P(E) + P(F)$ | For mutually exclusive events, probabilities add |
 
-        where the set $S$ is the sample space (all possible outcomes), and $E$ and $F$ are sets that represent events. The notation $P(E)$ denotes the probability of $E$, which you can interpret as the chance that something happens. $P(E) = 0$ means that the event cannot happen, while $P(E) = 1$ means the event will happen no matter what; $P(E) = 0.5$ means that $E$ has a 50% chance of happening.
-        
-        For an example, when rolling a fair six-sided die once, the sample space $S$ is the set of die faces ${1, 2, 3, 4, 5, 6}$, and there are many possible events; we'll see some examples below.
-        """
-    )
+    where the set $S$ is the sample space (all possible outcomes), and $E$ and $F$ are sets that represent events. The notation $P(E)$ denotes the probability of $E$, which you can interpret as the chance that something happens. $P(E) = 0$ means that the event cannot happen, while $P(E) = 1$ means the event will happen no matter what; $P(E) = 0.5$ means that $E$ has a 50% chance of happening.
+
+    For an example, when rolling a fair six-sided die once, the sample space $S$ is the set of die faces ${1, 2, 3, 4, 5, 6}$, and there are many possible events; we'll see some examples below.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Understanding Through Examples
+    mo.md(r"""
+    ## Understanding Through Examples
 
-        Let's explore these axioms using a simple experiment: rolling a fair six-sided die.
-        We'll use this to demonstrate why each axiom makes intuitive sense.
-        """
-    )
+    Let's explore these axioms using a simple experiment: rolling a fair six-sided die.
+    We'll use this to demonstrate why each axiom makes intuitive sense.
+    """)
     return
 
 
@@ -144,62 +138,58 @@ def _(event, mo, np, plt):
     """)
 
     mo.hstack([plt.gcf(), explanation])
-    return ax, colors, dice, event_map, explanation, fig, outcomes, prob
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Why These Axioms Matter
-
-        These axioms are more than just rules - they provide the foundation for all of probability theory:
-
-        1. **Non-negativity** (Axiom 1) makes intuitive sense: you can't have a negative number of occurrences 
-           in any experiment.
-
-        2. **Normalization** (Axiom 2) ensures that something must happen - the total probability must be 1.
-
-        3. **Additivity** (Axiom 3) lets us build complex probabilities from simple ones, but only for events 
-           that can't happen together (mutually exclusive events).
-
-        From these simple rules, we can derive all the powerful tools of probability theory that are used in 
-        statistics, machine learning, and other fields.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md(r"""
+    ## Why These Axioms Matter
 
-        Consider rolling two dice. Which of these statements follow from the axioms?
+    These axioms are more than just rules - they provide the foundation for all of probability theory:
 
-        <details>
-        <summary>1. P(sum is 13) = 0</summary>
+    1. **Non-negativity** (Axiom 1) makes intuitive sense: you can't have a negative number of occurrences
+       in any experiment.
 
-        ✅ Correct! This follows from Axiom 1. Since no combination of dice can sum to 13, 
-        the probability must be non-negative but can be 0.
-        </details>
+    2. **Normalization** (Axiom 2) ensures that something must happen - the total probability must be 1.
 
-        <details>
-        <summary>2. P(sum is 7) + P(sum is not 7) = 1</summary>
+    3. **Additivity** (Axiom 3) lets us build complex probabilities from simple ones, but only for events
+       that can't happen together (mutually exclusive events).
 
-        ✅ Correct! This follows from Axioms 2 and 3. These events are mutually exclusive and cover 
-        the entire sample space.
-        </details>
+    From these simple rules, we can derive all the powerful tools of probability theory that are used in
+    statistics, machine learning, and other fields.
+    """)
+    return
 
-        <details>
-        <summary>3. P(first die is 6 or second die is 6) = P(first die is 6) + P(second die is 6)</summary>
 
-        ❌ Incorrect! This doesn't follow from Axiom 3 because the events are not mutually exclusive - 
-        you could roll (6,6).
-        </details>
-        """
-    )
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
+
+    Consider rolling two dice. Which of these statements follow from the axioms?
+
+    <details>
+    <summary>1. P(sum is 13) = 0</summary>
+
+    ✅ Correct! This follows from Axiom 1. Since no combination of dice can sum to 13,
+    the probability must be non-negative but can be 0.
+    </details>
+
+    <details>
+    <summary>2. P(sum is 7) + P(sum is not 7) = 1</summary>
+
+    ✅ Correct! This follows from Axioms 2 and 3. These events are mutually exclusive and cover
+    the entire sample space.
+    </details>
+
+    <details>
+    <summary>3. P(first die is 6 or second die is 6) = P(first die is 6) + P(second die is 6)</summary>
+
+    ❌ Incorrect! This doesn't follow from Axiom 3 because the events are not mutually exclusive -
+    you could roll (6,6).
+    </details>
+    """)
     return
 
 

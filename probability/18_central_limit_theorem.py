@@ -12,90 +12,84 @@
 
 import marimo
 
-__generated_with = "0.12.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Central Limit Theorem")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Central Limit Theorem
+    mo.md(r"""
+    # Central Limit Theorem
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part4/clt/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part4/clt/), by Stanford professor Chris Piech._
 
-        The central limit theorem is honestly mind-blowing — it's like magic that no matter what distribution you start with, the sampling distribution of means approaches a normal distribution as sample size increases.
+    The central limit theorem is honestly mind-blowing — it's like magic that no matter what distribution you start with, the sampling distribution of means approaches a normal distribution as sample size increases.
 
-        Mathematically, if we have:
+    Mathematically, if we have:
 
-        $X_1, X_2, \ldots, X_n$ as independent, identically distributed random variables with:
+    $X_1, X_2, \ldots, X_n$ as independent, identically distributed random variables with:
 
-        - Mean: $\mu$
-        - Variance: $\sigma^2 < \infty$
+    - Mean: $\mu$
+    - Variance: $\sigma^2 < \infty$
 
-        Then as $n \to \infty$:
+    Then as $n \to \infty$:
 
-        $$\sqrt{n}\left(\frac{1}{n}\sum_{i=1}^{n}X_i - \mu\right) \xrightarrow{d} \mathcal{N}(0, \sigma^2)$$
+    $$\sqrt{n}\left(\frac{1}{n}\sum_{i=1}^{n}X_i - \mu\right) \xrightarrow{d} \mathcal{N}(0, \sigma^2)$$
 
-        > _Note:_ The above LaTeX derivation is included as a reference. Credit for this formulation goes to the original source linked at the top of the notebook.
-        """
-    )
+    > _Note:_ The above LaTeX derivation is included as a reference. Credit for this formulation goes to the original source linked at the top of the notebook.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Central Limit Theorem Statement
+    mo.md(r"""
+    ## Central Limit Theorem Statement
 
-        There are two ways to state the central limit theorem:
+    There are two ways to state the central limit theorem:
 
-        ### Sum Version
+    ### Sum Version
 
-        Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The sum of these random variables approaches a normal distribution as $n \rightarrow \infty$:
+    Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The sum of these random variables approaches a normal distribution as $n \rightarrow \infty$:
 
-        $\sum_{i=1}^{n}X_i \sim \mathcal{N}(n \cdot \mu, n \cdot \sigma^2)$
+    $\sum_{i=1}^{n}X_i \sim \mathcal{N}(n \cdot \mu, n \cdot \sigma^2)$
 
-        Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$. Since each $X_i$ is identically distributed, they share the same expectation and variance.
+    Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$. Since each $X_i$ is identically distributed, they share the same expectation and variance.
 
-        ### Average Version
+    ### Average Version
 
-        Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The average of these random variables approaches a normal distribution as $n \rightarrow \infty$:
+    Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables. The average of these random variables approaches a normal distribution as $n \rightarrow \infty$:
 
-        $\frac{1}{n}\sum_{i=1}^{n}X_i \sim \mathcal{N}(\mu, \frac{\sigma^2}{n})$
+    $\frac{1}{n}\sum_{i=1}^{n}X_i \sim \mathcal{N}(\mu, \frac{\sigma^2}{n})$
 
-        Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$.
+    Where $\mu = E[X_i]$ and $\sigma^2 = \text{Var}(X_i)$.
 
-        The CLT is incredible because it applies to almost any distribution (as long as it has a finite mean and variance), regardless of its shape.
-        """
-    )
+    The CLT is incredible because it applies to almost any distribution (as long as it has a finite mean and variance), regardless of its shape.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Central Limit Theorem Intuition
+    mo.md(r"""
+    ## Central Limit Theorem Intuition
 
-        Let's explore what happens when you add random variables together. For example, what if we add 100 different uniform random variables?
+    Let's explore what happens when you add random variables together. For example, what if we add 100 different uniform random variables?
 
-        ```python
-        from random import random 
+    ```python
+    from random import random
 
-        def add_100_uniforms():
-           total = 0
-           for i in range(100):
-               # returns a sample from uniform(0, 1)
-               x_i = random()    
-               total += x_i
-           return total
-        ```
+    def add_100_uniforms():
+       total = 0
+       for i in range(100):
+           # returns a sample from uniform(0, 1)
+           x_i = random()
+           total += x_i
+       return total
+    ```
 
-        The value returned by this function will be a random variable. Click the button below to run the function and observe the resulting value of total:
-        """
-    )
+    The value returned by this function will be a random variable. Click the button below to run the function and observe the resulting value of total:
+    """)
     return
 
 
@@ -125,12 +119,14 @@ def _(mo, random, run_button):
         display = mo.md("")
 
     display
-    return add_100_uniforms, display, uniform_result
+    return (add_100_uniforms,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""What does total look like as a distribution? Let's calculate total many times and visualize the histogram of values it produces.""")
+    mo.md(r"""
+    What does total look like as a distribution? Let's calculate total many times and visualize the histogram of values it produces.
+    """)
     return
 
 
@@ -251,113 +247,87 @@ def _(add_100_uniforms, go, mo, np, run_simulation_button, stats, time):
 
     # display
     histogram
-    return (
-        fig,
-        get_simulation_results,
-        histogram,
-        mean,
-        new_results,
-        progress_status,
-        sim_count,
-        sim_result,
-        sim_storage,
-        simulation_results,
-        std_dev,
-        theoretical_mean,
-        theoretical_std,
-        theoretical_variance,
-        total_samples,
-        x_vals,
-        y_vals,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        That is interesting! The sum of 100 independent uniforms looks normal. Is that a special property of uniforms? No! It turns out to work for almost any type of distribution (as long as the distribution has finite mean and variance).
-
-        - Sum of 40 $X_i$ where $X_i \sim \text{Beta}(a = 5, b = 4)$? Normal.
-        - Sum of 90 $X_i$ where $X_i \sim \text{Poisson}(\lambda = 4)$? Normal.
-        - Sum of 50 dice-rolls? Normal.
-        - Average of 10000 $X_i$ where $X_i \sim \text{Exp}(\lambda = 8)$? Normal.
-
-        For any distribution, the sum or average of a sufficiently large number of independent, identically distributed random variables will be approximately normally distributed.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Continuity Correction
+    mo.md(r"""
+    That is interesting! The sum of 100 independent uniforms looks normal. Is that a special property of uniforms? No! It turns out to work for almost any type of distribution (as long as the distribution has finite mean and variance).
 
-        When using the Central Limit Theorem with discrete random variables (like a Binomial or Poisson), we need to apply a continuity correction. This is because we're approximating a discrete distribution with a continuous one (normal).
+    - Sum of 40 $X_i$ where $X_i \sim \text{Beta}(a = 5, b = 4)$? Normal.
+    - Sum of 90 $X_i$ where $X_i \sim \text{Poisson}(\lambda = 4)$? Normal.
+    - Sum of 50 dice-rolls? Normal.
+    - Average of 10000 $X_i$ where $X_i \sim \text{Exp}(\lambda = 8)$? Normal.
 
-        The continuity correction involves adjusting the boundaries in probability calculations by ±0.5 to account for the discrete nature of the original variable.
-
-        You should use a continuity correction any time your normal is approximating a discrete random variable. The rules for a general continuity correction are the same as the rules for the [binomial-approximation continuity correction](http://marimo.app/https://github.com/marimo-team/learn/blob/main/probability/14_binomial_distribution.py).
-
-        In our example above, where we added 100 uniforms, a continuity correction isn't needed because the sum of uniforms is continuous. However, in examples with dice or other discrete distributions, a continuity correction would be necessary.
-        """
-    )
+    For any distribution, the sum or average of a sufficiently large number of independent, identically distributed random variables will be approximately normally distributed.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Examples
+    mo.md(r"""
+    ## Continuity Correction
 
-        Let's work through some practical examples to see how the Central Limit Theorem is applied.
-        """
-    )
+    When using the Central Limit Theorem with discrete random variables (like a Binomial or Poisson), we need to apply a continuity correction. This is because we're approximating a discrete distribution with a continuous one (normal).
+
+    The continuity correction involves adjusting the boundaries in probability calculations by ±0.5 to account for the discrete nature of the original variable.
+
+    You should use a continuity correction any time your normal is approximating a discrete random variable. The rules for a general continuity correction are the same as the rules for the [binomial-approximation continuity correction](http://marimo.app/https://github.com/marimo-team/learn/blob/main/probability/14_binomial_distribution.py).
+
+    In our example above, where we added 100 uniforms, a continuity correction isn't needed because the sum of uniforms is continuous. However, in examples with dice or other discrete distributions, a continuity correction would be necessary.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Example 1: Dice Game
+    mo.md(r"""
+    ## Examples
 
-        > _Note:_ The following application demonstrates the practical use of the Central Limit Theorem. The mathematical derivation is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
+    Let's work through some practical examples to see how the Central Limit Theorem is applied.
+    """)
+    return
 
-        Let's solve a fun probability problem: You roll a 6-sided die 10 times and let $X$ represent the total value of all 10 dice: $X = X_1 + X_2 + \dots + X_{10}$. You win if $X \leq 25$ or $X \geq 45$. What's your probability of winning?
 
-        For a single die roll $X_i$, we know:
-        - $E[X_i] = 3.5$
-        - $\text{Var}(X_i) = \frac{35}{12}$
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Example 1: Dice Game
 
-        **Solution Approach:**
+    > _Note:_ The following application demonstrates the practical use of the Central Limit Theorem. The mathematical derivation is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
 
-        This is where the Central Limit Theorem shines! Since we're summing 10 independent, identically distributed random variables, we can approximate this sum with a normal distribution $Y$:
+    Let's solve a fun probability problem: You roll a 6-sided die 10 times and let $X$ represent the total value of all 10 dice: $X = X_1 + X_2 + \dots + X_{10}$. You win if $X \leq 25$ or $X \geq 45$. What's your probability of winning?
 
-        $Y \sim \mathcal{N}(10 \cdot E[X_i], 10 \cdot \text{Var}(X_i)) = \mathcal{N}(35, 29.2)$
+    For a single die roll $X_i$, we know:
+    - $E[X_i] = 3.5$
+    - $\text{Var}(X_i) = \frac{35}{12}$
 
-        Now calculating our winning probability:
+    **Solution Approach:**
 
-        $P(X \leq 25 \text{ or } X \geq 45) = P(X \leq 25) + P(X \geq 45)$
+    This is where the Central Limit Theorem shines! Since we're summing 10 independent, identically distributed random variables, we can approximate this sum with a normal distribution $Y$:
 
-        Since we're approximating a discrete distribution with a continuous one, we apply a continuity correction:
+    $Y \sim \mathcal{N}(10 \cdot E[X_i], 10 \cdot \text{Var}(X_i)) = \mathcal{N}(35, 29.2)$
 
-        $\approx P(Y < 25.5) + P(Y > 44.5) = P(Y < 25.5) + [1 - P(Y < 44.5)]$
+    Now calculating our winning probability:
 
-        Converting to standard normal form:
+    $P(X \leq 25 \text{ or } X \geq 45) = P(X \leq 25) + P(X \geq 45)$
 
-        $\approx \Phi\left(\frac{25.5 - 35}{\sqrt{29.2}}\right) + \left[1 - \Phi\left(\frac{44.5 - 35}{\sqrt{29.2}}\right)\right]$
+    Since we're approximating a discrete distribution with a continuous one, we apply a continuity correction:
 
-        $\approx \Phi(-1.76) + [1 - \Phi(1.76)]$
+    $\approx P(Y < 25.5) + P(Y > 44.5) = P(Y < 25.5) + [1 - P(Y < 44.5)]$
 
-        $\approx 0.039 + (1 - 0.961) \approx 0.078$
+    Converting to standard normal form:
 
-        So your chance of winning is about 7.8% — not great odds, but that's probability for you!
-        """
-    )
+    $\approx \Phi\left(\frac{25.5 - 35}{\sqrt{29.2}}\right) + \left[1 - \Phi\left(\frac{44.5 - 35}{\sqrt{29.2}}\right)\right]$
+
+    $\approx \Phi(-1.76) + [1 - \Phi(1.76)]$
+
+    $\approx 0.039 + (1 - 0.961) \approx 0.078$
+
+    So your chance of winning is about 7.8% — not great odds, but that's probability for you!
+    """)
     return
 
 
@@ -384,56 +354,54 @@ def _(create_dice_game_visualization, fig_to_image, mo):
     )
 
     mo.vstack([dice_game_image, dice_explanation])
-    return dice_explanation, dice_game_fig, dice_game_image
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Example 2: Algorithm Runtime Estimation
+    mo.md(r"""
+    ### Example 2: Algorithm Runtime Estimation
 
-        > _Note:_ The following derivation demonstrates the practical application of the Central Limit Theorem for experimental design. The mathematical approach is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
+    > _Note:_ The following derivation demonstrates the practical application of the Central Limit Theorem for experimental design. The mathematical approach is based on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/clt/) by Chris Piech.
 
-        Here's a practical problem I encounter in performance testing: You've developed a new algorithm and want to measure its average runtime. You know the variance is $\sigma^2 = 4 \text{ sec}^2$, but need to estimate the true mean runtime $t$.
+    Here's a practical problem I encounter in performance testing: You've developed a new algorithm and want to measure its average runtime. You know the variance is $\sigma^2 = 4 \text{ sec}^2$, but need to estimate the true mean runtime $t$.
 
-        The question: How many test runs do you need to be 95% confident your estimated mean is within ±0.5 seconds of the true value?
+    The question: How many test runs do you need to be 95% confident your estimated mean is within ±0.5 seconds of the true value?
 
-        Let $X_i$ represent the runtime of the $i$-th test (for $1 \leq i \leq n$).
+    Let $X_i$ represent the runtime of the $i$-th test (for $1 \leq i \leq n$).
 
-        **Solution:**
+    **Solution:**
 
-        We need to find $n$ such that:
+    We need to find $n$ such that:
 
-        $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right)$
+    $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right)$
 
-        The Central Limit Theorem tells us that as $n$ increases, the sample mean approaches a normal distribution. Let's standardize this to work with the standard normal distribution:
+    The Central Limit Theorem tells us that as $n$ increases, the sample mean approaches a normal distribution. Let's standardize this to work with the standard normal distribution:
 
-        $Z = \frac{\left(\sum_{i=1}^n X_i\right) - n\mu}{\sigma \sqrt{n}} = \frac{\left(\sum_{i=1}^n X_i\right) - nt}{2 \sqrt{n}}$
+    $Z = \frac{\left(\sum_{i=1}^n X_i\right) - n\mu}{\sigma \sqrt{n}} = \frac{\left(\sum_{i=1}^n X_i\right) - nt}{2 \sqrt{n}}$
 
-        Rewriting our probability constraint in terms of $Z$:
+    Rewriting our probability constraint in terms of $Z$:
 
-        $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right) = P\left(\frac{-0.5 \sqrt{n}}{2} \leq Z \leq \frac{0.5 \sqrt{n}}{2}\right)$
+    $0.95 = P\left(-0.5 \leq \frac{\sum_{i=1}^n X_i}{n} - t \leq 0.5\right) = P\left(\frac{-0.5 \sqrt{n}}{2} \leq Z \leq \frac{0.5 \sqrt{n}}{2}\right)$
 
-        Using the properties of the standard normal CDF:
+    Using the properties of the standard normal CDF:
 
-        $0.95 = \Phi\left(\frac{\sqrt{n}}{4}\right) - \Phi\left(-\frac{\sqrt{n}}{4}\right) = 2\Phi\left(\frac{\sqrt{n}}{4}\right) - 1$
+    $0.95 = \Phi\left(\frac{\sqrt{n}}{4}\right) - \Phi\left(-\frac{\sqrt{n}}{4}\right) = 2\Phi\left(\frac{\sqrt{n}}{4}\right) - 1$
 
-        Solving for $\Phi\left(\frac{\sqrt{n}}{4}\right)$:
+    Solving for $\Phi\left(\frac{\sqrt{n}}{4}\right)$:
 
-        $0.975 = \Phi\left(\frac{\sqrt{n}}{4}\right)$
+    $0.975 = \Phi\left(\frac{\sqrt{n}}{4}\right)$
 
-        Using the inverse CDF:
+    Using the inverse CDF:
 
-        $\Phi^{-1}(0.975) = \frac{\sqrt{n}}{4}$
+    $\Phi^{-1}(0.975) = \frac{\sqrt{n}}{4}$
 
-        $1.96 = \frac{\sqrt{n}}{4}$
+    $1.96 = \frac{\sqrt{n}}{4}$
 
-        $n = 61.4$
+    $n = 61.4$
 
-        Rounding up, we need 62 test runs to achieve our desired confidence interval — a practical result we can immediately apply to our testing protocol.
-        """
-    )
+    Rounding up, we need 62 test runs to achieve our desired confidence interval — a practical result we can immediately apply to our testing protocol.
+    """)
     return
 
 
@@ -458,18 +426,16 @@ def _(create_algorithm_runtime_visualization, fig_to_image, mo):
     )
 
     mo.vstack([runtime_image, runtime_explanation])
-    return runtime_explanation, runtime_fig, runtime_image
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Interactive CLT Explorer
+    mo.md(r"""
+    ## Interactive CLT Explorer
 
-        Let's explore how the Central Limit Theorem works with different underlying distributions. You can select a distribution type and see how the distribution of the sample mean changes as the sample size increases.
-        """
-    )
+    Let's explore how the Central Limit Theorem works with different underlying distributions. You can select a distribution type and see how the distribution of the sample mean changes as the sample size increases.
+    """)
     return
 
 
@@ -604,81 +570,60 @@ def _(
         explorer_image = mo.md("Click the 'Run Simulation' button to see how the Central Limit Theorem works.")
 
     explorer_image
-    return (
-        ax1,
-        ax2,
-        dist_name,
-        expected_std,
-        explorer_fig,
-        explorer_image,
-        explorer_progress,
-        explorer_x,
-        explorer_y,
-        generate_sample,
-        n_param,
-        original_samples,
-        p,
-        rate,
-        sample,
-        sample_mean_mean,
-        sample_mean_std,
-        sample_means,
-        true_mean,
-        true_var,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        /// details | What is the shape of the distribution of the sum of many independent random variables?
-        The sum of many independent random variables approaches a normal distribution, regardless of the shape of the original distributions (as long as they have finite mean and variance). This is the essence of the Central Limit Theorem.
-        ///
-
-        /// details | If $X_1, X_2, \dots, X_{100}$ are IID random variables with $E[X_i] = 5$ and $Var(X_i) = 9$, what is the distribution of their sum?
-        By the Central Limit Theorem, the sum $S = X_1 + X_2 + \dots + X_{100}$ follows a normal distribution with:
-
-        - Mean: $E[S] = 100 \cdot E[X_i] = 100 \cdot 5 = 500$
-        - Variance: $Var(S) = 100 \cdot Var(X_i) = 100 \cdot 9 = 900$
-
-        Therefore, $S \sim \mathcal{N}(500, 900)$, or equivalently $S \sim \mathcal{N}(500, 30^2)$.
-        ///
-
-        /// details | When do you need to apply a continuity correction when using the Central Limit Theorem?
-        You need to apply a continuity correction when you're using the normal approximation (through CLT) for a discrete random variable. 
-
-        For example, when approximating a binomial or Poisson distribution with a normal distribution, you should adjust boundaries by ±0.5 to account for the discrete nature of the original variable. This makes the approximation more accurate.
-        ///
-
-        /// details | If $X_1, X_2, \dots, X_{n}$ are IID random variables, how does the variance of their sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^{n}X_i$ change as $n$ increases?
-        The variance of the sample mean decreases as the sample size $n$ increases. Specifically:
-
-        $Var(\bar{X}) = \frac{Var(X_i)}{n}$
-
-        This means that as we take more samples, the sample mean becomes more concentrated around the true mean of the distribution. This is why larger samples give more precise estimates.
-        ///
-
-        /// details | Why is the Central Limit Theorem so important in statistics?
-        The Central Limit Theorem is foundational in statistics because:
-
-        1. It allows us to make inferences about population parameters using sample statistics, regardless of the population's distribution.
-        2. It explains why the normal distribution appears so frequently in natural phenomena.
-        3. It enables the construction of confidence intervals and hypothesis tests for means, even when the underlying population distribution is unknown.
-        4. It justifies many statistical methods that assume normality, even when working with non-normal data, provided the sample size is large enough.
-
-        In essence, the CLT provides the theoretical justification for much of statistical inference.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Appendix (helper code and functions)""")
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
+
+    /// details | What is the shape of the distribution of the sum of many independent random variables?
+    The sum of many independent random variables approaches a normal distribution, regardless of the shape of the original distributions (as long as they have finite mean and variance). This is the essence of the Central Limit Theorem.
+    ///
+
+    /// details | If $X_1, X_2, \dots, X_{100}$ are IID random variables with $E[X_i] = 5$ and $Var(X_i) = 9$, what is the distribution of their sum?
+    By the Central Limit Theorem, the sum $S = X_1 + X_2 + \dots + X_{100}$ follows a normal distribution with:
+
+    - Mean: $E[S] = 100 \cdot E[X_i] = 100 \cdot 5 = 500$
+    - Variance: $Var(S) = 100 \cdot Var(X_i) = 100 \cdot 9 = 900$
+
+    Therefore, $S \sim \mathcal{N}(500, 900)$, or equivalently $S \sim \mathcal{N}(500, 30^2)$.
+    ///
+
+    /// details | When do you need to apply a continuity correction when using the Central Limit Theorem?
+    You need to apply a continuity correction when you're using the normal approximation (through CLT) for a discrete random variable.
+
+    For example, when approximating a binomial or Poisson distribution with a normal distribution, you should adjust boundaries by ±0.5 to account for the discrete nature of the original variable. This makes the approximation more accurate.
+    ///
+
+    /// details | If $X_1, X_2, \dots, X_{n}$ are IID random variables, how does the variance of their sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^{n}X_i$ change as $n$ increases?
+    The variance of the sample mean decreases as the sample size $n$ increases. Specifically:
+
+    $Var(\bar{X}) = \frac{Var(X_i)}{n}$
+
+    This means that as we take more samples, the sample mean becomes more concentrated around the true mean of the distribution. This is why larger samples give more precise estimates.
+    ///
+
+    /// details | Why is the Central Limit Theorem so important in statistics?
+    The Central Limit Theorem is foundational in statistics because:
+
+    1. It allows us to make inferences about population parameters using sample statistics, regardless of the population's distribution.
+    2. It explains why the normal distribution appears so frequently in natural phenomena.
+    3. It enables the construction of confidence intervals and hypothesis tests for means, even when the underlying population distribution is unknown.
+    4. It justifies many statistical methods that assume normality, even when working with non-normal data, provided the sample size is large enough.
+
+    In essence, the CLT provides the theoretical justification for much of statistical inference.
+    ///
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Appendix (helper code and functions)
+    """)
     return
 
 
@@ -691,7 +636,7 @@ def _():
 @app.cell(hide_code=True)
 def _():
     from wigglystuff import TangleSlider
-    return (TangleSlider,)
+    return
 
 
 @app.cell(hide_code=True)
@@ -706,7 +651,7 @@ def _():
     import time
     import plotly.graph_objects as go
     import plotly.io as pio
-    return base64, go, io, np, pio, plt, random, stats, time
+    return base64, go, io, np, plt, random, stats, time
 
 
 @app.cell(hide_code=True)
@@ -720,7 +665,7 @@ def _(base64, io):
         buf.seek(0)
         img_str = base64.b64encode(buf.getvalue()).decode('utf-8')
         return f"data:image/png;base64,{img_str}"
-    return Figure, fig_to_image
+    return (fig_to_image,)
 
 
 @app.cell(hide_code=True)
@@ -887,19 +832,17 @@ def _(np, plt):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## Summary
 
-        The Central Limit Theorem is truly one of the most remarkable ideas in all of statistics. It tells us that when we add up many independent random variables, their sum will follow a normal distribution, regardless of what the original distributions looked like. This is why we see normal distributions so often in real life – many natural phenomena are the result of numerous small, independent factors adding up.
+    The Central Limit Theorem is truly one of the most remarkable ideas in all of statistics. It tells us that when we add up many independent random variables, their sum will follow a normal distribution, regardless of what the original distributions looked like. This is why we see normal distributions so often in real life – many natural phenomena are the result of numerous small, independent factors adding up.
 
-        What makes the CLT so powerful is its universality. Whether we're working with dice rolls, measurement errors, or stock market returns, as long as we have enough independent samples, their average or sum will be approximately normal. For sums, the distribution will be $\mathcal{N}(n\mu, n\sigma^2)$, and for averages, it's $\mathcal{N}(\mu, \frac{\sigma^2}{n})$.
+    What makes the CLT so powerful is its universality. Whether we're working with dice rolls, measurement errors, or stock market returns, as long as we have enough independent samples, their average or sum will be approximately normal. For sums, the distribution will be $\mathcal{N}(n\mu, n\sigma^2)$, and for averages, it's $\mathcal{N}(\mu, \frac{\sigma^2}{n})$.
 
-        The CLT gives us the foundation for confidence intervals, hypothesis testing, and many other statistical tools. Without it, we'd have a much harder time making sense of data when we don't know the underlying population distribution. Just remember that if you're working with discrete distributions, you'll need to apply a continuity correction to get more accurate results.
+    The CLT gives us the foundation for confidence intervals, hypothesis testing, and many other statistical tools. Without it, we'd have a much harder time making sense of data when we don't know the underlying population distribution. Just remember that if you're working with discrete distributions, you'll need to apply a continuity correction to get more accurate results.
 
-        Next time you see a normal distribution in data, think about the Central Limit Theorem – it might be the reason behind that familiar bell curve!
-        """
-    )
+    Next time you see a normal distribution in data, think about the Central Limit Theorem – it might be the reason behind that familiar bell curve!
+    """)
     return
 
 

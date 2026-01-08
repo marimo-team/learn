@@ -11,85 +11,79 @@
 
 import marimo
 
-__generated_with = "0.11.26"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Normal Distribution")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Normal Distribution
+    mo.md(r"""
+    # Normal Distribution
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/normal/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/normal/), by Stanford professor Chris Piech._
 
-        The Normal (also known as Gaussian) distribution is one of the most important probability distributions in statistics and data science. It's characterized by a symmetric bell-shaped curve and is fully defined by two parameters: mean (μ) and variance (σ²).
-        """
-    )
+    The Normal (also known as Gaussian) distribution is one of the most important probability distributions in statistics and data science. It's characterized by a symmetric bell-shaped curve and is fully defined by two parameters: mean (μ) and variance (σ²).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Normal Random Variable Definition
+    mo.md(r"""
+    ## Normal Random Variable Definition
 
-        The Normal (or Gaussian) random variable is denoted as:
+    The Normal (or Gaussian) random variable is denoted as:
 
-        $$X \sim \mathcal{N}(\mu, \sigma^2)$$
+    $$X \sim \mathcal{N}(\mu, \sigma^2)$$
 
-        Where:
+    Where:
 
-        - $X$ is our random variable
-        - $\mathcal{N}$ indicates it follows a Normal distribution
-        - $\mu$ is the mean parameter
-        - $\sigma^2$ is the variance parameter (sometimes written as $\sigma$ for standard deviation)
+    - $X$ is our random variable
+    - $\mathcal{N}$ indicates it follows a Normal distribution
+    - $\mu$ is the mean parameter
+    - $\sigma^2$ is the variance parameter (sometimes written as $\sigma$ for standard deviation)
 
-        ```
-        X ~ N(μ, σ²)
-         ↑   ↑  ↑  ↑
-         |   |  |  +-- Variance (spread)
-         |   |  |      of the distribution
-         |   |  +-- Mean (center)
-         |   |      of the distribution
-         |   +-- Indicates Normal
-         |      distribution
-         |
-        Our random variable
-        ```
+    ```
+    X ~ N(μ, σ²)
+     ↑   ↑  ↑  ↑
+     |   |  |  +-- Variance (spread)
+     |   |  |      of the distribution
+     |   |  +-- Mean (center)
+     |   |      of the distribution
+     |   +-- Indicates Normal
+     |      distribution
+     |
+    Our random variable
+    ```
 
-        The Normal distribution is particularly important for many reasons:
+    The Normal distribution is particularly important for many reasons:
 
-        1. It arises naturally from the sum of independent random variables (Central Limit Theorem)
-        2. It appears frequently in natural phenomena
-        3. It is the maximum entropy distribution given a fixed mean and variance
-        4. It simplifies many mathematical calculations in statistics and probability
-        """
-    )
+    1. It arises naturally from the sum of independent random variables (Central Limit Theorem)
+    2. It appears frequently in natural phenomena
+    3. It is the maximum entropy distribution given a fixed mean and variance
+    4. It simplifies many mathematical calculations in statistics and probability
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Properties of Normal Distribution
+    mo.md(r"""
+    ## Properties of Normal Distribution
 
-        | Property | Formula |
-        |----------|---------|
-        | Notation | $X \sim \mathcal{N}(\mu, \sigma^2)$ |
-        | Description | A common, naturally occurring distribution |
-        | Parameters | $\mu \in \mathbb{R}$, the mean<br>$\sigma^2 \in \mathbb{R}^+$, the variance |
-        | Support | $x \in \mathbb{R}$ |
-        | PDF equation | $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}$ |
-        | CDF equation | $F(x) = \Phi(\frac{x-\mu}{\sigma})$ where $\Phi$ is the CDF of the standard normal |
-        | Expectation | $E[X] = \mu$ |
-        | Variance | $\text{Var}(X) = \sigma^2$ |
+    | Property | Formula |
+    |----------|---------|
+    | Notation | $X \sim \mathcal{N}(\mu, \sigma^2)$ |
+    | Description | A common, naturally occurring distribution |
+    | Parameters | $\mu \in \mathbb{R}$, the mean<br>$\sigma^2 \in \mathbb{R}^+$, the variance |
+    | Support | $x \in \mathbb{R}$ |
+    | PDF equation | $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}$ |
+    | CDF equation | $F(x) = \Phi(\frac{x-\mu}{\sigma})$ where $\Phi$ is the CDF of the standard normal |
+    | Expectation | $E[X] = \mu$ |
+    | Variance | $\text{Var}(X) = \sigma^2$ |
 
-        The PDF (Probability Density Function) reaches its maximum value at $x = \mu$, where the exponent becomes zero and $e^0 = 1$.
-        """
-    )
+    The PDF (Probability Density Function) reaches its maximum value at $x = \mu$, where the exponent becomes zero and $e^0 = 1$.
+    """)
     return
 
 
@@ -127,7 +121,7 @@ def _(
     # Call, convert and display
     comp_image = mo.image(fig_to_image(comparison_fig), width="100%")
     comp_image
-    return comp_image, comparison_fig, current_mu, current_sigma
+    return
 
 
 @app.cell(hide_code=True)
@@ -181,44 +175,42 @@ def _(create_normal_pdf_plot, fig_to_image, mean_slider, mo, std_slider):
     )
 
     mo.vstack([pdf_image, pdf_explanation])
-    return pdf_explanation, pdf_fig, pdf_image
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Standard Normal Distribution
+    mo.md(r"""
+    ## Standard Normal Distribution
 
-        The **Standard Normal Distribution** is a special case of the normal distribution where $\mu = 0$ and $\sigma = 1$. We denote it as:
+    The **Standard Normal Distribution** is a special case of the normal distribution where $\mu = 0$ and $\sigma = 1$. We denote it as:
 
-        $$Z \sim \mathcal{N}(0, 1)$$
+    $$Z \sim \mathcal{N}(0, 1)$$
 
-        This distribution is particularly important because:
+    This distribution is particularly important because:
 
-        1. Any normal distribution can be transformed into the standard normal
-        2. Statistical tables and calculations often use the standard normal as a reference
+    1. Any normal distribution can be transformed into the standard normal
+    2. Statistical tables and calculations often use the standard normal as a reference
 
-        ### Standardizing a Normal Random Variable
+    ### Standardizing a Normal Random Variable
 
-        For any normal random variable $X \sim \mathcal{N}(\mu, \sigma^2)$, we can transform it to the standard normal $Z$ using:
+    For any normal random variable $X \sim \mathcal{N}(\mu, \sigma^2)$, we can transform it to the standard normal $Z$ using:
 
-        $$Z = \frac{X - \mu}{\sigma}$$
+    $$Z = \frac{X - \mu}{\sigma}$$
 
-        Let's see the mathematical derivation:
+    Let's see the mathematical derivation:
 
-        \begin{align*}
-        W &= \frac{X -\mu}{\sigma} && \text{Subtract by $\mu$ and divide by $\sigma$} \\
-          &= \frac{1}{\sigma}X - \frac{\mu}{\sigma} && \text{Use algebra to rewrite the equation}\\
-          &= aX + b && \text{Linear transform where $a = \frac{1}{\sigma}$, $b = -\frac{\mu}{\sigma}$}\\
-          &\sim \mathcal{N}(a\mu + b, a^2\sigma^2) && \text{The linear transform of a Normal is another Normal}\\
-          &\sim \mathcal{N}\left(\frac{\mu}{\sigma} - \frac{\mu}{\sigma}, \frac{\sigma^2}{\sigma^2}\right) && \text{Substitute values for $a$ and $b$}\\
-          &\sim \mathcal{N}(0, 1) && \text{The standard normal}
-        \end{align*}
+    \begin{align*}
+    W &= \frac{X -\mu}{\sigma} && \text{Subtract by $\mu$ and divide by $\sigma$} \\
+      &= \frac{1}{\sigma}X - \frac{\mu}{\sigma} && \text{Use algebra to rewrite the equation}\\
+      &= aX + b && \text{Linear transform where $a = \frac{1}{\sigma}$, $b = -\frac{\mu}{\sigma}$}\\
+      &\sim \mathcal{N}(a\mu + b, a^2\sigma^2) && \text{The linear transform of a Normal is another Normal}\\
+      &\sim \mathcal{N}\left(\frac{\mu}{\sigma} - \frac{\mu}{\sigma}, \frac{\sigma^2}{\sigma^2}\right) && \text{Substitute values for $a$ and $b$}\\
+      &\sim \mathcal{N}(0, 1) && \text{The standard normal}
+    \end{align*}
 
-        This transformation is the foundation for many statistical tests and probability calculations.
-        """
-    )
+    This transformation is the foundation for many statistical tests and probability calculations.
+    """)
     return
 
 
@@ -247,64 +239,62 @@ def _(create_standardization_plot, fig_to_image, mo):
     )
 
     mo.vstack([stand_image, stand_explanation])
-    return stand_explanation, stand_fig, stand_image
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Linear Transformations of Normal Variables
-
-        One useful property of the normal distribution is that linear transformations of normal random variables remain normal.
-
-        If $X \sim \mathcal{N}(\mu, \sigma^2)$ and $Y = aX + b$ (where $a$ and $b$ are constants), then:
-
-        $$Y \sim \mathcal{N}(a\mu + b, a^2\sigma^2)$$
-
-        This means:
-
-        - The mean is transformed by $a\mu + b$
-        - The variance is transformed by $a^2\sigma^2$
-
-        This property is extremely useful in statistics and probability calculations, as it allows us to easily determine the _distribution_ of transformed variables.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Calculating Probabilities with the Normal CDF
+    mo.md(r"""
+    ## Linear Transformations of Normal Variables
 
-        Unlike many other distributions, the normal distribution does not have a closed-form expression for its CDF. However, we can use the standard normal CDF (denoted as $\Phi$) to calculate probabilities.
+    One useful property of the normal distribution is that linear transformations of normal random variables remain normal.
 
-        For any normal random variable $X \sim \mathcal{N}(\mu, \sigma^2)$, the CDF is:
+    If $X \sim \mathcal{N}(\mu, \sigma^2)$ and $Y = aX + b$ (where $a$ and $b$ are constants), then:
 
-        $$F_X(x) = P(X \leq x) = \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+    $$Y \sim \mathcal{N}(a\mu + b, a^2\sigma^2)$$
 
-        Where $\Phi$ is the CDF of the standard normal distribution.
+    This means:
 
-        ### Derivation
+    - The mean is transformed by $a\mu + b$
+    - The variance is transformed by $a^2\sigma^2$
 
-        \begin{align*}
-        F_X(x) &= P(X \leq x) \\
-        &= P\left(\frac{X - \mu}{\sigma} \leq \frac{x - \mu}{\sigma}\right) \\
-        &= P\left(Z \leq \frac{x - \mu}{\sigma}\right) \\
-        &= \Phi\left(\frac{x - \mu}{\sigma}\right)
-        \end{align*}
-
-        Let's look at some examples of calculating probabilities with normal distributions.
-        """
-    )
+    This property is extremely useful in statistics and probability calculations, as it allows us to easily determine the _distribution_ of transformed variables.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""## Examples of Normal Distributions""")
+    mo.md(r"""
+    ## Calculating Probabilities with the Normal CDF
+
+    Unlike many other distributions, the normal distribution does not have a closed-form expression for its CDF. However, we can use the standard normal CDF (denoted as $\Phi$) to calculate probabilities.
+
+    For any normal random variable $X \sim \mathcal{N}(\mu, \sigma^2)$, the CDF is:
+
+    $$F_X(x) = P(X \leq x) = \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+
+    Where $\Phi$ is the CDF of the standard normal distribution.
+
+    ### Derivation
+
+    \begin{align*}
+    F_X(x) &= P(X \leq x) \\
+    &= P\left(\frac{X - \mu}{\sigma} \leq \frac{x - \mu}{\sigma}\right) \\
+    &= P\left(Z \leq \frac{x - \mu}{\sigma}\right) \\
+    &= \Phi\left(\frac{x - \mu}{\sigma}\right)
+    \end{align*}
+
+    Let's look at some examples of calculating probabilities with normal distributions.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ## Examples of Normal Distributions
+    """)
     return
 
 
@@ -340,16 +330,7 @@ def _(create_probability_example, fig_to_image, mo):
     )
 
     mo.vstack([prob_image, prob_explanation])
-    return (
-        default_mu,
-        default_query,
-        default_sigma,
-        ex_z_score,
-        prob_explanation,
-        prob_fig,
-        prob_image,
-        prob_value,
-    )
+    return
 
 
 @app.cell(hide_code=True)
@@ -391,18 +372,7 @@ def _(create_range_probability_example, fig_to_image, mo, stats):
     )
 
     mo.vstack([range_image, range_explanation])
-    return (
-        default_range_lower,
-        default_range_mu,
-        default_range_sigma,
-        default_range_upper,
-        range_explanation,
-        range_fig,
-        range_image,
-        range_prob,
-        range_z_lower,
-        range_z_upper,
-    )
+    return
 
 
 @app.cell(hide_code=True)
@@ -447,42 +417,42 @@ def _(create_voltage_example_visualization, fig_to_image, mo):
     )
 
     mo.vstack([voltage_image, voltage_explanation])
-    return voltage_error_prob, voltage_explanation, voltage_fig, voltage_image
+    return
 
 
 @app.cell(hide_code=True)
 def emirical_rule(mo):
-    mo.md(
-        r"""
-        ## The 68-95-99.7 Rule (Empirical Rule)
+    mo.md(r"""
+    ## The 68-95-99.7 Rule (Empirical Rule)
 
-        One of the most useful properties of the normal distribution is the "[68-95-99.7 rule](https://en.wikipedia.org/wiki/68-95-99.7_rule)," which states that:
+    One of the most useful properties of the normal distribution is the "[68-95-99.7 rule](https://en.wikipedia.org/wiki/68-95-99.7_rule)," which states that:
 
-        - Approximately 68% of the data falls within 1 standard deviation of the mean
-        - Approximately 95% of the data falls within 2 standard deviations of the mean
-        - Approximately 99.7% of the data falls within 3 standard deviations of the mean
+    - Approximately 68% of the data falls within 1 standard deviation of the mean
+    - Approximately 95% of the data falls within 2 standard deviations of the mean
+    - Approximately 99.7% of the data falls within 3 standard deviations of the mean
 
-        Let's verify this with a calculation for the 68% rule:
+    Let's verify this with a calculation for the 68% rule:
 
-        \begin{align}
-        P(\mu - \sigma < X < \mu + \sigma) 
-        &= P(X < \mu + \sigma) - P(X < \mu - \sigma) \\
-        &= \Phi\left(\frac{(\mu + \sigma)-\mu}{\sigma}\right) - \Phi\left(\frac{(\mu - \sigma)-\mu}{\sigma}\right) \\
-        &= \Phi\left(\frac{\sigma}{\sigma}\right) - \Phi\left(\frac{-\sigma}{\sigma}\right) \\
-        &= \Phi(1) - \Phi(-1) \\
-        &\approx 0.8413 - 0.1587 \\
-        &\approx 0.6826 \approx 68.3\%
-        \end{align}
+    \begin{align}
+    P(\mu - \sigma < X < \mu + \sigma)
+    &= P(X < \mu + \sigma) - P(X < \mu - \sigma) \\
+    &= \Phi\left(\frac{(\mu + \sigma)-\mu}{\sigma}\right) - \Phi\left(\frac{(\mu - \sigma)-\mu}{\sigma}\right) \\
+    &= \Phi\left(\frac{\sigma}{\sigma}\right) - \Phi\left(\frac{-\sigma}{\sigma}\right) \\
+    &= \Phi(1) - \Phi(-1) \\
+    &\approx 0.8413 - 0.1587 \\
+    &\approx 0.6826 \approx 68.3\%
+    \end{align}
 
-        This calculation works for any normal distribution, regardless of the values of $\mu$ and $\sigma$!
-        """
-    )
+    This calculation works for any normal distribution, regardless of the values of $\mu$ and $\sigma$!
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""The Cumulative Distribution Function (CDF) gives the probability that a random variable is less than or equal to a specific value. Use the interactive calculator below to compute CDF values for a normal distribution.""")
+    mo.md(r"""
+    The Cumulative Distribution Function (CDF) gives the probability that a random variable is less than or equal to a specific value. Use the interactive calculator below to compute CDF values for a normal distribution.
+    """)
     return
 
 
@@ -554,85 +524,74 @@ def _(
     )
 
     mo.vstack([calc_image, calc_result])
-    return (
-        calc_fig,
-        calc_image,
-        calc_mu,
-        calc_result,
-        calc_sigma,
-        calc_x,
-        calc_z_score,
-        cdf_value,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        Test your knowledge with these true/false questions about normal distributions:
-
-        /// details | For a normal random variable X ~ N(μ, σ²), the probability that X takes on exactly the value μ is highest among all possible values.
-
-        **✅ True**
-
-        While the PDF is indeed highest at x = μ, making this the most likely value in terms of density, remember that for continuous random variables, the probability of any exact value is zero. The statement refers to the density function being maximized at the mean.
-        ///
-
-        /// details | The probability that a normal random variable X equals any specific exact value (e.g., P(X = 3)) is always zero.
-
-        **✅ True**
-
-        For continuous random variables including the normal, the probability of any exact value is zero. Probabilities only make sense for ranges of values, which is why we integrate the PDF over intervals.
-        ///
-
-        /// details | If X ~ N(μ, σ²), then aX + b ~ N(aμ + b, a²σ²) for any constants a and b.
-
-        **✅ True**
-
-        Linear transformations of normal random variables remain normal, with the given transformation of the parameters. This is a key property that makes normal distributions particularly useful.
-        ///
-
-        /// details | If X ~ N(5, 9) and Y ~ N(3, 4) are independent, then X + Y ~ N(8, 5).
-
-        **❌ False**
-
-        While the mean of the sum is indeed the sum of the means (5 + 3 = 8), the variance of the sum is the sum of the variances (9 + 4 = 13), not 5. The correct distribution would be X + Y ~ N(8, 13).
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        We've taken a tour of Normal distributions; probably the most famous probability distribution you'll encounter in statistics. It's that nice bell-shaped curve that shows up everywhere from heights/ weights to memes to measurement errors & stock returns.
+    Test your knowledge with these true/false questions about normal distributions:
 
-        The Normal distribution isn't just pretty — it's incredibly practical. With just two parameters (mean and standard deviation), you can describe complex phenomena and make powerful predictions. Plus, thanks to the Central Limit Theorem, many random processes naturally converge to this distribution, which is why it's so prevalent.
+    /// details | For a normal random variable X ~ N(μ, σ²), the probability that X takes on exactly the value μ is highest among all possible values.
 
-        **What we covered:**
+    **✅ True**
 
-        - The mathematical definition and key properties of Normal random variables
+    While the PDF is indeed highest at x = μ, making this the most likely value in terms of density, remember that for continuous random variables, the probability of any exact value is zero. The statement refers to the density function being maximized at the mean.
+    ///
 
-        - How to transform any Normal distribution to the standard Normal
+    /// details | The probability that a normal random variable X equals any specific exact value (e.g., P(X = 3)) is always zero.
 
-        - Calculating probabilities using the CDF (no more looking up values in those tiny tables in the back of textbooks or Clark's table!)
+    **✅ True**
 
-        Whether you're analyzing data, designing experiments, or building ML models, the concepts we explored provide a solid foundation for working with this fundamental distribution.
-        """
-    )
+    For continuous random variables including the normal, the probability of any exact value is zero. Probabilities only make sense for ranges of values, which is why we integrate the PDF over intervals.
+    ///
+
+    /// details | If X ~ N(μ, σ²), then aX + b ~ N(aμ + b, a²σ²) for any constants a and b.
+
+    **✅ True**
+
+    Linear transformations of normal random variables remain normal, with the given transformation of the parameters. This is a key property that makes normal distributions particularly useful.
+    ///
+
+    /// details | If X ~ N(5, 9) and Y ~ N(3, 4) are independent, then X + Y ~ N(8, 5).
+
+    **❌ False**
+
+    While the mean of the sum is indeed the sum of the means (5 + 3 = 8), the variance of the sum is the sum of the variances (9 + 4 = 13), not 5. The correct distribution would be X + Y ~ N(8, 13).
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Appendix (helper code and functions)""")
+    mo.md(r"""
+    ## Summary
+
+    We've taken a tour of Normal distributions; probably the most famous probability distribution you'll encounter in statistics. It's that nice bell-shaped curve that shows up everywhere from heights/ weights to memes to measurement errors & stock returns.
+
+    The Normal distribution isn't just pretty — it's incredibly practical. With just two parameters (mean and standard deviation), you can describe complex phenomena and make powerful predictions. Plus, thanks to the Central Limit Theorem, many random processes naturally converge to this distribution, which is why it's so prevalent.
+
+    **What we covered:**
+
+    - The mathematical definition and key properties of Normal random variables
+
+    - How to transform any Normal distribution to the standard Normal
+
+    - Calculating probabilities using the CDF (no more looking up values in those tiny tables in the back of textbooks or Clark's table!)
+
+    Whether you're analyzing data, designing experiments, or building ML models, the concepts we explored provide a solid foundation for working with this fundamental distribution.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Appendix (helper code and functions)
+    """)
     return
 
 
@@ -733,7 +692,7 @@ def _(base64, io):
         buf.seek(0)
         img_str = base64.b64encode(buf.getvalue()).decode('utf-8')
         return f"data:image/png;base64,{img_str}"
-    return Figure, fig_to_image
+    return (fig_to_image,)
 
 
 @app.cell(hide_code=True)

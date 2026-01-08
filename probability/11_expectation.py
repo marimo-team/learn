@@ -10,55 +10,49 @@
 
 import marimo
 
-__generated_with = "0.12.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Expectation")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Expectation
+    mo.md(r"""
+    # Expectation
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/expectation/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/expectation/), by Stanford professor Chris Piech._
 
-        Expectations are fascinating — they represent the "center of mass" of a probability distribution. while they're often called "expected values" or "averages," they don't always match our intuition about what's "expected" to happen.
+    Expectations are fascinating — they represent the "center of mass" of a probability distribution. while they're often called "expected values" or "averages," they don't always match our intuition about what's "expected" to happen.
 
-        For me, the most interesting part about expectations is how they quantify what happens "on average" in the long run, even if that average isn't a possible outcome (like expecting 3.5 on a standard die roll).
-        """
-    )
+    For me, the most interesting part about expectations is how they quantify what happens "on average" in the long run, even if that average isn't a possible outcome (like expecting 3.5 on a standard die roll).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Definition of Expectation
+    mo.md(r"""
+    ## Definition of Expectation
 
-        Expectation (written as $E[X]$) is basically the "average outcome" of a random variable, but with a twist - we weight each possible value by how likely it is to occur. I like to think of it as the "center of gravity" for probability.
+    Expectation (written as $E[X]$) is basically the "average outcome" of a random variable, but with a twist - we weight each possible value by how likely it is to occur. I like to think of it as the "center of gravity" for probability.
 
-        $$E[X] = \sum_x x \cdot P(X=x)$$
+    $$E[X] = \sum_x x \cdot P(X=x)$$
 
-        People call this concept by different names - mean, weighted average, center of mass, or 1st moment if you're being fancy. They're all calculated the same way, though: multiply each value by its probability, then add everything up.
-        """
-    )
+    People call this concept by different names - mean, weighted average, center of mass, or 1st moment if you're being fancy. They're all calculated the same way, though: multiply each value by its probability, then add everything up.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Intuition Behind Expectation
+    mo.md(r"""
+    ## Intuition Behind Expectation
 
-        The expected value represents the long-run average value of a random variable over many independent repetitions of an experiment.
+    The expected value represents the long-run average value of a random variable over many independent repetitions of an experiment.
 
-        For example, if you roll a fair six-sided die many times and calculate the average of all rolls, that average will approach the expected value of 3.5 as the number of rolls increases.
+    For example, if you roll a fair six-sided die many times and calculate the average of all rolls, that average will approach the expected value of 3.5 as the number of rolls increases.
 
-        Let's visualize this concept:
-        """
-    )
+    Let's visualize this concept:
+    """)
     return
 
 
@@ -91,12 +85,14 @@ def _(np, plt):
                 arrowprops=dict(facecolor='black', shrink=0.05, width=1.5))
 
     plt.gca()
-    return exp_die_rolls, exp_num_rolls, exp_running_avg
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Properties of Expectation""")
+    mo.md(r"""
+    ## Properties of Expectation
+    """)
     return
 
 
@@ -145,25 +141,23 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Calculating Expectation
+    mo.md(r"""
+    ## Calculating Expectation
 
-        Let's calculate the expected value for some common examples:
+    Let's calculate the expected value for some common examples:
 
-        ### Example 1: Fair Die Roll
+    ### Example 1: Fair Die Roll
 
-        For a fair six-sided die, the PMF is:
+    For a fair six-sided die, the PMF is:
 
-        $$P(X=x) = \frac{1}{6} \text{ for } x \in \{1, 2, 3, 4, 5, 6\}$$
+    $$P(X=x) = \frac{1}{6} \text{ for } x \in \{1, 2, 3, 4, 5, 6\}$$
 
-        The expected value is:
+    The expected value is:
 
-        $$E[X] = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + 3 \cdot \frac{1}{6} + 4 \cdot \frac{1}{6} + 5 \cdot \frac{1}{6} + 6 \cdot \frac{1}{6} = \frac{21}{6} = 3.5$$
+    $$E[X] = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + 3 \cdot \frac{1}{6} + 4 \cdot \frac{1}{6} + 5 \cdot \frac{1}{6} + 6 \cdot \frac{1}{6} = \frac{21}{6} = 3.5$$
 
-        Let's implement this calculation in Python:
-        """
-    )
+    Let's implement this calculation in Python:
+    """)
     return
 
 
@@ -179,18 +173,16 @@ def _():
 
     exp_die_result = calc_expectation_die()
     print(f"Expected value of a fair die roll: {exp_die_result}")
-    return calc_expectation_die, exp_die_result
+    return (exp_die_result,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Example 2: Sum of Two Dice
+    mo.md(r"""
+    ### Example 2: Sum of Two Dice
 
-        Now let's calculate the expected value for the sum of two fair dice. First, we need the PMF:
-        """
-    )
+    Now let's calculate the expected value for the sum of two fair dice. First, we need the PMF:
+    """)
     return
 
 
@@ -210,7 +202,7 @@ def _():
     exp_test_values = [2, 7, 12]
     for exp_test_y in exp_test_values:
         print(f"P(Y = {exp_test_y}) = {pmf_sum_two_dice(exp_test_y)}")
-    return exp_test_values, exp_test_y, pmf_sum_two_dice
+    return (pmf_sum_two_dice,)
 
 
 @app.cell
@@ -239,24 +231,16 @@ def _(pmf_sum_two_dice):
 
     # Verify that this equals 7
     print(f"Is the expected value exactly 7? {abs(exp_sum_result - 7) < 1e-10}")
-    return (
-        calc_expectation_sum_two_dice,
-        exp_direct_calc,
-        exp_direct_calc_rounded,
-        exp_sum_result,
-        exp_sum_result_rounded,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Visualizing Expectation
+    mo.md(r"""
+    ### Visualizing Expectation
 
-        Let's visualize the expectation for the sum of two dice. The expected value is the "center of mass" of the PMF:
-        """
-    )
+    Let's visualize the expectation for the sum of two dice. The expected value is the "center of mass" of the PMF:
+    """)
     return
 
 
@@ -283,18 +267,16 @@ def _(plt, pmf_sum_two_dice):
 
     plt.tight_layout()
     plt.gca()
-    return dice_ax, dice_fig, exp_i, exp_prob, exp_probabilities, exp_y_values
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Demonstrating the Properties of Expectation
+    mo.md(r"""
+    ## Demonstrating the Properties of Expectation
 
-        Let's demonstrate some of these properties with examples:
-        """
-    )
+    Let's demonstrate some of these properties with examples:
+    """)
     return
 
 
@@ -321,25 +303,16 @@ def _(exp_die_result):
 
     # Verify they match
     print(f"Do they match? {abs(prop_expected_using_property - prop_expected_direct) < 1e-10}")
-    return (
-        prop_a,
-        prop_b,
-        prop_expected_direct,
-        prop_expected_direct_rounded,
-        prop_expected_using_property,
-        prop_expected_using_property_rounded,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Law of the Unconscious Statistician (LOTUS)
+    mo.md(r"""
+    ### Law of the Unconscious Statistician (LOTUS)
 
-        Let's use LOTUS to calculate $E[X^2]$ for a die roll, which will be useful when we study variance:
-        """
-    )
+    Let's use LOTUS to calculate $E[X^2]$ for a die roll, which will be useful when we study variance:
+    """)
     return
 
 
@@ -358,38 +331,27 @@ def _():
 
     print(f"E[X^2] for a die roll = {lotus_expected_x_squared_rounded}")
     print(f"(E[X])^2 for a die roll = {expected_x_squared_rounded}")
-    return (
-        expected_x_squared,
-        expected_x_squared_rounded,
-        lotus_die_probs,
-        lotus_die_values,
-        lotus_expected_x_squared,
-        lotus_expected_x_squared_rounded,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        /// Note
-        Note that E[X^2] != (E[X])^2
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Interactive Example
+    mo.md(r"""
+    /// Note
+    Note that E[X^2] != (E[X])^2
+    """)
+    return
 
-        Let's explore how the expected value changes as we adjust the parameters of common probability distributions. This interactive visualization focuses specifically on the relationship between distribution parameters and expected values.
 
-        Use the controls below to select a distribution and adjust its parameters. The graph will show how the expected value changes across a range of parameter values.
-        """
-    )
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Interactive Example
+
+    Let's explore how the expected value changes as we adjust the parameters of common probability distributions. This interactive visualization focuses specifically on the relationship between distribution parameters and expected values.
+
+    Use the controls below to select a distribution and adjust its parameters. The graph will show how the expected value changes across a range of parameter values.
+    """)
     return
 
 
@@ -423,7 +385,9 @@ def _(dist_description):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""### Adjust Parameters""")
+    mo.md("""
+    ### Adjust Parameters
+    """)
     return
 
 
@@ -549,37 +513,16 @@ def _(
 
     plt.tight_layout()
     plt.gca()
-    return (
-        annotation_x,
-        annotation_y,
-        current_expected,
-        current_param,
-        dist_ax,
-        dist_fig,
-        dist_props,
-        expected_values,
-        formula,
-        lambda_max,
-        lambda_min,
-        max_y,
-        n,
-        p_max,
-        p_min,
-        param_values,
-        title,
-        x_label,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Expectation vs. Mode
+    mo.md(r"""
+    ## Expectation vs. Mode
 
-        The expected value (mean) of a random variable is not always the same as its most likely value (mode). Let's explore this with an example:
-        """
-    )
+    The expected value (mean) of a random variable is not always the same as its most likely value (mode). Let's explore this with an example:
+    """)
     return
 
 
@@ -633,94 +576,75 @@ def _(np, plt, stats):
 
     plt.tight_layout()
     plt.gca()
-    return (
-        max_x,
-        mid_x,
-        min_x,
-        skew_ax,
-        skew_expected,
-        skew_expected_rounded,
-        skew_fig,
-        skew_mode,
-        skew_n,
-        skew_p,
-        skew_pmf_values,
-        skew_x_values,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        /// NOTE
-        For the sum of two dice we calculated earlier, we found the expected value to be exactly 7. In that case, 7 also happens to be the mode (most likely outcome) of the distribution. However, this is just a coincidence for this particular example!
-
-        As we can see from the binomial distribution above, the expected value (2.50) and the mode (2) are often different values (this is common in skewed distributions). The expected value represents the "center of mass" of the distribution, while the mode represents the most likely single outcome.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md(r"""
+    /// NOTE
+    For the sum of two dice we calculated earlier, we found the expected value to be exactly 7. In that case, 7 also happens to be the mode (most likely outcome) of the distribution. However, this is just a coincidence for this particular example!
 
-        Choose what you believe are the correct options in the questions below:
-
-        <details>
-        <summary>The expected value of a random variable is always one of the possible values the random variable can take.</summary>
-        ❌ False! The expected value is a weighted average and may not be a value the random variable can actually take. For example, the expected value of a fair die roll is 3.5, which is not a possible outcome.
-        </details>
-
-        <details>
-        <summary>If X and Y are independent random variables, then E[XÂ·Y] = E[X]Â·E[Y].</summary>
-        ✅ True! For independent random variables, the expectation of their product equals the product of their expectations.
-        </details>
-
-        <details>
-        <summary>The expected value of a constant random variable (one that always takes the same value) is that constant.</summary>
-        ✅ True! If X = c with probability 1, then E[X] = c.
-        </details>
-
-        <details>
-        <summary>The expected value of the sum of two random variables is always the sum of their expected values, regardless of whether they are independent.</summary>
-        ✅ True! This is the linearity of expectation property: E[X + Y] = E[X] + E[Y], which holds regardless of dependence.
-        </details>
-        """
-    )
+    As we can see from the binomial distribution above, the expected value (2.50) and the mode (2) are often different values (this is common in skewed distributions). The expected value represents the "center of mass" of the distribution, while the mode represents the most likely single outcome.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Practical Applications of Expectation
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        Expected values show up everywhere - from investment decisions and insurance pricing to machine learning algorithms and game design. Engineers use them to predict system reliability, data scientists to understand customer behavior, and economists to model market outcomes. They're essential for risk assessment in project management and for optimizing resource allocation in operations research.
-        """
-    )
+    Choose what you believe are the correct options in the questions below:
+
+    <details>
+    <summary>The expected value of a random variable is always one of the possible values the random variable can take.</summary>
+    ❌ False! The expected value is a weighted average and may not be a value the random variable can actually take. For example, the expected value of a fair die roll is 3.5, which is not a possible outcome.
+    </details>
+
+    <details>
+    <summary>If X and Y are independent random variables, then E[XÂ·Y] = E[X]Â·E[Y].</summary>
+    ✅ True! For independent random variables, the expectation of their product equals the product of their expectations.
+    </details>
+
+    <details>
+    <summary>The expected value of a constant random variable (one that always takes the same value) is that constant.</summary>
+    ✅ True! If X = c with probability 1, then E[X] = c.
+    </details>
+
+    <details>
+    <summary>The expected value of the sum of two random variables is always the sum of their expected values, regardless of whether they are independent.</summary>
+    ✅ True! This is the linearity of expectation property: E[X + Y] = E[X] + E[Y], which holds regardless of dependence.
+    </details>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Key Takeaways
+    mo.md(r"""
+    ## Practical Applications of Expectation
 
-        Expectation gives us a single value that summarizes a random variable's central tendency - it's the weighted average of all possible outcomes, where the weights are probabilities. The linearity property makes expectations easy to work with, even for complex combinations of random variables. While a PMF gives the complete probability picture, expectation provides an essential summary that helps us make decisions under uncertainty. In our next notebook, we'll explore variance, which measures how spread out a random variable's values are around its expectation.
-        """
-    )
+    Expected values show up everywhere - from investment decisions and insurance pricing to machine learning algorithms and game design. Engineers use them to predict system reliability, data scientists to understand customer behavior, and economists to model market outcomes. They're essential for risk assessment in project management and for optimizing resource allocation in operations research.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""#### Appendix (containing helper code)""")
+    mo.md(r"""
+    ## Key Takeaways
+
+    Expectation gives us a single value that summarizes a random variable's central tendency - it's the weighted average of all possible outcomes, where the weights are probabilities. The linearity property makes expectations easy to work with, even for complex combinations of random variables. While a PMF gives the complete probability picture, expectation provides an essential summary that helps us make decisions under uncertainty. In our next notebook, we'll explore variance, which measures how spread out a random variable's values are around its expectation.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    #### Appendix (containing helper code)
+    """)
     return
 
 
@@ -736,7 +660,7 @@ def _():
     import numpy as np
     from scipy import stats
     import collections
-    return collections, np, plt, stats
+    return np, plt, stats
 
 
 @app.cell(hide_code=True)

@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.11.2"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
@@ -24,43 +24,39 @@ def _():
     import matplotlib.pyplot as plt
     from matplotlib_venn import venn2
     import numpy as np
-    return np, plt, venn2
+    return plt, venn2
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Probability of Or
+    mo.md(r"""
+    # Probability of Or
 
-        When calculating the probability of either one event _or_ another occurring, we need to be careful about how we combine probabilities. The method depends on whether the events can happen together[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/prob_or/).
+    When calculating the probability of either one event _or_ another occurring, we need to be careful about how we combine probabilities. The method depends on whether the events can happen together[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/prob_or/).
 
-        Let's explore how to calculate $P(E \cup F)$, i.e. $P(E \text{ or } F)$, in different scenarios.
-        """
-    )
+    Let's explore how to calculate $P(E \cup F)$, i.e. $P(E \text{ or } F)$, in different scenarios.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Mutually Exclusive Events
+    mo.md(r"""
+    ## Mutually Exclusive Events
 
-        Two events $E$ and $F$ are **mutually exclusive** if they cannot occur simultaneously. 
-        In set notation, this means:
+    Two events $E$ and $F$ are **mutually exclusive** if they cannot occur simultaneously.
+    In set notation, this means:
 
-        $E \cap F = \emptyset$
+    $E \cap F = \emptyset$
 
-        For example:
+    For example:
 
-        - Rolling an even number (2,4,6) vs rolling an odd number (1,3,5)
-        - Drawing a heart vs drawing a spade from a deck
-        - Passing vs failing a test
+    - Rolling an even number (2,4,6) vs rolling an odd number (1,3,5)
+    - Drawing a heart vs drawing a spade from a deck
+    - Passing vs failing a test
 
-        Here's a Python function to check if two sets of outcomes are mutually exclusive:
-        """
-    )
+    Here's a Python function to check if two sets of outcomes are mutually exclusive:
+    """)
     return
 
 
@@ -90,21 +86,19 @@ def _(are_mutually_exclusive, even_numbers, prime_numbers):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Or with Mutually Exclusive Events
+    mo.md(r"""
+    ## Or with Mutually Exclusive Events
 
-        For mutually exclusive events, the probability of either event occurring is simply the sum of their individual probabilities:
+    For mutually exclusive events, the probability of either event occurring is simply the sum of their individual probabilities:
 
-        $P(E \cup F) = P(E) + P(F)$
+    $P(E \cup F) = P(E) + P(F)$
 
-        This extends to multiple events. For $n$ mutually exclusive events $E_1, E_2, \ldots, E_n$:
+    This extends to multiple events. For $n$ mutually exclusive events $E_1, E_2, \ldots, E_n$:
 
-        $P(E_1 \cup E_2 \cup \cdots \cup E_n) = \sum_{i=1}^n P(E_i)$
+    $P(E_1 \cup E_2 \cup \cdots \cup E_n) = \sum_{i=1}^n P(E_i)$
 
-        Let's implement this calculation:
-        """
-    )
+    Let's implement this calculation:
+    """)
     return
 
 
@@ -121,34 +115,28 @@ def _():
     # P(prime) = P(2) + P(3) + P(5)
     p_prime_mutually_exclusive = prob_union_mutually_exclusive([1/6, 1/6, 1/6])
     print(f"P(rolling a prime number) = {p_prime_mutually_exclusive}")
-    return (
-        p_even_mutually_exclusive,
-        p_prime_mutually_exclusive,
-        prob_union_mutually_exclusive,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Or with Non-Mutually Exclusive Events
+    mo.md(r"""
+    ## Or with Non-Mutually Exclusive Events
 
-        When events can occur together, we need to use the **inclusion-exclusion principle**:
+    When events can occur together, we need to use the **inclusion-exclusion principle**:
 
-        $P(E \cup F) = P(E) + P(F) - P(E \cap F)$
+    $P(E \cup F) = P(E) + P(F) - P(E \cap F)$
 
-        Why subtract $P(E \cap F)$? Because when we add $P(E)$ and $P(F)$, we count the overlap twice!
+    Why subtract $P(E \cap F)$? Because when we add $P(E)$ and $P(F)$, we count the overlap twice!
 
-        For example, consider calculating $P(\text{prime or even})$ when rolling a die:
+    For example, consider calculating $P(\text{prime or even})$ when rolling a die:
 
-        - Prime numbers: {2, 3, 5}
-        - Even numbers: {2, 4, 6}
-        - The number 2 is counted twice unless we subtract its probability
+    - Prime numbers: {2, 3, 5}
+    - Even numbers: {2, 4, 6}
+    - The number 2 is counted twice unless we subtract its probability
 
-        Here's how to implement this calculation:
-        """
-    )
+    Here's how to implement this calculation:
+    """)
     return
 
 
@@ -166,40 +154,34 @@ def _():
 
     result = prob_union_general(p_prime_general, p_even_general, p_intersection)
     print(f"P(prime or even) = {p_prime_general} + {p_even_general} - {p_intersection} = {result}")
-    return (
-        p_even_general,
-        p_intersection,
-        p_prime_general,
-        prob_union_general,
-        result,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ### Extension to Three Events
-
-        For three events, the inclusion-exclusion principle becomes:
-
-        $P(E_1 \cup E_2 \cup E_3) = P(E_1) + P(E_2) + P(E_3)$
-        $- P(E_1 \cap E_2) - P(E_1 \cap E_3) - P(E_2 \cap E_3)$
-        $+ P(E_1 \cap E_2 \cap E_3)$
-
-        The pattern is:
-
-        1. Add individual probabilities
-        2. Subtract probabilities of pairs
-        3. Add probability of triple intersection
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Interactive example:""")
+    mo.md(r"""
+    ### Extension to Three Events
+
+    For three events, the inclusion-exclusion principle becomes:
+
+    $P(E_1 \cup E_2 \cup E_3) = P(E_1) + P(E_2) + P(E_3)$
+    $- P(E_1 \cap E_2) - P(E_1 \cap E_3) - P(E_2 \cap E_3)$
+    $+ P(E_1 \cap E_2 \cap E_3)$
+
+    The pattern is:
+
+    1. Add individual probabilities
+    2. Subtract probabilities of pairs
+    3. Add probability of triple intersection
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Interactive example:
+    """)
     return
 
 
@@ -298,57 +280,53 @@ def _(event_type, mo, plt, venn2):
         plt.gcf(),
         mo.md(data["explanation"])
     ])
-    return data, events_data, v
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        Consider rolling a six-sided die. Which of these statements are true?
-
-        <details>
-        <summary>1. P(even or less than 3) = P(even) + P(less than 3)</summary>
-
-        ❌ Incorrect! These events are not mutually exclusive (2 is both even and less than 3).
-        We need to use the inclusion-exclusion principle.
-        </details>
-
-        <details>
-        <summary>2. P(even or greater than 4) = 4/6</summary>
-
-        ✅ Correct! {2,4,6} ∪ {5,6} = {2,4,5,6}, so probability is 4/6.
-        </details>
-
-        <details>
-        <summary>3. P(prime or odd) = 5/6</summary>
-
-        ✅ Correct! {2,3,5} ∪ {1,3,5} = {1,2,3,5}, so probability is 5/6.
-        </details>
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        You've learned:
+    Consider rolling a six-sided die. Which of these statements are true?
 
-        - How to identify mutually exclusive events
-        - The addition rule for mutually exclusive events
-        - The inclusion-exclusion principle for overlapping events
-        - How to extend these concepts to multiple events
+    <details>
+    <summary>1. P(even or less than 3) = P(even) + P(less than 3)</summary>
 
-        In the next lesson, we'll explore **conditional probability** - how the probability 
-        of one event changes when we know another event has occurred.
-        """
-    )
+    ❌ Incorrect! These events are not mutually exclusive (2 is both even and less than 3).
+    We need to use the inclusion-exclusion principle.
+    </details>
+
+    <details>
+    <summary>2. P(even or greater than 4) = 4/6</summary>
+
+    ✅ Correct! {2,4,6} ∪ {5,6} = {2,4,5,6}, so probability is 4/6.
+    </details>
+
+    <details>
+    <summary>3. P(prime or odd) = 5/6</summary>
+
+    ✅ Correct! {2,3,5} ∪ {1,3,5} = {1,2,3,5}, so probability is 5/6.
+    </details>
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ## Summary
+
+    You've learned:
+
+    - How to identify mutually exclusive events
+    - The addition rule for mutually exclusive events
+    - The inclusion-exclusion principle for overlapping events
+    - How to extend these concepts to multiple events
+
+    In the next lesson, we'll explore **conditional probability** - how the probability
+    of one event changes when we know another event has occurred.
+    """)
     return
 
 

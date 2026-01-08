@@ -11,77 +11,69 @@
 
 import marimo
 
-__generated_with = "0.11.20"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Variance")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Variance
+    mo.md(r"""
+    # Variance
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/variance/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/variance/), by Stanford professor Chris Piech._
 
-        In our previous exploration of random variables, we learned about expectation - a measure of central tendency. However, knowing the average value alone doesn't tell us everything about a distribution. Consider these questions:
+    In our previous exploration of random variables, we learned about expectation - a measure of central tendency. However, knowing the average value alone doesn't tell us everything about a distribution. Consider these questions:
 
-        - How spread out are the values around the mean?
-        - How reliable is the expectation as a predictor of individual outcomes?
-        - How much do individual samples typically deviate from the average?
+    - How spread out are the values around the mean?
+    - How reliable is the expectation as a predictor of individual outcomes?
+    - How much do individual samples typically deviate from the average?
 
-        This is where **variance** comes in - it measures the spread or dispersion of a random variable around its expected value.
-        """
-    )
+    This is where **variance** comes in - it measures the spread or dispersion of a random variable around its expected value.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Definition of Variance
+    mo.md(r"""
+    ## Definition of Variance
 
-        The variance of a random variable $X$ with expected value $\mu = E[X]$ is defined as:
+    The variance of a random variable $X$ with expected value $\mu = E[X]$ is defined as:
 
-        $$\text{Var}(X) = E[(X-\mu)^2]$$
+    $$\text{Var}(X) = E[(X-\mu)^2]$$
 
-        This definition captures the average squared deviation from the mean. There's also an equivalent, often more convenient formula:
+    This definition captures the average squared deviation from the mean. There's also an equivalent, often more convenient formula:
 
-        $$\text{Var}(X) = E[X^2] - (E[X])^2$$
+    $$\text{Var}(X) = E[X^2] - (E[X])^2$$
 
-        /// tip
-        The second formula is usually easier to compute, as it only requires calculating $E[X^2]$ and $E[X]$, rather than working with deviations from the mean.
-        """
-    )
+    /// tip
+    The second formula is usually easier to compute, as it only requires calculating $E[X^2]$ and $E[X]$, rather than working with deviations from the mean.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Intuition Through Example
+    mo.md(r"""
+    ## Intuition Through Example
 
-        Let's look at a real-world example that illustrates why variance is important. Consider three different groups of graders evaluating assignments in a massive online course. Each grader has their own "grading distribution" - their pattern of assigning scores to work that deserves a 70/100.
+    Let's look at a real-world example that illustrates why variance is important. Consider three different groups of graders evaluating assignments in a massive online course. Each grader has their own "grading distribution" - their pattern of assigning scores to work that deserves a 70/100.
 
-        The visualization below shows the probability distributions for three types of graders. Try clicking and dragging the blue numbers to adjust the parameters and see how they affect the variance.
-        """
-    )
+    The visualization below shows the probability distributions for three types of graders. Try clicking and dragging the blue numbers to adjust the parameters and see how they affect the variance.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// TIP
-        Try adjusting the blue numbers above to see how:
+    mo.md(r"""
+    /// TIP
+    Try adjusting the blue numbers above to see how:
 
-        - Increasing spread increases variance
-        - The mixture ratio affects how many outliers appear in Grader C's distribution
-        - Changing the true grade shifts all distributions but maintains their relative variances
-        """
-    )
+    - Increasing spread increases variance
+    - The mixture ratio affects how many outliers appear in Grader C's distribution
+    - Changing the true grade shifts all distributions but maintains their relative variances
+    """)
     return
 
 
@@ -165,50 +157,35 @@ def _(
 
     plt.tight_layout()
     plt.gca()
-    return (
-        ax1,
-        ax2,
-        ax3,
-        grader_a,
-        grader_b,
-        grader_c,
-        grader_fig,
-        var_a,
-        var_b,
-        var_c,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        /// note
-        All three distributions have the same expected value (the true grade), but they differ significantly in their spread:
-
-        - **Grader A** has high variance - grades vary widely from the true value
-        - **Grader B** has low variance - grades consistently stay close to the true value
-        - **Grader C** has a mixture distribution - mostly consistent but with occasional extreme values
-
-        This illustrates why variance is crucial: two distributions can have the same mean but behave very differently in practice.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Computing Variance
+    mo.md(r"""
+    /// note
+    All three distributions have the same expected value (the true grade), but they differ significantly in their spread:
 
-        Let's work through some concrete examples to understand how to calculate variance.
+    - **Grader A** has high variance - grades vary widely from the true value
+    - **Grader B** has low variance - grades consistently stay close to the true value
+    - **Grader C** has a mixture distribution - mostly consistent but with occasional extreme values
 
-        ### Example 1: Fair Die Roll
+    This illustrates why variance is crucial: two distributions can have the same mean but behave very differently in practice.
+    """)
+    return
 
-        Consider rolling a fair six-sided die. We'll calculate its variance step by step:
-        """
-    )
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Computing Variance
+
+    Let's work through some concrete examples to understand how to calculate variance.
+
+    ### Example 1: Fair Die Roll
+
+    Consider rolling a fair six-sided die. We'll calculate its variance step by step:
+    """)
     return
 
 
@@ -234,75 +211,62 @@ def _(np):
     print(f"E[X^2] = {expected_square:.2f}")
     print(f"Var(X) = {variance:.2f}")
     print(f"Standard Deviation = {std_dev:.2f}")
-    return (
-        die_probs,
-        die_values,
-        expected_square,
-        expected_value,
-        std_dev,
-        variance,
-    )
+    return die_probs, die_values
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// NOTE
-        For a fair die:
+    mo.md(r"""
+    /// NOTE
+    For a fair die:
 
-        - The expected value (3.50) tells us the average roll
-        - The variance (2.92) tells us how much typical rolls deviate from this average
-        - The standard deviation (1.71) gives us this spread in the original units
-        """
-    )
+    - The expected value (3.50) tells us the average roll
+    - The variance (2.92) tells us how much typical rolls deviate from this average
+    - The standard deviation (1.71) gives us this spread in the original units
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Properties of Variance
+    mo.md(r"""
+    ## Properties of Variance
 
-        Variance has several important properties that make it useful for analyzing random variables:
+    Variance has several important properties that make it useful for analyzing random variables:
 
-        1. **Non-negativity**: $\text{Var}(X) \geq 0$ for any random variable $X$
-        2. **Variance of a constant**: $\text{Var}(c) = 0$ for any constant $c$
-        3. **Scaling**: $\text{Var}(aX) = a^2\text{Var}(X)$ for any constant $a$
-        4. **Translation**: $\text{Var}(X + b) = \text{Var}(X)$ for any constant $b$
-        5. **Independence**: If $X$ and $Y$ are independent, then $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$
+    1. **Non-negativity**: $\text{Var}(X) \geq 0$ for any random variable $X$
+    2. **Variance of a constant**: $\text{Var}(c) = 0$ for any constant $c$
+    3. **Scaling**: $\text{Var}(aX) = a^2\text{Var}(X)$ for any constant $a$
+    4. **Translation**: $\text{Var}(X + b) = \text{Var}(X)$ for any constant $b$
+    5. **Independence**: If $X$ and $Y$ are independent, then $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$
 
-        Let's verify a property with an example.
-        """
-    )
+    Let's verify a property with an example.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Proof of Variance Formula
+    mo.md(r"""
+    ## Proof of Variance Formula
 
-        The equivalence of the two variance formulas is a fundamental result in probability theory. Here's the proof:
+    The equivalence of the two variance formulas is a fundamental result in probability theory. Here's the proof:
 
-        Starting with the definition $\text{Var}(X) = E[(X-\mu)^2]$ where $\mu = E[X]$:
+    Starting with the definition $\text{Var}(X) = E[(X-\mu)^2]$ where $\mu = E[X]$:
 
-        \begin{align}
-        \text{Var}(X) &= E[(X-\mu)^2] \\
-        &= \sum_x(x-\mu)^2P(x) && \text{Definition of Expectation}\\
-        &= \sum_x (x^2 -2\mu x + \mu^2)P(x) && \text{Expanding the square}\\
-        &= \sum_x x^2P(x)- 2\mu \sum_x xP(x) + \mu^2 \sum_x P(x) && \text{Distributing the sum}\\
-        &= E[X^2]- 2\mu E[X] + \mu^2 && \text{Definition of expectation}\\
-        &= E[X^2]- 2(E[X])^2 + (E[X])^2 && \text{Since }\mu = E[X]\\
-        &= E[X^2]- (E[X])^2 && \text{Simplifying}
-        \end{align}
+    \begin{align}
+    \text{Var}(X) &= E[(X-\mu)^2] \\
+    &= \sum_x(x-\mu)^2P(x) && \text{Definition of Expectation}\\
+    &= \sum_x (x^2 -2\mu x + \mu^2)P(x) && \text{Expanding the square}\\
+    &= \sum_x x^2P(x)- 2\mu \sum_x xP(x) + \mu^2 \sum_x P(x) && \text{Distributing the sum}\\
+    &= E[X^2]- 2\mu E[X] + \mu^2 && \text{Definition of expectation}\\
+    &= E[X^2]- 2(E[X])^2 + (E[X])^2 && \text{Since }\mu = E[X]\\
+    &= E[X^2]- (E[X])^2 && \text{Simplifying}
+    \end{align}
 
-        /// tip
-        This proof shows why the formula $\text{Var}(X) = E[X^2] - (E[X])^2$ is so useful - it's much easier to compute $E[X^2]$ and $E[X]$ separately than to work with deviations directly.
-        """
-    )
+    /// tip
+    This proof shows why the formula $\text{Var}(X) = E[X^2] - (E[X])^2$ is so useful - it's much easier to compute $E[X^2]$ and $E[X]$ separately than to work with deviations directly.
+    """)
     return
 
 
@@ -322,7 +286,7 @@ def _(die_probs, die_values, np):
     print(f"Scaled Variance (a={a}): {scaled_var:.2f}")
     print(f"a^2 * Original Variance: {a**2 * original_var:.2f}")
     print(f"Property holds: {abs(scaled_var - a**2 * original_var) < 1e-10}")
-    return a, original_var, scaled_values, scaled_var
+    return
 
 
 @app.cell
@@ -333,23 +297,21 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Standard Deviation
+    mo.md(r"""
+    ## Standard Deviation
 
-        While variance is mathematically convenient, it has one practical drawback: its units are squared. For example, if we're measuring grades (0-100), the variance is in "grade points squared." This makes it hard to interpret intuitively.
+    While variance is mathematically convenient, it has one practical drawback: its units are squared. For example, if we're measuring grades (0-100), the variance is in "grade points squared." This makes it hard to interpret intuitively.
 
-        The **standard deviation**, denoted by $\sigma$ or $\text{SD}(X)$, is the square root of variance:
+    The **standard deviation**, denoted by $\sigma$ or $\text{SD}(X)$, is the square root of variance:
 
-        $$\sigma = \sqrt{\text{Var}(X)}$$
+    $$\sigma = \sqrt{\text{Var}(X)}$$
 
-        /// tip
-        Standard deviation is often more intuitive because it's in the same units as the original data. For a normal distribution, approximately:
-        - 68% of values fall within 1 standard deviation of the mean
-        - 95% of values fall within 2 standard deviations
-        - 99.7% of values fall within 3 standard deviations
-        """
-    )
+    /// tip
+    Standard deviation is often more intuitive because it's in the same units as the original data. For a normal distribution, approximately:
+    - 68% of values fall within 1 standard deviation of the mean
+    - 95% of values fall within 2 standard deviations
+    - 99.7% of values fall within 3 standard deviations
+    """)
     return
 
 
@@ -452,93 +414,80 @@ def _(normal_mean, normal_std, np, plt, stats):
 
     plt.tight_layout()
     plt.gca()
-    return (
-        normal_ax,
-        normal_fig,
-        one_sigma_left,
-        one_sigma_right,
-        three_sigma_left,
-        three_sigma_right,
-        two_sigma_left,
-        two_sigma_right,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        /// tip
-        The interactive visualization above demonstrates how standard deviation (σ) affects the shape of a normal distribution:
-
-        - The **red region** covers μ ± 1σ, containing approximately 68% of the probability
-        - The **green region** covers μ ± 2σ, containing approximately 95% of the probability
-        - The **blue region** covers μ ± 3σ, containing approximately 99.7% of the probability
-
-        This is known as the "68-95-99.7 rule" or the "empirical rule" and is a useful heuristic for understanding the spread of data.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md(r"""
+    /// tip
+    The interactive visualization above demonstrates how standard deviation (σ) affects the shape of a normal distribution:
 
-        Choose what you believe are the correct options in the questions below:
+    - The **red region** covers μ ± 1σ, containing approximately 68% of the probability
+    - The **green region** covers μ ± 2σ, containing approximately 95% of the probability
+    - The **blue region** covers μ ± 3σ, containing approximately 99.7% of the probability
 
-        <details>
-        <summary>The variance of a random variable can be negative.</summary>
-        ❌ False! Variance is defined as an expected value of squared deviations, and squares are always non-negative.
-        </details>
-
-        <details>
-        <summary>If X and Y are independent random variables, then Var(X + Y) = Var(X) + Var(Y).</summary>
-        ✅ True! This is one of the key properties of variance for independent random variables.
-        </details>
-
-        <details>
-        <summary>Multiplying a random variable by 2 multiplies its variance by 2.</summary>
-        ❌ False! Multiplying a random variable by a constant a multiplies its variance by a². So multiplying by 2 multiplies variance by 4.
-        </details>
-
-        <details>
-        <summary>Standard deviation is always equal to the square root of variance.</summary>
-        ✅ True! By definition, standard deviation σ = √Var(X).
-        </details>
-
-        <details>
-        <summary>If Var(X) = 0, then X must be a constant.</summary>
-        ✅ True! Zero variance means there is no spread around the mean, so X can only take one value.
-        </details>
-        """
-    )
+    This is known as the "68-95-99.7 rule" or the "empirical rule" and is a useful heuristic for understanding the spread of data.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Key Takeaways
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        Variance gives us a way to measure how spread out a random variable is around its mean. It's like the "uncertainty" in our expectation - a high variance means individual outcomes can differ widely from what we expect on average.
+    Choose what you believe are the correct options in the questions below:
 
-        Standard deviation brings this measure back to the original units, making it easier to interpret. For grades, a standard deviation of 10 points means typical grades fall within about 10 points of the average.
+    <details>
+    <summary>The variance of a random variable can be negative.</summary>
+    ❌ False! Variance is defined as an expected value of squared deviations, and squares are always non-negative.
+    </details>
 
-        Variance pops up everywhere - from weather forecasts (how reliable is the predicted temperature?) to financial investments (how risky is this stock?) to quality control (how consistent is our manufacturing process?).
+    <details>
+    <summary>If X and Y are independent random variables, then Var(X + Y) = Var(X) + Var(Y).</summary>
+    ✅ True! This is one of the key properties of variance for independent random variables.
+    </details>
 
-        In our next notebook, we'll explore more properties of random variables and see how they combine to form more complex distributions.
-        """
-    )
+    <details>
+    <summary>Multiplying a random variable by 2 multiplies its variance by 2.</summary>
+    ❌ False! Multiplying a random variable by a constant a multiplies its variance by a². So multiplying by 2 multiplies variance by 4.
+    </details>
+
+    <details>
+    <summary>Standard deviation is always equal to the square root of variance.</summary>
+    ✅ True! By definition, standard deviation σ = √Var(X).
+    </details>
+
+    <details>
+    <summary>If Var(X) = 0, then X must be a constant.</summary>
+    ✅ True! Zero variance means there is no spread around the mean, so X can only take one value.
+    </details>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Appendix (containing helper code):""")
+    mo.md(r"""
+    ## Key Takeaways
+
+    Variance gives us a way to measure how spread out a random variable is around its mean. It's like the "uncertainty" in our expectation - a high variance means individual outcomes can differ widely from what we expect on average.
+
+    Standard deviation brings this measure back to the original units, making it easier to interpret. For grades, a standard deviation of 10 points means typical grades fall within about 10 points of the average.
+
+    Variance pops up everywhere - from weather forecasts (how reliable is the predicted temperature?) to financial investments (how risky is this stock?) to quality control (how consistent is our manufacturing process?).
+
+    In our next notebook, we'll explore more properties of random variables and see how they combine to form more complex distributions.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Appendix (containing helper code):
+    """)
     return
 
 

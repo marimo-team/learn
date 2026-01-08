@@ -12,174 +12,162 @@
 
 import marimo
 
-__generated_with = "0.12.0"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Maximum Likelihood Estimation")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Maximum Likelihood Estimation
+    mo.md(r"""
+    # Maximum Likelihood Estimation
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/mle/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/mle/), by Stanford professor Chris Piech._
 
-        Maximum Likelihood Estimation (MLE) is a fundamental method in statistics for estimating parameters of a probability distribution. The central idea is elegantly simple: **choose the parameters that make the observed data most likely**.
+    Maximum Likelihood Estimation (MLE) is a fundamental method in statistics for estimating parameters of a probability distribution. The central idea is elegantly simple: **choose the parameters that make the observed data most likely**.
 
-        In this notebook, we'll try to understand MLE, starting with the core concept of likelihood and how it differs from probability. We'll explore how to formulate MLE problems mathematically and then solve them for various common distributions. Along the way, I've included some interactive visualizations to help build your intuition about these concepts. You'll see how MLE applies to real-world scenarios like linear regression, and hopefully gain a deeper appreciation for why this technique is so widely used in statistics and machine learning. Think of MLE as detective work - we have some evidence (our data) and we're trying to figure out the most plausible explanation (our parameters) for what we've observed.
-        """
-    )
+    In this notebook, we'll try to understand MLE, starting with the core concept of likelihood and how it differs from probability. We'll explore how to formulate MLE problems mathematically and then solve them for various common distributions. Along the way, I've included some interactive visualizations to help build your intuition about these concepts. You'll see how MLE applies to real-world scenarios like linear regression, and hopefully gain a deeper appreciation for why this technique is so widely used in statistics and machine learning. Think of MLE as detective work - we have some evidence (our data) and we're trying to figure out the most plausible explanation (our parameters) for what we've observed.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Likelihood: The Core Concept
+    mo.md(r"""
+    ## Likelihood: The Core Concept
 
-        Before diving into MLE, we need to understand what "likelihood" means in a statistical context.
+    Before diving into MLE, we need to understand what "likelihood" means in a statistical context.
 
-        ### Data and Parameters
+    ### Data and Parameters
 
-        Suppose we have collected some data $X_1, X_2, \ldots, X_n$ that are independent and identically distributed (IID). We assume these data points come from a specific type of distribution (like Normal, Bernoulli, etc.) with unknown parameters $\theta$.
+    Suppose we have collected some data $X_1, X_2, \ldots, X_n$ that are independent and identically distributed (IID). We assume these data points come from a specific type of distribution (like Normal, Bernoulli, etc.) with unknown parameters $\theta$.
 
-        ### What is Likelihood?
+    ### What is Likelihood?
 
-        Likelihood measures how probable our observed data is, given specific values of the parameters $\theta$.
+    Likelihood measures how probable our observed data is, given specific values of the parameters $\theta$.
 
-        /// note
-        **Probability vs. Likelihood**
+    /// note
+    **Probability vs. Likelihood**
 
-        - **Probability**: Given parameters $\theta$, what's the chance of observing data $X$?
-        - **Likelihood**: Given observed data $X$, how likely are different parameter values $\theta$?
-        ///
+    - **Probability**: Given parameters $\theta$, what's the chance of observing data $X$?
+    - **Likelihood**: Given observed data $X$, how likely are different parameter values $\theta$?
+    ///
 
-        To simplify notation, we'll use $f(X=x|\Theta=\theta)$ to represent either the PMF or PDF of our data, conditioned on the parameters.
-        """
-    )
+    To simplify notation, we'll use $f(X=x|\Theta=\theta)$ to represent either the PMF or PDF of our data, conditioned on the parameters.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### The Likelihood Function
+    mo.md(r"""
+    ### The Likelihood Function
 
-        Since we assume our data points are independent, the likelihood of all our data is the product of the likelihoods of each individual data point:
+    Since we assume our data points are independent, the likelihood of all our data is the product of the likelihoods of each individual data point:
 
-        $$L(\theta) = \prod_{i=1}^n f(X_i = x_i|\Theta = \theta)$$
+    $$L(\theta) = \prod_{i=1}^n f(X_i = x_i|\Theta = \theta)$$
 
-        This function $L(\theta)$ gives us the likelihood of observing our entire dataset for different parameter values $\theta$.
+    This function $L(\theta)$ gives us the likelihood of observing our entire dataset for different parameter values $\theta$.
 
-        /// tip
-        **Key Insight**: Different parameter values produce different likelihoods for the same data. Better parameter values will make the observed data more likely.
-        ///
-        """
-    )
+    /// tip
+    **Key Insight**: Different parameter values produce different likelihoods for the same data. Better parameter values will make the observed data more likely.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Maximum Likelihood Estimation
+    mo.md(r"""
+    ## Maximum Likelihood Estimation
 
-        The core idea of MLE is to find the parameter values $\hat{\theta}$ that maximize the likelihood function:
+    The core idea of MLE is to find the parameter values $\hat{\theta}$ that maximize the likelihood function:
 
-        $$\hat{\theta} = \underset{\theta}{\operatorname{argmax}} \, L(\theta)$$
+    $$\hat{\theta} = \underset{\theta}{\operatorname{argmax}} \, L(\theta)$$
 
-        The notation $\hat{\theta}$ represents our best estimate of the true parameters based on the observed data.
+    The notation $\hat{\theta}$ represents our best estimate of the true parameters based on the observed data.
 
-        ### Working with Log-Likelihood
+    ### Working with Log-Likelihood
 
-        In practice, we usually work with the **log-likelihood** instead of the likelihood directly. Since logarithm is a monotonically increasing function, the maximum of $L(\theta)$ occurs at the same value of $\theta$ as the maximum of $\log L(\theta)$.
+    In practice, we usually work with the **log-likelihood** instead of the likelihood directly. Since logarithm is a monotonically increasing function, the maximum of $L(\theta)$ occurs at the same value of $\theta$ as the maximum of $\log L(\theta)$.
 
-        Taking the logarithm transforms our product into a sum, which is much easier to work with:
+    Taking the logarithm transforms our product into a sum, which is much easier to work with:
 
-        $$LL(\theta) = \log L(\theta) = \log \prod_{i=1}^n f(X_i=x_i|\Theta = \theta) = \sum_{i=1}^n \log f(X_i = x_i|\Theta = \theta)$$
+    $$LL(\theta) = \log L(\theta) = \log \prod_{i=1}^n f(X_i=x_i|\Theta = \theta) = \sum_{i=1}^n \log f(X_i = x_i|\Theta = \theta)$$
 
-        /// warning
-        Working with products of many small probabilities can lead to numerical underflow. Taking the logarithm converts these products to sums, which is numerically more stable.
-        ///
-        """
-    )
+    /// warning
+    Working with products of many small probabilities can lead to numerical underflow. Taking the logarithm converts these products to sums, which is numerically more stable.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Finding the Maximum
+    mo.md(r"""
+    ### Finding the Maximum
 
-        To find the values of $\theta$ that maximize the log-likelihood, we typically:
+    To find the values of $\theta$ that maximize the log-likelihood, we typically:
 
-        1. Take the derivative of $LL(\theta)$ with respect to each parameter
-        2. Set each derivative equal to zero
-        3. Solve for the parameters
+    1. Take the derivative of $LL(\theta)$ with respect to each parameter
+    2. Set each derivative equal to zero
+    3. Solve for the parameters
 
-        Let's see this approach in action with some common distributions.
-        """
-    )
+    Let's see this approach in action with some common distributions.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## MLE for Bernoulli Distribution
+    mo.md(r"""
+    ## MLE for Bernoulli Distribution
 
-        > _Note:_ The following derivation is included as reference material. The credit for this mathematical formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/mle/) by Chris Piech.
+    > _Note:_ The following derivation is included as reference material. The credit for this mathematical formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/mle/) by Chris Piech.
 
-        Let's start with a simple example: estimating the parameter $p$ of a Bernoulli distribution.
+    Let's start with a simple example: estimating the parameter $p$ of a Bernoulli distribution.
 
-        ### The Model
+    ### The Model
 
-        A Bernoulli distribution has a single parameter $p$ which represents the probability of success (getting a value of 1). Its probability mass function (PMF) can be written as:
+    A Bernoulli distribution has a single parameter $p$ which represents the probability of success (getting a value of 1). Its probability mass function (PMF) can be written as:
 
-        $$f(x|p) = p^x(1-p)^{1-x}, \quad x \in \{0, 1\}$$
+    $$f(x|p) = p^x(1-p)^{1-x}, \quad x \in \{0, 1\}$$
 
-        This elegant formula works because:
+    This elegant formula works because:
 
-        - When $x = 1$: $f(1|p) = p^1(1-p)^0 = p$
-        - When $x = 0$: $f(0|p) = p^0(1-p)^1 = 1-p$
+    - When $x = 1$: $f(1|p) = p^1(1-p)^0 = p$
+    - When $x = 0$: $f(0|p) = p^0(1-p)^1 = 1-p$
 
-        ### Deriving the MLE
+    ### Deriving the MLE
 
-        Given $n$ independent Bernoulli trials $X_1, X_2, \ldots, X_n$, we want to find the value of $p$ that maximizes the likelihood of our observed data.
+    Given $n$ independent Bernoulli trials $X_1, X_2, \ldots, X_n$, we want to find the value of $p$ that maximizes the likelihood of our observed data.
 
-        Step 1: Write the likelihood function
-        $$L(p) = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}$$
+    Step 1: Write the likelihood function
+    $$L(p) = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}$$
 
-        Step 2: Take the logarithm to get the log-likelihood
-        $$\begin{align*}
-        LL(p) &= \sum_{i=1}^n \log(p^{x_i}(1-p)^{1-x_i}) \\
-        &= \sum_{i=1}^n \left[x_i \log(p) + (1-x_i)\log(1-p)\right] \\
-        &= \left(\sum_{i=1}^n x_i\right) \log(p) + \left(n - \sum_{i=1}^n x_i\right) \log(1-p) \\
-        &= Y\log(p) + (n-Y)\log(1-p)
-        \end{align*}$$
+    Step 2: Take the logarithm to get the log-likelihood
+    $$\begin{align*}
+    LL(p) &= \sum_{i=1}^n \log(p^{x_i}(1-p)^{1-x_i}) \\
+    &= \sum_{i=1}^n \left[x_i \log(p) + (1-x_i)\log(1-p)\right] \\
+    &= \left(\sum_{i=1}^n x_i\right) \log(p) + \left(n - \sum_{i=1}^n x_i\right) \log(1-p) \\
+    &= Y\log(p) + (n-Y)\log(1-p)
+    \end{align*}$$
 
-        where $Y = \sum_{i=1}^n x_i$ is the total number of successes.
+    where $Y = \sum_{i=1}^n x_i$ is the total number of successes.
 
-        Step 3: Find the value of $p$ that maximizes $LL(p)$ by setting the derivative to zero
-        $$\begin{align*}
-        \frac{d\,LL(p)}{dp} &= \frac{Y}{p} - \frac{n-Y}{1-p} = 0 \\
-        \frac{Y}{p} &= \frac{n-Y}{1-p} \\
-        Y(1-p) &= p(n-Y) \\
-        Y - Yp &= pn - pY \\
-        Y &= pn \\
-        \hat{p} &= \frac{Y}{n} = \frac{\sum_{i=1}^n x_i}{n}
-        \end{align*}$$
+    Step 3: Find the value of $p$ that maximizes $LL(p)$ by setting the derivative to zero
+    $$\begin{align*}
+    \frac{d\,LL(p)}{dp} &= \frac{Y}{p} - \frac{n-Y}{1-p} = 0 \\
+    \frac{Y}{p} &= \frac{n-Y}{1-p} \\
+    Y(1-p) &= p(n-Y) \\
+    Y - Yp &= pn - pY \\
+    Y &= pn \\
+    \hat{p} &= \frac{Y}{n} = \frac{\sum_{i=1}^n x_i}{n}
+    \end{align*}$$
 
-        /// tip
-        The MLE for the parameter $p$ in a Bernoulli distribution is simply the **sample mean** - the proportion of successes in our data!
-        ///
-        """
-    )
+    /// tip
+    The MLE for the parameter $p$ in a Bernoulli distribution is simply the **sample mean** - the proportion of successes in our data!
+    ///
+    """)
     return
 
 
@@ -262,86 +250,66 @@ def _(generate_button, mo, np, plt, sample_size_slider, true_p_slider):
         bernoulli_fig,
         bernoulli_explanation
     ])
-    return (
-        bernoulli_Y,
-        bernoulli_ax1,
-        bernoulli_ax2,
-        bernoulli_button_value,
-        bernoulli_count,
-        bernoulli_data,
-        bernoulli_explanation,
-        bernoulli_fig,
-        bernoulli_i,
-        bernoulli_idx,
-        bernoulli_ll_values,
-        bernoulli_n,
-        bernoulli_p,
-        bernoulli_p_hat,
-        bernoulli_p_values,
-        bernoulli_true_p,
-        bernoulli_y_counts,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## MLE for Normal Distribution
+    mo.md(r"""
+    ## MLE for Normal Distribution
 
-        Next, let's look at a more complex example: estimating the parameters $\mu$ and $\sigma^2$ of a Normal distribution.
+    Next, let's look at a more complex example: estimating the parameters $\mu$ and $\sigma^2$ of a Normal distribution.
 
-        ### The Model
+    ### The Model
 
-        A Normal (Gaussian) distribution has two parameters:
-        - $\mu$: the mean
-        - $\sigma^2$: the variance
+    A Normal (Gaussian) distribution has two parameters:
+    - $\mu$: the mean
+    - $\sigma^2$: the variance
 
-        Its probability density function (PDF) is:
+    Its probability density function (PDF) is:
 
-        $$f(x|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
+    $$f(x|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$$
 
-        ### Deriving the MLE
+    ### Deriving the MLE
 
-        Given $n$ independent samples $X_1, X_2, \ldots, X_n$ from a Normal distribution, we want to find the values of $\mu$ and $\sigma^2$ that maximize the likelihood of our observed data.
+    Given $n$ independent samples $X_1, X_2, \ldots, X_n$ from a Normal distribution, we want to find the values of $\mu$ and $\sigma^2$ that maximize the likelihood of our observed data.
 
-        Step 1: Write the likelihood function
-        $$L(\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$$
+    Step 1: Write the likelihood function
+    $$L(\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$$
 
-        Step 2: Take the logarithm to get the log-likelihood
-        $$\begin{align*}
-        LL(\mu, \sigma^2) &= \log\prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right) \\
-        &= \sum_{i=1}^n \log\left[\frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)\right] \\
-        &= \sum_{i=1}^n \left[-\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x_i - \mu)^2}{2\sigma^2}\right] \\
-        &= -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
-        \end{align*}$$
+    Step 2: Take the logarithm to get the log-likelihood
+    $$\begin{align*}
+    LL(\mu, \sigma^2) &= \log\prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right) \\
+    &= \sum_{i=1}^n \log\left[\frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)\right] \\
+    &= \sum_{i=1}^n \left[-\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x_i - \mu)^2}{2\sigma^2}\right] \\
+    &= -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
+    \end{align*}$$
 
-        Step 3: Find the values of $\mu$ and $\sigma^2$ that maximize $LL(\mu, \sigma^2)$ by setting the partial derivatives to zero.
+    Step 3: Find the values of $\mu$ and $\sigma^2$ that maximize $LL(\mu, \sigma^2)$ by setting the partial derivatives to zero.
 
-        For $\mu$:
-        $$\begin{align*}
-        \frac{\partial LL(\mu, \sigma^2)}{\partial \mu} &= \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0 \\
-        \sum_{i=1}^n (x_i - \mu) &= 0 \\
-        \sum_{i=1}^n x_i &= n\mu \\
-        \hat{\mu} &= \frac{1}{n}\sum_{i=1}^n x_i
-        \end{align*}$$
+    For $\mu$:
+    $$\begin{align*}
+    \frac{\partial LL(\mu, \sigma^2)}{\partial \mu} &= \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0 \\
+    \sum_{i=1}^n (x_i - \mu) &= 0 \\
+    \sum_{i=1}^n x_i &= n\mu \\
+    \hat{\mu} &= \frac{1}{n}\sum_{i=1}^n x_i
+    \end{align*}$$
 
-        For $\sigma^2$:
-        $$\begin{align*}
-        \frac{\partial LL(\mu, \sigma^2)}{\partial \sigma^2} &= -\frac{n}{2\sigma^2} + \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i - \mu)^2 = 0 \\
-        \frac{n}{2\sigma^2} &= \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i - \mu)^2 \\
-        n\sigma^2 &= \sum_{i=1}^n (x_i - \mu)^2 \\
-        \hat{\sigma}^2 &= \frac{1}{n}\sum_{i=1}^n (x_i - \hat{\mu})^2
-        \end{align*}$$
+    For $\sigma^2$:
+    $$\begin{align*}
+    \frac{\partial LL(\mu, \sigma^2)}{\partial \sigma^2} &= -\frac{n}{2\sigma^2} + \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i - \mu)^2 = 0 \\
+    \frac{n}{2\sigma^2} &= \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i - \mu)^2 \\
+    n\sigma^2 &= \sum_{i=1}^n (x_i - \mu)^2 \\
+    \hat{\sigma}^2 &= \frac{1}{n}\sum_{i=1}^n (x_i - \hat{\mu})^2
+    \end{align*}$$
 
-        /// tip
-        The MLE for a Normal distribution gives us:
+    /// tip
+    The MLE for a Normal distribution gives us:
 
-        - $\hat{\mu}$ = sample mean
-        - $\hat{\sigma}^2$ = sample variance (using $n$ in the denominator, not $n-1$)
-        ///
-        """
-    )
+    - $\hat{\mu}$ = sample mean
+    - $\hat{\sigma}^2$ = sample variance (using $n$ in the denominator, not $n-1$)
+    ///
+    """)
     return
 
 
@@ -457,99 +425,68 @@ def _(
         normal_fig,
         normal_explanation
     ])
-    return (
-        normal_ax1,
-        normal_ax2,
-        normal_bins,
-        normal_button_value,
-        normal_contour,
-        normal_data,
-        normal_explanation,
-        normal_fig,
-        normal_i,
-        normal_j,
-        normal_ll,
-        normal_ll_grid,
-        normal_mle_pdf,
-        normal_mu,
-        normal_mu_grid,
-        normal_mu_hat,
-        normal_mu_range,
-        normal_n,
-        normal_sigma,
-        normal_sigma2_hat,
-        normal_sigma_grid,
-        normal_sigma_hat,
-        normal_sigma_range,
-        normal_true_mu,
-        normal_true_pdf,
-        normal_true_sigma,
-        normal_true_var,
-        normal_x,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## MLE for Linear Regression
+    mo.md(r"""
+    ## MLE for Linear Regression
 
-        Now let's look at a more practical example: using MLE to derive linear regression.
+    Now let's look at a more practical example: using MLE to derive linear regression.
 
-        ### The Model
+    ### The Model
 
-        Consider a model where:
-        - We have pairs of observations $(X_1, Y_1), (X_2, Y_2), \ldots, (X_n, Y_n)$
-        - The relationship between $X$ and $Y$ follows: $Y = \theta X + Z$
-        - $Z \sim N(0, \sigma^2)$ is random noise
-        - Our goal is to estimate the parameter $\theta$
+    Consider a model where:
+    - We have pairs of observations $(X_1, Y_1), (X_2, Y_2), \ldots, (X_n, Y_n)$
+    - The relationship between $X$ and $Y$ follows: $Y = \theta X + Z$
+    - $Z \sim N(0, \sigma^2)$ is random noise
+    - Our goal is to estimate the parameter $\theta$
 
-        This means that for a given $X_i$, the conditional distribution of $Y_i$ is:
+    This means that for a given $X_i$, the conditional distribution of $Y_i$ is:
 
-        $$Y_i | X_i \sim N(\theta X_i, \sigma^2)$$
+    $$Y_i | X_i \sim N(\theta X_i, \sigma^2)$$
 
-        ### Deriving the MLE
+    ### Deriving the MLE
 
-        Step 1: Write the likelihood function for each data point $(X_i, Y_i)$
-        $$f(Y_i | X_i, \theta) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right)$$
+    Step 1: Write the likelihood function for each data point $(X_i, Y_i)$
+    $$f(Y_i | X_i, \theta) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right)$$
 
-        Step 2: Write the likelihood for all data
-        $$\begin{align*}
-        L(\theta) &= \prod_{i=1}^n f(Y_i, X_i | \theta) \\
-        &= \prod_{i=1}^n f(Y_i | X_i, \theta) \cdot f(X_i)
-        \end{align*}$$
+    Step 2: Write the likelihood for all data
+    $$\begin{align*}
+    L(\theta) &= \prod_{i=1}^n f(Y_i, X_i | \theta) \\
+    &= \prod_{i=1}^n f(Y_i | X_i, \theta) \cdot f(X_i)
+    \end{align*}$$
 
-        Since $f(X_i)$ doesn't depend on $\theta$, we can simplify:
-        $$L(\theta) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right) \cdot f(X_i)$$
+    Since $f(X_i)$ doesn't depend on $\theta$, we can simplify:
+    $$L(\theta) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right) \cdot f(X_i)$$
 
-        Step 3: Take the logarithm to get the log-likelihood
-        $$\begin{align*}
-        LL(\theta) &= \log \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right) \cdot f(X_i) \\
-        &= \sum_{i=1}^n \log\left[\frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right)\right] + \sum_{i=1}^n \log f(X_i) \\
-        &= -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (Y_i - \theta X_i)^2 + \sum_{i=1}^n \log f(X_i)
-        \end{align*}$$
+    Step 3: Take the logarithm to get the log-likelihood
+    $$\begin{align*}
+    LL(\theta) &= \log \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right) \cdot f(X_i) \\
+    &= \sum_{i=1}^n \log\left[\frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(Y_i - \theta X_i)^2}{2\sigma^2}\right)\right] + \sum_{i=1}^n \log f(X_i) \\
+    &= -\frac{n}{2} \log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (Y_i - \theta X_i)^2 + \sum_{i=1}^n \log f(X_i)
+    \end{align*}$$
 
-        Step 4: Since we only care about maximizing with respect to $\theta$, we can drop terms that don't contain $\theta$:
-        $$\hat{\theta} = \underset{\theta}{\operatorname{argmax}} \left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n (Y_i - \theta X_i)^2 \right]$$
+    Step 4: Since we only care about maximizing with respect to $\theta$, we can drop terms that don't contain $\theta$:
+    $$\hat{\theta} = \underset{\theta}{\operatorname{argmax}} \left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n (Y_i - \theta X_i)^2 \right]$$
 
-        This is equivalent to:
-        $$\hat{\theta} = \underset{\theta}{\operatorname{argmin}} \sum_{i=1}^n (Y_i - \theta X_i)^2$$
+    This is equivalent to:
+    $$\hat{\theta} = \underset{\theta}{\operatorname{argmin}} \sum_{i=1}^n (Y_i - \theta X_i)^2$$
 
-        Step 5: Find the value of $\theta$ that minimizes the sum of squared errors by setting the derivative to zero:
-        $$\begin{align*}
-        \frac{d}{d\theta} \sum_{i=1}^n (Y_i - \theta X_i)^2 &= 0 \\
-        \sum_{i=1}^n -2X_i(Y_i - \theta X_i) &= 0 \\
-        \sum_{i=1}^n X_i Y_i - \theta X_i^2 &= 0 \\
-        \sum_{i=1}^n X_i Y_i &= \theta \sum_{i=1}^n X_i^2 \\
-        \hat{\theta} &= \frac{\sum_{i=1}^n X_i Y_i}{\sum_{i=1}^n X_i^2}
-        \end{align*}$$
+    Step 5: Find the value of $\theta$ that minimizes the sum of squared errors by setting the derivative to zero:
+    $$\begin{align*}
+    \frac{d}{d\theta} \sum_{i=1}^n (Y_i - \theta X_i)^2 &= 0 \\
+    \sum_{i=1}^n -2X_i(Y_i - \theta X_i) &= 0 \\
+    \sum_{i=1}^n X_i Y_i - \theta X_i^2 &= 0 \\
+    \sum_{i=1}^n X_i Y_i &= \theta \sum_{i=1}^n X_i^2 \\
+    \hat{\theta} &= \frac{\sum_{i=1}^n X_i Y_i}{\sum_{i=1}^n X_i^2}
+    \end{align*}$$
 
-        /// tip
-        **Key Insight**: MLE for this simple linear model gives us the least squares estimator! This is an important connection between MLE and regression.
-        ///
-        """
-    )
+    /// tip
+    **Key Insight**: MLE for this simple linear model gives us the least squares estimator! This is an important connection between MLE and regression.
+    ///
+    """)
     return
 
 
@@ -657,38 +594,16 @@ def _(
         linear_fig,
         linear_explanation
     ])
-    return (
-        linear_X,
-        linear_Y,
-        linear_Z,
-        linear_ax1,
-        linear_ax2,
-        linear_button_value,
-        linear_explanation,
-        linear_fig,
-        linear_i,
-        linear_ll_values,
-        linear_n,
-        linear_noise_sigma,
-        linear_sse_values,
-        linear_theta,
-        linear_theta_hat,
-        linear_theta_range,
-        linear_true_theta,
-        linear_x_line,
-        linear_y_pred,
-    )
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Interactive Concept: Density/Mass Functions vs. Likelihood
+    mo.md(r"""
+    ## Interactive Concept: Density/Mass Functions vs. Likelihood
 
-        To better understand the distinction between likelihood and density/mass functions, let's create an interactive visualization. This concept is crucial for understanding why MLE works.
-        """
-    )
+    To better understand the distinction between likelihood and density/mass functions, let's create an interactive visualization. This concept is crucial for understanding why MLE works.
+    """)
     return
 
 
@@ -940,135 +855,103 @@ def _(concept_dist_type, mo, np, perspective_selector, plt, stats):
         concept_fig,
         concept_explanation
     ])
-    return (
-        concept_ax,
-        concept_colors,
-        concept_data,
-        concept_data_point,
-        concept_data_points,
-        concept_dist_type_value,
-        concept_explanation,
-        concept_fig,
-        concept_highlight_lambdas,
-        concept_highlight_ps,
-        concept_highlight_xs,
-        concept_i,
-        concept_lam,
-        concept_lambda_values,
-        concept_like_val,
-        concept_likelihood,
-        concept_mu,
-        concept_mus,
-        concept_p,
-        concept_p_values,
-        concept_pdf,
-        concept_pmf_values,
-        concept_prob,
-        concept_sigma,
-        concept_view_mode,
-        concept_x,
-        concept_x_values,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        Which of the following statements about Maximum Likelihood Estimation are correct? Click each statement to check your answer.
-
-        /// details | Probability and likelihood have different interpretations: probability measures the chance of data given parameters, while likelihood measures how likely parameters are given data.
-        ✅ **Correct!** 
-
-        Probability measures how likely it is to observe particular data when we know the parameters. Likelihood measures how likely particular parameter values are, given observed data.
-
-        Mathematically, probability is $P(X=x|\theta)$ while likelihood is $L(\theta|X=x)$.
-        ///
-
-        /// details | We use log-likelihood instead of likelihood because it's mathematically simpler and numerically more stable.
-        ✅ **Correct!**
-
-        We work with log-likelihood for several reasons:
-        1. It converts products into sums, which is easier to work with mathematically
-        2. It avoids numerical underflow when multiplying many small probabilities
-        3. Logarithm is a monotonically increasing function, so the maximum of the likelihood occurs at the same parameter values as the maximum of the log-likelihood
-        ///
-
-        /// details | For a Bernoulli distribution, the MLE for parameter p is the sample mean of the observations.
-        ✅ **Correct!**
-
-        For a Bernoulli distribution with parameter $p$, given $n$ independent samples $X_1, X_2, \ldots, X_n$, the MLE estimator is:
-
-        $$\hat{p} = \frac{\sum_{i=1}^n X_i}{n}$$
-
-        This is simply the sample mean, or the proportion of successes (1s) in the data.
-        ///
-
-        /// details | For a Normal distribution, MLE gives unbiased estimates for both mean and variance parameters.
-        ❌ **Incorrect.**
-
-        While the MLE for the mean ($\hat{\mu} = \frac{1}{n}\sum_{i=1}^n X_i$) is unbiased, the MLE for variance:
-
-        $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
-
-        is a biased estimator. It uses $n$ in the denominator rather than $n-1$ used in the unbiased estimator.
-        ///
-
-        /// details | MLE estimators are always unbiased regardless of the distribution.
-        ❌ **Incorrect.**
-
-        MLE is not always unbiased, though it often is asymptotically unbiased (meaning the bias approaches zero as the sample size increases).
-
-        A notable example is the MLE estimator for the variance of a Normal distribution:
-        $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
-
-        This estimator is biased, which is why we often use the unbiased estimator:
-        $$s^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
-
-        Despite occasional bias, MLE estimators have many desirable properties, including consistency and asymptotic efficiency.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        Maximum Likelihood Estimation really is one of those elegant ideas that sits at the core of modern statistics. When you get down to it, MLE is just about finding the most plausible explanation for the data we've observed. It's like being a detective - you have some clues (your data), and you're trying to piece together the most likely story (your parameters) that explains them.
+    Which of the following statements about Maximum Likelihood Estimation are correct? Click each statement to check your answer.
 
-        We've seen how this works with different distributions. For the Bernoulli, it simply gives us the sample proportion. For the Normal, it gives us the sample mean and a slightly biased estimate of variance. And for linear regression, it provides a mathematical justification for the least squares method that everyone learns in basic stats classes.
+    /// details | Probability and likelihood have different interpretations: probability measures the chance of data given parameters, while likelihood measures how likely parameters are given data.
+    ✅ **Correct!**
 
-        What makes MLE so useful in practice is that it tends to give us estimates with good properties. As you collect more data, the estimates generally get closer to the true values (consistency) and do so efficiently. That's why MLE is everywhere in statistics and machine learning - from simple regression models to complex neural networks.
+    Probability measures how likely it is to observe particular data when we know the parameters. Likelihood measures how likely particular parameter values are, given observed data.
 
-        The most important takeaway? Next time you're fitting a model to data, remember that you're not just following a recipe - you're finding the parameters that make your observed data most likely to have occurred. That's the essence of statistical inference.
-        """
-    )
+    Mathematically, probability is $P(X=x|\theta)$ while likelihood is $L(\theta|X=x)$.
+    ///
+
+    /// details | We use log-likelihood instead of likelihood because it's mathematically simpler and numerically more stable.
+    ✅ **Correct!**
+
+    We work with log-likelihood for several reasons:
+    1. It converts products into sums, which is easier to work with mathematically
+    2. It avoids numerical underflow when multiplying many small probabilities
+    3. Logarithm is a monotonically increasing function, so the maximum of the likelihood occurs at the same parameter values as the maximum of the log-likelihood
+    ///
+
+    /// details | For a Bernoulli distribution, the MLE for parameter p is the sample mean of the observations.
+    ✅ **Correct!**
+
+    For a Bernoulli distribution with parameter $p$, given $n$ independent samples $X_1, X_2, \ldots, X_n$, the MLE estimator is:
+
+    $$\hat{p} = \frac{\sum_{i=1}^n X_i}{n}$$
+
+    This is simply the sample mean, or the proportion of successes (1s) in the data.
+    ///
+
+    /// details | For a Normal distribution, MLE gives unbiased estimates for both mean and variance parameters.
+    ❌ **Incorrect.**
+
+    While the MLE for the mean ($\hat{\mu} = \frac{1}{n}\sum_{i=1}^n X_i$) is unbiased, the MLE for variance:
+
+    $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
+
+    is a biased estimator. It uses $n$ in the denominator rather than $n-1$ used in the unbiased estimator.
+    ///
+
+    /// details | MLE estimators are always unbiased regardless of the distribution.
+    ❌ **Incorrect.**
+
+    MLE is not always unbiased, though it often is asymptotically unbiased (meaning the bias approaches zero as the sample size increases).
+
+    A notable example is the MLE estimator for the variance of a Normal distribution:
+    $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
+
+    This estimator is biased, which is why we often use the unbiased estimator:
+    $$s^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \hat{\mu})^2$$
+
+    Despite occasional bias, MLE estimators have many desirable properties, including consistency and asymptotic efficiency.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Further Reading
+    mo.md(r"""
+    ## Summary
 
-        If you're curious to dive deeper into this topic, check out "Statistical Inference" by Casella and Berger - it's the classic text that many statisticians learned from. For a more machine learning angle, Bishop's "Pattern Recognition and Machine Learning" shows how MLE connects to more advanced topics like EM algorithms and Bayesian methods.
+    Maximum Likelihood Estimation really is one of those elegant ideas that sits at the core of modern statistics. When you get down to it, MLE is just about finding the most plausible explanation for the data we've observed. It's like being a detective - you have some clues (your data), and you're trying to piece together the most likely story (your parameters) that explains them.
 
-        Beyond the basics we've covered, you might explore Bayesian estimation (which incorporates prior knowledge), Fisher Information (which tells us how precisely we can estimate parameters), or the EM algorithm (for when we have missing data or latent variables). Each of these builds on the foundation of likelihood that we've established here.
-        """
-    )
+    We've seen how this works with different distributions. For the Bernoulli, it simply gives us the sample proportion. For the Normal, it gives us the sample mean and a slightly biased estimate of variance. And for linear regression, it provides a mathematical justification for the least squares method that everyone learns in basic stats classes.
+
+    What makes MLE so useful in practice is that it tends to give us estimates with good properties. As you collect more data, the estimates generally get closer to the true values (consistency) and do so efficiently. That's why MLE is everywhere in statistics and machine learning - from simple regression models to complex neural networks.
+
+    The most important takeaway? Next time you're fitting a model to data, remember that you're not just following a recipe - you're finding the parameters that make your observed data most likely to have occurred. That's the essence of statistical inference.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Appendix (helper functions and imports)""")
+    mo.md(r"""
+    ## Further Reading
+
+    If you're curious to dive deeper into this topic, check out "Statistical Inference" by Casella and Berger - it's the classic text that many statisticians learned from. For a more machine learning angle, Bishop's "Pattern Recognition and Machine Learning" shows how MLE connects to more advanced topics like EM algorithms and Bayesian methods.
+
+    Beyond the basics we've covered, you might explore Bayesian estimation (which incorporates prior knowledge), Fisher Information (which tells us how precisely we can estimate parameters), or the EM algorithm (for when we have missing data or latent variables). Each of these builds on the foundation of likelihood that we've established here.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Appendix (helper functions and imports)
+    """)
     return
 
 
@@ -1092,7 +975,7 @@ def _():
 
     # Set a nice style for matplotlib
     plt.style.use('seaborn-v0_8-darkgrid')
-    return cm, go, np, pl, plt, stats
+    return np, plt, stats
 
 
 @app.cell(hide_code=True)

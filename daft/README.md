@@ -1,3 +1,8 @@
+---
+title: Readme
+marimo-version: 0.18.4
+---
+
 # Learn Daft
 
 _🚧 This collection is a work in progress. Please help us add notebooks!_

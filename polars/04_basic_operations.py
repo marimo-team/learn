@@ -8,7 +8,7 @@
 
 import marimo
 
-__generated_with = "0.11.13"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
@@ -20,14 +20,12 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Basic operations on data
-        _By [Joram Mutenge](https://www.udemy.com/user/joram-mutenge/)._
+    mo.md(r"""
+    # Basic operations on data
+    _By [Joram Mutenge](https://www.udemy.com/user/joram-mutenge/)._
 
-        In this notebook, you'll learn how to perform arithmetic operations, comparisons, and conditionals on a Polars dataframe. We'll work with a DataFrame that tracks software usage by year, categorized as either Vintage (old) or Modern (new).
-        """
-    )
+    In this notebook, you'll learn how to perform arithmetic operations, comparisons, and conditionals on a Polars dataframe. We'll work with a DataFrame that tracks software usage by year, categorized as either Vintage (old) or Modern (new).
+    """)
     return
 
 
@@ -107,13 +105,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Arithmetic
-        ### Addition
-        Let's add 42 users to each piece of software. This means adding 42 to each value under **users**.
-        """
-    )
+    mo.md(r"""
+    ## Arithmetic
+    ### Addition
+    Let's add 42 users to each piece of software. This means adding 42 to each value under **users**.
+    """)
     return
 
 
@@ -125,7 +121,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Another way to perform the above operation is using the built-in function.""")
+    mo.md(r"""
+    Another way to perform the above operation is using the built-in function.
+    """)
     return
 
 
@@ -137,12 +135,10 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Subtraction
-        Let's subtract 42 users to each piece of software.
-        """
-    )
+    mo.md(r"""
+    ### Subtraction
+    Let's subtract 42 users to each piece of software.
+    """)
     return
 
 
@@ -154,7 +150,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Alternatively, you could subtract like this:""")
+    mo.md(r"""
+    Alternatively, you could subtract like this:
+    """)
     return
 
 
@@ -166,12 +164,10 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Division
-        Suppose the **users** values are inflated, we can reduce them by dividing by 1000. Here's how to do it.
-        """
-    )
+    mo.md(r"""
+    ### Division
+    Suppose the **users** values are inflated, we can reduce them by dividing by 1000. Here's how to do it.
+    """)
     return
 
 
@@ -183,7 +179,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Or we could do it with a built-in expression.""")
+    mo.md(r"""
+    Or we could do it with a built-in expression.
+    """)
     return
 
 
@@ -195,7 +193,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""If we didn't care about the remainder after division (i.e remove numbers after decimal point) we could do it like this.""")
+    mo.md(r"""
+    If we didn't care about the remainder after division (i.e remove numbers after decimal point) we could do it like this.
+    """)
     return
 
 
@@ -207,12 +207,10 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Multiplication
-        Let's pretend the *user* values are deflated and increase them by multiplying by 100.
-        """
-    )
+    mo.md(r"""
+    ### Multiplication
+    Let's pretend the *user* values are deflated and increase them by multiplying by 100.
+    """)
     return
 
 
@@ -224,7 +222,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Polars also has a built-in function for multiplication.""")
+    mo.md(r"""
+    Polars also has a built-in function for multiplication.
+    """)
     return
 
 
@@ -236,7 +236,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""So far, we've only modified the values in an existing column. Let's create a column **decade** that will represent the years as decades. Thus 1985 will be 1980 and 2008 will be 2000.""")
+    mo.md(r"""
+    So far, we've only modified the values in an existing column. Let's create a column **decade** that will represent the years as decades. Thus 1985 will be 1980 and 2008 will be 2000.
+    """)
     return
 
 
@@ -248,7 +250,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We could create a new column another way as follows:""")
+    mo.md(r"""
+    We could create a new column another way as follows:
+    """)
     return
 
 
@@ -260,16 +264,14 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        **Tip**  
-        Polars encounrages you to perform your operations as a chain. This enables you to take advantage of the query optimizer. We'll build upon the above code as a chain.
+    mo.md(r"""
+    **Tip**
+    Polars encounrages you to perform your operations as a chain. This enables you to take advantage of the query optimizer. We'll build upon the above code as a chain.
 
-        ## Comparison
-        ### Equal
-        Let's get all the software categorized as Vintage.
-        """
-    )
+    ## Comparison
+    ### Equal
+    Let's get all the software categorized as Vintage.
+    """)
     return
 
 
@@ -284,7 +286,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We could also do a double comparison. VisiCal is the only software that's vintage and in the decade 1970s. Let's perform this comparison operation.""")
+    mo.md(r"""
+    We could also do a double comparison. VisiCal is the only software that's vintage and in the decade 1970s. Let's perform this comparison operation.
+    """)
     return
 
 
@@ -300,13 +304,11 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        We could also do this comparison in one line, if readability is not a concern
+    mo.md(r"""
+    We could also do this comparison in one line, if readability is not a concern
 
-        **Notice** that we must enclose the two expressions between the `&` with parenthesis.
-        """
-    )
+    **Notice** that we must enclose the two expressions between the `&` with parenthesis.
+    """)
     return
 
 
@@ -321,7 +323,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We can also use the built-in function for equal to comparisons.""")
+    mo.md(r"""
+    We can also use the built-in function for equal to comparisons.
+    """)
     return
 
 
@@ -336,12 +340,10 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Not equal
-        We can also compare if something is `not` equal to something. In this case, category is not vintage.
-        """
-    )
+    mo.md(r"""
+    ### Not equal
+    We can also compare if something is `not` equal to something. In this case, category is not vintage.
+    """)
     return
 
 
@@ -356,7 +358,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Or with the built-in function.""")
+    mo.md(r"""
+    Or with the built-in function.
+    """)
     return
 
 
@@ -371,7 +375,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Or if you want to be extra clever, you can use the negation symbol `~` used in logic.""")
+    mo.md(r"""
+    Or if you want to be extra clever, you can use the negation symbol `~` used in logic.
+    """)
     return
 
 
@@ -386,12 +392,10 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Greater than
-        Let's get the software where the year is greater than 2008 from the above dataframe.
-        """
-    )
+    mo.md(r"""
+    ### Greater than
+    Let's get the software where the year is greater than 2008 from the above dataframe.
+    """)
     return
 
 
@@ -407,7 +411,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Or if we wanted the year 2008 to be included, we could use great or equal to.""")
+    mo.md(r"""
+    Or if we wanted the year 2008 to be included, we could use great or equal to.
+    """)
     return
 
 
@@ -423,7 +429,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We could do the previous two operations with built-in functions. Here's with greater than.""")
+    mo.md(r"""
+    We could do the previous two operations with built-in functions. Here's with greater than.
+    """)
     return
 
 
@@ -439,7 +447,9 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""And here's with greater or equal to""")
+    mo.md(r"""
+    And here's with greater or equal to
+    """)
     return
 
 
@@ -455,14 +465,12 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        **Note**: For "less than", and "less or equal to" you can use the operators `<` or `<=`. Alternatively, you can use built-in functions `lt` or `le` respectively.
+    mo.md(r"""
+    **Note**: For "less than", and "less or equal to" you can use the operators `<` or `<=`. Alternatively, you can use built-in functions `lt` or `le` respectively.
 
-        ### Is between
-        Polars also allows us to filter between a range of values. Let's get the modern software were the year is between 2013 and 2016. This is inclusive on both ends (i.e. both years are part of the result).
-        """
-    )
+    ### Is between
+    Polars also allows us to filter between a range of values. Let's get the modern software were the year is between 2013 and 2016. This is inclusive on both ends (i.e. both years are part of the result).
+    """)
     return
 
 
@@ -478,14 +486,12 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Or operator
-        If we only want either one of the conditions in the comparison to be met, we could use `|`, which is the `or` operator.
+    mo.md(r"""
+    ### Or operator
+    If we only want either one of the conditions in the comparison to be met, we could use `|`, which is the `or` operator.
 
-        Let's get software that is either modern or used in the decade 1980s.
-        """
-    )
+    Let's get software that is either modern or used in the decade 1980s.
+    """)
     return
 
 
@@ -500,14 +506,12 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Conditionals
-        Polars also allows you create new columns based on a condition. Let's create a column *status* that will indicate if the software is "discontinued" or "in use".
+    mo.md(r"""
+    ## Conditionals
+    Polars also allows you create new columns based on a condition. Let's create a column *status* that will indicate if the software is "discontinued" or "in use".
 
-        Here's a list of products that are no longer in use.
-        """
-    )
+    Here's a list of products that are no longer in use.
+    """)
     return
 
 
@@ -519,7 +523,9 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Here's how we can get a dataframe of the products that are discontinued.""")
+    mo.md(r"""
+    Here's how we can get a dataframe of the products that are discontinued.
+    """)
     return
 
 
@@ -534,7 +540,9 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now, let's create the **status** column.""")
+    mo.md(r"""
+    Now, let's create the **status** column.
+    """)
     return
 
 
@@ -553,12 +561,10 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Unique counts
-        Sometimes you may want to see only the unique values in a column. Let's check the unique decades we have in our DataFrame.
-        """
-    )
+    mo.md(r"""
+    ## Unique counts
+    Sometimes you may want to see only the unique values in a column. Let's check the unique decades we have in our DataFrame.
+    """)
     return
 
 
@@ -578,7 +584,9 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Finally, let's find out the number of software used in each decade.""")
+    mo.md(r"""
+    Finally, let's find out the number of software used in each decade.
+    """)
     return
 
 
@@ -598,7 +606,9 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We could also rewrite the above code as follows:""")
+    mo.md(r"""
+    We could also rewrite the above code as follows:
+    """)
     return
 
 
@@ -618,7 +628,9 @@ def _(df, discontinued_list, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Hopefully, we've picked your interest to try out Polars the next time you analyze your data.""")
+    mo.md(r"""
+    Hopefully, we've picked your interest to try out Polars the next time you analyze your data.
+    """)
     return
 
 

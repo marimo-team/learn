@@ -14,41 +14,37 @@
 
 import marimo
 
-__generated_with = "0.14.12"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Working with Apache Arrow
     *By [Thomas Liang](https://github.com/thliang01)*
     #
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        [Apache Arrow](https://arrow.apache.org/) is a multi-language toolbox for building high performance applications that process and transport large data sets. It is designed to both improve the performance of analytical algorithms and the efficiency of moving data from one system or programming language to another.
+    mo.md(r"""
+    [Apache Arrow](https://arrow.apache.org/) is a multi-language toolbox for building high performance applications that process and transport large data sets. It is designed to both improve the performance of analytical algorithms and the efficiency of moving data from one system or programming language to another.
 
-        A critical component of Apache Arrow is its in-memory columnar format, a standardized, language-agnostic specification for representing structured, table-like datasets in-memory. This data format has a rich data type system (included nested and user-defined data types) designed to support the needs of analytic database systems, data frame libraries, and more.
+    A critical component of Apache Arrow is its in-memory columnar format, a standardized, language-agnostic specification for representing structured, table-like datasets in-memory. This data format has a rich data type system (included nested and user-defined data types) designed to support the needs of analytic database systems, data frame libraries, and more.
 
-        DuckDB has native support for Apache Arrow, which is an in-memory columnar data format. This allows for efficient data transfer between DuckDB and other Arrow-compatible systems, such as Polars and Pandas (via PyArrow).
+    DuckDB has native support for Apache Arrow, which is an in-memory columnar data format. This allows for efficient data transfer between DuckDB and other Arrow-compatible systems, such as Polars and Pandas (via PyArrow).
 
-        In this notebook, we'll explore how to:
+    In this notebook, we'll explore how to:
 
-        - Create an Arrow table from a DuckDB query.
-        - Load an Arrow table into DuckDB.
-        - Convert between DuckDB, Arrow, and Polars/Pandas DataFrames.
-        - Combining data from multiple sources
-        - Performance benefits
-        """
-    )
+    - Create an Arrow table from a DuckDB query.
+    - Load an Arrow table into DuckDB.
+    - Convert between DuckDB, Arrow, and Polars/Pandas DataFrames.
+    - Combining data from multiple sources
+    - Performance benefits
+    """)
     return
 
 
@@ -71,23 +67,21 @@ def _(mo):
             (5, 'Eve', 40, 'London');
         """
     )
-    return (users,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 1. Creating an Arrow Table from a DuckDB Query
+    mo.md(r"""
+    ## 1. Creating an Arrow Table from a DuckDB Query
 
-        You can directly fetch the results of a DuckDB query as an Apache Arrow table using the `.arrow()` method on the query result.
-        """
-    )
+    You can directly fetch the results of a DuckDB query as an Apache Arrow table using the `.arrow()` method on the query result.
+    """)
     return
 
 
 @app.cell
-def _(mo, users):
+def _(mo):
     users_arrow_table = mo.sql(  # type: ignore
         """
         SELECT * FROM users WHERE age > 30;
@@ -98,7 +92,9 @@ def _(mo, users):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""The `.arrow()` method returns a `pyarrow.Table` object. We can inspect its schema:""")
+    mo.md(r"""
+    The `.arrow()` method returns a `pyarrow.Table` object. We can inspect its schema:
+    """)
     return
 
 
@@ -110,13 +106,11 @@ def _(users_arrow_table):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 2. Loading an Arrow Table into DuckDB
+    mo.md(r"""
+    ## 2. Loading an Arrow Table into DuckDB
 
-        You can also register an existing Arrow table (or a Polars/Pandas DataFrame, which uses Arrow under the hood) directly with DuckDB. This allows you to query the in-memory data without any copying, which is highly efficient.
-        """
-    )
+    You can also register an existing Arrow table (or a Polars/Pandas DataFrame, which uses Arrow under the hood) directly with DuckDB. This allows you to query the in-memory data without any copying, which is highly efficient.
+    """)
     return
 
 
@@ -129,17 +123,19 @@ def _(pa):
         'age': [22, 45],
         'city': ['Berlin', 'Tokyo']
     })
-    return (new_data,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now, we can query this Arrow table `new_data` directly from SQL by embedding it in the query.""")
+    mo.md(r"""
+    Now, we can query this Arrow table `new_data` directly from SQL by embedding it in the query.
+    """)
     return
 
 
 @app.cell
-def _(mo, new_data):
+def _(mo):
     mo.sql(
         f"""
         SELECT name, age, city
@@ -152,19 +148,19 @@ def _(mo, new_data):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 3. Convert between DuckDB, Arrow, and Polars/Pandas DataFrames.
+    mo.md(r"""
+    ## 3. Convert between DuckDB, Arrow, and Polars/Pandas DataFrames.
 
-        The real power of DuckDB's Arrow integration comes from its seamless interoperability with data frame libraries like Polars and Pandas. Because they all share the Arrow in-memory format, conversions are often zero-copy and extremely fast.
-        """
-    )
+    The real power of DuckDB's Arrow integration comes from its seamless interoperability with data frame libraries like Polars and Pandas. Because they all share the Arrow in-memory format, conversions are often zero-copy and extremely fast.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### From DuckDB to Polars/Pandas""")
+    mo.md(r"""
+    ### From DuckDB to Polars/Pandas
+    """)
     return
 
 
@@ -186,7 +182,9 @@ def _(users_arrow_table):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### From Polars/Pandas to DuckDB""")
+    mo.md(r"""
+    ### From Polars/Pandas to DuckDB
+    """)
     return
 
 
@@ -199,17 +197,19 @@ def _(pl):
         "price": [1200.00, 25.50, 75.00]
     })
     polars_df
-    return (polars_df,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now we can query this Polars DataFrame directly in DuckDB:""")
+    mo.md(r"""
+    Now we can query this Polars DataFrame directly in DuckDB:
+    """)
     return
 
 
 @app.cell
-def _(mo, polars_df):
+def _(mo):
     # Query the Polars DataFrame directly in DuckDB
     mo.sql(
         f"""
@@ -224,7 +224,9 @@ def _(mo, polars_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Similarly, we can query a Pandas DataFrame:""")
+    mo.md(r"""
+    Similarly, we can query a Pandas DataFrame:
+    """)
     return
 
 
@@ -238,11 +240,11 @@ def _(pd):
         "order_date": pd.to_datetime(['2024-01-15', '2024-01-16', '2024-01-16', '2024-01-17'])
     })
     pandas_df
-    return (pandas_df,)
+    return
 
 
 @app.cell
-def _(mo, pandas_df):
+def _(mo):
     # Query the Pandas DataFrame in DuckDB
     mo.sql(
         f"""
@@ -257,18 +259,16 @@ def _(mo, pandas_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 4. Advanced Example: Combining Multiple Data Sources
+    mo.md(r"""
+    ## 4. Advanced Example: Combining Multiple Data Sources
 
-        One of the most powerful features is the ability to join data from different sources (DuckDB tables, Arrow tables, Polars/Pandas DataFrames) in a single query:
-        """
-    )
+    One of the most powerful features is the ability to join data from different sources (DuckDB tables, Arrow tables, Polars/Pandas DataFrames) in a single query:
+    """)
     return
 
 
 @app.cell
-def _(mo, pandas_df, polars_df, users):
+def _(mo):
     # Join the DuckDB users table with the Polars products DataFrame and Pandas orders DataFrame
     result = mo.sql(
         f"""
@@ -291,27 +291,28 @@ def _(mo, pandas_df, polars_df, users):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 5. Performance Benefits of Arrow Integration
+    mo.md(r"""
+    ## 5. Performance Benefits of Arrow Integration
 
-        The zero-copy integration between DuckDB and Apache Arrow delivers significant performance and memory benefits. This seamless integration enables:
+    The zero-copy integration between DuckDB and Apache Arrow delivers significant performance and memory benefits. This seamless integration enables:
 
-        ### Key Benefits:
+    ### Key Benefits:
 
-        - **Memory Efficiency**: Arrow's columnar format uses 20-40% less memory than traditional DataFrames through compact columnar representation and better compression ratios
-        - **Zero-Copy Operations**: Data can be shared between DuckDB and Arrow-compatible systems (Polars, Pandas) without any data copying, eliminating redundant memory usage
-        - **Query Performance**: 2-10x faster queries compared to traditional approaches that require data copying
-        - **Larger-than-Memory Analysis**: Both DuckDB and Arrow-compatible libraries support streaming query results, allowing you to execute queries on data larger than available memory by processing data in batches.
-        - **Advanced Query Optimization**: DuckDB's optimizer can push down filters and projections directly into Arrow scans, reading only relevant columns and partitions 
-        Let's demonstrate these benefits with concrete examples:
-        """
-    )
+    - **Memory Efficiency**: Arrow's columnar format uses 20-40% less memory than traditional DataFrames through compact columnar representation and better compression ratios
+    - **Zero-Copy Operations**: Data can be shared between DuckDB and Arrow-compatible systems (Polars, Pandas) without any data copying, eliminating redundant memory usage
+    - **Query Performance**: 2-10x faster queries compared to traditional approaches that require data copying
+    - **Larger-than-Memory Analysis**: Both DuckDB and Arrow-compatible libraries support streaming query results, allowing you to execute queries on data larger than available memory by processing data in batches.
+    - **Advanced Query Optimization**: DuckDB's optimizer can push down filters and projections directly into Arrow scans, reading only relevant columns and partitions
+    Let's demonstrate these benefits with concrete examples:
+    """)
     return
+
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Memory Efficiency Demonstration""")
+    mo.md(r"""
+    ### Memory Efficiency Demonstration
+    """)
     return
 
 
@@ -352,18 +353,22 @@ def _(pd, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Performance Comparison: Arrow vs Non-Arrow Approaches""")
+    mo.md(r"""
+    ### Performance Comparison: Arrow vs Non-Arrow Approaches
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Let's compare three approaches for the same analytical query:""")
+    mo.md(r"""
+    Let's compare three approaches for the same analytical query:
+    """)
     return
 
 
 @app.cell
-def _(duckdb, mo, pandas_data, polars_data, time):
+def _(duckdb, mo, pandas_data, time):
     # Test query: group by category and calculate aggregations
     query = """
     SELECT 
@@ -425,14 +430,16 @@ def _(duckdb, mo, pandas_data, polars_data, time):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""### Visualizing the Performance Difference""")
+    mo.md(r"""
+    ### Visualizing the Performance Difference
+    """)
     return
 
 
 @app.cell
 def _(approach1_time, approach2_time, approach3_time, mo, pl):
     import altair as alt
-    
+
     # Create a bar chart showing the performance comparison
     performance_data = pl.DataFrame({
         "Approach": ["Traditional\n(Copy to DuckDB)", "Pandas\nGroupBy", "Arrow-based\n(Zero-copy)"],
@@ -450,27 +457,30 @@ def _(approach1_time, approach2_time, approach3_time, mo, pl):
         width=400,
         height=300
     )
-    
+
     # Display using marimo's altair_chart UI element
     mo.ui.altair_chart(chart)
-    return alt, chart, performance_data
-
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""### Complex Query Performance""")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Let's test a more complex query with joins and window functions:""")
+    mo.md(r"""
+    ### Complex Query Performance
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Let's test a more complex query with joins and window functions:
+    """)
     return
 
 
 @app.cell
-def _(mo, pl, polars_data, time):
+def _(mo, pl, time):
     # Create additional datasets for join operations
     categories_df = pl.DataFrame({
         "category": [f"cat_{i}" for i in range(100)],
@@ -510,23 +520,21 @@ def _(mo, pl, polars_data, time):
     print(f"Complex query with joins and window functions completed in {complex_query_time:.3f} seconds")
 
     complex_result
-    return (categories_df,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Memory Efficiency During Operations
 
     Let's demonstrate how Arrow's zero-copy operations save memory during data transformations:
-    """
-    )
+    """)
     return
 
 
 @app.cell
-def _(polars_data, time):
+def _(polars_data, psutil, time):
     import os
     import pyarrow.compute as pc  # Add this import
 
@@ -558,7 +566,7 @@ def _(polars_data, time):
 
     copy_ops_time = time.time() - latest_start_time
     memory_after_copy = process.memory_info().rss / 1024 / 1024  # MB
- 
+
     print("Memory Usage Comparison:")
     print(f"Initial memory: {memory_before:.2f} MB")
     print(f"After Arrow operations: {memory_after_arrow:.2f} MB (diff: +{memory_after_arrow - memory_before:.2f} MB)")
@@ -567,14 +575,12 @@ def _(polars_data, time):
     print(f"Arrow operations: {arrow_ops_time:.3f} seconds")
     print(f"Copy operations: {copy_ops_time:.3f} seconds")
     print(f"Speedup: {copy_ops_time/arrow_ops_time:.1f}x")
-    return pc
-
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Summary
 
     In this notebook, we've explored:
@@ -590,8 +596,7 @@ def _(mo):
         - **Better scalability**: Can handle larger datasets within the same memory constraints
 
     The seamless integration between DuckDB and Arrow-compatible systems makes it easy to work with data across different tools while maintaining high performance and memory efficiency.
-    """
-    )
+    """)
     return
 
 
@@ -604,7 +609,7 @@ def _():
     import duckdb
     import sqlglot
     import psutil
-    return duckdb, mo, pa, pd, pl
+    return duckdb, mo, pa, pd, pl, psutil
 
 
 if __name__ == "__main__":

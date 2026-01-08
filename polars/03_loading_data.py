@@ -14,14 +14,13 @@
 
 import marimo
 
-__generated_with = "0.15.2"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Loading Data
 
     _By [etrotta](https://github.com/etrotta)._
@@ -29,8 +28,7 @@ def _(mo):
     This tutorial covers how to load data of varying formats and from different sources using [polars](https://docs.pola.rs/).
 
     It includes examples of how to load and write to a variety of formats, shows how to convert data from other libraries to support formats not supported directly by polars, includes relevant links for users that need to connect with external sources, and explains how to deal with custom formats via plugins.
-    """
-    )
+    """)
     return
 
 
@@ -80,12 +78,10 @@ def _(mo, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Parquet
     Parquet is a popular format for storing tabular data based on the Arrow memory spec, it is a great default and you'll find a lot of datasets already using it in sites like HuggingFace
-    """
-    )
+    """)
     return
 
 
@@ -100,14 +96,12 @@ def _(df, folder, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## CSV
     A classic and common format that has been widely used for decades.
 
     The API is almost identical to Parquet - You can just replace `parquet` by `csv` and it will work with the default settings, but polars also allows for you to customize some settings such as the delimiter and quoting rules.
-    """
-    )
+    """)
     return
 
 
@@ -123,8 +117,7 @@ def _(df, folder, lz, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## JSON
 
     JavaScript Object Notation is somewhat commonly used for storing unstructed data, and extremely commonly used for API responses.
@@ -138,8 +131,7 @@ def _(mo):
         Polars supports Lists with variable length, Arrays with fixed length, and Structs with well defined fields, but not mappings with arbitrary keys.
 
         You might want to transform data by unnesting structs and exploding lists after loading from complex JSON files.
-    """
-    )
+    """)
     return
 
 
@@ -163,8 +155,7 @@ def _(df, folder, lz, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Databases
 
     Polars doesn't supports any databases _directly_, but rather uses other libraries as Engines. Reading and writing to databases using polars methods does not supports Lazy execution, but you may pass an SQL Query for the database to pre-filter the data before reaches polars. See the [User Guide](https://docs.pola.rs/user-guide/io/database)  for more details.
@@ -172,8 +163,7 @@ def _(mo):
     You can also use other libraries with [arrow support](#arrow-support) or [polars plugins](#plugin-support) to read from databases before loading into polars, some of which support lazy reading.
 
     Using the Arrow Database Connectivity SQLite support as an example:
-    """
-    )
+    """)
     return
 
 
@@ -190,43 +180,37 @@ def _(df, folder, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Excel
 
     From a performance perspective, we recommend using other formats if possible, such as Parquet or CSV files.
 
     Similarly to Databases, polars doesn't supports it natively but rather uses other libraries as Engines. See the [User Guide](https://docs.pola.rs/user-guide/io/excel) if you need to use it.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Others natively supported
 
     If you understood the above examples, then all other formats should feel familiar - the core API is the same for all formats, `read` and `write` for the Eager API or `scan` and `sink` for the lazy API.
 
     See https://docs.pola.rs/api/python/stable/reference/io.html for the full list of formats natively supported by Polars
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Arrow Support
 
     You can convert Arrow compatible data from other libraries such as `pandas`, `duckdb` or `pyarrow` to polars DataFrames and vice-versa, much of the time without even having to copy data.
 
     This allows for you to use other libraries to load data in formats not support by polars, then convert the dataframe in-memory to polars.
-    """
-    )
+    """)
     return
 
 
@@ -241,13 +225,11 @@ def _(df, folder, pd, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Plugin Support
 
     You can also write [IO Plugins](https://docs.pola.rs/user-guide/plugins/io_plugins/) for Polars in order to support any format you need, or use other libraries that support polars via their own plugins such as DuckDB.
-    """
-    )
+    """)
     return
 
 
@@ -261,8 +243,7 @@ def _(duckdb, folder):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Creating your own Plugin
 
     The simplest form of plugins are essentially generators that yield DataFrames.
@@ -273,12 +254,11 @@ def _(mo):
 
     - You must use `register_io_source` for polars to create the LazyFrame which will consume the Generator
     - You are expected to provide a Schema before the Generator starts
-    - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function 
+    - - For many use cases the Plugin may be able to infer it, but you could also pass it explicitly to the plugin function
     - Ideally you should parse some of the filters and column selectors to avoid unnecessary work, but it is possible to delegate that to polars after loading the data in order to keep it simpler (at the cost of efficiency)
 
     Efficiently parsing the filter expressions is out of the scope for this notebook.
-    """
-    )
+    """)
     return
 
 
@@ -351,8 +331,7 @@ def _(Iterator, get_positional_names, itertools, pl, register_io_source):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### DuckDB
 
     As demonstrated above, in addition to Arrow interoperability support, [DuckDB](https://duckdb.org/) also has added support for loading query results into a polars DataFrame or LazyFrame via a polars plugin.
@@ -363,8 +342,7 @@ def _(mo):
     - https://duckdb.org/docs/stable/guides/python/polars.html
 
     You can learn more about DuckDB in the marimo course about it as well, including Marimo SQL related features
-    """
-    )
+    """)
     return
 
 
@@ -398,16 +376,14 @@ def _(duckdb_conn, duckdb_query):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Hive Partitions
 
     There is also support for [Hive](https://docs.pola.rs/user-guide/io/hive/) partitioned data, but parts of the API are still unstable (may change in future polars versions
     ).
 
     Even without using partitions, many methods also support glob patterns to read multiple files in the same folder such as `scan_csv(folder / "*.csv")`
-    """
-    )
+    """)
     return
 
 
@@ -422,28 +398,24 @@ def _(df, folder, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Reading from the Cloud
 
-    Polars also has support for reading public and private datasets from multiple websites 
+    Polars also has support for reading public and private datasets from multiple websites
     and cloud storage solutions.
 
     If you must (re)use the same file many times in the same machine you may want to manually download it then load from your local file system instead to avoid re-downloading though, or download and write to disk only if the file does not exists.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Arbitrary web sites
 
     You can load files from nearly any website just by using a HTTPS URL, as long as it is not locked behind authorization.
-    """
-    )
+    """)
     return
 
 
@@ -455,15 +427,13 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Hugging Face & Kaggle Datasets
 
     Look for polars inside of dropdowns such as "Use this dataset" in Hugging Face or "Code" in Kaggle, and oftentimes you'll get a snippet to load data directly into a dataframe you can use
 
     Read more: [Hugging Face](https://docs.pola.rs/user-guide/io/hugging-face/), [Kaggle](https://github.com/Kaggle/kagglehub/blob/main/README.md#kaggledatasetadapterpolars)
-    """
-    )
+    """)
     return
 
 
@@ -475,15 +445,13 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Cloud Storage - AWS S3, Azure Blob Storage, Google Cloud Storage
 
     The API is the same for all three storage providers, check the [User Guide](https://docs.pola.rs/user-guide/io/cloud-storage/) if you need of any of them.
 
     Runnable examples are not included in this Notebook as it would require setting up authentication, but the disabled cell below shows an example using Azure.
-    """
-    )
+    """)
     return
 
 
@@ -510,13 +478,11 @@ def _(adlfs, df, os, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Multiplexing
 
     You can also split a query into multiple sinks via [multiplexing](https://docs.pola.rs/user-guide/lazy/multiplexing/), to avoid reading multiple times, repeating the same operations for each sink or collecting intermediary results into memory.
-    """
-    )
+    """)
     return
 
 
@@ -540,13 +506,11 @@ def _(folder, lz, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Async Execution
 
     Polars also has experimental support for running lazy queries in `async` mode, letting you `await` operations inside of async functions.
-    """
-    )
+    """)
     return
 
 
@@ -566,27 +530,23 @@ async def _(folder, lz, pl, sinks):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Conclusion
     As you have seen, polars makes it easy to work with a variety of formats and different data sources.
 
     From natively supported formats such as Parquet and CSV files, to using other libraries as an intermediary for XML or geospatial data, and plugins for newly emerging or proprietary formats, as long as your data can fit in a table then odds are you can turn it into a polars DataFrame.
 
     Combined with loading directly from remote sources, including public data platforms such as Hugging Face and Kaggle as well as private data in your cloud, you can import datasets for almost anything you can imagine.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Utilities
     Imports, utility functions and alike used through the Notebook
-    """
-    )
+    """)
     return
 
 

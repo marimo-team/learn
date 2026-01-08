@@ -7,102 +7,98 @@
 
 import marimo
 
-__generated_with = "0.12.8"
+__generated_with = "0.18.4"
 app = marimo.App(app_title="Category Theory and Functors")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Category Theory and Functors
+    mo.md("""
+    # Category Theory and Functors
 
-        In this notebook, you will learn:
+    In this notebook, you will learn:
 
-        * Why `length` is a *functor* from the category of `list concatenation` to the category of `integer addition`
-        * How to *lift* an ordinary function into a specific *computational context*
-        * How to write an *adapter* between two categories
+    * Why `length` is a *functor* from the category of `list concatenation` to the category of `integer addition`
+    * How to *lift* an ordinary function into a specific *computational context*
+    * How to write an *adapter* between two categories
 
-        In short, a mathematical functor is a **mapping** between two categories in category theory. In practice, a functor represents a type that can be mapped over.
+    In short, a mathematical functor is a **mapping** between two categories in category theory. In practice, a functor represents a type that can be mapped over.
 
-        /// admonition | Intuitions 
+    /// admonition | Intuitions
 
-        - A simple intuition is that a `Functor` represents a **container** of values, along with the ability to apply a function uniformly to every element in the container.
-        - Another intuition is that a `Functor` represents some sort of **computational context**.
-        - Mathematically, `Functors` generalize the idea of a container or a computational context.
-        ///
+    - A simple intuition is that a `Functor` represents a **container** of values, along with the ability to apply a function uniformly to every element in the container.
+    - Another intuition is that a `Functor` represents some sort of **computational context**.
+    - Mathematically, `Functors` generalize the idea of a container or a computational context.
+    ///
 
-        We will start with intuition, introduce the basics of category theory, and then examine functors from a categorical perspective.
+    We will start with intuition, introduce the basics of category theory, and then examine functors from a categorical perspective.
 
-        /// details | Notebook metadata
-            type: info
+    /// details | Notebook metadata
+        type: info
 
-        version: 0.1.5 | last modified: 2025-04-11 | author: [métaboulie](https://github.com/metaboulie)<br/>
-        reviewer: [Haleshot](https://github.com/Haleshot)
+    version: 0.1.5 | last modified: 2025-04-11 | author: [métaboulie](https://github.com/metaboulie)<br/>
+    reviewer: [Haleshot](https://github.com/Haleshot)
 
-        ///
-        """
-    )
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Functor as a Computational Context
+    mo.md("""
+    # Functor as a Computational Context
 
-        A [**Functor**](https://wiki.haskell.org/Functor) is an abstraction that represents a computational context with the ability to apply a function to every value inside it without altering the structure of the context itself. This enables transformations while preserving the shape of the data.
+    A [**Functor**](https://wiki.haskell.org/Functor) is an abstraction that represents a computational context with the ability to apply a function to every value inside it without altering the structure of the context itself. This enables transformations while preserving the shape of the data.
 
-        To understand this, let's look at a simple example.
+    To understand this, let's look at a simple example.
 
-        ## [The One-Way Wrapper Design Pattern](http://blog.sigfpe.com/2007/04/trivial-monad.html)
+    ## [The One-Way Wrapper Design Pattern](http://blog.sigfpe.com/2007/04/trivial-monad.html)
 
-        Often, we need to wrap data in some kind of context. However, when performing operations on wrapped data, we typically have to:
+    Often, we need to wrap data in some kind of context. However, when performing operations on wrapped data, we typically have to:
 
-        1. Unwrap the data.
-        2. Modify the unwrapped data.
-        3. Rewrap the modified data.
+    1. Unwrap the data.
+    2. Modify the unwrapped data.
+    3. Rewrap the modified data.
 
-        This process is tedious and inefficient. Instead, we want to wrap data **once** and apply functions directly to the wrapped data without unwrapping it.
+    This process is tedious and inefficient. Instead, we want to wrap data **once** and apply functions directly to the wrapped data without unwrapping it.
 
-        /// admonition | Rules for a One-Way Wrapper
+    /// admonition | Rules for a One-Way Wrapper
 
-        1. We can wrap values, but we cannot unwrap them.
-        2. We should still be able to apply transformations to the wrapped data.
-        3. Any operation that depends on wrapped data should itself return a wrapped result.
-        ///
+    1. We can wrap values, but we cannot unwrap them.
+    2. We should still be able to apply transformations to the wrapped data.
+    3. Any operation that depends on wrapped data should itself return a wrapped result.
+    ///
 
-        Let's define such a `Wrapper` class:
+    Let's define such a `Wrapper` class:
 
-        ```python
-        from dataclasses import dataclass
-        from typing import TypeVar
+    ```python
+    from dataclasses import dataclass
+    from typing import TypeVar
 
-        A = TypeVar("A")
-        B = TypeVar("B")
+    A = TypeVar("A")
+    B = TypeVar("B")
 
-        @dataclass
-        class Wrapper[A]:
-            value: A
-        ```
+    @dataclass
+    class Wrapper[A]:
+        value: A
+    ```
 
-        Now, we can create an instance of wrapped data:
+    Now, we can create an instance of wrapped data:
 
-        ```python
-        wrapped = Wrapper(1)
-        ```
+    ```python
+    wrapped = Wrapper(1)
+    ```
 
-        ### Mapping Functions Over Wrapped Data
+    ### Mapping Functions Over Wrapped Data
 
-        To modify wrapped data while keeping it wrapped, we define an `fmap` method:
-        """
-    )
+    To modify wrapped data while keeping it wrapped, we define an `fmap` method:
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, dataclass):
+def _(A, B, Callable, Functor, dataclass):
     @dataclass
     class Wrapper[A](Functor):
         value: A
@@ -115,26 +111,24 @@ def _(B, Callable, Functor, dataclass):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// attention
+    mo.md(r"""
+    /// attention
 
-        To distinguish between regular types and functors, we use the prefix `f` to indicate `Functor`.
+    To distinguish between regular types and functors, we use the prefix `f` to indicate `Functor`.
 
-        For instance,
+    For instance,
 
-        - `a: A` is a regular variable of type `A`
-        - `g: Callable[[A], B]` is a regular function from type `A` to `B`
-        - `fa: Functor[A]` is a *Functor* wrapping a value of type `A`  
-        - `fg: Functor[Callable[[A], B]]` is a *Functor* wrapping a function from type `A` to `B`  
+    - `a: A` is a regular variable of type `A`
+    - `g: Callable[[A], B]` is a regular function from type `A` to `B`
+    - `fa: Functor[A]` is a *Functor* wrapping a value of type `A`
+    - `fg: Functor[Callable[[A], B]]` is a *Functor* wrapping a function from type `A` to `B`
 
-        and we will avoid using `f` to represent a function
+    and we will avoid using `f` to represent a function
 
-        ///
+    ///
 
-        > Try with Wrapper below
-        """
-    )
+    > Try with Wrapper below
+    """)
     return
 
 
@@ -149,46 +143,42 @@ def _(Wrapper, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        We can analyze the type signature of `fmap` for `Wrapper`:
+    mo.md("""
+    We can analyze the type signature of `fmap` for `Wrapper`:
 
-        * `g` is of type `Callable[[A], B]`
-        * `fa` is of type `Wrapper[A]`
-        * The return value is of type `Wrapper[B]`
+    * `g` is of type `Callable[[A], B]`
+    * `fa` is of type `Wrapper[A]`
+    * The return value is of type `Wrapper[B]`
 
-        Thus, in Python's type system, we can express the type signature of `fmap` as:
+    Thus, in Python's type system, we can express the type signature of `fmap` as:
 
-        ```python
-        fmap(g: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]:
-        ```
+    ```python
+    fmap(g: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]:
+    ```
 
-        Essentially, `fmap`:
+    Essentially, `fmap`:
 
-        1. Takes a function `Callable[[A], B]` and a `Wrapper[A]` instance as input.
-        2. Applies the function to the value inside the wrapper.
-        3. Returns a new `Wrapper[B]` instance with the transformed value, leaving the original wrapper and its internal data unmodified.
+    1. Takes a function `Callable[[A], B]` and a `Wrapper[A]` instance as input.
+    2. Applies the function to the value inside the wrapper.
+    3. Returns a new `Wrapper[B]` instance with the transformed value, leaving the original wrapper and its internal data unmodified.
 
-        Now, let's examine `list` as a similar kind of wrapper.
-        """
-    )
+    Now, let's examine `list` as a similar kind of wrapper.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## The List Functor
+    mo.md("""
+    ## The List Functor
 
-        We can define a `List` class to represent a wrapped list that supports `fmap`:
-        """
-    )
+    We can define a `List` class to represent a wrapped list that supports `fmap`:
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, dataclass):
+def _(A, B, Callable, Functor, dataclass):
     @dataclass
     class List[A](Functor):
         value: list[A]
@@ -201,7 +191,9 @@ def _(B, Callable, Functor, dataclass):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""> Try with List below""")
+    mo.md(r"""
+    > Try with List below
+    """)
     return
 
 
@@ -215,114 +207,106 @@ def _(List, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Extracting the Type of `fmap`
+    mo.md("""
+    ### Extracting the Type of `fmap`
 
-        The type signature of `fmap` for `List` is:
+    The type signature of `fmap` for `List` is:
 
-        ```python
-        fmap(g: Callable[[A], B], fa: List[A]) -> List[B]
-        ```
+    ```python
+    fmap(g: Callable[[A], B], fa: List[A]) -> List[B]
+    ```
 
-        Similarly, for `Wrapper`:
+    Similarly, for `Wrapper`:
 
-        ```python
-        fmap(g: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]
-        ```
+    ```python
+    fmap(g: Callable[[A], B], fa: Wrapper[A]) -> Wrapper[B]
+    ```
 
-        Both follow the same pattern, which we can generalize as:
+    Both follow the same pattern, which we can generalize as:
 
-        ```python
-        fmap(g: Callable[[A], B], fa: Functor[A]) -> Functor[B]
-        ```
+    ```python
+    fmap(g: Callable[[A], B], fa: Functor[A]) -> Functor[B]
+    ```
 
-        where `Functor` can be `Wrapper`, `List`, or any other wrapper type that follows the same structure.
+    where `Functor` can be `Wrapper`, `List`, or any other wrapper type that follows the same structure.
 
-        ### Functors in Haskell (optional)
+    ### Functors in Haskell (optional)
 
-        In Haskell, the type of `fmap` is:
+    In Haskell, the type of `fmap` is:
 
-        ```haskell
-        fmap :: Functor f => (a -> b) -> f a -> f b
-        ```
+    ```haskell
+    fmap :: Functor f => (a -> b) -> f a -> f b
+    ```
 
-        or equivalently:
+    or equivalently:
 
-        ```haskell
-        fmap :: Functor f => (a -> b) -> (f a -> f b)
-        ```
+    ```haskell
+    fmap :: Functor f => (a -> b) -> (f a -> f b)
+    ```
 
-        This means that `fmap` **lifts** an ordinary function into the **functor world**, allowing it to operate within a computational context.
+    This means that `fmap` **lifts** an ordinary function into the **functor world**, allowing it to operate within a computational context.
 
-        Now, let's define an abstract class for `Functor`.
-        """
-    )
+    Now, let's define an abstract class for `Functor`.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Defining Functor
+    mo.md("""
+    ## Defining Functor
 
-        Recall that, a **Functor** is an abstraction that allows us to apply a function to values inside a computational context while preserving its structure. 
+    Recall that, a **Functor** is an abstraction that allows us to apply a function to values inside a computational context while preserving its structure.
 
-        To define `Functor` in Python, we use an abstract base class:
+    To define `Functor` in Python, we use an abstract base class:
 
-        ```python
-        @dataclass
-        class Functor[A](ABC):
-            @classmethod
-            @abstractmethod
-            def fmap(g: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
-                raise NotImplementedError
-        ```
+    ```python
+    @dataclass
+    class Functor[A](ABC):
+        @classmethod
+        @abstractmethod
+        def fmap(g: Callable[[A], B], fa: "Functor[A]") -> "Functor[B]":
+            raise NotImplementedError
+    ```
 
-        We can now extend custom wrappers, containers, or computation contexts with this `Functor` base class, implement the `fmap` method, and apply any function.
-        """
-    )
+    We can now extend custom wrappers, containers, or computation contexts with this `Functor` base class, implement the `fmap` method, and apply any function.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # More Functor instances (optional)
+    mo.md(r"""
+    # More Functor instances (optional)
 
-        In this section, we will explore more *Functor* instances to help you build up a better comprehension.
+    In this section, we will explore more *Functor* instances to help you build up a better comprehension.
 
-        The main reference is [Data.Functor](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Functor.html)
-        """
-    )
+    The main reference is [Data.Functor](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Functor.html)
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The [Maybe](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Maybe.html#t:Maybe) Functor
+    mo.md(r"""
+    ## The [Maybe](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Maybe.html#t:Maybe) Functor
 
-        **`Maybe`** is a functor that can either hold a value (`Just(value)`) or be `Nothing` (equivalent to `None` in Python). 
+    **`Maybe`** is a functor that can either hold a value (`Just(value)`) or be `Nothing` (equivalent to `None` in Python).
 
-        - It the value exists, `fmap` applies the function to this value inside the functor.
-        - If the value is `None`, `fmap` simply returns `None`.
+    - It the value exists, `fmap` applies the function to this value inside the functor.
+    - If the value is `None`, `fmap` simply returns `None`.
 
-        /// admonition
-        By using `Maybe` as a functor, we gain the ability to apply transformations (`fmap`) to potentially absent values, without having to explicitly handle the `None` case every time.
-        ///
+    /// admonition
+    By using `Maybe` as a functor, we gain the ability to apply transformations (`fmap`) to potentially absent values, without having to explicitly handle the `None` case every time.
+    ///
 
-        We can implement the `Maybe` functor as:
-        """
-    )
+    We can implement the `Maybe` functor as:
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, dataclass):
+def _(A, B, Callable, Functor, dataclass):
     @dataclass
     class Maybe[A](Functor):
         value: None | A
@@ -345,24 +329,22 @@ def _(Maybe, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The [Either](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Either.html#t:Either) Functor
+    mo.md(r"""
+    ## The [Either](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Either.html#t:Either) Functor
 
-        The `Either` type represents values with two possibilities: a value of type `Either a b` is either `Left a` or `Right b`.
+    The `Either` type represents values with two possibilities: a value of type `Either a b` is either `Left a` or `Right b`.
 
-        The `Either` type is sometimes used to represent a value which is **either correct or an error**; by convention, the `left` attribute is used to hold an error value and the `right` attribute is used to hold a correct value.
+    The `Either` type is sometimes used to represent a value which is **either correct or an error**; by convention, the `left` attribute is used to hold an error value and the `right` attribute is used to hold a correct value.
 
-        `fmap` for `Either` will ignore Left values, but will apply the supplied function to values contained in the Right.
+    `fmap` for `Either` will ignore Left values, but will apply the supplied function to values contained in the Right.
 
-        The implementation is:
-        """
-    )
+    The implementation is:
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, Union, dataclass):
+def _(A, B, Callable, Functor, Union, dataclass):
     @dataclass
     class Either[A](Functor):
         left: A = None
@@ -400,29 +382,27 @@ def _(Either):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## The [RoseTree](https://en.wikipedia.org/wiki/Rose_tree) Functor
+    mo.md("""
+    ## The [RoseTree](https://en.wikipedia.org/wiki/Rose_tree) Functor
 
-        A **RoseTree** is a tree where:
+    A **RoseTree** is a tree where:
 
-        - Each node holds a **value**.
-        - Each node has a **list of child nodes** (which are also RoseTrees).
+    - Each node holds a **value**.
+    - Each node has a **list of child nodes** (which are also RoseTrees).
 
-        This structure is useful for representing hierarchical data, such as:
+    This structure is useful for representing hierarchical data, such as:
 
-        - Abstract Syntax Trees (ASTs)
-        - File system directories
-        - Recursive computations
+    - Abstract Syntax Trees (ASTs)
+    - File system directories
+    - Recursive computations
 
-        The implementation is:
-        """
-    )
+    The implementation is:
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, dataclass):
+def _(A, B, Callable, Functor, dataclass):
     @dataclass
     class RoseTree[A](Functor):
         value: A  # The value stored in the node.
@@ -459,34 +439,32 @@ def _(RoseTree, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Generic Functions that can be Used with Any Functor
+    mo.md("""
+    ## Generic Functions that can be Used with Any Functor
 
-        One of the powerful features of functors is that we can write **generic functions** that can work with any functor.
+    One of the powerful features of functors is that we can write **generic functions** that can work with any functor.
 
-        Remember that in Haskell, the type of `fmap` can be written as:
+    Remember that in Haskell, the type of `fmap` can be written as:
 
-        ```haskell
-        fmap :: Functor f => (a -> b) -> (f a -> f b)
-        ```
+    ```haskell
+    fmap :: Functor f => (a -> b) -> (f a -> f b)
+    ```
 
-        Translating to Python, we get:
+    Translating to Python, we get:
 
-        ```python
-        def fmap(g: Callable[[A], B]) -> Callable[[Functor[A]], Functor[B]]
-        ```
+    ```python
+    def fmap(g: Callable[[A], B]) -> Callable[[Functor[A]], Functor[B]]
+    ```
 
-        This means that `fmap`:
+    This means that `fmap`:
 
-        - Takes an **ordinary function** `Callable[[A], B]` as input.
-        - Outputs a function that:
-            - Takes a **functor** of type `Functor[A]` as input.
-            - Outputs a **functor** of type `Functor[B]`.
+    - Takes an **ordinary function** `Callable[[A], B]` as input.
+    - Outputs a function that:
+        - Takes a **functor** of type `Functor[A]` as input.
+        - Outputs a **functor** of type `Functor[B]`.
 
-        Inspired by this, we can implement an `inc` function which takes a functor, applies the function `lambda x: x + 1` to every value inside it, and returns a new functor with the updated values.
-        """
-    )
+    Inspired by this, we can implement an `inc` function which takes a functor, applies the function `lambda x: x + 1` to every value inside it, and returns a new functor with the updated values.
+    """)
     return
 
 
@@ -506,55 +484,51 @@ def _(flist, inc, pp, rosetree, wrapper):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// admonition | exercise
-        Implement other generic functions and apply them to different *Functor* instances.
-        ///
-        """
-    )
+    mo.md(r"""
+    /// admonition | exercise
+    Implement other generic functions and apply them to different *Functor* instances.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""# Functor laws and utility functions""")
+    mo.md(r"""
+    # Functor laws and utility functions
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Functor laws
+    mo.md("""
+    ## Functor laws
 
-        In addition to providing a function `fmap` of the specified type, functors are also required to satisfy two equational laws:
+    In addition to providing a function `fmap` of the specified type, functors are also required to satisfy two equational laws:
 
-        ```haskell
-        fmap id = id                    -- fmap preserves identity
-        fmap (g . h) = fmap g . fmap h  -- fmap distributes over composition
-        ```
+    ```haskell
+    fmap id = id                    -- fmap preserves identity
+    fmap (g . h) = fmap g . fmap h  -- fmap distributes over composition
+    ```
 
-        1. `fmap` should preserve the **identity function**, in the sense that applying `fmap` to this function returns the same function as the result.
-        2. `fmap` should also preserve **function composition**. Applying two composed functions `g` and `h` to a functor via `fmap` should give the same result as first applying `fmap` to `g` and then applying `fmap` to `h`.
+    1. `fmap` should preserve the **identity function**, in the sense that applying `fmap` to this function returns the same function as the result.
+    2. `fmap` should also preserve **function composition**. Applying two composed functions `g` and `h` to a functor via `fmap` should give the same result as first applying `fmap` to `g` and then applying `fmap` to `h`.
 
-        /// admonition | 
-        - Any `Functor` instance satisfying the first law `(fmap id = id)` will [automatically satisfy the second law](https://github.com/quchen/articles/blob/master/second_functor_law.md) as well.
-        ///
-        """
-    )
+    /// admonition |
+    - Any `Functor` instance satisfying the first law `(fmap id = id)` will [automatically satisfy the second law](https://github.com/quchen/articles/blob/master/second_functor_law.md) as well.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Functor laws verification
+    mo.md(r"""
+    ### Functor laws verification
 
-        We can define `id` and `compose` in `Python` as:
-        """
-    )
+    We can define `id` and `compose` in `Python` as:
+    """)
     return
 
 
@@ -562,12 +536,14 @@ def _(mo):
 def _():
     id = lambda x: x
     compose = lambda f, g: lambda x: f(g(x))
-    return compose, id
+    return (id,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We can add a helper function `check_functor_law` to verify that an instance satisfies the functor laws:""")
+    mo.md(r"""
+    We can add a helper function `check_functor_law` to verify that an instance satisfies the functor laws:
+    """)
     return
 
 
@@ -581,7 +557,9 @@ def _(id):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We can verify the functor we've defined:""")
+    mo.md(r"""
+    We can verify the functor we've defined:
+    """)
     return
 
 
@@ -589,17 +567,19 @@ def _(mo):
 def _(check_functor_law, flist, pp, rosetree, wrapper):
     for functor in (wrapper, flist, rosetree):
         pp(check_functor_law(functor))
-    return (functor,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""And here is an `EvilFunctor`. We can verify it's not a valid `Functor`.""")
+    mo.md("""
+    And here is an `EvilFunctor`. We can verify it's not a valid `Functor`.
+    """)
     return
 
 
 @app.cell
-def _(B, Callable, Functor, dataclass):
+def _(A, B, Callable, Functor, dataclass):
     @dataclass
     class EvilFunctor[A](Functor):
         value: list[A]
@@ -624,31 +604,29 @@ def _(EvilFunctor, check_functor_law, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Utility functions
+    mo.md(r"""
+    ## Utility functions
 
-        ```python
-        @classmethod
-        def const(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
-            return cls.fmap(lambda _: b, fa)
+    ```python
+    @classmethod
+    def const(cls, fa: "Functor[A]", b: B) -> "Functor[B]":
+        return cls.fmap(lambda _: b, fa)
 
-        @classmethod
-        def void(cls, fa: "Functor[A]") -> "Functor[None]":
-            return cls.const(fa, None)
+    @classmethod
+    def void(cls, fa: "Functor[A]") -> "Functor[None]":
+        return cls.const(fa, None)
 
-        @classmethod
-        def unzip(
-            cls, fab: "Functor[tuple[A, B]]"
-        ) -> tuple["Functor[A]", "Functor[B]"]:
-            return cls.fmap(lambda p: p[0], fab), cls.fmap(lambda p: p[1], fab)
-        ```
+    @classmethod
+    def unzip(
+        cls, fab: "Functor[tuple[A, B]]"
+    ) -> tuple["Functor[A]", "Functor[B]"]:
+        return cls.fmap(lambda p: p[0], fab), cls.fmap(lambda p: p[1], fab)
+    ```
 
-        - `const` replaces all values inside a functor with a constant `b`
-        - `void` is equivalent to `const(fa, None)`, transforming all values in a functor into `None`
-        - `unzip` is a generalization of the regular *unzip* on a list of pairs
-        """
-    )
+    - `const` replaces all values inside a functor with a constant `b`
+    - `void` is equivalent to `const(fa, None)`, transforming all values in a functor into `None`
+    - `unzip` is a generalization of the regular *unzip* on a list of pairs
+    """)
     return
 
 
@@ -676,13 +654,11 @@ def _(List, Maybe):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// admonition
-        You can always override these utility functions with a more efficient implementation for specific instances.
-        ///
-        """
-    )
+    mo.md(r"""
+    /// admonition
+    You can always override these utility functions with a more efficient implementation for specific instances.
+    ///
+    """)
     return
 
 
@@ -697,7 +673,9 @@ def _(List, RoseTree, flist, pp, rosetree):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""# Formal implementation of Functor""")
+    mo.md("""
+    # Formal implementation of Functor
+    """)
     return
 
 
@@ -728,291 +706,275 @@ def _(ABC, B, Callable, abstractmethod, dataclass):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Limitations of Functor
+    mo.md("""
+    ## Limitations of Functor
 
-        Functors abstract the idea of mapping a function over each element of a structure. Suppose now that we wish to generalise this idea to allow functions with any number of arguments to be mapped, rather than being restricted to functions with a single argument. More precisely, suppose that we wish to define a hierarchy of `fmap` functions with the following types:
+    Functors abstract the idea of mapping a function over each element of a structure. Suppose now that we wish to generalise this idea to allow functions with any number of arguments to be mapped, rather than being restricted to functions with a single argument. More precisely, suppose that we wish to define a hierarchy of `fmap` functions with the following types:
 
-        ```haskell
-        fmap0 :: a -> f a
+    ```haskell
+    fmap0 :: a -> f a
 
-        fmap1 :: (a -> b) -> f a -> f b
+    fmap1 :: (a -> b) -> f a -> f b
 
-        fmap2 :: (a -> b -> c) -> f a -> f b -> f c
+    fmap2 :: (a -> b -> c) -> f a -> f b -> f c
 
-        fmap3 :: (a -> b -> c -> d) -> f a -> f b -> f c -> f d
-        ```
+    fmap3 :: (a -> b -> c -> d) -> f a -> f b -> f c -> f d
+    ```
 
-        And we have to declare a special version of the functor class for each case.
+    And we have to declare a special version of the functor class for each case.
 
-        We will learn how to resolve this problem in the next notebook on `Applicatives`.
-        """
-    )
+    We will learn how to resolve this problem in the next notebook on `Applicatives`.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Introduction to Categories
+    mo.md("""
+    # Introduction to Categories
 
-        A [category](https://en.wikibooks.org/wiki/Haskell/Category_theory#Introduction_to_categories) is, in essence, a simple collection. It has three components: 
+    A [category](https://en.wikibooks.org/wiki/Haskell/Category_theory#Introduction_to_categories) is, in essence, a simple collection. It has three components:
 
-        - A collection of **objects**.
-        - A collection of **morphisms**, each of which ties two objects (a _source object_ and a _target object_) together. If $f$ is a morphism with source object $C$ and target object $B$, we write $f : C → B$.
-        - A notion of **composition** of these morphisms. If $g : A → B$ and $f : B → C$ are two morphisms, they can be composed, resulting in a morphism $f ∘ g : A → C$.
+    - A collection of **objects**.
+    - A collection of **morphisms**, each of which ties two objects (a _source object_ and a _target object_) together. If $f$ is a morphism with source object $C$ and target object $B$, we write $f : C → B$.
+    - A notion of **composition** of these morphisms. If $g : A → B$ and $f : B → C$ are two morphisms, they can be composed, resulting in a morphism $f ∘ g : A → C$.
 
-        ## Category laws
+    ## Category laws
 
-        There are three laws that categories need to follow. 
+    There are three laws that categories need to follow.
 
-        1. The composition of morphisms needs to be **associative**. Symbolically, $f ∘ (g ∘ h) = (f ∘ g) ∘ h$
+    1. The composition of morphisms needs to be **associative**. Symbolically, $f ∘ (g ∘ h) = (f ∘ g) ∘ h$
 
-            - Morphisms are applied right to left, so with $f ∘ g$ first $g$ is applied, then $f$. 
+        - Morphisms are applied right to left, so with $f ∘ g$ first $g$ is applied, then $f$.
 
-        2. The category needs to be **closed** under the composition operation. So if $f : B → C$ and $g : A → B$, then there must be some morphism $h : A → C$ in the category such that $h = f ∘ g$. 
+    2. The category needs to be **closed** under the composition operation. So if $f : B → C$ and $g : A → B$, then there must be some morphism $h : A → C$ in the category such that $h = f ∘ g$.
 
-        3. Given a category $C$ there needs to be for every object $A$ an **identity** morphism, $id_A : A → A$ that is an identity of composition with other morphisms. Put precisely, for every morphism $g : A → B$: $g ∘ id_A = id_B ∘ g = g$
+    3. Given a category $C$ there needs to be for every object $A$ an **identity** morphism, $id_A : A → A$ that is an identity of composition with other morphisms. Put precisely, for every morphism $g : A → B$: $g ∘ id_A = id_B ∘ g = g$
 
-        /// attention | The definition of a category does not define: 
+    /// attention | The definition of a category does not define:
 
-        - what `∘` is,
-        - what `id` is, or
-        - what `f`, `g`, and `h` might be. 
+    - what `∘` is,
+    - what `id` is, or
+    - what `f`, `g`, and `h` might be.
 
-        Instead, category theory leaves it up to us to discover what they might be.
-        ///
-        """
-    )
+    Instead, category theory leaves it up to us to discover what they might be.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## The Python category
+    mo.md("""
+    ## The Python category
 
-        The main category we'll be concerning ourselves with in this part is the Python category, or we can give it a shorter name: `Py`. `Py` treats Python types as objects and Python functions as morphisms. A function `def f(a: A) -> B` for types A and B is a morphism in Python.
+    The main category we'll be concerning ourselves with in this part is the Python category, or we can give it a shorter name: `Py`. `Py` treats Python types as objects and Python functions as morphisms. A function `def f(a: A) -> B` for types A and B is a morphism in Python.
 
-        Remember that we defined the `id` and `compose` function above as:
+    Remember that we defined the `id` and `compose` function above as:
 
-        ```Python
-        def id(x: A) -> A:
-            return x
+    ```Python
+    def id(x: A) -> A:
+        return x
 
-        def compose(f: Callable[[B], C], g: Callable[[A], B]) -> Callable[[A], C]:
-            return lambda x: f(g(x))  
-        ```
+    def compose(f: Callable[[B], C], g: Callable[[A], B]) -> Callable[[A], C]:
+        return lambda x: f(g(x))
+    ```
 
-        We can check second law easily. 
+    We can check second law easily.
 
-        For the first law, we have:
+    For the first law, we have:
 
-        ```python
-        # compose(f, g) = lambda x: f(g(x))
-        f ∘ (g ∘ h) 
-        = compose(f, compose(g, h)) 
-        = lambda x: f(compose(g, h)(x))
-        = lambda x: f(lambda y: g(h(y))(x))
-        = lambda x: f(g(h(x)))
+    ```python
+    # compose(f, g) = lambda x: f(g(x))
+    f ∘ (g ∘ h)
+    = compose(f, compose(g, h))
+    = lambda x: f(compose(g, h)(x))
+    = lambda x: f(lambda y: g(h(y))(x))
+    = lambda x: f(g(h(x)))
 
-        (f ∘ g) ∘ h 
-        = compose(compose(f, g), h)
-        = lambda x: compose(f, g)(h(x))
-        = lambda x: lambda y: f(g(y))(h(x))
-        = lambda x: f(g(h(x)))
-        ```
+    (f ∘ g) ∘ h
+    = compose(compose(f, g), h)
+    = lambda x: compose(f, g)(h(x))
+    = lambda x: lambda y: f(g(y))(h(x))
+    = lambda x: f(g(h(x)))
+    ```
 
-        For the third law, we have: 
+    For the third law, we have:
 
-        ```python
-        g ∘ id_A 
-        = compose(g: Callable[[a], b], id: Callable[[a], a]) -> Callable[[a], b]
-        = lambda x: g(id(x))
-        = lambda x: g(x) # id(x) = x
-        = g
-        ```
-        the similar proof can be applied to $id_B ∘ g =g$.
+    ```python
+    g ∘ id_A
+    = compose(g: Callable[[a], b], id: Callable[[a], a]) -> Callable[[a], b]
+    = lambda x: g(id(x))
+    = lambda x: g(x) # id(x) = x
+    = g
+    ```
+    the similar proof can be applied to $id_B ∘ g =g$.
 
-        Thus `Py` is a valid category.
-        """
-    )
+    Thus `Py` is a valid category.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Functors, again
+    mo.md("""
+    # Functors, again
 
-        A functor is essentially a transformation between categories, so given categories $C$ and $D$, a functor $F : C → D$:
+    A functor is essentially a transformation between categories, so given categories $C$ and $D$, a functor $F : C → D$:
 
-        - Maps any object $A$ in $C$ to $F ( A )$, in $D$.
-        - Maps morphisms $f : A → B$ in $C$ to $F ( f ) : F ( A ) → F ( B )$ in $D$.
+    - Maps any object $A$ in $C$ to $F ( A )$, in $D$.
+    - Maps morphisms $f : A → B$ in $C$ to $F ( f ) : F ( A ) → F ( B )$ in $D$.
 
-        /// admonition | 
+    /// admonition |
 
-        Endofunctors are functors from a category to itself.
+    Endofunctors are functors from a category to itself.
 
-        ///
-        """
-    )
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Functors on the category of Python
+    mo.md("""
+    ## Functors on the category of Python
 
-        Remember that a functor has two parts: it maps objects in one category to objects in another and morphisms in the first category to morphisms in the second. 
+    Remember that a functor has two parts: it maps objects in one category to objects in another and morphisms in the first category to morphisms in the second.
 
-        Functors in Python are from `Py` to `Func`, where `Func` is the subcategory of `Py` defined on just that functor's types. E.g. the RoseTree functor goes from `Py` to `RoseTree`, where `RoseTree` is the category containing only RoseTree types, that is, `RoseTree[T]` for any type `T`. The morphisms in `RoseTree` are functions defined on RoseTree types, that is, functions `Callable[[RoseTree[T]], RoseTree[U]]` for types `T`, `U`.
+    Functors in Python are from `Py` to `Func`, where `Func` is the subcategory of `Py` defined on just that functor's types. E.g. the RoseTree functor goes from `Py` to `RoseTree`, where `RoseTree` is the category containing only RoseTree types, that is, `RoseTree[T]` for any type `T`. The morphisms in `RoseTree` are functions defined on RoseTree types, that is, functions `Callable[[RoseTree[T]], RoseTree[U]]` for types `T`, `U`.
 
-        Recall the definition of `Functor`:
+    Recall the definition of `Functor`:
 
-        ```Python
-        @dataclass
-        class Functor[A](ABC)
-        ```
+    ```Python
+    @dataclass
+    class Functor[A](ABC)
+    ```
 
-        And RoseTree: 
+    And RoseTree:
 
-        ```Python
-        @dataclass
-        class RoseTree[A](Functor)
-        ```
+    ```Python
+    @dataclass
+    class RoseTree[A](Functor)
+    ```
 
-        **Here's the key part:** the _type constructor_ `RoseTree` takes any type `T` to a new type, `RoseTree[T]`. Also, `fmap` restricted to `RoseTree` types takes a function `Callable[[A], B]` to a function `Callable[[RoseTree[A]], RoseTree[B]]`.
+    **Here's the key part:** the _type constructor_ `RoseTree` takes any type `T` to a new type, `RoseTree[T]`. Also, `fmap` restricted to `RoseTree` types takes a function `Callable[[A], B]` to a function `Callable[[RoseTree[A]], RoseTree[B]]`.
 
-        But that's it. We've defined two parts, something that takes objects in `Py` to objects in another category (that of `RoseTree` types and functions defined on `RoseTree` types), and something that takes morphisms in `Py` to morphisms in this category. So `RoseTree` is a functor. 
+    But that's it. We've defined two parts, something that takes objects in `Py` to objects in another category (that of `RoseTree` types and functions defined on `RoseTree` types), and something that takes morphisms in `Py` to morphisms in this category. So `RoseTree` is a functor.
 
-        To sum up:
+    To sum up:
 
-        - We work in the category **Py** and its subcategories.  
-        - **Objects** are types (e.g., `int`, `str`, `list`).  
-        - **Morphisms** are functions (`Callable[[A], B]`).  
-        - **Things that take a type and return another type** are type constructors (`RoseTree[T]`).  
-        - **Things that take a function and return another function** are higher-order functions (`Callable[[Callable[[A], B]], Callable[[C], D]]`).  
-        - **Abstract base classes (ABC)** and duck typing provide a way to express polymorphism, capturing the idea that in category theory, structures are often defined over multiple objects at once.
-        """
-    )
+    - We work in the category **Py** and its subcategories.
+    - **Objects** are types (e.g., `int`, `str`, `list`).
+    - **Morphisms** are functions (`Callable[[A], B]`).
+    - **Things that take a type and return another type** are type constructors (`RoseTree[T]`).
+    - **Things that take a function and return another function** are higher-order functions (`Callable[[Callable[[A], B]], Callable[[C], D]]`).
+    - **Abstract base classes (ABC)** and duck typing provide a way to express polymorphism, capturing the idea that in category theory, structures are often defined over multiple objects at once.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Functor laws, again
+    mo.md("""
+    ## Functor laws, again
 
-        Once again there are a few axioms that functors have to obey. 
+    Once again there are a few axioms that functors have to obey.
 
-        1. Given an identity morphism $id_A$ on an object $A$, $F ( id_A )$ must be the identity morphism on $F ( A )$.:
+    1. Given an identity morphism $id_A$ on an object $A$, $F ( id_A )$ must be the identity morphism on $F ( A )$.:
 
-        $$F({id} _{A})={id} _{F(A)}$$
+    $$F({id} _{A})={id} _{F(A)}$$
 
-        3. Functors must distribute over morphism composition.
+    3. Functors must distribute over morphism composition.
 
-        $$F(f\circ g)=F(f)\circ F(g)$$
-        """
-    )
+    $$F(f\circ g)=F(f)\circ F(g)$$
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        Remember that we defined the `id` and `compose` as 
-        ```python
-        id = lambda x: x
-        compose = lambda f, g: lambda x: f(g(x))
-        ```
+    mo.md("""
+    Remember that we defined the `id` and `compose` as
+    ```python
+    id = lambda x: x
+    compose = lambda f, g: lambda x: f(g(x))
+    ```
 
-        We can define `fmap` as: 
+    We can define `fmap` as:
 
-        ```python
-        fmap = lambda g, functor: functor.fmap(g, functor)  
-        ```
+    ```python
+    fmap = lambda g, functor: functor.fmap(g, functor)
+    ```
 
-        Let's prove that `fmap` is a functor.
+    Let's prove that `fmap` is a functor.
 
-        First, let's define a `Category` for a specific `Functor`. We choose to define the `Category` for the `Wrapper` as `WrapperCategory` here for simplicity, but remember that `Wrapper` can be any `Functor`(i.e. `List`, `RoseTree`, `Maybe` and more):
+    First, let's define a `Category` for a specific `Functor`. We choose to define the `Category` for the `Wrapper` as `WrapperCategory` here for simplicity, but remember that `Wrapper` can be any `Functor`(i.e. `List`, `RoseTree`, `Maybe` and more):
 
-        We define `WrapperCategory` as:
+    We define `WrapperCategory` as:
 
-        ```python
-        @dataclass
-        class WrapperCategory:
-            @staticmethod
-            def id(wrapper: Wrapper[A]) -> Wrapper[A]:
-                return Wrapper(wrapper.value)
+    ```python
+    @dataclass
+    class WrapperCategory:
+        @staticmethod
+        def id(wrapper: Wrapper[A]) -> Wrapper[A]:
+            return Wrapper(wrapper.value)
 
-            @staticmethod
-            def compose(
-                f: Callable[[Wrapper[B]], Wrapper[C]],
-                g: Callable[[Wrapper[A]], Wrapper[B]],
-                wrapper: Wrapper[A]
-            ) -> Callable[[Wrapper[A]], Wrapper[C]]:
-                return f(g(Wrapper(wrapper.value)))
-        ```
+        @staticmethod
+        def compose(
+            f: Callable[[Wrapper[B]], Wrapper[C]],
+            g: Callable[[Wrapper[A]], Wrapper[B]],
+            wrapper: Wrapper[A]
+        ) -> Callable[[Wrapper[A]], Wrapper[C]]:
+            return f(g(Wrapper(wrapper.value)))
+    ```
 
-        And `Wrapper` is:
+    And `Wrapper` is:
 
-        ```Python
-        @dataclass
-        class Wrapper[A](Functor):
-            value: A
+    ```Python
+    @dataclass
+    class Wrapper[A](Functor):
+        value: A
 
-            @classmethod
-            def fmap(cls, g: Callable[[A], B], fa: "Wrapper[A]") -> "Wrapper[B]":
-                return Wrapper(g(fa.value))
-        ```
-        """
-    )
+        @classmethod
+        def fmap(cls, g: Callable[[A], B], fa: "Wrapper[A]") -> "Wrapper[B]":
+            return Wrapper(g(fa.value))
+    ```
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        We can prove that:
+    mo.md("""
+    We can prove that:
 
-        ```python
-        fmap(id, wrapper)
-        = Wrapper.fmap(id, wrapper)
-        = Wrapper(id(wrapper.value))
-        = Wrapper(wrapper.value)
-        = WrapperCategory.id(wrapper)
-        ```
-        and:
-        ```python
-        fmap(compose(f, g), wrapper)
-        = Wrapper.fmap(compose(f, g), wrapper)
-        = Wrapper(compose(f, g)(wrapper.value))
-        = Wrapper(f(g(wrapper.value)))
+    ```python
+    fmap(id, wrapper)
+    = Wrapper.fmap(id, wrapper)
+    = Wrapper(id(wrapper.value))
+    = Wrapper(wrapper.value)
+    = WrapperCategory.id(wrapper)
+    ```
+    and:
+    ```python
+    fmap(compose(f, g), wrapper)
+    = Wrapper.fmap(compose(f, g), wrapper)
+    = Wrapper(compose(f, g)(wrapper.value))
+    = Wrapper(f(g(wrapper.value)))
 
-        WrapperCategory.compose(fmap(f, wrapper), fmap(g, wrapper), wrapper)
-        = fmap(f, wrapper)(fmap(g, wrapper)(wrapper))
-        = fmap(f, wrapper)(Wrapper.fmap(g, wrapper))
-        = fmap(f, wrapper)(Wrapper(g(wrapper.value)))
-        = Wrapper.fmap(f, Wrapper(g(wrapper.value)))
-        = Wrapper(f(Wrapper(g(wrapper.value)).value))
-        = Wrapper(f(g(wrapper.value)))  # Wrapper(g(wrapper.value)).value = g(wrapper.value)
-        ```
+    WrapperCategory.compose(fmap(f, wrapper), fmap(g, wrapper), wrapper)
+    = fmap(f, wrapper)(fmap(g, wrapper)(wrapper))
+    = fmap(f, wrapper)(Wrapper.fmap(g, wrapper))
+    = fmap(f, wrapper)(Wrapper(g(wrapper.value)))
+    = Wrapper.fmap(f, Wrapper(g(wrapper.value)))
+    = Wrapper(f(Wrapper(g(wrapper.value)).value))
+    = Wrapper(f(g(wrapper.value)))  # Wrapper(g(wrapper.value)).value = g(wrapper.value)
+    ```
 
-        So our `Wrapper` is a valid `Functor`.
+    So our `Wrapper` is a valid `Functor`.
 
-        > Try validating functor laws for `Wrapper` below.
-        """
-    )
+    > Try validating functor laws for `Wrapper` below.
+    """)
     return
 
 
@@ -1042,19 +1004,17 @@ def _(WrapperCategory, id, pp, wrapper):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Length as a Functor
+    mo.md("""
+    ## Length as a Functor
 
-        Remember that a functor is a transformation between two categories. It is not only limited to a functor from `Py` to `Func`, but also includes transformations between other mathematical structures.
+    Remember that a functor is a transformation between two categories. It is not only limited to a functor from `Py` to `Func`, but also includes transformations between other mathematical structures.
 
-        Let’s prove that **`length`** can be viewed as a functor. Specifically, we will demonstrate that `length` is a functor from the **category of list concatenation** to the **category of integer addition**.
+    Let’s prove that **`length`** can be viewed as a functor. Specifically, we will demonstrate that `length` is a functor from the **category of list concatenation** to the **category of integer addition**.
 
-        ### Category of List Concatenation
+    ### Category of List Concatenation
 
-        First, let’s define the category of list concatenation:
-        """
-    )
+    First, let’s define the category of list concatenation:
+    """)
     return
 
 
@@ -1078,24 +1038,20 @@ def _(A, dataclass):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        - **Identity**: The identity element is an empty list (`ListConcatenation([])`).
-        - **Composition**: The composition of two lists is their concatenation (`this.value + other.value`).
-        """
-    )
+    mo.md("""
+    - **Identity**: The identity element is an empty list (`ListConcatenation([])`).
+    - **Composition**: The composition of two lists is their concatenation (`this.value + other.value`).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Category of Integer Addition
+    mo.md("""
+    ### Category of Integer Addition
 
-        Now, let's define the category of integer addition:
-        """
-    )
+    Now, let's define the category of integer addition:
+    """)
     return
 
 
@@ -1117,28 +1073,24 @@ def _(dataclass):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        - **Identity**: The identity element is `IntAddition(0)` (the additive identity).
-        - **Composition**: The composition of two integers is their sum (`this.value + other.value`).
-        """
-    )
+    mo.md("""
+    - **Identity**: The identity element is `IntAddition(0)` (the additive identity).
+    - **Composition**: The composition of two integers is their sum (`this.value + other.value`).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Defining the Length Functor
+    mo.md("""
+    ### Defining the Length Functor
 
-        We now define the `length` function as a functor, mapping from the category of list concatenation to the category of integer addition:
+    We now define the `length` function as a functor, mapping from the category of list concatenation to the category of integer addition:
 
-        ```python
-        length = lambda l: IntAddition(len(l.value))
-        ```
-        """
-    )
+    ```python
+    length = lambda l: IntAddition(len(l.value))
+    ```
+    """)
     return
 
 
@@ -1150,23 +1102,23 @@ def _(IntAddition):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""This function takes an instance of `ListConcatenation`, computes its length, and returns an `IntAddition` instance with the computed length.""")
+    mo.md("""
+    This function takes an instance of `ListConcatenation`, computes its length, and returns an `IntAddition` instance with the computed length.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Verifying Functor Laws
+    mo.md("""
+    ### Verifying Functor Laws
 
-        Now, let’s verify that `length` satisfies the two functor laws.
+    Now, let’s verify that `length` satisfies the two functor laws.
 
-        **Identity Law**
+    **Identity Law**
 
-        The identity law states that applying the functor to the identity element of one category should give the identity element of the other category.
-        """
-    )
+    The identity law states that applying the functor to the identity element of one category should give the identity element of the other category.
+    """)
     return
 
 
@@ -1178,19 +1130,19 @@ def _(IntAddition, ListConcatenation, length, pp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""This ensures that the length of an empty list (identity in the `ListConcatenation` category) is `0` (identity in the `IntAddition` category).""")
+    mo.md("""
+    This ensures that the length of an empty list (identity in the `ListConcatenation` category) is `0` (identity in the `IntAddition` category).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        **Composition Law**
+    mo.md("""
+    **Composition Law**
 
-        The composition law states that the functor should preserve composition. Applying the functor to a composed element should be the same as composing the functor applied to the individual elements.
-        """
-    )
+    The composition law states that the functor should preserve composition. Applying the functor to a composed element should be the same as composing the functor applied to the individual elements.
+    """)
     return
 
 
@@ -1202,36 +1154,36 @@ def _(IntAddition, ListConcatenation, length, pp):
         length(ListConcatenation.compose(lista, listb))
         == IntAddition.compose(length(lista), length(listb))
     )
-    return lista, listb
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""This ensures that the length of the concatenation of two lists is the same as the sum of the lengths of the individual lists.""")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Bifunctor
-
-        A `Bifunctor` is a type constructor that takes two type arguments and **is a functor in both arguments.** 
-
-        For example, think about `Either`'s usual `Functor` instance. It only allows you to fmap over the second type parameter: `right` values get mapped, `left` values stay as they are.
-
-        However, its `Bifunctor` instance allows you to map both halves of the sum.
-
-        There are three core methods for `Bifunctor`: 
-
-        - `bimap` allows mapping over both type arguments at once.
-        - `first` and `second` are also provided for mapping over only one type argument at a time.
+    mo.md("""
+    This ensures that the length of the concatenation of two lists is the same as the sum of the lengths of the individual lists.
+    """)
+    return
 
 
-        The abstraction of `Bifunctor` is: 
-        """
-    )
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # Bifunctor
+
+    A `Bifunctor` is a type constructor that takes two type arguments and **is a functor in both arguments.**
+
+    For example, think about `Either`'s usual `Functor` instance. It only allows you to fmap over the second type parameter: `right` values get mapped, `left` values stay as they are.
+
+    However, its `Bifunctor` instance allows you to map both halves of the sum.
+
+    There are three core methods for `Bifunctor`:
+
+    - `bimap` allows mapping over both type arguments at once.
+    - `first` and `second` are also provided for mapping over only one type argument at a time.
+
+
+    The abstraction of `Bifunctor` is:
+    """)
     return
 
 
@@ -1261,38 +1213,36 @@ def _(ABC, B, Callable, D, dataclass, f, id):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        /// admonition | minimal implementation requirement
-        - `bimap` or both `first` and `second`
-        ///
-        """
-    )
+    mo.md(r"""
+    /// admonition | minimal implementation requirement
+    - `bimap` or both `first` and `second`
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Instances of Bifunctor""")
+    mo.md(r"""
+    ## Instances of Bifunctor
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### The Either Bifunctor
+    mo.md(r"""
+    ### The Either Bifunctor
 
-        For the `Either Bifunctor`, we allow it to map a function over the `left` value as well.
+    For the `Either Bifunctor`, we allow it to map a function over the `left` value as well.
 
-        Notice that, the `Either Bifunctor`  still only contains the `left` value or the `right` value.
-        """
-    )
+    Notice that, the `Either Bifunctor`  still only contains the `left` value or the `right` value.
+    """)
     return
 
 
 @app.cell
-def _(B, Bifunctor, Callable, D, dataclass):
+def _(A, B, Bifunctor, C, Callable, D, dataclass):
     @dataclass
     class BiEither[A, C](Bifunctor):
         left: A = None
@@ -1334,18 +1284,16 @@ def _(BiEither):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### The 2d Tuple Bifunctor
+    mo.md(r"""
+    ### The 2d Tuple Bifunctor
 
-        For 2d tuples, we simply expect `bimap` to map 2 functions to the 2 elements in the tuple respectively.
-        """
-    )
+    For 2d tuples, we simply expect `bimap` to map 2 functions to the 2 elements in the tuple respectively.
+    """)
     return
 
 
 @app.cell
-def _(B, Bifunctor, Callable, D, dataclass):
+def _(A, B, Bifunctor, C, Callable, D, dataclass):
     @dataclass
     class BiTuple[A, C](Bifunctor):
         value: tuple[A, C]
@@ -1368,19 +1316,17 @@ def _(BiTuple):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Bifunctor laws
+    mo.md(r"""
+    ## Bifunctor laws
 
-        The only law we need to follow is
+    The only law we need to follow is
 
-        ```python
-        bimap(id, id, fa) == id(fa)
-        ```
+    ```python
+    bimap(id, id, fa) == id(fa)
+    ```
 
-        and then other laws are followed automatically.
-        """
-    )
+    and then other laws are followed automatically.
+    """)
     return
 
 
@@ -1394,24 +1340,22 @@ def _(BiEither, BiTuple, id):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Further reading
+    mo.md("""
+    # Further reading
 
-        - [The Trivial Monad](http://blog.sigfpe.com/2007/04/trivial-monad.html)
-        - [Haskellforall: The Category Design Pattern](https://www.haskellforall.com/2012/08/the-category-design-pattern.html)
-        - [Haskellforall: The Functor Design Pattern](https://www.haskellforall.com/2012/09/the-functor-design-pattern.html)
+    - [The Trivial Monad](http://blog.sigfpe.com/2007/04/trivial-monad.html)
+    - [Haskellforall: The Category Design Pattern](https://www.haskellforall.com/2012/08/the-category-design-pattern.html)
+    - [Haskellforall: The Functor Design Pattern](https://www.haskellforall.com/2012/09/the-functor-design-pattern.html)
 
-            /// attention | ATTENTION 
-            The functor design pattern doesn't work at all if you aren't using categories in the first place. This is why you should structure your tools using the compositional category design pattern so that you can take advantage of functors to easily mix your tools together. 
-            ///
+        /// attention | ATTENTION
+        The functor design pattern doesn't work at all if you aren't using categories in the first place. This is why you should structure your tools using the compositional category design pattern so that you can take advantage of functors to easily mix your tools together.
+        ///
 
-        - [Haskellwiki: Functor](https://wiki.haskell.org/index.php?title=Functor)
-        - [Haskellwiki: Typeclassopedia#Functor](https://wiki.haskell.org/index.php?title=Typeclassopedia#Functor)
-        - [Haskellwiki: Typeclassopedia#Category](https://wiki.haskell.org/index.php?title=Typeclassopedia#Category)
-        - [Haskellwiki: Category Theory](https://en.wikibooks.org/wiki/Haskell/Category_theory)
-        """
-    )
+    - [Haskellwiki: Functor](https://wiki.haskell.org/index.php?title=Functor)
+    - [Haskellwiki: Typeclassopedia#Functor](https://wiki.haskell.org/index.php?title=Typeclassopedia#Functor)
+    - [Haskellwiki: Typeclassopedia#Category](https://wiki.haskell.org/index.php?title=Typeclassopedia#Category)
+    - [Haskellwiki: Category Theory](https://en.wikibooks.org/wiki/Haskell/Category_theory)
+    """)
     return
 
 

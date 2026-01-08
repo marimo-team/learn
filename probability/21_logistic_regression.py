@@ -12,81 +12,75 @@
 
 import marimo
 
-__generated_with = "0.12.5"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Logistic Regression")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Logistic Regression
+    mo.md(r"""
+    # Logistic Regression
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/), by Stanford professor Chris Piech._
 
-        Logistic regression learns a function approximating $P(y|x)$, and can be used to make a classifier. It makes the central assumption that $P(y|x)$ can be approximated as a sigmoid function applied to a linear combination of input features. It is particularly important to learn because logistic regression is the basic building block of artificial neural networks.
-        """
-    )
+    Logistic regression learns a function approximating $P(y|x)$, and can be used to make a classifier. It makes the central assumption that $P(y|x)$ can be approximated as a sigmoid function applied to a linear combination of input features. It is particularly important to learn because logistic regression is the basic building block of artificial neural networks.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Binary Classification Problem
+    mo.md(r"""
+    ## The Binary Classification Problem
 
-        Imagine situations where we would like to know:
+    Imagine situations where we would like to know:
 
-        - The eligibility of getting a bank loan given the value of credit score ($x_{credit\_score}$) and monthly income ($x_{income}$)
-        - Identifying a tumor as benign or malignant given its size ($x_{tumor\_size}$)
-        - Classifying an email as promotional given the number of occurrences for some keywords like {'win', 'gift', 'discount'} ($x_{n\_win}$, $x_{n\_gift}$, $x_{n\_discount}$)
-        - Finding a monetary transaction as fraudulent given the time of occurrence ($x_{time\_stamp}$) and amount ($x_{amount}$)
+    - The eligibility of getting a bank loan given the value of credit score ($x_{credit\_score}$) and monthly income ($x_{income}$)
+    - Identifying a tumor as benign or malignant given its size ($x_{tumor\_size}$)
+    - Classifying an email as promotional given the number of occurrences for some keywords like {'win', 'gift', 'discount'} ($x_{n\_win}$, $x_{n\_gift}$, $x_{n\_discount}$)
+    - Finding a monetary transaction as fraudulent given the time of occurrence ($x_{time\_stamp}$) and amount ($x_{amount}$)
 
-        These problems occur frequently in real life & can be dealt with machine learning. All such problems come under the umbrella of what is known as Classification. In each scenario, only one of the two possible outcomes can occur, hence these are specifically known as Binary Classification problems.
+    These problems occur frequently in real life & can be dealt with machine learning. All such problems come under the umbrella of what is known as Classification. In each scenario, only one of the two possible outcomes can occur, hence these are specifically known as Binary Classification problems.
 
-        ### How Does A Machine Perform Classification?
+    ### How Does A Machine Perform Classification?
 
-        During the inference, the goal is to have the ML model predict the class label for a given set of feature values.
+    During the inference, the goal is to have the ML model predict the class label for a given set of feature values.
 
-        Specifically, a binary classification model estimates two probabilities $p_0$ & $p_1$ for 'class-0' and 'class-1' respectively where $p_0 + p_1 = 1$.
+    Specifically, a binary classification model estimates two probabilities $p_0$ & $p_1$ for 'class-0' and 'class-1' respectively where $p_0 + p_1 = 1$.
 
-        The predicted label depends on $\max(p_0, p_1)$ i.e., it's the one which is most probable based on the given features.
+    The predicted label depends on $\max(p_0, p_1)$ i.e., it's the one which is most probable based on the given features.
 
-        In logistic regression, $p_1$ (i.e., success probability) is compared with a predefined threshold $p$ to predict the class label like below:
+    In logistic regression, $p_1$ (i.e., success probability) is compared with a predefined threshold $p$ to predict the class label like below:
 
-        $$\text{predicted class} = 
-        \begin{cases}
-        1, & \text{if } p_1 \geq p \\
-        0, & \text{otherwise}
-        \end{cases}$$
+    $$\text{predicted class} =
+    \begin{cases}
+    1, & \text{if } p_1 \geq p \\
+    0, & \text{otherwise}
+    \end{cases}$$
 
-        To keep the notation simple and consistent, we will denote the success probability as $p$, and failure probability as $(1-p)$ instead of $p_1$ and $p_0$ respectively.
-        """
-    )
+    To keep the notation simple and consistent, we will denote the success probability as $p$, and failure probability as $(1-p)$ instead of $p_1$ and $p_0$ respectively.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Why NOT Linear Regression?
+    mo.md(r"""
+    ## Why NOT Linear Regression?
 
-        Can't we really use linear regression to address classification? The answer is NO! The key issue is that probabilities must be between 0 and 1 and linear regression can output any real number.
+    Can't we really use linear regression to address classification? The answer is NO! The key issue is that probabilities must be between 0 and 1 and linear regression can output any real number.
 
-        If we tried using linear regression directly:
-        $$p = \beta_0 + \beta_1 \cdot x_{feature}$$
+    If we tried using linear regression directly:
+    $$p = \beta_0 + \beta_1 \cdot x_{feature}$$
 
-        This creates a problem: the right side can produce any value in $\mathbb{R}$ (all real numbers), but a probability $p$ must be confined to the range $(0,1)$.
+    This creates a problem: the right side can produce any value in $\mathbb{R}$ (all real numbers), but a probability $p$ must be confined to the range $(0,1)$.
 
-        Can we convert $(\beta_0 + \beta_1 \cdot x_{tumor\_size})$ to something belonging to $(0,1)$? That may work as an estimate of a probability! The answer is YES!
+    Can we convert $(\beta_0 + \beta_1 \cdot x_{tumor\_size})$ to something belonging to $(0,1)$? That may work as an estimate of a probability! The answer is YES!
 
-        We need a converter (a function), say, $g()$ that will connect $p \in (0,1)$ to $(\beta_0 + \beta_1 \cdot x_{tumor\_size}) \in \mathbb{R}$.
+    We need a converter (a function), say, $g()$ that will connect $p \in (0,1)$ to $(\beta_0 + \beta_1 \cdot x_{tumor\_size}) \in \mathbb{R}$.
 
-        The solution is to use a "link function" that maps from any real number to a valid probability range. This is where the sigmoid function comes in.
-        """
-    )
+    The solution is to use a "link function" that maps from any real number to a valid probability range. This is where the sigmoid function comes in.
+    """)
     return
 
 
@@ -133,80 +127,76 @@ def _(mo, np, plt):
     ax.grid(True, alpha=0.3)
 
     mo.mpl.interactive(_fig)
-    return ax, sigmoid, x, y
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        **Figure**: The sigmoid function maps any real number to a value between 0 and 1, making it perfect for representing probabilities.
-
-        /// note
-        For more information about the sigmoid function, head over to [this detailed notebook](http://marimo.app/https://github.com/marimo-team/deepml-notebooks/blob/main/problems/problem-22/notebook.py) for more insights.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Core Concept (math)
+    mo.md(r"""
+    **Figure**: The sigmoid function maps any real number to a value between 0 and 1, making it perfect for representing probabilities.
 
-        Logistic regression models the probability of class 1 using the sigmoid function:
-
-        $$P(Y=1|X=x) = \sigma(z) \text{ where } z = \theta_0 + \sum_{i=1}^m \theta_i x_i$$
-
-        The sigmoid function $\sigma(z)$ transforms any real number into a probability between 0 and 1:
-
-        $$\sigma(z) = \frac{1}{1+ e^{-z}}$$
-
-        This can be written more compactly using vector notation:
-
-        $$P(Y=1|\mathbf{X}=\mathbf{x}) =\sigma(\mathbf{\theta}^T\mathbf{x}) \quad \text{ where we always set $x_0$ to be 1}$$
-
-        $$P(Y=0|\mathbf{X}=\mathbf{x}) =1-\sigma(\mathbf{\theta}^T\mathbf{x}) \quad \text{ by total law of probability}$$
-
-        Where $\theta$ represents the model parameters that need to be learned from data, and $x$ is the feature vector (with $x_0=1$ to account for the intercept term).
-
-        > **Note:** For the detailed mathematical derivation of how these parameters are learned through Maximum Likelihood Estimation (MLE) and Gradient Descent (GD), please refer to [Chris Piech's original material](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/). The mathematical details are elegant but beyond the scope of this notebook topic (which is confined to Logistic Regression).
-        """
-    )
+    /// note
+    For more information about the sigmoid function, head over to [this detailed notebook](http://marimo.app/https://github.com/marimo-team/deepml-notebooks/blob/main/problems/problem-22/notebook.py) for more insights.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Linear Decision Boundary
+    mo.md(r"""
+    ## The Core Concept (math)
 
-        A key characteristic of logistic regression is that it creates a linear decision boundary. When the model predicts, it's effectively dividing the feature space with a straight line (in 2D) or hyperplane (in higher dimensions). It is actually a straight line (of the form $y = mx + c$).
+    Logistic regression models the probability of class 1 using the sigmoid function:
 
-        Recall the prediction rule:
-        $$\text{predicted class} = 
-        \begin{cases}
-        1, & \text{if } p \geq \theta_0 + \theta_1 \cdot x_{tumor\_size} \Rightarrow \log\frac{p}{1-p} \\
-        0, & \text{otherwise}
-        \end{cases}$$
+    $$P(Y=1|X=x) = \sigma(z) \text{ where } z = \theta_0 + \sum_{i=1}^m \theta_i x_i$$
 
-        For a two-feature model, the decision boundary where $P(Y=1|X=x) = 0.5$ occurs at:
-        $$\theta_0 + \theta_1 x_1 + \theta_2 x_2 = 0$$
+    The sigmoid function $\sigma(z)$ transforms any real number into a probability between 0 and 1:
 
-        A simple logistic regression predicts the class label by identifying the regions on either side of a straight line (or hyperplane in general), hence it's a _linear_ classifier.
+    $$\sigma(z) = \frac{1}{1+ e^{-z}}$$
 
-        This linear nature makes logistic regression effective for linearly separable classes but limited when dealing with more complex patterns.
-        """
-    )
+    This can be written more compactly using vector notation:
+
+    $$P(Y=1|\mathbf{X}=\mathbf{x}) =\sigma(\mathbf{\theta}^T\mathbf{x}) \quad \text{ where we always set $x_0$ to be 1}$$
+
+    $$P(Y=0|\mathbf{X}=\mathbf{x}) =1-\sigma(\mathbf{\theta}^T\mathbf{x}) \quad \text{ by total law of probability}$$
+
+    Where $\theta$ represents the model parameters that need to be learned from data, and $x$ is the feature vector (with $x_0=1$ to account for the intercept term).
+
+    > **Note:** For the detailed mathematical derivation of how these parameters are learned through Maximum Likelihood Estimation (MLE) and Gradient Descent (GD), please refer to [Chris Piech's original material](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/). The mathematical details are elegant but beyond the scope of this notebook topic (which is confined to Logistic Regression).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""### Visual: Linear Separability and Classification""")
+    mo.md(r"""
+    ### Linear Decision Boundary
+
+    A key characteristic of logistic regression is that it creates a linear decision boundary. When the model predicts, it's effectively dividing the feature space with a straight line (in 2D) or hyperplane (in higher dimensions). It is actually a straight line (of the form $y = mx + c$).
+
+    Recall the prediction rule:
+    $$\text{predicted class} =
+    \begin{cases}
+    1, & \text{if } p \geq \theta_0 + \theta_1 \cdot x_{tumor\_size} \Rightarrow \log\frac{p}{1-p} \\
+    0, & \text{otherwise}
+    \end{cases}$$
+
+    For a two-feature model, the decision boundary where $P(Y=1|X=x) = 0.5$ occurs at:
+    $$\theta_0 + \theta_1 x_1 + \theta_2 x_2 = 0$$
+
+    A simple logistic regression predicts the class label by identifying the regions on either side of a straight line (or hyperplane in general), hence it's a _linear_ classifier.
+
+    This linear nature makes logistic regression effective for linearly separable classes but limited when dealing with more complex patterns.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ### Visual: Linear Separability and Classification
+    """)
     return
 
 
@@ -253,44 +243,32 @@ def _(mo, np, plt):
 
     fig.tight_layout()
     mo.mpl.interactive(fig)
-    return (
-        X1,
-        X2,
-        ax1,
-        ax2,
-        fig,
-        inner_x,
-        inner_y,
-        outer_x,
-        outer_y,
-        radius,
-        theta,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""**Figure**: On the left, the classes are linearly separable as the boundary is a straight line. However, they are not linearly separable on the right, where no straight line can properly separate the two classes.""")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Logistic regression is typically trained using MLE - finding the parameters $\theta$ that make our observed data most probable.
+    mo.md(r"""
+    **Figure**: On the left, the classes are linearly separable as the boundary is a straight line. However, they are not linearly separable on the right, where no straight line can properly separate the two classes.
+    """)
+    return
 
-        The optimization process generally uses GD (or its variants) to iteratively improve the parameters. The gradient has a surprisingly elegant form:
 
-        $$\frac{\partial LL(\theta)}{\partial \theta_j} = \sum_{i=1}^n \left[
-        y^{(i)} - \sigma(\theta^T x^{(i)})
-        \right] x_j^{(i)}$$
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Logistic regression is typically trained using MLE - finding the parameters $\theta$ that make our observed data most probable.
 
-        This shows that the update to each parameter depends on the prediction error (actual - predicted) multiplied by the feature value.
+    The optimization process generally uses GD (or its variants) to iteratively improve the parameters. The gradient has a surprisingly elegant form:
 
-        For those interested in the complete mathematical derivation, including log likelihood calculation and the detailed steps of GD (and relevant pseudocode followed for training), please see the [original lecture notes](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/).
-        """
-    )
+    $$\frac{\partial LL(\theta)}{\partial \theta_j} = \sum_{i=1}^n \left[
+    y^{(i)} - \sigma(\theta^T x^{(i)})
+    \right] x_j^{(i)}$$
+
+    This shows that the update to each parameter depends on the prediction error (actual - predicted) multiplied by the feature value.
+
+    For those interested in the complete mathematical derivation, including log likelihood calculation and the detailed steps of GD (and relevant pseudocode followed for training), please see the [original lecture notes](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/log_regression/).
+    """)
     return
 
 
@@ -399,94 +377,71 @@ def _(LogisticRegression, mo, np, plt, run_button, widget):
         mo.mpl.interactive(_fig),
         model_info
     ])
-    return (
-        X,
-        Z,
-        ax_fig,
-        coef,
-        contour,
-        df,
-        equation,
-        intercept,
-        model,
-        model_info,
-        warning_msg,
-        x_max,
-        x_min,
-        xx,
-        y_colors,
-        y_max,
-        y_min,
-        yy,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Key Takeaways
-
-        Click on the statements below that you think are correct to verify your understanding:
-
-        /// details | Logistic regression tries to find parameters (θ) that minimize the error between predicted and actual values using ordinary least squares.
-        ❌ **Incorrect.** Logistic regression uses maximum likelihood estimation (MLE), not ordinary least squares. It finds parameters that maximize the probability of observing the training data, which is different from minimizing squared errors as in linear regression.
-        ///
-
-        /// details | The sigmoid function maps any real number to a value between 0 and 1, which allows logistic regression to output probabilities.
-        ✅ **Correct!** The sigmoid function σ(z) = 1/(1+e^(-z)) takes any real number as input and outputs a value between 0 and 1. This is perfect for representing probabilities and is a key component of logistic regression.
-        ///
-
-        /// details | The decision boundary in logistic regression is always a straight line, regardless of the data's complexity.
-        ✅ **Correct!** Standard logistic regression produces a linear decision boundary (a straight line in 2D or a hyperplane in higher dimensions). This is why it works well for linearly separable data but struggles with more complex patterns, like concentric circles (as you might've noticed from the interactive demo).
-        ///
-
-        /// details | The logistic regression model params are typically initialized to random values and refined through gradient descent.
-        ✅ **Correct!** Parameters are often initialized to zeros or small random values, then updated iteratively using gradient descent (or ascent for maximizing likelihood) until convergence.
-        ///
-
-        /// details | Logistic regression can naturally handle multi-class classification problems without any modifications.
-        ❌ **Incorrect.** Standard logistic regression is inherently a binary classifier. To handle multi-class classification, techniques like one-vs-rest or softmax regression are typically used.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Key Takeaways
 
-        So we've just explored logistic regression. Despite its name (seriously though, why not call it "logistic classification"?), it's actually quite elegant in how it transforms a simple linear model into a powerful decision _boundary_ maker.
+    Click on the statements below that you think are correct to verify your understanding:
 
-        The training process boils down to finding the values of θ that maximize the likelihood of seeing our training data. What's super cool is that even though the math looks _scary_ at first, the gradient has this surprisingly simple form: just the error (y - predicted) multiplied by the feature values.
+    /// details | Logistic regression tries to find parameters (θ) that minimize the error between predicted and actual values using ordinary least squares.
+    ❌ **Incorrect.** Logistic regression uses maximum likelihood estimation (MLE), not ordinary least squares. It finds parameters that maximize the probability of observing the training data, which is different from minimizing squared errors as in linear regression.
+    ///
 
-        Two key insights to remember:
+    /// details | The sigmoid function maps any real number to a value between 0 and 1, which allows logistic regression to output probabilities.
+    ✅ **Correct!** The sigmoid function σ(z) = 1/(1+e^(-z)) takes any real number as input and outputs a value between 0 and 1. This is perfect for representing probabilities and is a key component of logistic regression.
+    ///
 
-        - Logistic regression creates a _linear_ decision boundary, so it works great for linearly separable classes but struggles with more _complex_ patterns
-        - It directly gives you probabilities, not just classifications, which is incredibly useful when you need confidence measures
-        """
-    )
+    /// details | The decision boundary in logistic regression is always a straight line, regardless of the data's complexity.
+    ✅ **Correct!** Standard logistic regression produces a linear decision boundary (a straight line in 2D or a hyperplane in higher dimensions). This is why it works well for linearly separable data but struggles with more complex patterns, like concentric circles (as you might've noticed from the interactive demo).
+    ///
+
+    /// details | The logistic regression model params are typically initialized to random values and refined through gradient descent.
+    ✅ **Correct!** Parameters are often initialized to zeros or small random values, then updated iteratively using gradient descent (or ascent for maximizing likelihood) until convergence.
+    ///
+
+    /// details | Logistic regression can naturally handle multi-class classification problems without any modifications.
+    ❌ **Incorrect.** Standard logistic regression is inherently a binary classifier. To handle multi-class classification, techniques like one-vs-rest or softmax regression are typically used.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Additional resources referred to:
+    mo.md(r"""
+    ## Summary
 
-        - [Logistic Regression Tutorial by _Koushik Khan_](https://koushikkhan.github.io/resources/pdf/tutorials/logistic_regression_tutorial.pdf)
-        """
-    )
+    So we've just explored logistic regression. Despite its name (seriously though, why not call it "logistic classification"?), it's actually quite elegant in how it transforms a simple linear model into a powerful decision _boundary_ maker.
+
+    The training process boils down to finding the values of θ that maximize the likelihood of seeing our training data. What's super cool is that even though the math looks _scary_ at first, the gradient has this surprisingly simple form: just the error (y - predicted) multiplied by the feature values.
+
+    Two key insights to remember:
+
+    - Logistic regression creates a _linear_ decision boundary, so it works great for linearly separable classes but struggles with more _complex_ patterns
+    - It directly gives you probabilities, not just classifications, which is incredibly useful when you need confidence measures
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Appendix (helper code)""")
+    mo.md(r"""
+    Additional resources referred to:
+
+    - [Logistic Regression Tutorial by _Koushik Khan_](https://koushikkhan.github.io/resources/pdf/tutorials/logistic_regression_tutorial.pdf)
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Appendix (helper code)
+    """)
     return
 
 

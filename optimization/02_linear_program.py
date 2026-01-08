@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.11.0"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
@@ -23,33 +23,31 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Linear program
+    mo.md(r"""
+    # Linear program
 
-        A linear program is an optimization problem with a linear objective and affine
-        inequality constraints. A common standard form is the following:
+    A linear program is an optimization problem with a linear objective and affine
+    inequality constraints. A common standard form is the following:
 
-        \[  
-            \begin{array}{ll}
-            \text{minimize}   & c^Tx \\
-            \text{subject to} & Ax \leq b.
-            \end{array}
-        \]
+    \[
+        \begin{array}{ll}
+        \text{minimize}   & c^Tx \\
+        \text{subject to} & Ax \leq b.
+        \end{array}
+    \]
 
-        Here $A \in \mathcal{R}^{m \times n}$, $b \in \mathcal{R}^m$, and $c \in \mathcal{R}^n$ are problem data and $x \in \mathcal{R}^{n}$ is the optimization variable. The inequality constraint $Ax \leq b$ is elementwise.
+    Here $A \in \mathcal{R}^{m \times n}$, $b \in \mathcal{R}^m$, and $c \in \mathcal{R}^n$ are problem data and $x \in \mathcal{R}^{n}$ is the optimization variable. The inequality constraint $Ax \leq b$ is elementwise.
 
-        For example, we might have $n$ different products, each constructed out of $m$ components. Each entry $A_{ij}$ is the amount of component $i$ required to build one unit of product $j$. Each entry $b_i$ is the total amount of component $i$ available. We lose $c_j$ for each unit of product $j$ ($c_j < 0$ indicates profit). Our goal then is to choose how many units of each product $j$ to make, $x_j$, in order to minimize loss without exceeding our budget for any component.
+    For example, we might have $n$ different products, each constructed out of $m$ components. Each entry $A_{ij}$ is the amount of component $i$ required to build one unit of product $j$. Each entry $b_i$ is the total amount of component $i$ available. We lose $c_j$ for each unit of product $j$ ($c_j < 0$ indicates profit). Our goal then is to choose how many units of each product $j$ to make, $x_j$, in order to minimize loss without exceeding our budget for any component.
 
-        In addition to a solution $x^\star$, we obtain a dual solution $\lambda^\star$. A positive entry $\lambda^\star_i$ indicates that the constraint $a_i^Tx \leq b_i$ holds with equality for $x^\star$ and suggests that changing $b_i$ would change the optimal value.
+    In addition to a solution $x^\star$, we obtain a dual solution $\lambda^\star$. A positive entry $\lambda^\star_i$ indicates that the constraint $a_i^Tx \leq b_i$ holds with equality for $x^\star$ and suggests that changing $b_i$ would change the optimal value.
 
-        **Why linear programming?** Linear programming is a way to achieve an optimal outcome, such as maximum utility or lowest cost, subject to a linear objective function and affine constraints. Developed in the 20th century, linear programming is widely used today to solve problems in resource allocation, scheduling, transportation, and more. The discovery of polynomial-time algorithms to solve linear programs was of tremendous worldwide importance and entered the public discourse, even making the front page of the New York Times.
+    **Why linear programming?** Linear programming is a way to achieve an optimal outcome, such as maximum utility or lowest cost, subject to a linear objective function and affine constraints. Developed in the 20th century, linear programming is widely used today to solve problems in resource allocation, scheduling, transportation, and more. The discovery of polynomial-time algorithms to solve linear programs was of tremendous worldwide importance and entered the public discourse, even making the front page of the New York Times.
 
-        In the late 20th and early 21st century, researchers generalized linear programming to a much wider class of problems called convex optimization problems. Nearly all convex optimization problems can be solved efficiently and reliably, and even more difficult problems are readily solved by a sequence of convex optimization problems. Today, convex optimization is used to fit machine learning models, land rockets in real-time at SpaceX, plan trajectories for self-driving cars at Waymo, execute many billions of dollars of financial trades a day, and much more.
+    In the late 20th and early 21st century, researchers generalized linear programming to a much wider class of problems called convex optimization problems. Nearly all convex optimization problems can be solved efficiently and reliably, and even more difficult problems are readily solved by a sequence of convex optimization problems. Today, convex optimization is used to fit machine learning models, land rockets in real-time at SpaceX, plan trajectories for self-driving cars at Waymo, execute many billions of dollars of financial trades a day, and much more.
 
-        This marimo learn course uses CVXPY, a modeling language for convex optimization problems developed originally at Stanford, to construct and solve convex programs.
-        """
-    )
+    This marimo learn course uses CVXPY, a modeling language for convex optimization problems developed originally at Stanford, to construct and solve convex programs.
+    """)
     return
 
 
@@ -66,13 +64,11 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Example
+    mo.md(r"""
+    ## Example
 
-        Here we use CVXPY to construct and solve a linear program.
-        """
-    )
+    Here we use CVXPY to construct and solve a linear program.
+    """)
     return
 
 
@@ -119,7 +115,9 @@ def _(np):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We've randomly generated problem data $A$ and $B$. The vector for $c$ is shown below. Try playing with the value of $c$ by dragging the components, and see how the level curves change in the visualization below.""")
+    mo.md(r"""
+    We've randomly generated problem data $A$ and $B$. The vector for $c$ is shown below. Try playing with the value of $c$ by dragging the components, and see how the level curves change in the visualization below.
+    """)
     return
 
 
@@ -129,7 +127,7 @@ def _(mo, np):
 
     c_widget = mo.ui.anywidget(Matrix(matrix=np.array([[0.1, -0.2]]), step=0.01))
     c_widget
-    return Matrix, c_widget
+    return (c_widget,)
 
 
 @app.cell
@@ -149,7 +147,9 @@ def _(A, b, c, cp):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Below, we plot the feasible region of the problem — the intersection of the inequalities — and the level curves of the objective function. The optimal value $x^\star$ is the point farthest in the feasible region in the direction $-c$.""")
+    mo.md(r"""
+    Below, we plot the feasible region of the problem — the intersection of the inequalities — and the level curves of the objective function. The optimal value $x^\star$ is the point farthest in the feasible region in the direction $-c$.
+    """)
     return
 
 
@@ -249,7 +249,7 @@ def _(np):
         ax.set_xlim(np.min(x_vals), np.max(x_vals))
         ax.set_ylim(np.min(y_vals), np.max(y_vals))
         return ax
-    return make_plot, plt
+    return (make_plot,)
 
 
 @app.cell(hide_code=True)
@@ -257,7 +257,7 @@ def _(mo, prob, x):
     mo.md(
         f"""
         The optimal value is {prob.value:.04f}.
-        
+
         A solution $x$ is {mo.as_html(list(x.value))}
         A dual solution is is {mo.as_html(list(prob.constraints[0].dual_value))}
         """

@@ -7,40 +7,38 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🎭 Strings
+    mo.md("""
+    # 🎭 Strings
 
-        This notebook introduces **strings**, which are containers for text.
+    This notebook introduces **strings**, which are containers for text.
 
-        ## Creating strings
-        Create strings by wrapping text in quotes:
+    ## Creating strings
+    Create strings by wrapping text in quotes:
 
-        ```python
-        # Use double quotes
-        greeting = "Hello, Python!"
+    ```python
+    # Use double quotes
+    greeting = "Hello, Python!"
 
-        # or single quotes
-        name = 'Alice'
+    # or single quotes
+    name = 'Alice'
 
-        # or triple quotes
-        multiline_string = \"""
-        Dear, Alice,
-        Nice to meet you.
-        Sincerely,
-        Bob.
-        \"""
-        ```
+    # or triple quotes
+    multiline_string = "\""
+    Dear, Alice,
+    Nice to meet you.
+    Sincerely,
+    Bob.
+    "\""
+    ```
 
-        Below is an example string.
-        """
-    )
+    Below is an example string.
+    """)
     return
 
 
@@ -53,16 +51,14 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Essential string operations
+    mo.md("""
+    ## Essential string operations
 
-        Here are some methods for working with strings.
+    Here are some methods for working with strings.
 
-        Tip: Try changing the value of `text` above, and watch how the
-        computed values below change.
-        """
-    )
+    Tip: Try changing the value of `text` above, and watch how the
+    computed values below change.
+    """)
     return
 
 
@@ -93,7 +89,9 @@ def _(text):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""Use string methods and the `in` operator to find things in strings.""")
+    mo.md("""
+    Use string methods and the `in` operator to find things in strings.
+    """)
     return
 
 
@@ -118,16 +116,14 @@ def _(text):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Inserting values in strings
+    mo.md("""
+    ## Inserting values in strings
 
-        Modern Python uses f-strings to insert values into strings. For example,
-        check out how the next cell greets you (and notice the `f''''`)!
+    Modern Python uses f-strings to insert values into strings. For example,
+    check out how the next cell greets you (and notice the `f''''`)!
 
-        **Try it!** Enter your name in `my_name` below, then run the cell.
-        """
-    )
+    **Try it!** Enter your name in `my_name` below, then run the cell.
+    """)
     return
 
 
@@ -145,12 +141,10 @@ def _(my_name):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Working with parts of strings
-        You can access any part of a string using its position (index):
-        """
-    )
+    mo.md("""
+    ## Working with parts of strings
+    You can access any part of a string using its position (index):
+    """)
     return
 
 
@@ -158,39 +152,37 @@ def _(mo):
 def _(text):
     first_letter = text[0]
     first_letter
-    return (first_letter,)
+    return
 
 
 @app.cell
 def _(text):
     last_letter = text[-1]
     last_letter
-    return (last_letter,)
+    return
 
 
 @app.cell
 def _(text):
     first_three = text[0:3]
     first_three
-    return (first_three,)
+    return
 
 
 @app.cell
 def _(text):
     last_two = text[-2:]
     last_two
-    return (last_two,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Other helpful string methods
+    mo.md("""
+    ## Other helpful string methods
 
-        Finally, here are some other helpful string methods. Feel free to try them out on your own strings by modifying the value of `sentence` below.
-        """
-    )
+    Finally, here are some other helpful string methods. Feel free to try them out on your own strings by modifying the value of `sentence` below.
+    """)
     return
 
 
@@ -241,13 +233,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Next steps
+    mo.md(r"""
+    ## Next steps
 
-        For a full primer on strings, check out the [official documentation](https://docs.python.org/3/library/string.html).
-        """
-    )
+    For a full primer on strings, check out the [official documentation](https://docs.python.org/3/library/string.html).
+    """)
     return
 
 

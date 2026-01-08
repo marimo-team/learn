@@ -7,24 +7,22 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🔄 Advanced collections
+    mo.md("""
+    # 🔄 Advanced collections
 
-        This tutorials hows advanced patterns for working with collections.
+    This tutorials hows advanced patterns for working with collections.
 
-        ## Lists of dictionaries
+    ## Lists of dictionaries
 
-        A common pattern in data handling is working with lists of dictionaries:
-        this is helpful for representing structured data like records or entries.
-        """
-    )
+    A common pattern in data handling is working with lists of dictionaries:
+    this is helpful for representing structured data like records or entries.
+    """)
     return
 
 
@@ -41,14 +39,12 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        Let's explore common operations on structured data.
+    mo.md("""
+    Let's explore common operations on structured data.
 
-        **Try it!** Try modifying the `users_data` above and see how the results
-        change!
-        """
-    )
+    **Try it!** Try modifying the `users_data` above and see how the results
+    change!
+    """)
     return
 
 
@@ -59,18 +55,16 @@ def _(users_data):
         user["name"] for user in users_data if "Python" in user["skills"]
     ]
     print("Python developers:", python_users)
-    return (python_users,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Nested data structures
+    mo.md("""
+    ## Nested data structures
 
-        Python collections can be nested in various ways to represent complex data:
-        """
-    )
+    Python collections can be nested in various ways to represent complex data:
+    """)
     return
 
 
@@ -104,18 +98,16 @@ def _(project_data):
 
     ios_tech = project_data["mobile_app"]["technologies"]["iOS"]
     print("iOS technologies:", ios_tech)
-    return backend_langs, ios_tech
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Example: data transformation
+    mo.md("""
+    ### Example: data transformation
 
-        Let's explore how to transform and reshape collection data:
-        """
-    )
+    Let's explore how to transform and reshape collection data:
+    """)
     return
 
 
@@ -144,35 +136,33 @@ def _(sales_data):
         })
 
     print("Sales by product:", product_sales)
-    return product_sales, sale
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## More collection utilities
+    mo.md("""
+    ## More collection utilities
 
-        Python's `collections` module provides specialized container datatypes:
+    Python's `collections` module provides specialized container datatypes:
 
-        ```python
-        from collections import defaultdict, Counter, deque
+    ```python
+    from collections import defaultdict, Counter, deque
 
-        # defaultdict - dictionary with default factory
-        word_count = defaultdict(int)
-        for word in words:
-            word_count[word] += 1
+    # defaultdict - dictionary with default factory
+    word_count = defaultdict(int)
+    for word in words:
+        word_count[word] += 1
 
-        # Counter - count hashable objects
-        colors = Counter(['red', 'blue', 'red', 'green', 'blue', 'blue'])
-        print(colors.most_common(2))  # Top 2 most common colors
+    # Counter - count hashable objects
+    colors = Counter(['red', 'blue', 'red', 'green', 'blue', 'blue'])
+    print(colors.most_common(2))  # Top 2 most common colors
 
-        # deque - double-ended queue
-        history = deque(maxlen=10)  # Only keeps last 10 items
-        history.append(item)
-        ```
-        """
-    )
+    # deque - double-ended queue
+    history = deque(maxlen=10)  # Only keeps last 10 items
+    history.append(item)
+    ```
+    """)
     return
 
 
@@ -189,19 +179,17 @@ def _():
     language_count = Counter(programming_languages)
     print("Language frequency:", dict(language_count))
     print("Most common language:", language_count.most_common(1))
-    return Counter, language_count, programming_languages
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Next steps
+    mo.md("""
+    ## Next steps
 
-        For a reference on the `collections` module, see [the official Python 
-        docs](https://docs.python.org/3/library/collections.html).
-        """
-    )
+    For a reference on the `collections` module, see [the official Python
+    docs](https://docs.python.org/3/library/collections.html).
+    """)
     return
 
 

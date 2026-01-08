@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.11.8"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Bayes Theorem")
 
 
@@ -23,140 +23,128 @@ def _():
 def _():
     import matplotlib.pyplot as plt
     import numpy as np
-    return np, plt
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        # Bayes' Theorem
-
-        _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/bayes_theorem/), by Stanford professor Chris Piech._
-
-        In the 1740s, an English minister named Thomas Bayes discovered a profound mathematical relationship that would revolutionize how we reason about uncertainty. His theorem provides an elegant framework for calculating the probability of a hypothesis being true given observed evidence.
-
-        At its core, Bayes' Theorem connects two different types of probabilities: the probability of a hypothesis given evidence $P(H|E)$, and its reverse - the probability of evidence given a hypothesis $P(E|H)$. This relationship is particularly powerful because it allows us to compute difficult probabilities using ones that are easier to measure.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Heart of Bayesian Reasoning
+    mo.md(r"""
+    # Bayes' Theorem
 
-        The fundamental insight of Bayes' Theorem lies in its ability to relate what we want to know with what we can measure. When we observe evidence $E$, we often want to know the probability of a hypothesis $H$ being true. However, it's typically much easier to measure how likely we are to observe the evidence when we know the hypothesis is true.
+    _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/bayes_theorem/), by Stanford professor Chris Piech._
 
-        This reversal of perspective - from $P(H|E)$ to $P(E|H)$ - is powerful because it lets us:
-        1. Start with what we know (prior beliefs)
-        2. Use easily measurable relationships (likelihood)
-        3. Update our beliefs with new evidence
+    In the 1740s, an English minister named Thomas Bayes discovered a profound mathematical relationship that would revolutionize how we reason about uncertainty. His theorem provides an elegant framework for calculating the probability of a hypothesis being true given observed evidence.
 
-        This approach mirrors both how humans naturally learn and the scientific method: we begin with prior beliefs, gather evidence, and update our understanding based on that evidence. This makes Bayes' Theorem not just a mathematical tool, but a framework for rational thinking.
-        """
-    )
+    At its core, Bayes' Theorem connects two different types of probabilities: the probability of a hypothesis given evidence $P(H|E)$, and its reverse - the probability of evidence given a hypothesis $P(E|H)$. This relationship is particularly powerful because it allows us to compute difficult probabilities using ones that are easier to measure.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Formula
+    mo.md(r"""
+    ## The Heart of Bayesian Reasoning
 
-        Bayes' Theorem states:
+    The fundamental insight of Bayes' Theorem lies in its ability to relate what we want to know with what we can measure. When we observe evidence $E$, we often want to know the probability of a hypothesis $H$ being true. However, it's typically much easier to measure how likely we are to observe the evidence when we know the hypothesis is true.
 
-        $P(H|E) = \frac{P(E|H)P(H)}{P(E)}$
+    This reversal of perspective - from $P(H|E)$ to $P(E|H)$ - is powerful because it lets us:
+    1. Start with what we know (prior beliefs)
+    2. Use easily measurable relationships (likelihood)
+    3. Update our beliefs with new evidence
 
-        Where:
-
-        - $P(H|E)$ is the **posterior probability** - probability of hypothesis H given evidence E
-        - $P(E|H)$ is the **likelihood** - probability of evidence E given hypothesis H
-        - $P(H)$ is the **prior probability** - initial probability of hypothesis H
-        - $P(E)$ is the **evidence** - total probability of observing evidence E
-
-        The denominator $P(E)$ can be expanded using the [Law of Total Probability](https://marimo.app/gh/marimo-team/learn/main?entrypoint=probability%2F07_law_of_total_probability.py):
-
-        $P(E) = P(E|H)P(H) + P(E|H^c)P(H^c)$
-        """
-    )
+    This approach mirrors both how humans naturally learn and the scientific method: we begin with prior beliefs, gather evidence, and update our understanding based on that evidence. This makes Bayes' Theorem not just a mathematical tool, but a framework for rational thinking.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Understanding Each Component
+    mo.md(r"""
+    ## The Formula
 
-        ### 1. Prior Probability - $P(H)$
-        - Initial belief about hypothesis before seeing evidence
-        - Based on previous knowledge or assumptions
-        - Example: Probability of having a disease before any tests
+    Bayes' Theorem states:
 
-        ### 2. Likelihood - $P(E|H)$
-        - Probability of evidence given hypothesis is true
-        - Often known from data or scientific studies
-        - Example: Probability of positive test given disease present
+    $P(H|E) = \frac{P(E|H)P(H)}{P(E)}$
 
-        ### 3. Evidence - $P(E)$
-        - Total probability of observing the evidence
-        - Acts as a normalizing constant
-        - Can be calculated using Law of Total Probability
+    Where:
 
-        ### 4. Posterior - $P(H|E)$
-        - Updated probability after considering evidence
-        - Combines prior knowledge with new evidence
-        - Becomes new prior for future updates
-        """
-    )
+    - $P(H|E)$ is the **posterior probability** - probability of hypothesis H given evidence E
+    - $P(E|H)$ is the **likelihood** - probability of evidence E given hypothesis H
+    - $P(H)$ is the **prior probability** - initial probability of hypothesis H
+    - $P(E)$ is the **evidence** - total probability of observing evidence E
+
+    The denominator $P(E)$ can be expanded using the [Law of Total Probability](https://marimo.app/gh/marimo-team/learn/main?entrypoint=probability%2F07_law_of_total_probability.py):
+
+    $P(E) = P(E|H)P(H) + P(E|H^c)P(H^c)$
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Real-World Examples
+    mo.md(r"""
+    ## Understanding Each Component
 
-        ### 1. Medical Testing
-        - **Want to know**: $P(\text{Disease}|\text{Positive})$ - Probability of disease given positive test
-        - **Easy to know**: $P(\text{Positive}|\text{Disease})$ - Test accuracy for sick people
-        - **Causality**: Disease causes test results, not vice versa
+    ### 1. Prior Probability - $P(H)$
+    - Initial belief about hypothesis before seeing evidence
+    - Based on previous knowledge or assumptions
+    - Example: Probability of having a disease before any tests
 
-        ### 2. Student Ability
-        - **Want to know**: $P(\text{High Ability}|\text{Good Grade})$ - Probability student is skilled given good grade
-        - **Easy to know**: $P(\text{Good Grade}|\text{High Ability})$ - Probability good students get good grades
-        - **Causality**: Ability influences grades, not vice versa
+    ### 2. Likelihood - $P(E|H)$
+    - Probability of evidence given hypothesis is true
+    - Often known from data or scientific studies
+    - Example: Probability of positive test given disease present
 
-        ### 3. Cell Phone Location
-        - **Want to know**: $P(\text{Location}|\text{Signal Strength})$ - Probability of phone location given signal
-        - **Easy to know**: $P(\text{Signal Strength}|\text{Location})$ - Signal strength at known locations
-        - **Causality**: Location determines signal strength, not vice versa
+    ### 3. Evidence - $P(E)$
+    - Total probability of observing the evidence
+    - Acts as a normalizing constant
+    - Can be calculated using Law of Total Probability
 
-        These examples highlight a common pattern: what we want to know (posterior) is harder to measure directly than its reverse (likelihood).
-        """
-    )
+    ### 4. Posterior - $P(H|E)$
+    - Updated probability after considering evidence
+    - Combines prior knowledge with new evidence
+    - Becomes new prior for future updates
+    """)
     return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Real-World Examples
+
+    ### 1. Medical Testing
+    - **Want to know**: $P(\text{Disease}|\text{Positive})$ - Probability of disease given positive test
+    - **Easy to know**: $P(\text{Positive}|\text{Disease})$ - Test accuracy for sick people
+    - **Causality**: Disease causes test results, not vice versa
+
+    ### 2. Student Ability
+    - **Want to know**: $P(\text{High Ability}|\text{Good Grade})$ - Probability student is skilled given good grade
+    - **Easy to know**: $P(\text{Good Grade}|\text{High Ability})$ - Probability good students get good grades
+    - **Causality**: Ability influences grades, not vice versa
+
+    ### 3. Cell Phone Location
+    - **Want to know**: $P(\text{Location}|\text{Signal Strength})$ - Probability of phone location given signal
+    - **Easy to know**: $P(\text{Signal Strength}|\text{Location})$ - Signal strength at known locations
+    - **Causality**: Location determines signal strength, not vice versa
+
+    These examples highlight a common pattern: what we want to know (posterior) is harder to measure directly than its reverse (likelihood).
+    """)
+    return
+
+
+@app.function
+def calculate_posterior(prior, likelihood, false_positive_rate):
+    # Calculate P(E) using Law of Total Probability
+    p_e = likelihood * prior + false_positive_rate * (1 - prior)
+
+    # Calculate posterior using Bayes' Theorem
+    posterior = (likelihood * prior) / p_e
+    return posterior, p_e
 
 
 @app.cell
 def _():
-    def calculate_posterior(prior, likelihood, false_positive_rate):
-        # Calculate P(E) using Law of Total Probability
-        p_e = likelihood * prior + false_positive_rate * (1 - prior)
-
-        # Calculate posterior using Bayes' Theorem
-        posterior = (likelihood * prior) / p_e
-        return posterior, p_e
-    return (calculate_posterior,)
-
-
-@app.cell
-def _(calculate_posterior):
     # Medical test example
     p_disease = 0.01  # Prior: 1% have the disease
     p_positive_given_disease = 0.95  # Likelihood: 95% test accuracy
@@ -167,13 +155,7 @@ def _(calculate_posterior):
         p_positive_given_disease,
         p_positive_given_healthy
     )
-    return (
-        medical_evidence,
-        medical_posterior,
-        p_disease,
-        p_positive_given_disease,
-        p_positive_given_healthy,
-    )
+    return (medical_posterior,)
 
 
 @app.cell
@@ -203,7 +185,7 @@ def _(medical_posterior, mo):
 
 
 @app.cell
-def _(calculate_posterior):
+def _():
     # Student ability example
     p_high_ability = 0.30  # Prior: 30% of students have high ability
     p_good_grade_given_high = 0.90  # Likelihood: 90% of high ability students get good grades
@@ -214,13 +196,7 @@ def _(calculate_posterior):
         p_good_grade_given_high,
         p_good_grade_given_low
     )
-    return (
-        p_good_grade_given_high,
-        p_good_grade_given_low,
-        p_high_ability,
-        student_evidence,
-        student_posterior,
-    )
+    return (student_posterior,)
 
 
 @app.cell
@@ -250,7 +226,7 @@ def _(mo, student_posterior):
 
 
 @app.cell
-def _(calculate_posterior):
+def _():
     # Cell phone location example
     p_location_a = 0.25  # Prior probability of being in location A
     p_strong_signal_at_a = 0.85  # Likelihood of strong signal at A
@@ -261,13 +237,7 @@ def _(calculate_posterior):
         p_strong_signal_at_a,
         p_strong_signal_elsewhere
     )
-    return (
-        location_evidence,
-        location_posterior,
-        p_location_a,
-        p_strong_signal_at_a,
-        p_strong_signal_elsewhere,
-    )
+    return (location_posterior,)
 
 
 @app.cell
@@ -298,7 +268,9 @@ def _(location_posterior, mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Interactive example""")
+    mo.md(r"""
+    ## Interactive example
+    """)
     return
 
 
@@ -394,87 +366,79 @@ def _(
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Applications in Computer Science
+    mo.md(r"""
+    ## Applications in Computer Science
 
-        Bayes' Theorem is fundamental in many computing applications:
+    Bayes' Theorem is fundamental in many computing applications:
 
-        1. **Spam Filtering**
+    1. **Spam Filtering**
 
-            - $P(\text{Spam}|\text{Words})$ = Probability email is spam given its words
-            - Updates as new emails are classified
+        - $P(\text{Spam}|\text{Words})$ = Probability email is spam given its words
+        - Updates as new emails are classified
 
-        2. **Machine Learning**
+    2. **Machine Learning**
 
-            - Naive Bayes classifiers
-            - Probabilistic graphical models
-            - Bayesian neural networks
+        - Naive Bayes classifiers
+        - Probabilistic graphical models
+        - Bayesian neural networks
 
-        3. **Computer Vision**
+    3. **Computer Vision**
 
-            - Object detection confidence
-            - Face recognition systems
-            - Image classification
-        """
-    )
+        - Object detection confidence
+        - Face recognition systems
+        - Image classification
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## 🤔 Test Your Understanding
+    mo.md("""
+    ## 🤔 Test Your Understanding
 
-        Pick which of these statements about Bayes' Theorem you think are correct:
+    Pick which of these statements about Bayes' Theorem you think are correct:
 
-        <details>
-        <summary>The posterior probability will always be larger than the prior probability</summary>
-        ❌ Incorrect! Evidence can either increase or decrease our belief in the hypothesis. For example, a negative medical test decreases the probability of having a disease.
-        </details>
+    <details>
+    <summary>The posterior probability will always be larger than the prior probability</summary>
+    ❌ Incorrect! Evidence can either increase or decrease our belief in the hypothesis. For example, a negative medical test decreases the probability of having a disease.
+    </details>
 
-        <details>
-        <summary>If the likelihood is 0.9 and the prior is 0.5, then the posterior must equal 0.9</summary>
-        ❌ Incorrect! We also need the false positive rate to calculate the posterior probability. The likelihood alone doesn't determine the posterior.
-        </details>
+    <details>
+    <summary>If the likelihood is 0.9 and the prior is 0.5, then the posterior must equal 0.9</summary>
+    ❌ Incorrect! We also need the false positive rate to calculate the posterior probability. The likelihood alone doesn't determine the posterior.
+    </details>
 
-        <details>
-        <summary>The denominator acts as a normalizing constant to ensure the posterior is a valid probability</summary>
-        ✅ Correct! The denominator ensures the posterior probability is between 0 and 1 by considering all ways the evidence could occur.
-        </details>
-        """
-    )
+    <details>
+    <summary>The denominator acts as a normalizing constant to ensure the posterior is a valid probability</summary>
+    ✅ Correct! The denominator ensures the posterior probability is between 0 and 1 by considering all ways the evidence could occur.
+    </details>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Summary
+    mo.md("""
+    ## Summary
 
-        You've learned:
+    You've learned:
 
-        - The components and intuition behind Bayes' Theorem
-        - How to update probabilities when new evidence arrives
-        - Why posterior probabilities can be counterintuitive
-        - Real-world applications in computer science
+    - The components and intuition behind Bayes' Theorem
+    - How to update probabilities when new evidence arrives
+    - Why posterior probabilities can be counterintuitive
+    - Real-world applications in computer science
 
-        In the next lesson, we'll explore Random Variables, which help us work with numerical outcomes in probability.
-        """
-    )
+    In the next lesson, we'll explore Random Variables, which help us work with numerical outcomes in probability.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Appendix
-        Below (hidden) cell blocks are responsible for the interactive example above
-        """
-    )
+    mo.md(r"""
+    ### Appendix
+    Below (hidden) cell blocks are responsible for the interactive example above
+    """)
     return
 
 

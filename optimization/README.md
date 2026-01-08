@@ -1,3 +1,8 @@
+---
+title: Readme
+marimo-version: 0.18.4
+---
+
 # Learn optimization
 
 This collection of marimo notebooks teaches you the basics of convex

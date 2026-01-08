@@ -35,7 +35,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, reviews, sqlite_engine):
+def _(mo, sqlite_engine):
     _df = mo.sql(
         f"""
         SELECT * FROM reviews LIMIT 100
@@ -91,7 +91,7 @@ def _(mo):
 
 
 @app.cell
-def _(hotels, mo, sqlite_engine):
+def _(mo, sqlite_engine):
     _df = mo.sql(
         f"""
         SELECT * FROM hotels LIMIT 10
@@ -112,7 +112,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, reviews, sqlite_engine, users):
+def _(mo, sqlite_engine):
     polars_age_groups = mo.sql(
         f"""
         SELECT reviews.*, age_group FROM reviews JOIN users ON reviews.user_id = users.user_id LIMIT 1000
@@ -139,7 +139,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, reviews, sqlite_engine, users):
+def _(mo, sqlite_engine):
     _df = mo.sql(
         f"""
         SELECT age_group, AVG(reviews.score_overall) FROM reviews JOIN users ON reviews.user_id = users.user_id GROUP BY age_group
@@ -158,7 +158,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, polars_age_groups):
+def _(mo):
     _df = mo.sql(
         f"""
         SELECT * FROM polars_age_groups LIMIT 10
@@ -261,7 +261,7 @@ def _(mo):
 
 
 @app.cell
-def _(duckdb, hotels):
+def _(duckdb):
     duckdb.sql("SELECT * FROM hotels").pl(lazy=True).sort("cleanliness_base", descending=True).limit(5).collect()
     return
 

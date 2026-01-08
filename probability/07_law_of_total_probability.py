@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.11.7"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
@@ -24,56 +24,52 @@ def _():
     import matplotlib.pyplot as plt
     from matplotlib_venn import venn2
     import numpy as np
-    return np, plt, venn2
+    return plt, venn2
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Law of Total Probability
+    mo.md(r"""
+    # Law of Total Probability
 
-        _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/law_total/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/law_total/), by Stanford professor Chris Piech._
 
-        The Law of Total Probability is a fundamental rule that helps us calculate probabilities by breaking down complex events into simpler parts. It's particularly useful when we want to compute the probability of an event that can occur through multiple distinct scenarios.
-        """
-    )
+    The Law of Total Probability is a fundamental rule that helps us calculate probabilities by breaking down complex events into simpler parts. It's particularly useful when we want to compute the probability of an event that can occur through multiple distinct scenarios.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Core Concept
+    mo.md(r"""
+    ## The Core Concept
 
-        The Law of Total Probability emerged from a simple but powerful observation: any event E can be broken down into parts based on another event F and its complement Fᶜ.
+    The Law of Total Probability emerged from a simple but powerful observation: any event E can be broken down into parts based on another event F and its complement Fᶜ.
 
-        ### From Simple Observation to Powerful Law
+    ### From Simple Observation to Powerful Law
 
-        Consider an event E that can occur in two ways:
+    Consider an event E that can occur in two ways:
 
-        1. When F occurs (E ∩ F)
-        2. When F doesn't occur (E ∩ Fᶜ)
+    1. When F occurs (E ∩ F)
+    2. When F doesn't occur (E ∩ Fᶜ)
 
-        This leads to our first insight:
+    This leads to our first insight:
 
-        $P(E) = P(E \cap F) + P(E \cap F^c)$
+    $P(E) = P(E \cap F) + P(E \cap F^c)$
 
-        Applying the chain rule to each term:
+    Applying the chain rule to each term:
 
-        \begin{align}
-        P(E) &= P(E \cap F) + P(E \cap F^c) \\
-        &= P(E|F)P(F) + P(E|F^c)P(F^c)
-        \end{align}
+    \begin{align}
+    P(E) &= P(E \cap F) + P(E \cap F^c) \\
+    &= P(E|F)P(F) + P(E|F^c)P(F^c)
+    \end{align}
 
-        This two-part version generalizes to any number of [mutually exclusive](marimo.app/https://github.com/marimo-team/learn/blob/main/probability/03_probability_of_or.py) events that cover the sample space:
+    This two-part version generalizes to any number of [mutually exclusive](marimo.app/https://github.com/marimo-team/learn/blob/main/probability/03_probability_of_or.py) events that cover the sample space:
 
-        $P(A) = \sum_{i=1}^n P(A|B_i)P(B_i)$
+    $P(A) = \sum_{i=1}^n P(A|B_i)P(B_i)$
 
-        where {B₁, B₂, ..., Bₙ} forms a partition of the sample space.
-        """
-    )
+    where {B₁, B₂, ..., Bₙ} forms a partition of the sample space.
+    """)
     return
 
 
@@ -98,7 +94,7 @@ def _():
 
     print("Odd/Even partition:", is_valid_partition(partition1, sample_space))
     print("Number pairs partition:", is_valid_partition(partition2, sample_space))
-    return is_valid_partition, partition1, partition2, sample_space
+    return (is_valid_partition,)
 
 
 @app.cell
@@ -111,7 +107,7 @@ def _(is_valid_partition):
     print("Student Grades Examples:")
     print("Pass/Fail partition:", is_valid_partition(passing_partition, grade_space))
     print("Individual grades partition:", is_valid_partition(letter_groups, grade_space))
-    return grade_space, letter_groups, passing_partition
+    return
 
 
 @app.cell
@@ -124,7 +120,7 @@ def _(is_valid_partition):
     print("\nPlaying Cards Examples:")
     print("Color-based partition:", is_valid_partition(color_partition, card_space))  # True
     print("Invalid partition:", is_valid_partition(invalid_partition, card_space))    # False
-    return card_space, color_partition, invalid_partition
+    return
 
 
 @app.cell(hide_code=True)
@@ -151,75 +147,71 @@ def _(mo, plt, venn2):
     """)
 
     mo.hstack([plt.gca(), viz_explanation])
-    return v, viz_explanation
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Computing Total Probability
-
-        To use the Law of Total Probability:
-
-        1. Identify a partition of the sample space
-        2. Calculate $P(B_i)$ for each part
-        3. Calculate $P(A|B_i)$ for each part
-        4. Sum the products $P(A|B_i)P(B_i)$
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Let's implement this calculation:""")
+    mo.md(r"""
+    ## Computing Total Probability
+
+    To use the Law of Total Probability:
+
+    1. Identify a partition of the sample space
+    2. Calculate $P(B_i)$ for each part
+    3. Calculate $P(A|B_i)$ for each part
+    4. Sum the products $P(A|B_i)P(B_i)$
+    """)
     return
-
-
-@app.cell
-def _():
-    def total_probability(conditional_probs, partition_probs):
-        """Calculate total probability using Law of Total Probability
-        conditional_probs: List of P(A|Bi)
-        partition_probs: List of P(Bi)
-        """
-        if len(conditional_probs) != len(partition_probs):
-            raise ValueError("Must have same number of conditional and partition probabilities")
-
-        if abs(sum(partition_probs) - 1) > 1e-10:
-            raise ValueError("Partition probabilities must sum to 1")
-
-        return sum(c * p for c, p in zip(conditional_probs, partition_probs))
-    return (total_probability,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Example: System Reliability
+    mo.md(r"""
+    Let's implement this calculation:
+    """)
+    return
 
-        Consider a computer system that can be in three states:
 
-        - Normal (70% of time)
-        - Degraded (20% of time)
-        - Critical (10% of time)
+@app.function
+def total_probability(conditional_probs, partition_probs):
+    """Calculate total probability using Law of Total Probability
+    conditional_probs: List of P(A|Bi)
+    partition_probs: List of P(Bi)
+    """
+    if len(conditional_probs) != len(partition_probs):
+        raise ValueError("Must have same number of conditional and partition probabilities")
 
-        The probability of errors in each state:
+    if abs(sum(partition_probs) - 1) > 1e-10:
+        raise ValueError("Partition probabilities must sum to 1")
 
-        - P(Error | Normal) = 0.01 (1%)
-        - P(Error | Degraded) = 0.15 (15%)
-        - P(Error | Critical) = 0.45 (45%)
+    return sum(c * p for c, p in zip(conditional_probs, partition_probs))
 
-        Let's calculate the overall probability of encountering an error:
-        """
-    )
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Example: System Reliability
+
+    Consider a computer system that can be in three states:
+
+    - Normal (70% of time)
+    - Degraded (20% of time)
+    - Critical (10% of time)
+
+    The probability of errors in each state:
+
+    - P(Error | Normal) = 0.01 (1%)
+    - P(Error | Degraded) = 0.15 (15%)
+    - P(Error | Critical) = 0.45 (45%)
+
+    Let's calculate the overall probability of encountering an error:
+    """)
     return
 
 
 @app.cell
-def _(mo, total_probability):
+def _(mo):
     # System states and probabilities
     states = ["Normal", "Degraded", "Critical"]
     state_probs = [0.7, 0.2, 0.1]  # System spends 70%, 20%, 10% of time in each state
@@ -252,12 +244,14 @@ def _(mo, total_probability):
     Total: {total_error:.3f} or {total_error:.1%} chance of error
     """)
     explanation
-    return error_probs, explanation, state_probs, states, total_error
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Interactive Example:""")
+    mo.md(r"""
+    ## Interactive Example:
+    """)
     return
 
 
@@ -311,24 +305,22 @@ def _(late_given_dry, late_given_rain, mo, plt, venn2, weather_prob):
     plt.title("Weather and Traffic Probability")
 
     mo.hstack([plt.gca(), explanation_example])
-    return explanation_example, p_dry, p_late, p_rain
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Visual Intuition
+    mo.md(r"""
+    ## Visual Intuition
 
-        The Law of Total Probability works because:
+    The Law of Total Probability works because:
 
-        1. The partition divides the sample space into non-overlapping regions
-        2. Every outcome belongs to exactly one region
-        3. We account for all possible ways an event can occur
+    1. The partition divides the sample space into non-overlapping regions
+    2. Every outcome belongs to exactly one region
+    3. We account for all possible ways an event can occur
 
-        Let's visualize this with a tree diagram:
-        """
-    )
+    Let's visualize this with a tree diagram:
+    """)
     return
 
 
@@ -371,49 +363,45 @@ def _(plt):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        For a fair six-sided die with partitions:
-        - B₁: Numbers less than 3 {1,2}
-        - B₂: Numbers from 3 to 4 {3,4}
-        - B₃: Numbers greater than 4 {5,6}
+    For a fair six-sided die with partitions:
+    - B₁: Numbers less than 3 {1,2}
+    - B₂: Numbers from 3 to 4 {3,4}
+    - B₃: Numbers greater than 4 {5,6}
 
-        **Question 1**: Which of these statements correctly describes the partition?
-        <details>
-        <summary>The sets overlap at number 3</summary>
-        ❌ Incorrect! The sets are clearly separated with no overlapping numbers.
-        </details>
-        <details>
-        <summary>Some numbers are missing from the partition</summary>
-        ❌ Incorrect! All numbers from 1 to 6 are included exactly once.
-        </details>
-        <details>
-        <summary>The sets form a valid partition of {1,2,3,4,5,6}</summary>
-        ✅ Correct! The sets are mutually exclusive and their union covers all outcomes.
-        </details>
-        """
-    )
+    **Question 1**: Which of these statements correctly describes the partition?
+    <details>
+    <summary>The sets overlap at number 3</summary>
+    ❌ Incorrect! The sets are clearly separated with no overlapping numbers.
+    </details>
+    <details>
+    <summary>Some numbers are missing from the partition</summary>
+    ❌ Incorrect! All numbers from 1 to 6 are included exactly once.
+    </details>
+    <details>
+    <summary>The sets form a valid partition of {1,2,3,4,5,6}</summary>
+    ✅ Correct! The sets are mutually exclusive and their union covers all outcomes.
+    </details>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Summary
+    mo.md("""
+    ## Summary
 
-        You've learned:
+    You've learned:
 
-        - How to identify valid partitions of a sample space
-        - The Law of Total Probability formula and its components
-        - How to break down complex probability calculations
-        - Applications to real-world scenarios
+    - How to identify valid partitions of a sample space
+    - The Law of Total Probability formula and its components
+    - How to break down complex probability calculations
+    - Applications to real-world scenarios
 
-        In the next lesson, we'll explore **Bayes' Theorem**, which builds on these concepts to solve even more sophisticated probability problems.
-        """
-    )
+    In the next lesson, we'll explore **Bayes' Theorem**, which builds on these concepts to solve even more sophisticated probability problems.
+    """)
     return
 
 

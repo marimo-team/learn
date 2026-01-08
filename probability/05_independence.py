@@ -7,7 +7,7 @@
 
 import marimo
 
-__generated_with = "0.11.4"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
@@ -19,88 +19,84 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Independence in Probability Theory
+    mo.md("""
+    # Independence in Probability Theory
 
-        _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/independence/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/independence/), by Stanford professor Chris Piech._
 
-        In probability theory, independence is a fundamental concept that helps us understand 
-        when events don't influence each other. Two events are independent if knowing the 
-        outcome of one event doesn't change our belief about the other event occurring.
+    In probability theory, independence is a fundamental concept that helps us understand
+    when events don't influence each other. Two events are independent if knowing the
+    outcome of one event doesn't change our belief about the other event occurring.
 
-        ## Definition of Independence
+    ## Definition of Independence
 
-        Two events $E$ and $F$ are independent if:
+    Two events $E$ and $F$ are independent if:
 
-        $$P(E|F) = P(E)$$
+    $$P(E|F) = P(E)$$
 
-        This means that knowing $F$ occurred doesn't change the probability of $E$ occurring.
+    This means that knowing $F$ occurred doesn't change the probability of $E$ occurring.
 
-        ### _Alternative Definition_
+    ### _Alternative Definition_
 
-        Using the chain rule, we can derive another equivalent definition:
+    Using the chain rule, we can derive another equivalent definition:
 
-        $$P(E \cap F) = P(E) \cdot P(F)$$
-        """
-    )
+    $$P(E \cap F) = P(E) \cdot P(F)$$
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Independence is Symmetric
+    mo.md(r"""
+    ## Independence is Symmetric
 
-        This property is symmetric: if $E$ is independent of $F$, then $F$ is independent of $E$. 
-        We can prove this using Bayes' Theorem:
+    This property is symmetric: if $E$ is independent of $F$, then $F$ is independent of $E$.
+    We can prove this using Bayes' Theorem:
 
-        \[P(E|F) = \frac{P(F|E)P(E)}{P(F)}\]
+    \[P(E|F) = \frac{P(F|E)P(E)}{P(F)}\]
 
-        \[= \frac{P(F)P(E)}{P(F)}\]
+    \[= \frac{P(F)P(E)}{P(F)}\]
 
-        \[= P(E)\]
+    \[= P(E)\]
 
-        ## Independence and Complements
+    ## Independence and Complements
 
-        Given independent events $A$ and $B$, we can prove that $A$ and $B^C$ are also independent:
-
-
-        \[P(AB^C) = P(A) - P(AB)\]
-
-        \[= P(A) - P(A)P(B)\]
-
-        \[= P(A)(1 - P(B))\]
-
-        \[= P(A)P(B^C)\]
-
-        ## Generalized Independence
-
-        Events $E_1, E_2, \ldots, E_n$ are independent if for every subset with $r$ elements (where $r \leq n$):
-
-        \[P(E_1, E_2, \ldots, E_r) = \prod_{i=1}^r P(E_i)\]
-
-        For example, consider getting 5 heads on 5 coin flips. Let $H_i$ be the event that the $i$th flip is heads:
+    Given independent events $A$ and $B$, we can prove that $A$ and $B^C$ are also independent:
 
 
-        \[P(H_1, H_2, H_3, H_4, H_5) = P(H_1)P(H_2)P(H_3)P(H_4)P(H_5)\]
+    \[P(AB^C) = P(A) - P(AB)\]
 
-        \[= \prod_{i=1}^5 P(H_i)\]
+    \[= P(A) - P(A)P(B)\]
 
-        \[= \left(\frac{1}{2}\right)^5 = 0.03125\]
+    \[= P(A)(1 - P(B))\]
 
-        ## Conditional Independence
+    \[= P(A)P(B^C)\]
 
-        Events $E_1, E_2, E_3$ are conditionally independent given event $F$ if:
+    ## Generalized Independence
 
-        \[P(E_1, E_2, E_3 | F) = P(E_1|F)P(E_2|F)P(E_3|F)\]
+    Events $E_1, E_2, \ldots, E_n$ are independent if for every subset with $r$ elements (where $r \leq n$):
 
-        This can be written more succinctly using product notation:
+    \[P(E_1, E_2, \ldots, E_r) = \prod_{i=1}^r P(E_i)\]
 
-        \[P(E_1, E_2, E_3 | F) = \prod_{i=1}^3 P(E_i|F)\]
-        """
-    )
+    For example, consider getting 5 heads on 5 coin flips. Let $H_i$ be the event that the $i$th flip is heads:
+
+
+    \[P(H_1, H_2, H_3, H_4, H_5) = P(H_1)P(H_2)P(H_3)P(H_4)P(H_5)\]
+
+    \[= \prod_{i=1}^5 P(H_i)\]
+
+    \[= \left(\frac{1}{2}\right)^5 = 0.03125\]
+
+    ## Conditional Independence
+
+    Events $E_1, E_2, E_3$ are conditionally independent given event $F$ if:
+
+    \[P(E_1, E_2, E_3 | F) = P(E_1|F)P(E_2|F)P(E_3|F)\]
+
+    This can be written more succinctly using product notation:
+
+    \[P(E_1, E_2, E_3 | F) = \prod_{i=1}^3 P(E_i|F)\]
+    """)
     return
 
 
@@ -121,21 +117,19 @@ def _(mo):
         callout_text,
         kind="warn"
     )
-    return (callout_text,)
+    return
+
+
+@app.function
+def check_independence(p_e, p_f, p_intersection):
+    expected = p_e * p_f
+    tolerance = 1e-5  # Stricter tolerance for comparison
+
+    return abs(p_intersection - expected) < tolerance
 
 
 @app.cell
-def _():
-    def check_independence(p_e, p_f, p_intersection):
-        expected = p_e * p_f
-        tolerance = 1e-5  # Stricter tolerance for comparison
-
-        return abs(p_intersection - expected) < tolerance
-    return (check_independence,)
-
-
-@app.cell
-def _(check_independence, mo):
+def _(mo):
     # Example 1: Rolling dice
     p_first_even = 0.5      # P(First die is even)
     p_second_six = 1/6      # P(Second die is 6)
@@ -157,11 +151,11 @@ def _(check_independence, mo):
     </details>
     """
     mo.md(example1)
-    return dice_independent, example1, p_both, p_first_even, p_second_six
+    return
 
 
 @app.cell
-def _(check_independence, mo):
+def _(mo):
     # Example 2: Drawing cards (dependent events)
     p_first_heart = 13/52    # P(First card is heart)
     p_second_heart = 12/51   # P(Second card is heart | First was heart)
@@ -192,18 +186,11 @@ def _(check_independence, mo):
     </details>
     """
     mo.md(example2)
-    return (
-        cards_independent,
-        example2,
-        p_both_hearts,
-        p_first_heart,
-        p_second_heart,
-        theoretical_if_independent,
-    )
+    return
 
 
 @app.cell
-def _(check_independence, mo):
+def _(mo):
     # Example 3: Computer system
     p_hardware = 0.02       # P(Hardware failure)
     p_software = 0.03       # P(Software crash)
@@ -224,60 +211,54 @@ def _(check_independence, mo):
     </details>
     """
     mo.md(example3)
-    return (
-        example3,
-        p_both_failure,
-        p_hardware,
-        p_software,
-        system_independent,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ## Establishing Independence
-
-        In practice, we can establish independence through:
-
-        1. **Mathematical Verification**: Show that P(E∩F) = P(E)P(F)
-        2. **Empirical Testing**: Analyze data to check if events appear independent
-        3. **Domain Knowledge**: Use understanding of the system to justify independence
-
-        > **Note**: Perfect independence is rare in real data. We often make independence assumptions 
-        when dependencies are negligible and the simplification is useful.
-
-        ## Backup Systems in Space Missions
-
-        Consider a space mission with two backup life support systems:
-
-        $$P(\text{Primary fails}) = p_1$$
-
-        $$P(\text{Secondary fails}) = p_2$$
-
-        If the systems are truly independent (different power sources, separate locations, distinct technologies):
-
-        $$P(\text{Life support fails}) = p_1p_2$$
-
-        For example:
-
-        - If $p_1 = 0.01$ and $p_2 = 0.02$ (99% and 98% reliable)
-        - Then $P(\text{Total failure}) = 0.0002$ (99.98% reliable)
-
-        However, if both systems share vulnerabilities (same radiation exposure, temperature extremes):
-
-        $$P(\text{Life support fails}) > p_1p_2$$
-
-        This example shows why space agencies invest heavily in ensuring true independence of backup systems.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Interactive Example""")
+    mo.md("""
+    ## Establishing Independence
+
+    In practice, we can establish independence through:
+
+    1. **Mathematical Verification**: Show that P(E∩F) = P(E)P(F)
+    2. **Empirical Testing**: Analyze data to check if events appear independent
+    3. **Domain Knowledge**: Use understanding of the system to justify independence
+
+    > **Note**: Perfect independence is rare in real data. We often make independence assumptions
+    when dependencies are negligible and the simplification is useful.
+
+    ## Backup Systems in Space Missions
+
+    Consider a space mission with two backup life support systems:
+
+    $$P(	ext{Primary fails}) = p_1$$
+
+    $$P(	ext{Secondary fails}) = p_2$$
+
+    If the systems are truly independent (different power sources, separate locations, distinct technologies):
+
+    $$P(	ext{Life support fails}) = p_1p_2$$
+
+    For example:
+
+    - If $p_1 = 0.01$ and $p_2 = 0.02$ (99% and 98% reliable)
+    - Then $P(	ext{Total failure}) = 0.0002$ (99.98% reliable)
+
+    However, if both systems share vulnerabilities (same radiation exposure, temperature extremes):
+
+    $$P(	ext{Life support fails}) > p_1p_2$$
+
+    This example shows why space agencies invest heavily in ensuring true independence of backup systems.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Interactive Example
+    """)
     return
 
 
@@ -292,7 +273,7 @@ def _(mo):
     flip_button = mo.ui.run_button(label="Flip Coins!", kind="info")
     reset_button = mo.ui.run_button(label="Reset", kind="danger")
     stats_display = mo.md("*Click 'Flip Coins!' to start simulation*")
-    return flip_button, reset_button, stats_display
+    return flip_button, reset_button
 
 
 @app.cell(hide_code=True)
@@ -337,95 +318,80 @@ def _(flip_button, mo, np, reset_button):
 
     new_stats_display = mo.md(stats)
     new_stats_display
-    return (
-        coin1,
-        coin2,
-        new_stats_display,
-        p_both_h,
-        p_h1,
-        p_h2,
-        p_product,
-        stats,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        """
-        ## Understanding the Simulation
-
-        This simulation demonstrates independence using coin flips, where each coin's outcome is unaffected by the other.
-
-        ### Reading the Results
-
-        1. **Individual Probabilities:**
-
-               - P(H₁): 1 if heads, 0 if tails on first coin
-               - P(H₂): 1 if heads, 0 if tails on second coin
-
-        2. **Testing Independence:**
-
-               - P(Both Heads): 1 if both show heads, 0 otherwise
-               - P(H₁)P(H₂): Product of individual results
-
-        > **Note**: Each click performs a new independent trial. While a single flip shows binary outcomes (0 or 1), 
-        the theoretical probability is 0.5 for each coin and 0.25 for both heads.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md("""
+    ## Understanding the Simulation
 
-        Which of these statements about independence are true?
+    This simulation demonstrates independence using coin flips, where each coin's outcome is unaffected by the other.
 
-        <details>
-        <summary>If P(E|F) = P(E), then E and F are independent</summary>
-        ✅ True! This is one definition of independence - knowing F occurred doesn't change the probability of E.
-        </details>
+    ### Reading the Results
 
-        <details>
-        <summary>Independent events cannot occur simultaneously</summary>
-        ❌ False! Independent events can and do occur together - their joint probability is just the product of their individual probabilities.
-        </details>
+    1. **Individual Probabilities:**
 
-        <details>
-        <summary>If P(E∩F) = P(E)P(F), then E and F are independent</summary>
-        ✅ True! This is the multiplicative definition of independence.
-        </details>
+           - P(H₁): 1 if heads, 0 if tails on first coin
+           - P(H₂): 1 if heads, 0 if tails on second coin
 
-        <details>
-        <summary>Independence is symmetric: if E is independent of F, then F is independent of E</summary>
-        ✅ True! The definition P(E∩F) = P(E)P(F) is symmetric in E and F.
-        </details>
+    2. **Testing Independence:**
 
-        <details>
-        <summary>Three events being pairwise independent means they are mutually independent</summary>
-        ❌ False! Pairwise independence doesn't guarantee mutual independence - we need to check all combinations.
-        </details>
-        """
-    )
+           - P(Both Heads): 1 if both show heads, 0 otherwise
+           - P(H₁)P(H₂): Product of individual results
+
+    > **Note**: Each click performs a new independent trial. While a single flip shows binary outcomes (0 or 1),
+    the theoretical probability is 0.5 for each coin and 0.25 for both heads.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        In this exploration of probability independence, we've discovered how to recognize when events truly don't influence each other. Through the lens of both mathematical definitions and interactive examples, we've seen how independence manifests in scenarios ranging from simple coin flips to critical system designs.
+    Which of these statements about independence are true?
 
-        The power of independence lies in its simplicity: when events are independent, we can multiply their individual probabilities to understand their joint behavior. Yet, as our examples showed, true independence is often more nuanced than it first appears. What seems independent might harbor hidden dependencies, and what appears dependent might be independent under certain conditions.
+    <details>
+    <summary>If P(E|F) = P(E), then E and F are independent</summary>
+    ✅ True! This is one definition of independence - knowing F occurred doesn't change the probability of E.
+    </details>
 
-        _The art lies not just in calculating probabilities, but in developing the intuition to recognize independence in real-world scenarios—a skill essential for making informed decisions in uncertain situations._
-        """
-    )
+    <details>
+    <summary>Independent events cannot occur simultaneously</summary>
+    ❌ False! Independent events can and do occur together - their joint probability is just the product of their individual probabilities.
+    </details>
+
+    <details>
+    <summary>If P(E∩F) = P(E)P(F), then E and F are independent</summary>
+    ✅ True! This is the multiplicative definition of independence.
+    </details>
+
+    <details>
+    <summary>Independence is symmetric: if E is independent of F, then F is independent of E</summary>
+    ✅ True! The definition P(E∩F) = P(E)P(F) is symmetric in E and F.
+    </details>
+
+    <details>
+    <summary>Three events being pairwise independent means they are mutually independent</summary>
+    ❌ False! Pairwise independence doesn't guarantee mutual independence - we need to check all combinations.
+    </details>
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ## Summary
+
+    In this exploration of probability independence, we've discovered how to recognize when events truly don't influence each other. Through the lens of both mathematical definitions and interactive examples, we've seen how independence manifests in scenarios ranging from simple coin flips to critical system designs.
+
+    The power of independence lies in its simplicity: when events are independent, we can multiply their individual probabilities to understand their joint behavior. Yet, as our examples showed, true independence is often more nuanced than it first appears. What seems independent might harbor hidden dependencies, and what appears dependent might be independent under certain conditions.
+
+    _The art lies not just in calculating probabilities, but in developing the intuition to recognize independence in real-world scenarios—a skill essential for making informed decisions in uncertain situations._
+    """)
     return
 
 
@@ -433,7 +399,7 @@ def _(mo):
 def _():
     import numpy as np
     import pandas as pd
-    return np, pd
+    return (np,)
 
 
 if __name__ == "__main__":
