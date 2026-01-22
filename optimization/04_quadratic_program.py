@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.11.0"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
@@ -23,53 +23,49 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Quadratic program
+    mo.md(r"""
+    # Quadratic program
 
-        A quadratic program is an optimization problem with a quadratic objective and
-        affine equality and inequality constraints. A common standard form is the
-        following:
+    A quadratic program is an optimization problem with a quadratic objective and
+    affine equality and inequality constraints. A common standard form is the
+    following:
 
-        \[
-            \begin{array}{ll}
-            \text{minimize}   & (1/2)x^TPx + q^Tx\\
-            \text{subject to} & Gx \leq h \\
-                              & Ax = b.
-            \end{array}
-        \]
+    \[
+        \begin{array}{ll}
+        \text{minimize}   & (1/2)x^TPx + q^Tx\\
+        \text{subject to} & Gx \leq h \\
+                          & Ax = b.
+        \end{array}
+    \]
 
-        Here $P \in \mathcal{S}^{n}_+$, $q \in \mathcal{R}^n$, $G \in \mathcal{R}^{m \times n}$, $h \in \mathcal{R}^m$, $A \in \mathcal{R}^{p \times n}$, and $b \in \mathcal{R}^p$ are problem data and $x \in \mathcal{R}^{n}$ is the optimization variable. The inequality constraint $Gx \leq h$ is elementwise.
+    Here $P \in \mathcal{S}^{n}_+$, $q \in \mathcal{R}^n$, $G \in \mathcal{R}^{m \times n}$, $h \in \mathcal{R}^m$, $A \in \mathcal{R}^{p \times n}$, and $b \in \mathcal{R}^p$ are problem data and $x \in \mathcal{R}^{n}$ is the optimization variable. The inequality constraint $Gx \leq h$ is elementwise.
 
-        **Why quadratic programming?** Quadratic programs are convex optimization problems that generalize both least-squares and linear programming.They can be solved efficiently and reliably, even in real-time.
+    **Why quadratic programming?** Quadratic programs are convex optimization problems that generalize both least-squares and linear programming.They can be solved efficiently and reliably, even in real-time.
 
-        **An example from finance.** A simple example of a quadratic program arises in finance. Suppose we have $n$ different stocks, an estimate $r \in \mathcal{R}^n$ of the expected return on each stock, and an estimate $\Sigma \in \mathcal{S}^{n}_+$ of the covariance of the returns. Then we solve the optimization problem
+    **An example from finance.** A simple example of a quadratic program arises in finance. Suppose we have $n$ different stocks, an estimate $r \in \mathcal{R}^n$ of the expected return on each stock, and an estimate $\Sigma \in \mathcal{S}^{n}_+$ of the covariance of the returns. Then we solve the optimization problem
 
-        \[
-            \begin{array}{ll}
-            \text{minimize}   & (1/2)x^T\Sigma x - r^Tx\\
-            \text{subject to} & x \geq 0 \\
-                              & \mathbf{1}^Tx = 1,
-            \end{array}
-        \]
+    \[
+        \begin{array}{ll}
+        \text{minimize}   & (1/2)x^T\Sigma x - r^Tx\\
+        \text{subject to} & x \geq 0 \\
+                          & \mathbf{1}^Tx = 1,
+        \end{array}
+    \]
 
-        to find a nonnegative portfolio allocation $x \in \mathcal{R}^n_+$ that optimally balances expected return and variance of return.
+    to find a nonnegative portfolio allocation $x \in \mathcal{R}^n_+$ that optimally balances expected return and variance of return.
 
-        When we solve a quadratic program, in addition to a solution $x^\star$, we obtain a dual solution $\lambda^\star$ corresponding to the inequality constraints. A positive entry $\lambda^\star_i$ indicates that the constraint $g_i^Tx \leq h_i$ holds with equality for $x^\star$ and suggests that changing $h_i$ would change the optimal value.
-        """
-    )
+    When we solve a quadratic program, in addition to a solution $x^\star$, we obtain a dual solution $\lambda^\star$ corresponding to the inequality constraints. A positive entry $\lambda^\star_i$ indicates that the constraint $g_i^Tx \leq h_i$ holds with equality for $x^\star$ and suggests that changing $h_i$ would change the optimal value.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Example
+    mo.md(r"""
+    ## Example
 
-        In this example, we use CVXPY to construct and solve a quadratic program.
-        """
-    )
+    In this example, we use CVXPY to construct and solve a quadratic program.
+    """)
     return
 
 
@@ -82,7 +78,9 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""First we generate synthetic data. In this problem, we don't include equality constraints, only inequality.""")
+    mo.md("""
+    First we generate synthetic data. In this problem, we don't include equality constraints, only inequality.
+    """)
     return
 
 
@@ -95,7 +93,7 @@ def _(np):
     q = np.random.randn(n)
     G = np.random.randn(m, n)
     h = G @ np.random.randn(n)
-    return G, h, m, n, q
+    return G, h, n, q
 
 
 @app.cell(hide_code=True)
@@ -114,7 +112,7 @@ def _(mo, np):
         {P_widget.center()}
         """
     )
-    return P_widget, wigglystuff
+    return (P_widget,)
 
 
 @app.cell
@@ -125,7 +123,9 @@ def _(P_widget, np):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Next, we specify the problem. Notice that we use the `quad_form` function from CVXPY to create the quadratic form $x^TPx$.""")
+    mo.md(r"""
+    Next, we specify the problem. Notice that we use the `quad_form` function from CVXPY to create the quadratic form $x^TPx$.
+    """)
     return
 
 
@@ -162,14 +162,12 @@ def _(G, P, h, plot_contours, q, x):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        In this plot, the gray shaded region is the feasible region (points satisfying the inequality), and the ellipses are level curves of the quadratic form.
+    mo.md(r"""
+    In this plot, the gray shaded region is the feasible region (points satisfying the inequality), and the ellipses are level curves of the quadratic form.
 
-        **🌊 Try it!** Try changing the entries of $P$ above with your mouse. How do the
-        level curves and the optimal value of $x$ change? Can you explain what you see?
-        """
-    )
+    **🌊 Try it!** Try changing the entries of $P$ above with your mouse. How do the
+    level curves and the optimal value of $x$ change? Can you explain what you see?
+    """)
     return
 
 
@@ -178,7 +176,7 @@ def _(P, mo):
     mo.md(
         rf"""
         The above contour lines were generated with
-        
+
         \[
         P= \begin{{bmatrix}}
         {P[0, 0]:.01f} & {P[0, 1]:.01f} \\

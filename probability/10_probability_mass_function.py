@@ -10,57 +10,51 @@
 
 import marimo
 
-__generated_with = "0.12.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Probability Mass Functions")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Probability Mass Functions
+    mo.md(r"""
+    # Probability Mass Functions
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/pmf/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/pmf/), by Stanford professor Chris Piech._
 
-        PMFs are really important in discrete probability. They tell us how likely each possible outcome is for a discrete random variable.
+    PMFs are really important in discrete probability. They tell us how likely each possible outcome is for a discrete random variable.
 
-        What's interesting about PMFs is that they can be represented in multiple ways - equations, graphs, or even empirical data. The core idea is simple: they map each possible value to its probability.
-        """
-    )
+    What's interesting about PMFs is that they can be represented in multiple ways - equations, graphs, or even empirical data. The core idea is simple: they map each possible value to its probability.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Properties of a PMF
+    mo.md(r"""
+    ## Properties of a PMF
 
-        For a function $p_X(x)$ to be a valid PMF:
+    For a function $p_X(x)$ to be a valid PMF:
 
-        1. **Non-negativity**: probability can't be negative, so $p_X(x) \geq 0$ for all $x$
-        2. **Unit total probability**: all probabilities sum to 1, i.e., $\sum_x p_X(x) = 1$
+    1. **Non-negativity**: probability can't be negative, so $p_X(x) \geq 0$ for all $x$
+    2. **Unit total probability**: all probabilities sum to 1, i.e., $\sum_x p_X(x) = 1$
 
-        The second property makes intuitive sense - a random variable must take some value, and the sum of all possibilities should be 100%.
-        """
-    )
+    The second property makes intuitive sense - a random variable must take some value, and the sum of all possibilities should be 100%.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## PMFs as Graphs
+    mo.md(r"""
+    ## PMFs as Graphs
 
-        Let's start by looking at PMFs as graphs where the $x$-axis is the values that the random variable could take on and the $y$-axis is the probability of the random variable taking on said value.
+    Let's start by looking at PMFs as graphs where the $x$-axis is the values that the random variable could take on and the $y$-axis is the probability of the random variable taking on said value.
 
-        In the following example, we show two PMFs:
+    In the following example, we show two PMFs:
 
-        - On the left: PMF for the random variable $X$ = the value of a single six-sided die roll
-        - On the right: PMF for the random variable $Y$ = value of the sum of two dice rolls
-        """
-    )
+    - On the left: PMF for the random variable $X$ = the value of a single six-sided die roll
+    - On the right: PMF for the random variable $Y$ = value of the sum of two dice rolls
+    """)
     return
 
 
@@ -102,53 +96,39 @@ def _(np, plt):
 
     plt.tight_layout()
     plt.gca()
-    return (
-        dice_ax1,
-        dice_ax2,
-        dice_fig,
-        dice_prob,
-        dice_sum,
-        single_die_probs,
-        single_die_values,
-        two_dice_probs,
-        two_dice_values,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        These graphs really show us how likely each value is when we roll the dice.
-
-        looking at the right graph, when we see "6" on the $x$-axis with probability $\frac{5}{36}$ on the $y$-axis, that's telling us there's a $\frac{5}{36}$ chance of rolling a sum of 6 with two dice. or more formally: $P(Y = 6) = \frac{5}{36}$.
-
-        Similarly, the value "2" has probability "$\frac{1}{36}$" - that's because there's only one way to get a sum of 2 (rolling 1 on both dice). and you'll notice there's no value for "1" since you can't get a sum of 1 with two dice - the minimum possible is 2.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## PMFs as Equations
+    mo.md(r"""
+    These graphs really show us how likely each value is when we roll the dice.
 
-        Here is the exact same information in equation form:
+    looking at the right graph, when we see "6" on the $x$-axis with probability $\frac{5}{36}$ on the $y$-axis, that's telling us there's a $\frac{5}{36}$ chance of rolling a sum of 6 with two dice. or more formally: $P(Y = 6) = \frac{5}{36}$.
 
-        For a single die roll $X$:
-        $$P(X=x) = \frac{1}{6} \quad \text{ if } 1 \leq x \leq 6$$
+    Similarly, the value "2" has probability "$\frac{1}{36}$" - that's because there's only one way to get a sum of 2 (rolling 1 on both dice). and you'll notice there's no value for "1" since you can't get a sum of 1 with two dice - the minimum possible is 2.
+    """)
+    return
 
-        For the sum of two dice $Y$:
-        $$P(Y=y) = \begin{cases}
-        \frac{(y-1)}{36} & \text{ if } 2 \leq y \leq 7\\
-        \frac{(13-y)}{36} & \text{ if } 8 \leq y \leq 12
-        \end{cases}$$
 
-        Let's implement the PMF for $Y$, the sum of two dice, in Python code:
-        """
-    )
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## PMFs as Equations
+
+    Here is the exact same information in equation form:
+
+    For a single die roll $X$:
+    $$P(X=x) = \frac{1}{6} \quad \text{ if } 1 \leq x \leq 6$$
+
+    For the sum of two dice $Y$:
+    $$P(Y=y) = \begin{cases}
+    \frac{(y-1)}{36} & \text{ if } 2 \leq y \leq 7\\
+    \frac{(13-y)}{36} & \text{ if } 8 \leq y \leq 12
+    \end{cases}$$
+
+    Let's implement the PMF for $Y$, the sum of two dice, in Python code:
+    """)
     return
 
 
@@ -167,12 +147,14 @@ def _():
     test_values = [1, 2, 7, 12, 13]
     for test_y in test_values:
         print(f"P(Y = {test_y}) = {pmf_sum_two_dice(test_y)}")
-    return pmf_sum_two_dice, test_values, test_y
+    return (pmf_sum_two_dice,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now, let's verify that our PMF satisfies the property that the sum of all probabilities equals 1:""")
+    mo.md(r"""
+    Now, let's verify that our PMF satisfies the property that the sum of all probabilities equals 1:
+    """)
     return
 
 
@@ -183,7 +165,7 @@ def _(pmf_sum_two_dice):
     # Round to 10 decimal places to handle floating-point precision
     verify_total_prob_rounded = round(verify_total_prob, 10)
     print(f"Sum of all probabilities: {verify_total_prob_rounded}")
-    return verify_total_prob, verify_total_prob_rounded
+    return
 
 
 @app.cell(hide_code=True)
@@ -205,18 +187,16 @@ def _(plt, pmf_sum_two_dice):
         plt.text(verify_y_values[verify_i], verify_prob + 0.001, f'{verify_prob:.3f}', ha='center')
 
     plt.gca()  # Return the current axes to ensure proper display
-    return verify_i, verify_prob, verify_probabilities, verify_y_values
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Data to Histograms to Probability Mass Functions
+    mo.md(r"""
+    ## Data to Histograms to Probability Mass Functions
 
-        Here's something I find interesting — one way to represent a likelihood function is just through raw data. instead of mathematical formulas, we can actually approximate a PMF by collecting data points. let's see this in action by simulating lots of dice rolls and building an empirical PMF:
-        """
-    )
+    Here's something I find interesting — one way to represent a likelihood function is just through raw data. instead of mathematical formulas, we can actually approximate a PMF by collecting data points. let's see this in action by simulating lots of dice rolls and building an empirical PMF:
+    """)
     return
 
 
@@ -236,7 +216,7 @@ def _(np):
     # Display a small sample of the data
     print(f"First 20 dice sums: {sim_dice_sums[:20]}")
     print(f"Total number of trials: {sim_num_trials}")
-    return sim_dice_sums, sim_die1, sim_die2, sim_num_trials
+    return (sim_dice_sums,)
 
 
 @app.cell(hide_code=True)
@@ -296,32 +276,16 @@ def _(collections, np, plt, sim_dice_sums):
         plt.text(sim_sorted_values[sim_i], sim_count + 19, str(sim_count), ha='center')
 
     plt.gca()  # Return the current axes to ensure proper display
-    return (
-        sim_ax1,
-        sim_ax2,
-        sim_count,
-        sim_counter,
-        sim_counts,
-        sim_empirical_pmf,
-        sim_fig,
-        sim_i,
-        sim_prob,
-        sim_sorted_values,
-        sim_theoretical_pmf,
-        sim_theoretical_values,
-        sim_y,
-    )
+    return (sim_counter,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        When we normalize a histogram (divide each count by total sample size), we get a pretty good approximation of the true PMF. it's a simple yet powerful idea - count how many times each value appears, then divide by the total number of trials.
+    mo.md(r"""
+    When we normalize a histogram (divide each count by total sample size), we get a pretty good approximation of the true PMF. it's a simple yet powerful idea - count how many times each value appears, then divide by the total number of trials.
 
-        let's make this concrete. say we want to estimate $P(Y=3)$ - the probability of rolling a sum of 3 with two dice. we just count how many 3's show up in our simulated rolls and divide by the total number of rolls:
-        """
-    )
+    let's make this concrete. say we want to estimate $P(Y=3)$ - the probability of rolling a sum of 3 with two dice. we just count how many 3's show up in our simulated rolls and divide by the total number of rolls:
+    """)
     return
 
 
@@ -338,20 +302,18 @@ def _(sim_counter, sim_dice_sums):
     print(f"Empirical P(Y=3): {sim_count_of_3}/{len(sim_dice_sums)} = {sim_empirical_prob:.4f}")
     print(f"Theoretical P(Y=3): 2/36 = {sim_theoretical_prob:.4f}")
     print(f"Difference: {abs(sim_empirical_prob - sim_theoretical_prob):.4f}")
-    return sim_count_of_3, sim_empirical_prob, sim_theoretical_prob
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        As we can see, with a large number of trials, the empirical PMF becomes a very good approximation of the theoretical PMF. This is an example of the [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers) in action.
+    mo.md(r"""
+    As we can see, with a large number of trials, the empirical PMF becomes a very good approximation of the theoretical PMF. This is an example of the [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers) in action.
 
-        ## Interactive Example: Exploring PMFs
+    ## Interactive Example: Exploring PMFs
 
-        Let's create an interactive tool to explore different PMFs:
-        """
-    )
+    Let's create an interactive tool to explore different PMFs:
+    """)
     return
 
 
@@ -482,38 +444,20 @@ def _(dist_param1, dist_param2, dist_selection, np, plt, stats):
              bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 
     plt.gca()  # Return the current axes to ensure proper display
-    return (
-        dist_baseline,
-        dist_lam,
-        dist_markerline,
-        dist_max_x,
-        dist_mean,
-        dist_n,
-        dist_p,
-        dist_pmf_values,
-        dist_props_text,
-        dist_std_dev,
-        dist_stemlines,
-        dist_title,
-        dist_variance,
-        dist_x_label,
-        dist_x_values,
-    )
+    return dist_pmf_values, dist_x_values
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Expected Value from a PMF
+    mo.md(r"""
+    ## Expected Value from a PMF
 
-        The expected value (or mean) of a discrete random variable is calculated using its PMF:
+    The expected value (or mean) of a discrete random variable is calculated using its PMF:
 
-        $$E[X] = \sum_x x \cdot p_X(x)$$
+    $$E[X] = \sum_x x \cdot p_X(x)$$
 
-        This represents the long-run average value of the random variable.
-        """
-    )
+    This represents the long-run average value of the random variable.
+    """)
     return
 
 
@@ -527,24 +471,22 @@ def _(dist_pmf_values, dist_x_values):
     ev_dist_mean = calc_expected_value(dist_x_values, dist_pmf_values)
 
     print(f"Expected value: {ev_dist_mean:.4f}")
-    return calc_expected_value, ev_dist_mean
+    return (ev_dist_mean,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Variance from a PMF
+    mo.md(r"""
+    ## Variance from a PMF
 
-        The variance measures the spread or dispersion of a random variable around its mean:
+    The variance measures the spread or dispersion of a random variable around its mean:
 
-        $$\text{Var}(X) = E[(X - E[X])^2] = \sum_x (x - E[X])^2 \cdot p_X(x)$$
+    $$\text{Var}(X) = E[(X - E[X])^2] = \sum_x (x - E[X])^2 \cdot p_X(x)$$
 
-        An alternative formula is:
+    An alternative formula is:
 
-        $$\text{Var}(X) = E[X^2] - (E[X])^2 = \sum_x x^2 \cdot p_X(x) - \left(\sum_x x \cdot p_X(x)\right)^2$$
-        """
-    )
+    $$\text{Var}(X) = E[X^2] - (E[X])^2 = \sum_x x^2 \cdot p_X(x) - \left(\sum_x x \cdot p_X(x)\right)^2$$
+    """)
     return
 
 
@@ -560,22 +502,20 @@ def _(dist_pmf_values, dist_x_values, ev_dist_mean, np):
 
     print(f"Variance: {var_dist_var:.4f}")
     print(f"Standard deviation: {var_dist_std_dev:.4f}")
-    return calc_variance, var_dist_std_dev, var_dist_var
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## PMF vs. CDF
+    mo.md(r"""
+    ## PMF vs. CDF
 
-        The **Cumulative Distribution Function (CDF)** is related to the PMF but gives the probability that the random variable $X$ is less than or equal to a value $x$:
+    The **Cumulative Distribution Function (CDF)** is related to the PMF but gives the probability that the random variable $X$ is less than or equal to a value $x$:
 
-        $$F_X(x) = P(X \leq x) = \sum_{k \leq x} p_X(k)$$
+    $$F_X(x) = P(X \leq x) = \sum_{k \leq x} p_X(k)$$
 
-        While the PMF gives the probability mass at each point, the CDF accumulates these probabilities.
-        """
-    )
+    While the PMF gives the probability mass at each point, the CDF accumulates these probabilities.
+    """)
     return
 
 
@@ -612,77 +552,69 @@ def _(dist_pmf_values, dist_x_values, np, plt):
 
     plt.tight_layout()
     plt.gca()  # Return the current axes to ensure proper display
-    return cdf_ax1, cdf_ax2, cdf_dist_values, cdf_fig, x_max, x_min
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        The graphs above illustrate the key difference between PMF and CDF:
-
-        - **PMF (left)**: Shows the probability of the random variable taking each specific value: P(X = x)
-        - **CDF (right)**: Shows the probability of the random variable being less than or equal to each value: P(X ≤ x)
-
-        The CDF at any point is the sum of all PMF values up to and including that point. This is why the CDF is always non-decreasing and eventually reaches 1. For discrete distributions like this one, the CDF forms a step function that jumps at each value in the support of the random variable.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Test Your Understanding
+    mo.md(r"""
+    The graphs above illustrate the key difference between PMF and CDF:
 
-        Choose what you believe are the correct options in the questions below:
+    - **PMF (left)**: Shows the probability of the random variable taking each specific value: P(X = x)
+    - **CDF (right)**: Shows the probability of the random variable being less than or equal to each value: P(X ≤ x)
 
-        <details>
-        <summary>If X is a discrete random variable with PMF p(x), then p(x) must always be less than 1</summary>
-        ❌ False! While most values in a PMF are typically less than 1, a PMF can have p(x) = 1 for a specific value if the random variable always takes that value (with 100% probability).
-        </details>
-
-        <details>
-        <summary>The sum of all probabilities in a PMF must equal exactly 1</summary>
-        ✅ True! This is a fundamental property of any valid PMF. The total probability across all possible values must be 1, as the random variable must take some value.
-        </details>
-
-        <details>
-        <summary>A PMF can be estimated from data by creating a normalized histogram</summary>
-        ✅ True! Counting the frequency of each value and dividing by the total number of observations gives an empirical PMF.
-        </details>
-
-        <details>
-        <summary>The expected value of a discrete random variable is always one of the possible values of the variable</summary>
-        ❌ False! The expected value is a weighted average and may not be a value the random variable can actually take. For example, the expected value of a fair die roll is 3.5, which is not a possible outcome.
-        </details>
-        """
-    )
+    The CDF at any point is the sum of all PMF values up to and including that point. This is why the CDF is always non-decreasing and eventually reaches 1. For discrete distributions like this one, the CDF forms a step function that jumps at each value in the support of the random variable.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Practical Applications of PMFs
+    mo.md(r"""
+    ## Test Your Understanding
 
-        PMFs pop up everywhere - network engineers use them to model traffic patterns, reliability teams predict equipment failures, and marketers analyze purchase behavior. In finance, they help price options; in gaming, they're behind every dice roll. Machine learning algorithms like Naive Bayes rely on them, and they're essential for modeling rare events like genetic mutations or system failures.
-        """
-    )
+    Choose what you believe are the correct options in the questions below:
+
+    <details>
+    <summary>If X is a discrete random variable with PMF p(x), then p(x) must always be less than 1</summary>
+    ❌ False! While most values in a PMF are typically less than 1, a PMF can have p(x) = 1 for a specific value if the random variable always takes that value (with 100% probability).
+    </details>
+
+    <details>
+    <summary>The sum of all probabilities in a PMF must equal exactly 1</summary>
+    ✅ True! This is a fundamental property of any valid PMF. The total probability across all possible values must be 1, as the random variable must take some value.
+    </details>
+
+    <details>
+    <summary>A PMF can be estimated from data by creating a normalized histogram</summary>
+    ✅ True! Counting the frequency of each value and dividing by the total number of observations gives an empirical PMF.
+    </details>
+
+    <details>
+    <summary>The expected value of a discrete random variable is always one of the possible values of the variable</summary>
+    ❌ False! The expected value is a weighted average and may not be a value the random variable can actually take. For example, the expected value of a fair die roll is 3.5, which is not a possible outcome.
+    </details>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Key Takeaways
+    mo.md(r"""
+    ## Practical Applications of PMFs
 
-        PMFs give us the probability picture for discrete random variables - they tell us how likely each value is, must be non-negative, and always sum to 1. We can write them as equations, draw them as graphs, or estimate them from data. They're the foundation for calculating expected values and variances, which we'll explore in our next notebook on Expectation, where we'll learn how to summarize random variables with a single, most "expected" value.
-        """
-    )
+    PMFs pop up everywhere - network engineers use them to model traffic patterns, reliability teams predict equipment failures, and marketers analyze purchase behavior. In finance, they help price options; in gaming, they're behind every dice roll. Machine learning algorithms like Naive Bayes rely on them, and they're essential for modeling rare events like genetic mutations or system failures.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Key Takeaways
+
+    PMFs give us the probability picture for discrete random variables - they tell us how likely each value is, must be non-negative, and always sum to 1. We can write them as equations, draw them as graphs, or estimate them from data. They're the foundation for calculating expected values and variances, which we'll explore in our next notebook on Expectation, where we'll learn how to summarize random variables with a single, most "expected" value.
+    """)
     return
 
 

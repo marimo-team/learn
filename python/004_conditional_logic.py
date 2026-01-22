@@ -7,38 +7,38 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🔄 Conditional logic
+    mo.md("""
+    # 🔄 Conditional logic
 
-        This tutorial teaches you how to how to make **decisions** in your code, using
-        Python's conditional statements.
+    This tutorial teaches you how to how to make **decisions** in your code, using
+    Python's conditional statements.
 
-        ## If Statements
-        The foundation of decision-making in Python:
-        ```python
-        if condition:
-            # code to run if condition is True
-        elif another_condition:
-            # code to run if another_condition is True
-        else:
-            # code to run if no conditions are True
-        ```
-        Let's explore with some examples:
-        """
-    )
+    ## If Statements
+    The foundation of decision-making in Python:
+    ```python
+    if condition:
+        # code to run if condition is True
+    elif another_condition:
+        # code to run if another_condition is True
+    else:
+        # code to run if no conditions are True
+    ```
+    Let's explore with some examples:
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""**Try it!** Try changing the value of `42` below, and see how the output changes.""")
+    mo.md("""
+    **Try it!** Try changing the value of `42` below, and see how the output changes.
+    """)
     return
 
 
@@ -50,17 +50,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Compare numbers using operators like
+    mo.md(r"""
+    Compare numbers using operators like
 
-        - `>`
-        - `>=`
-        - `<`
-        - `<=`
-        - `==`  (note the two equal signs!)
-        """
-    )
+    - `>`
+    - `>=`
+    - `<`
+    - `<=`
+    - `==`  (note the two equal signs!)
+    """)
     return
 
 
@@ -73,17 +71,15 @@ def _(mo, number):
     else:
         result = "Less than 42"
     mo.md(result)
-    return (result,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Interactive decision making
-        **Try it!** Try changing the conditions below and see how the results change:
-        """
-    )
+    mo.md(r"""
+    ### Interactive decision making
+    **Try it!** Try changing the conditions below and see how the results change:
+    """)
     return
 
 
@@ -118,23 +114,21 @@ def _(mo, threshold, value):
         ],
         justify="space-around",
     )
-    return (decision,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Boolean operations
-        Python uses boolean operators to combine conditions:
+    mo.md(r"""
+    ## Boolean operations
+    Python uses boolean operators to combine conditions:
 
-        - `and`: Both conditions must be True
+    - `and`: Both conditions must be True
 
-        - `or`: At least one condition must be True
+    - `or`: At least one condition must be True
 
-        - `not`: Inverts the condition
-        """
-    )
+    - `not`: Inverts the condition
+    """)
     return
 
 
@@ -185,47 +179,47 @@ def _(age, has_id, mo):
     """
 
     mo.md(explanation)
-    return can_vote, explanation
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""**Try it!** Write Python code that computes whether an individual can vote.""")
+    mo.md(r"""
+    **Try it!** Write Python code that computes whether an individual can vote.
+    """)
     return
 
 
 @app.cell
 def _():
     my_age = 18
-    return (my_age,)
+    return
 
 
 @app.cell
 def _():
     has_an_id = False
-    return (has_an_id,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Complex conditions
-        Combine multiple conditions for more sophisticated logic:
-        ```python
-        # Multiple conditions
-        if (age >= 18 and has_id) or has_special_permission:
-            print("Access granted")
+    mo.md("""
+    ## Complex conditions
+    Combine multiple conditions for more sophisticated logic:
+    ```python
+    # Multiple conditions
+    if (age >= 18 and has_id) or has_special_permission:
+        print("Access granted")
 
-        # Nested conditions
-        if age >= 18:
-            if has_id:
-                print("Full access")
-            else:
-                print("Limited access")
-        ```
-        """
-    )
+    # Nested conditions
+    if age >= 18:
+        if has_id:
+            print("Full access")
+        else:
+            print("Limited access")
+    ```
+    """)
     return
 
 
@@ -281,7 +275,7 @@ def _(humidity, mo, temp, wind):
     """
 
     mo.md(message)
-    return conditions, get_weather_advice, message
+    return
 
 
 @app.cell(hide_code=True)

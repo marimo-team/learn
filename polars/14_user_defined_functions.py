@@ -14,58 +14,52 @@
 
 import marimo
 
-__generated_with = "0.11.17"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # User-Defined Functions
+    mo.md(r"""
+    # User-Defined Functions
 
-        _By [Péter Ferenc Gyarmati](http://github.com/peter-gy)_.
+    _By [Péter Ferenc Gyarmati](http://github.com/peter-gy)_.
 
-        Throughout the previous chapters, you've seen how Polars provides a comprehensive set of built-in expressions for flexible data transformation.  But what happens when you need something *more*? Perhaps your project has unique requirements, or you need to integrate functionality from an external Python library. This is where User-Defined Functions (UDFs) come into play, allowing you to extend Polars with your own custom logic.
+    Throughout the previous chapters, you've seen how Polars provides a comprehensive set of built-in expressions for flexible data transformation.  But what happens when you need something *more*? Perhaps your project has unique requirements, or you need to integrate functionality from an external Python library. This is where User-Defined Functions (UDFs) come into play, allowing you to extend Polars with your own custom logic.
 
-        In this chapter, we'll weigh the performance trade-offs of UDFs, pinpoint situations where they're truly beneficial, and explore different ways to effectively incorporate them into your Polars workflows. We'll walk through a complete, practical example.
-        """
-    )
+    In this chapter, we'll weigh the performance trade-offs of UDFs, pinpoint situations where they're truly beneficial, and explore different ways to effectively incorporate them into your Polars workflows. We'll walk through a complete, practical example.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## ⚖️ The Cost of UDFs
+    mo.md(r"""
+    ## ⚖️ The Cost of UDFs
 
-        > Performance vs. Flexibility
+    > Performance vs. Flexibility
 
-        Polars' built-in expressions are highly optimized for speed and parallel processing. User-defined functions (UDFs), however, introduce a significant performance overhead because they rely on standard Python code, which often runs in a single thread and bypasses Polars' logical optimizations. Therefore, always prioritize native Polars operations *whenever possible*.
+    Polars' built-in expressions are highly optimized for speed and parallel processing. User-defined functions (UDFs), however, introduce a significant performance overhead because they rely on standard Python code, which often runs in a single thread and bypasses Polars' logical optimizations. Therefore, always prioritize native Polars operations *whenever possible*.
 
-        However, UDFs become inevitable when you need to:
+    However, UDFs become inevitable when you need to:
 
-        -  **Integrate external libraries:**  Use functionality not directly available in Polars.
-        -  **Implement custom logic:** Handle complex transformations that can't be easily expressed with Polars' built-in functions.
+    -  **Integrate external libraries:**  Use functionality not directly available in Polars.
+    -  **Implement custom logic:** Handle complex transformations that can't be easily expressed with Polars' built-in functions.
 
-        Let's dive into a real-world project where UDFs were the only way to get the job done, demonstrating a scenario where native Polars expressions simply weren't sufficient.
-        """
-    )
+    Let's dive into a real-world project where UDFs were the only way to get the job done, demonstrating a scenario where native Polars expressions simply weren't sufficient.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 📊 Project Overview
+    mo.md(r"""
+    ## 📊 Project Overview
 
-        > Scraping and Analyzing Observable Notebook Statistics
+    > Scraping and Analyzing Observable Notebook Statistics
 
-        If you're into data visualization, you've probably seen [D3.js](https://d3js.org/) and [Observable Plot](https://observablehq.com/plot/). Both have extensive galleries showcasing amazing visualizations. Each gallery item is a standalone [Observable notebook](https://observablehq.com/documentation/notebooks/), with metrics like stars, comments, and forks – indicators of popularity. But getting and analyzing these statistics directly isn't straightforward. We'll need to scrape the web.
-        """
-    )
+    If you're into data visualization, you've probably seen [D3.js](https://d3js.org/) and [Observable Plot](https://observablehq.com/plot/). Both have extensive galleries showcasing amazing visualizations. Each gallery item is a standalone [Observable notebook](https://observablehq.com/documentation/notebooks/), with metrics like stars, comments, and forks – indicators of popularity. But getting and analyzing these statistics directly isn't straightforward. We'll need to scrape the web.
+    """)
     return
 
 
@@ -90,7 +84,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Our goal is to use Polars UDFs to fetch the HTML content of these gallery pages. Then, we'll use the `BeautifulSoup` Python library to parse the HTML and extract the relevant metadata.  After some data wrangling with native Polars expressions, we'll have a DataFrame listing each visualization notebook. Then, we'll use another UDF to retrieve the number of likes, forks, and comments for each notebook. Finally, we will create our own high-performance UDF to implement a custom notebook ranking scheme. This will involve multiple steps, showcasing different UDF approaches.""")
+    mo.md(r"""
+    Our goal is to use Polars UDFs to fetch the HTML content of these gallery pages. Then, we'll use the `BeautifulSoup` Python library to parse the HTML and extract the relevant metadata.  After some data wrangling with native Polars expressions, we'll have a DataFrame listing each visualization notebook. Then, we'll use another UDF to retrieve the number of likes, forks, and comments for each notebook. Finally, we will create our own high-performance UDF to implement a custom notebook ranking scheme. This will involve multiple steps, showcasing different UDF approaches.
+    """)
     return
 
 
@@ -109,7 +105,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Our starting point, `url_df`, is a simple DataFrame with a single `url` column containing the URLs of the D3 and Observable Plot gallery notebooks.""")
+    mo.md(r"""
+    Our starting point, `url_df`, is a simple DataFrame with a single `url` column containing the URLs of the D3 and Observable Plot gallery notebooks.
+    """)
     return
 
 
@@ -129,19 +127,17 @@ def _(pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🔂 Element-Wise UDFs
+    mo.md(r"""
+    ## 🔂 Element-Wise UDFs
 
-        > Processing Value by Value
+    > Processing Value by Value
 
-        The most common way to use UDFs is to apply them element-wise.  This means our custom function will execute for *each individual row* in a specified column.  Our first task is to fetch the HTML content for each URL in `url_df`.
+    The most common way to use UDFs is to apply them element-wise.  This means our custom function will execute for *each individual row* in a specified column.  Our first task is to fetch the HTML content for each URL in `url_df`.
 
-        We'll define a Python function that takes a `url` (a string) as input, uses the `httpx` library (an HTTP client) to fetch the content, and returns the HTML as a string. We then integrate this function into Polars using the [`map_elements`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_elements.html) expression.
+    We'll define a Python function that takes a `url` (a string) as input, uses the `httpx` library (an HTTP client) to fetch the content, and returns the HTML as a string. We then integrate this function into Polars using the [`map_elements`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_elements.html) expression.
 
-        You'll notice we have to explicitly specify the `return_dtype`.  This is *crucial*.  Polars doesn't automatically know what our custom function will return.  We're responsible for defining the function's logic and, therefore, its output type. By providing the `return_dtype`, we help Polars maintain its internal representation of the DataFrame's schema, enabling query optimization. Think of it as giving Polars a "heads-up" about the data type it should expect.
-        """
-    )
+    You'll notice we have to explicitly specify the `return_dtype`.  This is *crucial*.  Polars doesn't automatically know what our custom function will return.  We're responsible for defining the function's logic and, therefore, its output type. By providing the `return_dtype`, we help Polars maintain its internal representation of the DataFrame's schema, enabling query optimization. Think of it as giving Polars a "heads-up" about the data type it should expect.
+    """)
     return
 
 
@@ -159,13 +155,11 @@ def _(httpx, pl, url_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Now, `html_df` holds the HTML for each URL.  We need to parse it. Again, a UDF is the way to go. Parsing HTML with native Polars expressions would be a nightmare! Instead, we'll use the [`beautifulsoup4`](https://pypi.org/project/beautifulsoup4/) library, a standard tool for this.
+    mo.md(r"""
+    Now, `html_df` holds the HTML for each URL.  We need to parse it. Again, a UDF is the way to go. Parsing HTML with native Polars expressions would be a nightmare! Instead, we'll use the [`beautifulsoup4`](https://pypi.org/project/beautifulsoup4/) library, a standard tool for this.
 
-        These Observable pages are built with [Next.js](https://nextjs.org/), which helpfully serializes page properties as JSON within the HTML. This simplifies our UDF: we'll extract the raw JSON from the `<script id="__NEXT_DATA__" type="application/json">` tag. We'll use [`map_elements`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_elements.html) again.  For clarity, we'll define this UDF as a named function, `extract_nextjs_data`, since it's a bit more complex than a simple HTTP request.
-        """
-    )
+    These Observable pages are built with [Next.js](https://nextjs.org/), which helpfully serializes page properties as JSON within the HTML. This simplifies our UDF: we'll extract the raw JSON from the `<script id="__NEXT_DATA__" type="application/json">` tag. We'll use [`map_elements`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_elements.html) again.  For clarity, we'll define this UDF as a named function, `extract_nextjs_data`, since it's a bit more complex than a simple HTTP request.
+    """)
     return
 
 
@@ -193,7 +187,9 @@ def _(extract_nextjs_data, html_df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""With some data wrangling of the raw JSON (using *native* Polars expressions!), we get `notebooks_df`, containing the metadata for each notebook.""")
+    mo.md(r"""
+    With some data wrangling of the raw JSON (using *native* Polars expressions!), we get `notebooks_df`, containing the metadata for each notebook.
+    """)
     return
 
 
@@ -276,19 +272,17 @@ def _(parsed_html_df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 📦 Batch-Wise UDFs
+    mo.md(r"""
+    ## 📦 Batch-Wise UDFs
 
-        > Processing Entire Series
+    > Processing Entire Series
 
-        `map_elements` calls the UDF for *each row*. Fine for our tiny, two-rows-tall `url_df`. But `notebooks_df` has almost 400 rows! Individual HTTP requests for each would be painfully slow.
+    `map_elements` calls the UDF for *each row*. Fine for our tiny, two-rows-tall `url_df`. But `notebooks_df` has almost 400 rows! Individual HTTP requests for each would be painfully slow.
 
-        We want stats for each notebook in `notebooks_df`. To avoid sequential requests, we'll use Polars' [`map_batches`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_batches.html). This lets us process an *entire Series* (a column) at once.
+    We want stats for each notebook in `notebooks_df`. To avoid sequential requests, we'll use Polars' [`map_batches`](https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.Expr.map_batches.html). This lets us process an *entire Series* (a column) at once.
 
-        Our UDF, `fetch_html_batch`, will take a *Series* of URLs and use `asyncio` to make concurrent requests – a huge performance boost.
-        """
-    )
+    Our UDF, `fetch_html_batch`, will take a *Series* of URLs and use `asyncio` to make concurrent requests – a huge performance boost.
+    """)
     return
 
 
@@ -372,19 +366,19 @@ def _(mo, notebook_stats_df):
     return notebook_height, notebooks
 
 
-@app.cell(hide_code=True)
-def _():
-    def nb_iframe(notebook_url: str, height=825) -> str:
-        embed_url = notebook_url.replace(
-            "https://observablehq.com", "https://observablehq.com/embed"
-        )
-        return f'<iframe width="100%" height="{height}" frameborder="0" src="{embed_url}?cell=*"></iframe>'
-    return (nb_iframe,)
+@app.function(hide_code=True)
+def nb_iframe(notebook_url: str, height=825) -> str:
+    embed_url = notebook_url.replace(
+        "https://observablehq.com", "https://observablehq.com/embed"
+    )
+    return f'<iframe width="100%" height="{height}" frameborder="0" src="{embed_url}?cell=*"></iframe>'
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Now that we have access to notebook-level statistics, we can rank the visualizations by the number of likes they received & display them interactively.""")
+    mo.md(r"""
+    Now that we have access to notebook-level statistics, we can rank the visualizations by the number of likes they received & display them interactively.
+    """)
     return
 
 
@@ -395,7 +389,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(category, mo, nb_iframe, notebook_height, notebooks):
+def _(category, mo, notebook_height, notebooks):
     notebook = notebooks.value.to_dicts()[0]
     mo.vstack(
         [
@@ -406,60 +400,56 @@ def _(category, mo, nb_iframe, notebook_height, notebooks):
             mo.md(nb_iframe(notebook["notebook_url"], notebook_height.value)),
         ]
     )
-    return (notebook,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## ⚙️ Row-Wise UDFs
-
-        > Accessing All Columns at Once
-
-        Sometimes, you need to work with *all* columns of a row at once.  This is where [`map_rows`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.map_rows.html) comes in. It operates directly on the DataFrame, passing each row to your UDF *as a tuple*.
-
-        Below, `create_notebook_summary` takes a row from `notebook_stats_df` (as a tuple) and returns a formatted Markdown string summarizing the notebook's key stats.  We're essentially reducing the DataFrame to a single column.  While this *could* be done with native Polars expressions, it would be much more cumbersome. This example demonstrates a case where a row-wise UDF simplifies the code, even if the underlying operation isn't inherently complex.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
-def _():
-    def create_notebook_summary(row: tuple) -> str:
-        (
-            thumbnail_src,
-            category,
-            title,
-            likes,
-            forks,
-            comments,
-            license,
-            description,
-            notebook_url,
-        ) = row
-        return (
-            f"""
-    ### [{title}]({notebook_url})
+def _(mo):
+    mo.md(r"""
+    ## ⚙️ Row-Wise UDFs
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;">
-        <div>⭐ <strong>Likes:</strong> {likes}</div>
-        <div>↗️ <strong>Forks:</strong> {forks}</div>
-        <div>💬 <strong>Comments:</strong> {comments}</div>
-        <div>⚖️ <strong>License:</strong> {license}</div>
-    </div>
+    > Accessing All Columns at Once
 
-    <a href="{notebook_url}" target="_blank">
-        <img src="{thumbnail_src}" style="height: 300px;" />
-    <a/>
-    """.strip('\n')
-        )
-    return (create_notebook_summary,)
+    Sometimes, you need to work with *all* columns of a row at once.  This is where [`map_rows`](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.map_rows.html) comes in. It operates directly on the DataFrame, passing each row to your UDF *as a tuple*.
+
+    Below, `create_notebook_summary` takes a row from `notebook_stats_df` (as a tuple) and returns a formatted Markdown string summarizing the notebook's key stats.  We're essentially reducing the DataFrame to a single column.  While this *could* be done with native Polars expressions, it would be much more cumbersome. This example demonstrates a case where a row-wise UDF simplifies the code, even if the underlying operation isn't inherently complex.
+    """)
+    return
+
+
+@app.function(hide_code=True)
+def create_notebook_summary(row: tuple) -> str:
+    (
+        thumbnail_src,
+        category,
+        title,
+        likes,
+        forks,
+        comments,
+        license,
+        description,
+        notebook_url,
+    ) = row
+    return (
+        f"""
+### [{title}]({notebook_url})
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;">
+    <div>⭐ <strong>Likes:</strong> {likes}</div>
+    <div>↗️ <strong>Forks:</strong> {forks}</div>
+    <div>💬 <strong>Comments:</strong> {comments}</div>
+    <div>⚖️ <strong>License:</strong> {license}</div>
+</div>
+
+<a href="{notebook_url}" target="_blank">
+    <img src="{thumbnail_src}" style="height: 300px;" />
+<a/>
+""".strip('\n')
+    )
 
 
 @app.cell(hide_code=True)
-def _(create_notebook_summary, notebook_stats_df, pl):
+def _(notebook_stats_df, pl):
     notebook_summary_df = notebook_stats_df.map_rows(
         create_notebook_summary,
         return_dtype=pl.String,
@@ -487,37 +477,33 @@ def _(mo, notebook_summary_df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🚀 Higher-performance UDFs
+    mo.md(r"""
+    ## 🚀 Higher-performance UDFs
 
-        > Leveraging Numba to Make Python Fast
+    > Leveraging Numba to Make Python Fast
 
-        Python code doesn't *always* mean slow code. While UDFs *often* introduce performance overhead, there are exceptions. NumPy's universal functions ([`ufuncs`](https://numpy.org/doc/stable/reference/ufuncs.html)) and generalized universal functions ([`gufuncs`](https://numpy.org/neps/nep-0005-generalized-ufuncs.html)) provide high-performance operations on NumPy arrays, thanks to low-level implementations.
+    Python code doesn't *always* mean slow code. While UDFs *often* introduce performance overhead, there are exceptions. NumPy's universal functions ([`ufuncs`](https://numpy.org/doc/stable/reference/ufuncs.html)) and generalized universal functions ([`gufuncs`](https://numpy.org/neps/nep-0005-generalized-ufuncs.html)) provide high-performance operations on NumPy arrays, thanks to low-level implementations.
 
-        But NumPy's built-in functions are predefined. We can't easily use them for *custom* logic. Enter [`numba`](https://numba.pydata.org/).  Numba is a just-in-time (JIT) compiler that translates Python functions into optimized machine code *at runtime*. It provides decorators like [`numba.guvectorize`](https://numba.readthedocs.io/en/stable/user/vectorize.html#the-guvectorize-decorator) that let us create our *own* high-performance `gufuncs` – *without* writing low-level code!
-        """
-    )
+    But NumPy's built-in functions are predefined. We can't easily use them for *custom* logic. Enter [`numba`](https://numba.pydata.org/).  Numba is a just-in-time (JIT) compiler that translates Python functions into optimized machine code *at runtime*. It provides decorators like [`numba.guvectorize`](https://numba.readthedocs.io/en/stable/user/vectorize.html#the-guvectorize-decorator) that let us create our *own* high-performance `gufuncs` – *without* writing low-level code!
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Let's create a custom popularity metric to rank notebooks, considering likes, forks, *and* comments (not just likes).  We'll define `weighted_popularity_numba`, decorated with `@numba.guvectorize`.  The decorator arguments specify that we're taking three integer vectors of length `n` and returning a float vector of length `n`.
+    mo.md(r"""
+    Let's create a custom popularity metric to rank notebooks, considering likes, forks, *and* comments (not just likes).  We'll define `weighted_popularity_numba`, decorated with `@numba.guvectorize`.  The decorator arguments specify that we're taking three integer vectors of length `n` and returning a float vector of length `n`.
 
-        The weighted popularity score for each notebook is calculated using the following formula:
+    The weighted popularity score for each notebook is calculated using the following formula:
 
-        $$
-        \begin{equation}
-        \text{score}_i = w_l \cdot l_i^{f} + w_f \cdot f_i^{f} + w_c \cdot c_i^{f}
-        \end{equation}
-        $$
+    $$
+    \begin{equation}
+    \text{score}_i = w_l \cdot l_i^{f} + w_f \cdot f_i^{f} + w_c \cdot c_i^{f}
+    \end{equation}
+    $$
 
-        with:
-        """
-    )
+    with:
+    """)
     return
 
 
@@ -606,12 +592,14 @@ def _(
                 + w_f * (forks[i] ** nlf)
                 + w_c * (comments[i] ** nlf)
             )
-    return nlf, w_c, w_f, w_l, weighted_popularity_numba
+    return (weighted_popularity_numba,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We apply our JIT-compiled UDF using `map_batches`, as before.  The key is that we're passing entire columns directly to `weighted_popularity_numba`. Polars and Numba handle the conversion to NumPy arrays behind the scenes. This direct integration is a major benefit of using `guvectorize`.""")
+    mo.md(r"""
+    We apply our JIT-compiled UDF using `map_batches`, as before.  The key is that we're passing entire columns directly to `weighted_popularity_numba`. Polars and Numba handle the conversion to NumPy arrays behind the scenes. This direct integration is a major benefit of using `guvectorize`.
+    """)
     return
 
 
@@ -665,7 +653,9 @@ def _(
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""As the slope chart below demonstrates, this new ranking strategy significantly changes the notebook order, as it considers forks and comments, not just likes.""")
+    mo.md(r"""
+    As the slope chart below demonstrates, this new ranking strategy significantly changes the notebook order, as it considers forks and comments, not just likes.
+    """)
     return
 
 
@@ -700,27 +690,25 @@ def _(alt, notebook_popularity_df, pl):
         fill="title:N",
     )
     (points + lines).properties(width=400)
-    return lines, notebook_ranks_df, points
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## ⏱️ Quantifying the Overhead
+    mo.md(r"""
+    ## ⏱️ Quantifying the Overhead
 
-        > UDF Performance Comparison
+    > UDF Performance Comparison
 
-        To truly understand the performance implications of using UDFs, let's conduct a benchmark.  We'll create a DataFrame with random numbers and perform the same numerical operation using four different methods:
+    To truly understand the performance implications of using UDFs, let's conduct a benchmark.  We'll create a DataFrame with random numbers and perform the same numerical operation using four different methods:
 
-        1. **Native Polars:** Using Polars' built-in expressions.
-        2. **`map_elements`:**  Applying a Python function element-wise.
-        3. **`map_batches`:** **Applying** a Python function to the entire Series.
-        4. **`map_batches` with Numba:** Applying a JIT-compiled function to batches, similar to a generalized universal function.
+    1. **Native Polars:** Using Polars' built-in expressions.
+    2. **`map_elements`:**  Applying a Python function element-wise.
+    3. **`map_batches`:** **Applying** a Python function to the entire Series.
+    4. **`map_batches` with Numba:** Applying a JIT-compiled function to batches, similar to a generalized universal function.
 
-        We'll use a simple, but non-trivial, calculation:  `result = (x * 2.5 + 5) / (x + 1)`. This involves multiplication, addition, and division, giving us a realistic representation of a common numerical operation. We'll use the `timeit` module, to accurately measure execution times over multiple trials.
-        """
-    )
+    We'll use a simple, but non-trivial, calculation:  `result = (x * 2.5 + 5) / (x + 1)`. This involves multiplication, addition, and division, giving us a realistic representation of a common numerical operation. We'll use the `timeit` module, to accurately measure execution times over multiple trials.
+    """)
     return
 
 
@@ -750,15 +738,13 @@ def _(benchmark_plot, mo, num_samples, num_trials):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        As anticipated, the `Batch-Wise UDF (Python)` and `Element-Wise UDF` exhibit significantly worse performance, essentially acting as pure-Python for-each loops.  
+    mo.md(r"""
+    As anticipated, the `Batch-Wise UDF (Python)` and `Element-Wise UDF` exhibit significantly worse performance, essentially acting as pure-Python for-each loops.
 
-        However, when Python serves as an interface to lower-level, high-performance libraries, we observe substantial improvements. The `Batch-Wise UDF (NumPy)` lags behind both `Batch-Wise UDF (Numba)` and `Native Polars`, but it still represents a considerable improvement over pure-Python UDFs due to its vectorized computations. 
+    However, when Python serves as an interface to lower-level, high-performance libraries, we observe substantial improvements. The `Batch-Wise UDF (NumPy)` lags behind both `Batch-Wise UDF (Numba)` and `Native Polars`, but it still represents a considerable improvement over pure-Python UDFs due to its vectorized computations.
 
-        Numba's Just-In-Time (JIT) compilation delivers a dramatic performance boost, achieving speeds comparable to native Polars expressions. This demonstrates that UDFs, particularly when combined with tools like Numba, don't inevitably lead to bottlenecks in numerical computations.
-        """
-    )
+    Numba's Just-In-Time (JIT) compilation delivers a dramatic performance boost, achieving speeds comparable to native Polars expressions. This demonstrates that UDFs, particularly when combined with tools like Numba, don't inevitably lead to bottlenecks in numerical computations.
+    """)
     return
 
 
@@ -789,7 +775,7 @@ def _(mo):
 def _(np, num_samples, pl):
     rng = np.random.default_rng(42)
     sample_df = pl.from_dict({"x": rng.random(num_samples.value)})
-    return rng, sample_df
+    return (sample_df,)
 
 
 @app.cell(hide_code=True)
@@ -861,14 +847,7 @@ def _(np, num_trials, numba, pl, sample_df, timeit):
     def time_method(callable_name: str, number=num_trials.value) -> float:
         fn = globals()[callable_name]
         return timeit.timeit(fn, number=number)
-    return (
-        run_map_batches_numba,
-        run_map_batches_numpy,
-        run_map_batches_python,
-        run_map_elements,
-        run_native,
-        time_method,
-    )
+    return (time_method,)
 
 
 @app.cell(hide_code=True)
@@ -906,7 +885,7 @@ def _(alt, pl, time_method):
         x=alt.X("title:N", title="Method", sort="-y"),
         y=alt.Y("time:Q", title="Execution Time (s)", axis=alt.Axis(format=".3f")),
     ).properties(width=400)
-    return benchmark_df, benchmark_plot
+    return (benchmark_plot,)
 
 
 @app.cell(hide_code=True)
@@ -934,7 +913,6 @@ def _():
         asyncio,
         httpx,
         mo,
-        nest_asyncio,
         np,
         numba,
         pl,

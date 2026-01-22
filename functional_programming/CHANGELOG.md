@@ -1,3 +1,8 @@
+---
+title: Changelog
+marimo-version: 0.18.4
+---
+
 # Changelog of the functional-programming course
 
 ## 2025-04-16

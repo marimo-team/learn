@@ -7,30 +7,28 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 📚 Dictionaries
+    mo.md("""
+    # 📚 Dictionaries
 
-        Dictionaries are collections of key-value pairs, with each key associated with a value. The keys are unique, meaning they show up only once.
+    Dictionaries are collections of key-value pairs, with each key associated with a value. The keys are unique, meaning they show up only once.
 
-        ## Creating dictionaries
-        Here are a few ways to create dictionaries:
+    ## Creating dictionaries
+    Here are a few ways to create dictionaries:
 
-        ```python
-        simple_dict = {"name": "Alice", "age": 25}
-        empty_dict = dict()
-        from_pairs = dict([("a", 1), ("b", 2)])
-        ```
+    ```python
+    simple_dict = {"name": "Alice", "age": 25}
+    empty_dict = dict()
+    from_pairs = dict([("a", 1), ("b", 2)])
+    ```
 
-        Below is a sample dictionary we'll use to explore operations.
-        """
-    )
+    Below is a sample dictionary we'll use to explore operations.
+    """)
     return
 
 
@@ -48,27 +46,23 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Operations
+    mo.md("""
+    ## Operations
 
-        Let's explore how to work with dictionaries.
+    Let's explore how to work with dictionaries.
 
-        **Try it!** Try modifying the `sample_dict` above and watch how the results change!
-        """
-    )
+    **Try it!** Try modifying the `sample_dict` above and watch how the results change!
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Accessing values by key
+    mo.md(r"""
+    ### Accessing values by key
 
-        Access values by key using square brackets, like below
-        """
-    )
+    Access values by key using square brackets, like below
+    """)
     return
 
 
@@ -80,7 +74,9 @@ def _(sample_dict):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""If you're not sure if a dictionary has a given key, use `get()`:""")
+    mo.md(r"""
+    If you're not sure if a dictionary has a given key, use `get()`:
+    """)
     return
 
 
@@ -92,13 +88,11 @@ def _(sample_dict):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Enumerating dictionary contents
+    mo.md("""
+    ## Enumerating dictionary contents
 
-        Python dictionaries come with helpful methods to enumerate keys, values, and pairs.
-        """
-    )
+    Python dictionaries come with helpful methods to enumerate keys, values, and pairs.
+    """)
     return
 
 
@@ -136,18 +130,16 @@ def _():
 
 
     demonstrate_modification()
-    return (demonstrate_modification,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Dictionary comprehension
+    mo.md("""
+    ## Dictionary comprehension
 
-        Create dictionaries efficiently with dictionary comprehensions:
-        """
-    )
+    Create dictionaries efficiently with dictionary comprehensions:
+    """)
     return
 
 
@@ -165,13 +157,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Nested dictionaries
+    mo.md("""
+    ## Nested dictionaries
 
-        Dictionaries can contain other dictionaries, creating complex data structures:
-        """
-    )
+    Dictionaries can contain other dictionaries, creating complex data structures:
+    """)
     return
 
 
@@ -208,33 +198,31 @@ def _(mo, nested_data):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Common dictionary patterns
+    mo.md("""
+    ## Common dictionary patterns
 
-        Here are some useful patterns when working with dictionaries:
+    Here are some useful patterns when working with dictionaries:
 
-        ```python
-        # Pattern 1: Counting items
-        counter = {}
-        for item in items:
-            counter[item] = counter.get(item, 0) + 1
+    ```python
+    # Pattern 1: Counting items
+    counter = {}
+    for item in items:
+        counter[item] = counter.get(item, 0) + 1
 
-        # Pattern 2: Grouping data
-        groups = {}
-        for item in _items:
-            key = get_group_key(item)
-            groups.setdefault(key, []).append(item)
+    # Pattern 2: Grouping data
+    groups = {}
+    for item in _items:
+        key = get_group_key(item)
+        groups.setdefault(key, []).append(item)
 
-        # Pattern 3: Caching/Memoization
-        cache = {}
-        def expensive_function(arg):
-            if arg not in cache:
-                cache[arg] = compute_result(arg)
-            return cache[arg]
-        ```
-        """
-    )
+    # Pattern 3: Caching/Memoization
+    cache = {}
+    def expensive_function(arg):
+        if arg not in cache:
+            cache[arg] = compute_result(arg)
+        return cache[arg]
+    ```
+    """)
     return
 
 

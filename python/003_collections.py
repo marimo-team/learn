@@ -7,30 +7,28 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 📦 Collections
+    mo.md("""
+    # 📦 Collections
 
-        A "collection" is a type of variable that holds multiple values.
+    A "collection" is a type of variable that holds multiple values.
 
-        ## Lists
-        Lists are ordered, mutable sequences. Create them using square brackets:
+    ## Lists
+    Lists are ordered, mutable sequences. Create them using square brackets:
 
-        ```python
-        fruits = ["apple", "banana", "orange"]
-        numbers = [1, 2, 3, 4, 5]
-        mixed = [1, "hello", 3.14, True]
-        ```
+    ```python
+    fruits = ["apple", "banana", "orange"]
+    numbers = [1, 2, 3, 4, 5]
+    mixed = [1, "hello", 3.14, True]
+    ```
 
-        Below is an example list we'll use to explore operations.
-        """
-    )
+    Below is an example list we'll use to explore operations.
+    """)
     return
 
 
@@ -42,15 +40,13 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## List operations
+    mo.md("""
+    ## List operations
 
-        Here are common operations you can perform on lists.
+    Here are common operations you can perform on lists.
 
-        Try changing the values in `sample_list` above and watch the results change.
-        """
-    )
+    Try changing the values in `sample_list` above and watch the results change.
+    """)
     return
 
 
@@ -81,13 +77,11 @@ def _(extended_list):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Tuples
+    mo.md("""
+    ## Tuples
 
-        Tuples are immutable sequences. They're like lists that can't be changed after creation:
-        """
-    )
+    Tuples are immutable sequences. They're like lists that can't be changed after creation:
+    """)
     return
 
 
@@ -101,12 +95,14 @@ def _():
 def _(coordinates):
     x, y = coordinates  # Tuple unpacking
     x
-    return x, y
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""#### Tuple concatenation""")
+    mo.md("""
+    #### Tuple concatenation
+    """)
     return
 
 
@@ -117,18 +113,16 @@ def _():
 
     tuple3 = tuple1 + tuple2
     tuple3
-    return tuple1, tuple2, tuple3
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Dictionaries
+    mo.md("""
+    ## Dictionaries
 
-        Dictionaries store key-value pairs. They're perfect for mapping relationships:
-        """
-    )
+    Dictionaries store key-value pairs. They're perfect for mapping relationships:
+    """)
     return
 
 
@@ -158,13 +152,11 @@ def _(person):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Sets
+    mo.md("""
+    ## Sets
 
-        Sets are unordered collections of unique elements:
-        """
-    )
+    Sets are unordered collections of unique elements:
+    """)
     return
 
 
@@ -188,45 +180,41 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Collection methods and operations
+    mo.md("""
+    ## Collection methods and operations
 
-        Here are some common operations across collections:
+    Here are some common operations across collections:
 
-        ```python
-        # Lists
-        my_list = [1, 2, 3]
-        my_list.insert(0, 0)     # Insert at position
-        my_list.remove(2)        # Remove first occurrence
-        my_list.sort()           # Sort in place
-        sorted_list = sorted(my_list)  # Return new sorted list
+    ```python
+    # Lists
+    my_list = [1, 2, 3]
+    my_list.insert(0, 0)     # Insert at position
+    my_list.remove(2)        # Remove first occurrence
+    my_list.sort()           # Sort in place
+    sorted_list = sorted(my_list)  # Return new sorted list
 
-        # Dictionaries
-        my_dict = {"a": 1}
-        my_dict.update({"b": 2})  # Add new key-value pairs
-        my_dict.get("c", "Not found")  # Safe access with default
+    # Dictionaries
+    my_dict = {"a": 1}
+    my_dict.update({"b": 2})  # Add new key-value pairs
+    my_dict.get("c", "Not found")  # Safe access with default
 
-        # Sets
-        set_a = {1, 2, 3}
-        set_b = {3, 4, 5}
-        set_a.union(set_b)       # Combine sets
-        set_a.difference(set_b)  # Elements in A but not in B
-        ```
-        """
-    )
+    # Sets
+    set_a = {1, 2, 3}
+    set_b = {3, 4, 5}
+    set_a.union(set_b)       # Combine sets
+    set_a.difference(set_b)  # Elements in A but not in B
+    ```
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Documentation
+    mo.md(r"""
+    ## Documentation
 
-        See the official [Python tutorial on data structures](https://docs.python.org/3/tutorial/datastructures.html) for more in-depth information.
-        """
-    )
+    See the official [Python tutorial on data structures](https://docs.python.org/3/tutorial/datastructures.html) for more in-depth information.
+    """)
     return
 
 

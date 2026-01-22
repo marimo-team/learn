@@ -11,26 +11,24 @@
 
 import marimo
 
-__generated_with = "0.12.10"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # Reactive Plots
+    mo.md("""
+    # Reactive Plots
 
-        _By [etrotta](https://github.com/etrotta)._
+    _By [etrotta](https://github.com/etrotta)._
 
-        This tutorial covers Data Visualisation basics using marimo, [polars](https://docs.pola.rs/) and [plotly](https://plotly.com/python/plotly-express/).
-        It shows how to load data, explore and visualise it, then use User Interface elements (including the plots themselves) to filter and select data for more refined analysis.
+    This tutorial covers Data Visualisation basics using marimo, [polars](https://docs.pola.rs/) and [plotly](https://plotly.com/python/plotly-express/).
+    It shows how to load data, explore and visualise it, then use User Interface elements (including the plots themselves) to filter and select data for more refined analysis.
 
-        We will be using a [Spotify Tracks dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset). Before you write any code yourself, I recommend taking some time to understand the data you're working with, from which columns are available to what are their possible values, as well as more abstract details such as the scope, coverage and intended uses of the dataset.
+    We will be using a [Spotify Tracks dataset](https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset). Before you write any code yourself, I recommend taking some time to understand the data you're working with, from which columns are available to what are their possible values, as well as more abstract details such as the scope, coverage and intended uses of the dataset.
 
-        Note that this dataset does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size manageable for most users.
-        """
-    )
+    Note that this dataset does not contains data about ***all***  tracks, you can try using a larger dataset such as [bigdata-pw/Spotify](https://huggingface.co/datasets/bigdata-pw/Spotify), but I'm sticking with the smaller one to keep the notebook size manageable for most users.
+    """)
     return
 
 
@@ -47,20 +45,18 @@ def _(pl):
     # Or save to a local file first if you want to avoid downloading it each time you run:
     # file_path = "spotify-tracks.parquet"
     # lz = pl.scan_parquet(file_path)
-    return URL, branch, file_path, lz, repo_id
+    return (lz,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle you can preview it via their websites, and optionally filter or do some transformations before downloading.
+    mo.md("""
+    You should always take a look at the data you are working on before actually doing any operations on it - for data coming from sources such as HuggingFace or Kaggle you can preview it via their websites, and optionally filter or do some transformations before downloading.
 
-        The [Polars Lazy API](https://docs.pola.rs/user-guide/lazy/) allows for you define operations before loading the data, and polars will optimize the plan in order to avoid doing unnecessary operations or loading data we do not care about.
+    The [Polars Lazy API](https://docs.pola.rs/user-guide/lazy/) allows for you define operations before loading the data, and polars will optimize the plan in order to avoid doing unnecessary operations or loading data we do not care about.
 
-        Let's say that looking at the dataset's preview in the Data Viewer, we decided we do not want the Unnamed column (which appears to be the row index), nor do we care about the original ID, and we only want non-explicit tracks.
-        """
-    )
+    Let's say that looking at the dataset's preview in the Data Viewer, we decided we do not want the Unnamed column (which appears to be the row index), nor do we care about the original ID, and we only want non-explicit tracks.
+    """)
     return
 
 
@@ -87,18 +83,16 @@ def _(lz, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        When you start exploring a dataset, some of the first things to do may include:
+    mo.md(r"""
+    When you start exploring a dataset, some of the first things to do may include:
 
-        - investigating any values that seem weird
-        - verifying if there could be issues in the data
-        - checking for potential bugs in our pipelines
-        - ensuring you understand the data correctly, including its relationships and edge cases
+    - investigating any values that seem weird
+    - verifying if there could be issues in the data
+    - checking for potential bugs in our pipelines
+    - ensuring you understand the data correctly, including its relationships and edge cases
 
-        For example, the "min" value for the duration column is zero, and the max is over an hour. Why is that?
-        """
-    )
+    For example, the "min" value for the duration column is zero, and the max is over an hour. Why is that?
+    """)
     return
 
 
@@ -112,13 +106,11 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        For this Notebook we will be using [plotly](https://plotly.com/python), but Marimo also [supports other plotting libraries](https://docs.marimo.io/guides/working_with_data/plotting/).
+    mo.md(r"""
+    For this Notebook we will be using [plotly](https://plotly.com/python), but Marimo also [supports other plotting libraries](https://docs.marimo.io/guides/working_with_data/plotting/).
 
-        Let's visualize it using a [bar chart](https://plotly.com/python/bar-charts/) and get a feel for which region makes sense to focus on for our analysis
-        """
-    )
+    Let's visualize it using a [bar chart](https://plotly.com/python/bar-charts/) and get a feel for which region makes sense to focus on for our analysis
+    """)
     return
 
 
@@ -129,20 +121,18 @@ def _(df, mo, px):
     fig.update_layout(selectdirection="h")
     plot = mo.ui.plotly(fig)
     plot
-    return duration_counts, fig, plot
+    return (plot,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        Note how there are a few outliers with extremely little duration (less than 2 minutes) and a few with extremely long duration (more than 6 minutes)
+    mo.md("""
+    Note how there are a few outliers with extremely little duration (less than 2 minutes) and a few with extremely long duration (more than 6 minutes)
 
-        You can select a region in the graph by clicking and dragging, which can later be used to filter or transform data. In this Notebook we set a default if there is no selection, but you should try selecting a region yourself.
+    You can select a region in the graph by clicking and dragging, which can later be used to filter or transform data. In this Notebook we set a default if there is no selection, but you should try selecting a region yourself.
 
-        We will focus on those within that middle ground from around 120 seconds to 360 seconds, but you can play around with it a bit and see how the results change if you move the Selection region. Perhaps you can even find some Classical songs?
-        """
-    )
+    We will focus on those within that middle ground from around 120 seconds to 360 seconds, but you can play around with it a bit and see how the results change if you move the Selection region. Perhaps you can even find some Classical songs?
+    """)
     return
 
 
@@ -154,7 +144,7 @@ def _(pl, plot):
 
 
 @app.cell
-def _(df, get_extremes, pl, plot):
+def _(df, pl, plot):
     # Now, we want to filter to only include tracks whose duration falls inside of our selection - we will need to first identify the extremes, then filter based on them
     min_dur, max_dur = get_extremes(
         plot.value, col="duration_seconds", defaults_if_missing=(120, 360)
@@ -168,27 +158,25 @@ def _(df, get_extremes, pl, plot):
     # Actually apply the filter
     filtered_duration = df.filter(duration_in_range)
     filtered_duration
-    return duration_in_range, filtered_duration, max_dur, min_dur
+    return (filtered_duration,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Now that our data is 'clean', let's start coming up with and answering some questions about it. Some examples:
+    mo.md(r"""
+    Now that our data is 'clean', let's start coming up with and answering some questions about it. Some examples:
 
-        - Which tracks or artists are the most popular? (Both globally as well as for each genre)
-        - Which genres are the most popular? The loudest?
-        - What are some common combinations of different artists? 
-        - What can we infer anything based on the track's title or artist name?
-        - How popular is some specific song you like?
-        - How much does the mode and key affect other attributes?
-        - Can you classify a song's genre based on its attributes?
+    - Which tracks or artists are the most popular? (Both globally as well as for each genre)
+    - Which genres are the most popular? The loudest?
+    - What are some common combinations of different artists?
+    - What can we infer anything based on the track's title or artist name?
+    - How popular is some specific song you like?
+    - How much does the mode and key affect other attributes?
+    - Can you classify a song's genre based on its attributes?
 
-        For brevity, we will not explore all of them - feel free to try some of the others yourself, or go more in deep in the explored ones.
-        Make sure to come up with some questions of your own and explore them as well!
-        """
-    )
+    For brevity, we will not explore all of them - feel free to try some of the others yourself, or go more in deep in the explored ones.
+    Make sure to come up with some questions of your own and explore them as well!
+    """)
     return
 
 
@@ -235,18 +223,16 @@ def _(filter_genre, filtered_duration, mo, pl):
             ),
         ],
     )
-    return (most_popular_artists,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        So far so good - but there's been a distinct lack of visualations, so let's fix that.
+    mo.md(r"""
+    So far so good - but there's been a distinct lack of visualations, so let's fix that.
 
-        Let's start simple, just some metrics for each genre:
-        """
-    )
+    Let's start simple, just some metrics for each genre:
+    """)
     return
 
 
@@ -263,22 +249,20 @@ def _(filtered_duration, pl, px):
         x="popularity",
     )
     fig_dur_per_genre
-    return (fig_dur_per_genre,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Now, why don't we play a bit with marimo's UI elements?
+    mo.md(r"""
+    Now, why don't we play a bit with marimo's UI elements?
 
-        We will use Dropdowns to allow for the user to select any column to use for the visualisation, and throw in some extras
+    We will use Dropdowns to allow for the user to select any column to use for the visualisation, and throw in some extras
 
-        - A slider for the transparency to help understand dense clusters
-        - Add a Trendline to the scatterplot (requires statsmodels)
-        - Filter by some specific Genre
-        """
-    )
+    - A slider for the transparency to help understand dense clusters
+    - Add a Trendline to the scatterplot (requires statsmodels)
+    - Filter by some specific Genre
+    """)
     return
 
 
@@ -312,18 +296,16 @@ def _(
     chart2 = mo.ui.plotly(fig2)
 
     mo.vstack([mo.hstack([x_axis, y_axis, color, alpha, include_trendline, filter_genre2]), chart2])
-    return chart2, fig2
+    return (chart2,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        As we have seen before, we can also use the plot as an input to select a region and look at it in more detail.
+    mo.md(r"""
+    As we have seen before, we can also use the plot as an input to select a region and look at it in more detail.
 
-        Try selecting a region then performing some explorations of your own with the data inside of it.
-        """
-    )
+    Try selecting a region then performing some explorations of your own with the data inside of it.
+    """)
     return
 
 
@@ -340,47 +322,45 @@ def _(chart2, filtered_duration, mo, pl):
             pl.col(column_order), pl.exclude(*column_order)
         )
     out
-    return active_columns, column_order, out
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        In this notebook, we've focused on a few key aspects. First, it's essential to *understand* the data you're working with — this forms the foundation of any analysis. 
-
-        Creating plots is a powerful way to identify patterns, outliers, and trends. These visualizations are not just for _presentation_; they are tools for deeper insight.
-
-        /// NOTE
-        With marimo's `interactive` UI elements, exploring different _facets_ of the data becomes seamless, allowing for dynamic analysis without altering the code.
-
-        Keep these points in mind as you continue to work with data.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""# Utility Functions and UI Elements""")
+    mo.md(r"""
+    In this notebook, we've focused on a few key aspects. First, it's essential to *understand* the data you're working with — this forms the foundation of any analysis.
+
+    Creating plots is a powerful way to identify patterns, outliers, and trends. These visualizations are not just for _presentation_; they are tools for deeper insight.
+
+    /// NOTE
+    With marimo's `interactive` UI elements, exploring different _facets_ of the data becomes seamless, allowing for dynamic analysis without altering the code.
+
+    Keep these points in mind as you continue to work with data.
+    """)
     return
 
 
-@app.cell
-def get_extremes():
-    def get_extremes(selection, col, defaults_if_missing):
-        "Get the minimum and maximum values for a given column within the selection"
-        if selection is None or len(selection) == 0:
-            print(
-                f"Could not find a selected region. Using default values {defaults_if_missing} instead, try clicking and dragging in the plot to change them."
-            )
-            return defaults_if_missing
-        else:
-            return (
-                min(row[col] for row in selection),
-                max(row[col] for row in selection),
-            )
-    return (get_extremes,)
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # Utility Functions and UI Elements
+    """)
+    return
+
+
+@app.function
+def get_extremes(selection, col, defaults_if_missing):
+    "Get the minimum and maximum values for a given column within the selection"
+    if selection is None or len(selection) == 0:
+        print(
+            f"Could not find a selected region. Using default values {defaults_if_missing} instead, try clicking and dragging in the plot to change them."
+        )
+        return defaults_if_missing
+    else:
+        return (
+            min(row[col] for row in selection),
+            max(row[col] for row in selection),
+        )
 
 
 @app.cell
@@ -426,20 +406,14 @@ def _(filtered_duration, mo):
         searchable=True,
         label="Filter by Track Genre:",
     )
-    return (
-        alpha,
-        color,
-        filter_genre2,
-        include_trendline,
-        options,
-        x_axis,
-        y_axis,
-    )
+    return alpha, color, filter_genre2, include_trendline, x_axis, y_axis
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""# Appendix : Some other examples""")
+    mo.md("""
+    # Appendix : Some other examples
+    """)
     return
 
 
@@ -461,12 +435,7 @@ def _(filtered_duration, mo, pl):
     # So we just provide freeform text boxes and filter ourselfves later
     # (the "alternative_" in the name is just to avoid conflicts with the above cell,
     #  despite this being disabled marimo still requires global variables to be unique)
-    return (
-        all_artists,
-        all_tracks,
-        alternative_filter_artist,
-        alternative_filter_track,
-    )
+    return
 
 
 @app.cell
@@ -503,7 +472,7 @@ def _(filter_artist, filter_track, filtered_duration, mo, pl):
     )
 
     mo.vstack([mo.md("Filter a track based on its name or artist"), filter_artist, filter_track, filtered_artist_track])
-    return filtered_artist_track, score_match_text
+    return
 
 
 @app.cell
@@ -532,7 +501,7 @@ def _(filter_genre2, filtered_duration, mo, pl):
         ],
         align="center",
     )
-    return (artist_combinations,)
+    return
 
 
 @app.cell

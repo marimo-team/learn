@@ -1,3 +1,8 @@
+---
+title: Readme
+marimo-version: 0.18.4
+---
+
 # Learn Functional Programming
 
 _🚧 This collection is a [work in progress](https://github.com/marimo-team/learn/issues/51)._
@@ -24,13 +29,13 @@ Topics include:
 
 To run a notebook locally, use
 
-```bash 
-uvx marimo edit <URL> 
+```bash
+uvx marimo edit <URL>
 ```
 
 For example, run the `Functor` tutorial with
 
-```bash 
+```bash
 uvx marimo edit https://github.com/marimo-team/learn/blob/main/functional_programming/05_functors.py
 ```
 
@@ -52,11 +57,11 @@ on Discord (@eugene.hs).
 ## Description of notebooks
 
 Check [here](https://github.com/marimo-team/learn/issues/51) for current series
-structure. 
+structure.
 
 | Notebook | Title | Key Concepts | Prerequisites |
-|----------|-------|--------------|---------------| 
-| [05. Functors](https://github.com/marimo-team/learn/blob/main/functional_programming/05_functors.py) | Category Theory and Functors | Category Theory, Functor, fmap, Bifunctor | Basic Python, Functions | 
+|----------|-------|--------------|---------------|
+| [05. Functors](https://github.com/marimo-team/learn/blob/main/functional_programming/05_functors.py) | Category Theory and Functors | Category Theory, Functor, fmap, Bifunctor | Basic Python, Functions |
 | [06. Applicatives](https://github.com/marimo-team/learn/blob/main/functional_programming/06_applicatives.py) | Applicative programming with effects | Applicative Functor, pure, apply, Effectful programming, Alternative | Functors |
 
 **Authors.**

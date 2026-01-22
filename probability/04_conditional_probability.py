@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.11.4"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Conditional Probability")
 
 
@@ -22,42 +22,38 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Conditional Probability
+    mo.md(r"""
+    # Conditional Probability
 
-        _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/cond_prob/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/cond_prob/), by Stanford professor Chris Piech._
 
-        In probability theory, we often want to update our beliefs when we receive new information. 
-        Conditional probability helps us formalize this process by calculating "_what is the chance of 
-        event $E$ happening given that we have already observed some other event $F$?_"[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/cond_prob/)
+    In probability theory, we often want to update our beliefs when we receive new information.
+    Conditional probability helps us formalize this process by calculating "_what is the chance of
+    event $E$ happening given that we have already observed some other event $F$?_"[<sup>1</sup>](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/cond_prob/)
 
-        When we condition on an event $F$:
+    When we condition on an event $F$:
 
-        - We enter the universe where $F$ has occurred
-        - Only outcomes consistent with $F$ are possible
-        - Our sample space reduces to $F$
-        """
-    )
+    - We enter the universe where $F$ has occurred
+    - Only outcomes consistent with $F$ are possible
+    - Our sample space reduces to $F$
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Definition of Conditional Probability
+    mo.md(r"""
+    ## Definition of Conditional Probability
 
-        The probability of event $E$ given that event $F$ has occurred is denoted as $P(E \mid F)$ and is defined as:
+    The probability of event $E$ given that event $F$ has occurred is denoted as $P(E \mid F)$ and is defined as:
 
-        $$P(E \mid F) = \frac{P(E \cap F)}{P(F)}$$
+    $$P(E \mid F) = \frac{P(E \cap F)}{P(F)}$$
 
-        This formula tells us that the conditional probability is the probability of both events occurring 
-        divided by the probability of the conditioning event.
+    This formula tells us that the conditional probability is the probability of both events occurring
+    divided by the probability of the conditioning event.
 
-        Let's start with a visual example.
-        """
-    )
+    Let's start with a visual example.
+    """)
     return
 
 
@@ -66,7 +62,7 @@ def _():
     import matplotlib.pyplot as plt
     from matplotlib_venn import venn3
     import numpy as np
-    return np, plt, venn3
+    return plt, venn3
 
 
 @app.cell(hide_code=True)
@@ -138,75 +134,73 @@ def _(mo, plt, venn3):
     """)
 
     mo.vstack([mo.center(plt.gcf()), explanation])
-    return explanation, id, rect, v
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"Next, here's a function that computes $P(E \mid F)$, given $P( E \cap F)$ and $P(F)$"
-    )
+    mo.md(r"""
+    Next, here's a function that computes $P(E \mid F)$, given $P( E \cap F)$ and $P(F)$
+    """)
     return
+
+
+@app.function
+def conditional_probability(p_intersection, p_condition):
+    if p_condition == 0:
+        raise ValueError("Cannot condition on an impossible event")
+    if p_intersection > p_condition:
+        raise ValueError("P(E∩F) cannot be greater than P(F)")
+
+    return p_intersection / p_condition
 
 
 @app.cell
 def _():
-    def conditional_probability(p_intersection, p_condition):
-        if p_condition == 0:
-            raise ValueError("Cannot condition on an impossible event")
-        if p_intersection > p_condition:
-            raise ValueError("P(E∩F) cannot be greater than P(F)")
-
-        return p_intersection / p_condition
-    return (conditional_probability,)
-
-
-@app.cell
-def _(conditional_probability):
     # Example 1: Rolling a die
     # E: Rolling an even number (2,4,6)
     # F: Rolling a number greater than 3 (4,5,6)
     p_even_given_greater_than_3 = conditional_probability(2 / 6, 3 / 6)
     print("Example 1: Rolling a die")
     print(f"P(Even | >3) = {p_even_given_greater_than_3}")  # Should be 2/3
-    return (p_even_given_greater_than_3,)
+    return
 
 
 @app.cell
-def _(conditional_probability):
+def _():
     # Example 2: Cards
     # E: Drawing a Heart
     # F: Drawing a Face card (J,Q,K)
     p_heart_given_face = conditional_probability(3 / 52, 12 / 52)
     print("\nExample 2: Drawing cards")
     print(f"P(Heart | Face card) = {p_heart_given_face}")  # Should be 1/4
-    return (p_heart_given_face,)
+    return
 
 
 @app.cell
-def _(conditional_probability):
+def _():
     # Example 3: Student grades
     # E: Getting an A
     # F: Studying more than 3 hours
     p_a_given_study = conditional_probability(0.24, 0.40)
     print("\nExample 3: Student grades")
     print(f"P(A | Studied >3hrs) = {p_a_given_study}")  # Should be 0.6
-    return (p_a_given_study,)
+    return
 
 
 @app.cell
-def _(conditional_probability):
+def _():
     # Example 4: Weather
     # E: Raining
     # F: Cloudy
     p_rain_given_cloudy = conditional_probability(0.15, 0.30)
     print("\nExample 4: Weather")
     print(f"P(Rain | Cloudy) = {p_rain_given_cloudy}")  # Should be 0.5
-    return (p_rain_given_cloudy,)
+    return
 
 
 @app.cell
-def _(conditional_probability):
+def _():
     # Example 5: Error cases
     print("\nExample 5: Error cases")
     try:
@@ -225,72 +219,66 @@ def _(conditional_probability):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Conditional Paradigm
+    mo.md(r"""
+    ## The Conditional Paradigm
 
-        When we condition on an event, we enter a new probability universe. In this universe:
+    When we condition on an event, we enter a new probability universe. In this universe:
 
-        1. All probability axioms still hold
-        2. We must consistently condition on the same event
-        3. Our sample space becomes the conditioning event
+    1. All probability axioms still hold
+    2. We must consistently condition on the same event
+    3. Our sample space becomes the conditioning event
 
-        Here's how our familiar probability rules look when conditioned on event $G$:
+    Here's how our familiar probability rules look when conditioned on event $G$:
 
-        | Rule | Original | Conditioned on $G$ |
-        |------|----------|-------------------|
-        | Axiom 1 | $0 \leq P(E) \leq 1$ | $0 \leq P(E \mid G) \leq 1$ |
-        | Axiom 2 | $P(S) = 1$ | $P(S \mid G) = 1$ |
-        | Axiom 3* | $P(E \cup F) = P(E) + P(F)$ | $P(E \cup F \mid G) = P(E \mid G) + P(F \mid G)$ |
-        | Complement | $P(E^C) = 1 - P(E)$ | $P(E^C \mid G) = 1 - P(E \mid G)$ |
+    | Rule | Original | Conditioned on $G$ |
+    |------|----------|-------------------|
+    | Axiom 1 | $0 \leq P(E) \leq 1$ | $0 \leq P(E \mid G) \leq 1$ |
+    | Axiom 2 | $P(S) = 1$ | $P(S \mid G) = 1$ |
+    | Axiom 3* | $P(E \cup F) = P(E) + P(F)$ | $P(E \cup F \mid G) = P(E \mid G) + P(F \mid G)$ |
+    | Complement | $P(E^C) = 1 - P(E)$ | $P(E^C \mid G) = 1 - P(E \mid G)$ |
 
-        *_For mutually exclusive events_
-        """
-    )
+    *_For mutually exclusive events_
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Multiple Conditions
+    mo.md(r"""
+    ## Multiple Conditions
 
-        We can condition on multiple events. The notation $P(E \mid F,G)$ means "_the probability of $E$ 
-        occurring, given that both $F$ and $G$ have occurred._"
+    We can condition on multiple events. The notation $P(E \mid F,G)$ means "_the probability of $E$
+    occurring, given that both $F$ and $G$ have occurred._"
 
-        The conditional probability formula still holds in the universe where $G$ has occurred:
+    The conditional probability formula still holds in the universe where $G$ has occurred:
 
-        $$P(E \mid F,G) = \frac{P(E \cap F \mid G)}{P(F \mid G)}$$
+    $$P(E \mid F,G) = \frac{P(E \cap F \mid G)}{P(F \mid G)}$$
 
-        This is a powerful extension that allows us to update our probabilities as we receive 
-        multiple pieces of information.
-        """
-    )
+    This is a powerful extension that allows us to update our probabilities as we receive
+    multiple pieces of information.
+    """)
     return
+
+
+@app.function
+def multiple_conditional_probability(
+    p_intersection_all, p_intersection_conditions, p_condition
+):
+    """Calculate P(E|F,G) = P(E∩F|G)/P(F|G) = P(E∩F∩G)/P(F∩G)"""
+    if p_condition == 0:
+        raise ValueError("Cannot condition on an impossible event")
+    if p_intersection_conditions == 0:
+        raise ValueError(
+            "Cannot condition on an impossible combination of events"
+        )
+    if p_intersection_all > p_intersection_conditions:
+        raise ValueError("P(E∩F∩G) cannot be greater than P(F∩G)")
+
+    return p_intersection_all / p_intersection_conditions
 
 
 @app.cell
 def _():
-    def multiple_conditional_probability(
-        p_intersection_all, p_intersection_conditions, p_condition
-    ):
-        """Calculate P(E|F,G) = P(E∩F|G)/P(F|G) = P(E∩F∩G)/P(F∩G)"""
-        if p_condition == 0:
-            raise ValueError("Cannot condition on an impossible event")
-        if p_intersection_conditions == 0:
-            raise ValueError(
-                "Cannot condition on an impossible combination of events"
-            )
-        if p_intersection_all > p_intersection_conditions:
-            raise ValueError("P(E∩F∩G) cannot be greater than P(F∩G)")
-
-        return p_intersection_all / p_intersection_conditions
-    return (multiple_conditional_probability,)
-
-
-@app.cell
-def _(multiple_conditional_probability):
     # Example: College admissions
     # E: Getting admitted
     # F: High GPA
@@ -310,58 +298,54 @@ def _(multiple_conditional_probability):
         multiple_conditional_probability(0.3, 0.2, 0.2)
     except ValueError as e:
         print(f"\nError case: {e}")
-    return (p_admit_given_both,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        Which of these statements about conditional probability are true?
-
-        <details>
-        <summary>Knowing F occurred always decreases the probability of E</summary>
-        ❌ False! Conditioning on F can either increase or decrease P(E), depending on how E and F are related.
-        </details>
-
-        <details>
-        <summary>P(E|F) represents entering a new probability universe where F has occurred</summary>
-        ✅ True! We restrict ourselves to only the outcomes where F occurred, making F our new sample space.
-        </details>
-
-        <details>
-        <summary>If P(E|F) = P(E), then E and F must be the same event</summary>
-        ❌ False! This actually means E and F are independent - knowing one doesn't affect the other.
-        </details>
-
-        <details>
-        <summary>P(E|F) can be calculated by dividing P(E∩F) by P(F)</summary>
-        ✅ True! This is the fundamental definition of conditional probability.
-        </details>
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        You've learned:
+    Which of these statements about conditional probability are true?
 
-        - How conditional probability updates our beliefs with new information
-        - The formula $P(E \mid F) = P(E \cap F)/P(F)$ and its intuition
-        - How probability rules work in conditional universes
-        - How to handle multiple conditions
+    <details>
+    <summary>Knowing F occurred always decreases the probability of E</summary>
+    ❌ False! Conditioning on F can either increase or decrease P(E), depending on how E and F are related.
+    </details>
 
-        In the next lesson, we'll explore **independence** - when knowing about one event 
-        tells us nothing about another.
-        """
-    )
+    <details>
+    <summary>P(E|F) represents entering a new probability universe where F has occurred</summary>
+    ✅ True! We restrict ourselves to only the outcomes where F occurred, making F our new sample space.
+    </details>
+
+    <details>
+    <summary>If P(E|F) = P(E), then E and F must be the same event</summary>
+    ❌ False! This actually means E and F are independent - knowing one doesn't affect the other.
+    </details>
+
+    <details>
+    <summary>P(E|F) can be calculated by dividing P(E∩F) by P(F)</summary>
+    ✅ True! This is the fundamental definition of conditional probability.
+    </details>
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ## Summary
+
+    You've learned:
+
+    - How conditional probability updates our beliefs with new information
+    - The formula $P(E \mid F) = P(E \cap F)/P(F)$ and its intuition
+    - How probability rules work in conditional universes
+    - How to handle multiple conditions
+
+    In the next lesson, we'll explore **independence** - when knowing about one event
+    tells us nothing about another.
+    """)
     return
 
 

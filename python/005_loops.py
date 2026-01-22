@@ -7,34 +7,32 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🔄 Loops
+    mo.md("""
+    # 🔄 Loops
 
-        Let's learn how Python helps us repeat tasks efficiently with loops.
+    Let's learn how Python helps us repeat tasks efficiently with loops.
 
-        A "loop" is a way to execute a block of code multiple times. Python has two 
-        main types of loops:
+    A "loop" is a way to execute a block of code multiple times. Python has two
+    main types of loops:
 
-        ```python
-        # For loop: when you know how many times to repeat
-        for i in range(5):
-            print(i)
+    ```python
+    # For loop: when you know how many times to repeat
+    for i in range(5):
+        print(i)
 
-        # While loop: when you don't know how many repetitions
-        while condition:
-            do_something()
-        ```
+    # While loop: when you don't know how many repetitions
+    while condition:
+        do_something()
+    ```
 
-        Let's start with a simple list to explore loops. Feel free to modify this list and see how the subsequent outputs change.
-        """
-    )
+    Let's start with a simple list to explore loops. Feel free to modify this list and see how the subsequent outputs change.
+    """)
     return
 
 
@@ -46,14 +44,12 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## The for loop
+    mo.md("""
+    ## The for loop
 
-        The for loop is perfect for iterating over sequences.
-        Try changing the `sample_fruits` list above and see how the output changes.
-        """
-    )
+    The for loop is perfect for iterating over sequences.
+    Try changing the `sample_fruits` list above and see how the output changes.
+    """)
     return
 
 
@@ -66,13 +62,11 @@ def _(sample_fruits):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Getting the position of an item
+    mo.md("""
+    ### Getting the position of an item
 
-        When you need both the item and its position, use `enumerate()`:
-        """
-    )
+    When you need both the item and its position, use `enumerate()`:
+    """)
     return
 
 
@@ -85,13 +79,11 @@ def _(sample_fruits):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ### Iterating over a range of numbers
+    mo.md("""
+    ### Iterating over a range of numbers
 
-        `range()` is a powerful function for generating sequences of numbers:
-        """
-    )
+    `range()` is a powerful function for generating sequences of numbers:
+    """)
     return
 
 
@@ -112,13 +104,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## The `while` loop
+    mo.md("""
+    ## The `while` loop
 
-        While loops continue as long as a condition is `True`.
-        """
-    )
+    While loops continue as long as a condition is `True`.
+    """)
     return
 
 
@@ -133,19 +123,17 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Controlling loop execution
+    mo.md("""
+    ## Controlling loop execution
 
-        Python provides several ways to control loop execution:
+    Python provides several ways to control loop execution:
 
-        - `break`: exit the loop immediately
+    - `break`: exit the loop immediately
 
-        - `continue`: skip to the next iteration
+    - `continue`: skip to the next iteration
 
-        These can be used with both `for` and `while` loops.
-        """
-    )
+    These can be used with both `for` and `while` loops.
+    """)
     return
 
 
@@ -170,45 +158,41 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Practical loop patterns
+    mo.md("""
+    ## Practical loop patterns
 
-        Here are some common patterns you'll use with loops:
+    Here are some common patterns you'll use with loops:
 
-        ```python
-        # Pattern 1: Accumulator
-        value = 0
-        for num in [1, 2, 3, 4, 5]:
-            value += num
+    ```python
+    # Pattern 1: Accumulator
+    value = 0
+    for num in [1, 2, 3, 4, 5]:
+        value += num
 
-        # Pattern 2: Search
-        found = False
-        for item in items:
-            if condition:
-                found = True
-                break
+    # Pattern 2: Search
+    found = False
+    for item in items:
+        if condition:
+            found = True
+            break
 
-        # Pattern 3: Filter
-        filtered = []
-        for item in items:
-            if condition:
-                filtered.append(item)
-        ```
-        """
-    )
+    # Pattern 3: Filter
+    filtered = []
+    for item in items:
+        if condition:
+            filtered.append(item)
+    ```
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Next steps
+    mo.md(r"""
+    ## Next steps
 
-        Check out the official [Python docs on loops and control flow](https://docs.python.org/3/tutorial/controlflow.html).
-        """
-    )
+    Check out the official [Python docs on loops and control flow](https://docs.python.org/3/tutorial/controlflow.html).
+    """)
     return
 
 

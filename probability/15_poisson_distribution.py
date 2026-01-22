@@ -13,83 +13,77 @@
 
 import marimo
 
-__generated_with = "0.12.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Poisson Distribution")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Poisson Distribution
+    mo.md(r"""
+    # Poisson Distribution
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/), by Stanford professor Chris Piech._
 
-        The Poisson distribution is my go-to for modeling random events occurring over time or space. What makes it cool is that it only needs a single parameter λ (lambda), which represents both the mean and variance.
+    The Poisson distribution is my go-to for modeling random events occurring over time or space. What makes it cool is that it only needs a single parameter λ (lambda), which represents both the mean and variance.
 
-        I find it particularly useful when events happen rarely but the opportunities for them to occur are numerous — like modeling website visits, dust/particle emissions or even typos in a document.
-        """
-    )
+    I find it particularly useful when events happen rarely but the opportunities for them to occur are numerous — like modeling website visits, dust/particle emissions or even typos in a document.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Poisson Random Variable Definition
+    mo.md(r"""
+    ## Poisson Random Variable Definition
 
-        $X \sim \text{Poisson}(\lambda)$ represents a Poisson random variable where:
+    $X \sim \text{Poisson}(\lambda)$ represents a Poisson random variable where:
 
-        - $X$ is our random variable (number of events)
-        - $\text{Poisson}$ indicates it follows a Poisson distribution
-        - $\lambda$ is the rate parameter (average number of events per time interval)
+    - $X$ is our random variable (number of events)
+    - $\text{Poisson}$ indicates it follows a Poisson distribution
+    - $\lambda$ is the rate parameter (average number of events per time interval)
 
-        ```
-        X ~ Poisson(λ)
-         ↑     ↑    ↑
-         |     |    +-- Rate parameter:
-         |     |        average number of
-         |     |        events per interval
-         |     +-- Indicates Poisson
-         |         distribution
-         |
-        Our random variable
-          counting number of events
-        ```
+    ```
+    X ~ Poisson(λ)
+     ↑     ↑    ↑
+     |     |    +-- Rate parameter:
+     |     |        average number of
+     |     |        events per interval
+     |     +-- Indicates Poisson
+     |         distribution
+     |
+    Our random variable
+      counting number of events
+    ```
 
-        The Poisson distribution is particularly useful when:
+    The Poisson distribution is particularly useful when:
 
-        1. Events occur independently of each other
-        2. The average rate of occurrence is constant
-        3. Two events cannot occur at exactly the same instant
-        4. The probability of an event is proportional to the length of the time interval
-        """
-    )
+    1. Events occur independently of each other
+    2. The average rate of occurrence is constant
+    3. Two events cannot occur at exactly the same instant
+    4. The probability of an event is proportional to the length of the time interval
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Properties of Poisson Distribution
+    mo.md(r"""
+    ## Properties of Poisson Distribution
 
-        | Property | Formula |
-        |----------|---------|
-        | Notation | $X \sim \text{Poisson}(\lambda)$ |
-        | Description | Number of events in a fixed time frame if (a) events occur with a constant mean rate and (b) they occur independently of time since last event |
-        | Parameters | $\lambda \in \mathbb{R}^{+}$, the constant average rate |
-        | Support | $x \in \{0, 1, \dots\}$ |
-        | PMF equation | $P(X=x) = \frac{\lambda^x e^{-\lambda}}{x!}$ |
-        | Expectation | $E[X] = \lambda$ |
-        | Variance | $\text{Var}(X) = \lambda$ |
+    | Property | Formula |
+    |----------|---------|
+    | Notation | $X \sim \text{Poisson}(\lambda)$ |
+    | Description | Number of events in a fixed time frame if (a) events occur with a constant mean rate and (b) they occur independently of time since last event |
+    | Parameters | $\lambda \in \mathbb{R}^{+}$, the constant average rate |
+    | Support | $x \in \{0, 1, \dots\}$ |
+    | PMF equation | $P(X=x) = \frac{\lambda^x e^{-\lambda}}{x!}$ |
+    | Expectation | $E[X] = \lambda$ |
+    | Variance | $\text{Var}(X) = \lambda$ |
 
-        Note that unlike many other distributions, the Poisson distribution's mean and variance are equal, both being $\lambda$.
+    Note that unlike many other distributions, the Poisson distribution's mean and variance are equal, both being $\lambda$.
 
-        Let's explore how the Poisson distribution changes with different rate parameters.
-        """
-    )
+    Let's explore how the Poisson distribution changes with different rate parameters.
+    """)
     return
 
 
@@ -173,24 +167,22 @@ def _(lambda_slider, np, plt, stats):
     # Get parameter from slider and create plot
     _lambda = lambda_slider.amount
     create_poisson_pmf_plot(_lambda)
-    return (create_poisson_pmf_plot,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Poisson Intuition: Relation to Binomial Distribution
+    mo.md(r"""
+    ## Poisson Intuition: Relation to Binomial Distribution
 
-        The Poisson distribution can be derived as a limiting case of the binomial distribution. I find this connection fascinating because it shows how seemingly different distributions are actually related.
+    The Poisson distribution can be derived as a limiting case of the binomial distribution. I find this connection fascinating because it shows how seemingly different distributions are actually related.
 
-        Let's work through a practical example: predicting ride-sharing requests in a specific area over a one-minute interval. From historical data, we know that the average number of requests per minute is $\lambda = 5$.
+    Let's work through a practical example: predicting ride-sharing requests in a specific area over a one-minute interval. From historical data, we know that the average number of requests per minute is $\lambda = 5$.
 
-        We could model this using a binomial distribution by dividing our minute into smaller intervals. For example, splitting a minute into 60 seconds, where each second is a Bernoulli trial — either a request arrives (success) or it doesn't (failure).
+    We could model this using a binomial distribution by dividing our minute into smaller intervals. For example, splitting a minute into 60 seconds, where each second is a Bernoulli trial — either a request arrives (success) or it doesn't (failure).
 
-        Let's visualize this concept:
-        """
-    )
+    Let's visualize this concept:
+    """)
     return
 
 
@@ -242,38 +234,36 @@ def _(fig_to_image, mo, plt):
         """
     )
     mo.vstack([_fig, _explanation])
-    return create_time_division_visualization, i
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        The total number of requests received over the minute can be approximated as the sum of sixty indicator variables, which aligns perfectly with the binomial distribution — a sum of Bernoullis. 
+    mo.md(r"""
+    The total number of requests received over the minute can be approximated as the sum of sixty indicator variables, which aligns perfectly with the binomial distribution — a sum of Bernoullis.
 
-        If we define $X$ as the number of requests in a minute, $X$ follows a binomial with $n=60$ trials. To determine the success probability $p$, we need to match the expected value with our historical average $\lambda$:
+    If we define $X$ as the number of requests in a minute, $X$ follows a binomial with $n=60$ trials. To determine the success probability $p$, we need to match the expected value with our historical average $\lambda$:
 
-        \begin{align}
-        \lambda &= E[X] && \text{Expectation matches historical average} \\
-        \lambda &= n \cdot p && \text{Expectation of a Binomial is } n \cdot p \\
-        p &= \frac{\lambda}{n} && \text{Solving for $p$}
-        \end{align}
+    \begin{align}
+    \lambda &= E[X] && \text{Expectation matches historical average} \\
+    \lambda &= n \cdot p && \text{Expectation of a Binomial is } n \cdot p \\
+    p &= \frac{\lambda}{n} && \text{Solving for $p$}
+    \end{align}
 
-        With $\lambda=5$ and $n=60$, we get $p=\frac{5}{60}=\frac{1}{12}$, so $X \sim \text{Bin}(n=60, p=\frac{5}{60})$. Using the binomial PMF:
+    With $\lambda=5$ and $n=60$, we get $p=\frac{5}{60}=\frac{1}{12}$, so $X \sim \text{Bin}(n=60, p=\frac{5}{60})$. Using the binomial PMF:
 
-        $P(X = x) = {n \choose x} p^x (1-p)^{n-x}$
+    $P(X = x) = {n \choose x} p^x (1-p)^{n-x}$
 
-        For example:
+    For example:
 
-        \begin{align}
-        P(X=1) &= {60 \choose 1} (5/60)^1 (55/60)^{60-1} \approx 0.0295 \\
-        P(X=2) &= {60 \choose 2} (5/60)^2 (55/60)^{60-2} \approx 0.0790 \\
-        P(X=3) &= {60 \choose 3} (5/60)^3 (55/60)^{60-3} \approx 0.1389
-        \end{align}
+    \begin{align}
+    P(X=1) &= {60 \choose 1} (5/60)^1 (55/60)^{60-1} \approx 0.0295 \\
+    P(X=2) &= {60 \choose 2} (5/60)^2 (55/60)^{60-2} \approx 0.0790 \\
+    P(X=3) &= {60 \choose 3} (5/60)^3 (55/60)^{60-3} \approx 0.1389
+    \end{align}
 
-        This approximation works well, but it doesn't account for multiple events occurring in a single second. To address this limitation, we can use even finer intervals — perhaps 600 deciseconds (tenths of a second):
-        """
-    )
+    This approximation works well, but it doesn't account for multiple events occurring in a single second. To address this limitation, we can use even finer intervals — perhaps 600 deciseconds (tenths of a second):
+    """)
     return
 
 
@@ -327,18 +317,16 @@ def _(fig_to_image, mo, plt):
         """
     )
     mo.vstack([_fig, _explanation])
-    return (create_decisecond_visualization,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Binomial Distribution in the Limit
+    mo.md(r"""
+    ## The Binomial Distribution in the Limit
 
-        What happens if we continue dividing our time interval into smaller and smaller pieces? Let's explore how the probabilities change as we increase the number of intervals:
-        """
-    )
+    What happens if we continue dividing our time interval into smaller and smaller pieces? Let's explore how the probabilities change as we increase the number of intervals:
+    """)
     return
 
 
@@ -408,7 +396,7 @@ def _(intervals_slider, np, pd, plt, stats):
 
     # Cromparison plot
     df, fig, n, p = create_comparison_plot(n, _lambda)
-    return create_comparison_plot, df, fig, n, p
+    return df, fig, n, p
 
 
 @app.cell(hide_code=True)
@@ -434,88 +422,84 @@ def _(df, fig, fig_to_image, mo, n, p):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        As our interactive comparison demonstrates, the binomial distribution converges to the Poisson distribution as we increase the number of intervals! This remarkable relationship exists because the Poisson distribution is actually the limiting case of the binomial when:
+    mo.md(r"""
+    As our interactive comparison demonstrates, the binomial distribution converges to the Poisson distribution as we increase the number of intervals! This remarkable relationship exists because the Poisson distribution is actually the limiting case of the binomial when:
 
-        - The number of trials $n$ approaches infinity
-        - The probability of success $p$ approaches zero
-        - The product $np = \lambda$ remains constant
+    - The number of trials $n$ approaches infinity
+    - The probability of success $p$ approaches zero
+    - The product $np = \lambda$ remains constant
 
-        This elegance is why I find the Poisson distribution so powerful — it simplifies what would otherwise be a cumbersome binomial with numerous trials and tiny success probabilities.
+    This elegance is why I find the Poisson distribution so powerful — it simplifies what would otherwise be a cumbersome binomial with numerous trials and tiny success probabilities.
 
-        ## Derivation of the Poisson PMF
+    ## Derivation of the Poisson PMF
 
-        > _Note:_ The following mathematical derivation is included as reference material. The credit for this formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/) by Chris Piech.
+    > _Note:_ The following mathematical derivation is included as reference material. The credit for this formulation belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/poisson/) by Chris Piech.
 
-        The Poisson PMF can be derived by taking the limit of the binomial PMF as $n \to \infty$:
+    The Poisson PMF can be derived by taking the limit of the binomial PMF as $n \to \infty$:
 
-        $P(X=x) = \lim_{n \rightarrow \infty} {n \choose x} (\lambda / n)^x(1-\lambda/n)^{n-x}$
+    $P(X=x) = \lim_{n \rightarrow \infty} {n \choose x} (\lambda / n)^x(1-\lambda/n)^{n-x}$
 
-        Through a series of algebraic manipulations:
+    Through a series of algebraic manipulations:
 
-        \begin{align}
-        P(X=x) 
-        &= \lim_{n \rightarrow \infty} {n \choose x} (\lambda / n)^x(1-\lambda/n)^{n-x}
-            && \text{Start: binomial in the limit}\\
-        &= \lim_{n \rightarrow \infty}
-            {n \choose x} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            \frac{(1-\lambda/n)^{n}}{(1-\lambda/n)^{x}} 
-            && \text{Expanding the power terms} \\
-        &= \lim_{n \rightarrow \infty}
-            \frac{n!}{(n-x)!x!} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            \frac{(1-\lambda/n)^{n}}{(1-\lambda/n)^{x}} 
-            && \text{Expanding the binomial term} \\
-        &= \lim_{n \rightarrow \infty}
-            \frac{n!}{(n-x)!x!} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            \frac{e^{-\lambda}}{(1-\lambda/n)^{x}} 
-            && \text{Using limit rule } \lim_{n \rightarrow \infty}(1-\lambda/n)^{n} = e^{-\lambda}\\
-        &= \lim_{n \rightarrow \infty}
-            \frac{n!}{(n-x)!x!} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            \frac{e^{-\lambda}}{1} 
-            && \text{As } n \to \infty \text{, } \lambda/n \to 0\\
-        &= \lim_{n \rightarrow \infty}
-            \frac{n!}{(n-x)!} \cdot
-            \frac{1}{x!} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            e^{-\lambda}
-            && \text{Rearranging terms}\\
-        &= \lim_{n \rightarrow \infty}
-            \frac{n^x}{1} \cdot
-            \frac{1}{x!} \cdot
-            \frac{\lambda^x}{n^x} \cdot
-            e^{-\lambda}
-            && \text{As } n \to \infty \text{, } \frac{n!}{(n-x)!} \approx n^x\\
-        &= \lim_{n \rightarrow \infty}
-            \frac{\lambda^x}{x!} \cdot
-            e^{-\lambda}
-            && \text{Canceling } n^x\\
-        &= 
-            \frac{\lambda^x \cdot e^{-\lambda}}{x!} 
-            && \text{Simplifying}\\
-        \end{align}
+    \begin{align}
+    P(X=x)
+    &= \lim_{n \rightarrow \infty} {n \choose x} (\lambda / n)^x(1-\lambda/n)^{n-x}
+        && \text{Start: binomial in the limit}\\
+    &= \lim_{n \rightarrow \infty}
+        {n \choose x} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        \frac{(1-\lambda/n)^{n}}{(1-\lambda/n)^{x}}
+        && \text{Expanding the power terms} \\
+    &= \lim_{n \rightarrow \infty}
+        \frac{n!}{(n-x)!x!} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        \frac{(1-\lambda/n)^{n}}{(1-\lambda/n)^{x}}
+        && \text{Expanding the binomial term} \\
+    &= \lim_{n \rightarrow \infty}
+        \frac{n!}{(n-x)!x!} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        \frac{e^{-\lambda}}{(1-\lambda/n)^{x}}
+        && \text{Using limit rule } \lim_{n \rightarrow \infty}(1-\lambda/n)^{n} = e^{-\lambda}\\
+    &= \lim_{n \rightarrow \infty}
+        \frac{n!}{(n-x)!x!} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        \frac{e^{-\lambda}}{1}
+        && \text{As } n \to \infty \text{, } \lambda/n \to 0\\
+    &= \lim_{n \rightarrow \infty}
+        \frac{n!}{(n-x)!} \cdot
+        \frac{1}{x!} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        e^{-\lambda}
+        && \text{Rearranging terms}\\
+    &= \lim_{n \rightarrow \infty}
+        \frac{n^x}{1} \cdot
+        \frac{1}{x!} \cdot
+        \frac{\lambda^x}{n^x} \cdot
+        e^{-\lambda}
+        && \text{As } n \to \infty \text{, } \frac{n!}{(n-x)!} \approx n^x\\
+    &= \lim_{n \rightarrow \infty}
+        \frac{\lambda^x}{x!} \cdot
+        e^{-\lambda}
+        && \text{Canceling } n^x\\
+    &=
+        \frac{\lambda^x \cdot e^{-\lambda}}{x!}
+        && \text{Simplifying}\\
+    \end{align}
 
-        This gives us the elegant Poisson PMF formula: $P(X=x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$
-        """
-    )
+    This gives us the elegant Poisson PMF formula: $P(X=x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!}$
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Poisson Distribution in Python
+    mo.md(r"""
+    ## Poisson Distribution in Python
 
-        Python's `scipy.stats` module provides functions to work with the Poisson distribution. Let's see how to calculate probabilities and generate random samples.
+    Python's `scipy.stats` module provides functions to work with the Poisson distribution. Let's see how to calculate probabilities and generate random samples.
 
-        First, let's calculate some probabilities for our ride-sharing example with $\lambda = 5$:
-        """
-    )
+    First, let's calculate some probabilities for our ride-sharing example with $\lambda = 5$:
+    """)
     return
 
 
@@ -539,12 +523,14 @@ def _(stats):
     # Calculate probability P(X > 10)
     p_gt_10 = 1 - stats.poisson.cdf(10, _lambda)
     print(f"P(X>10) = {p_gt_10:.5f}")
-    return p_1, p_2, p_3, p_gt_10, p_leq_3
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""We can also generate random samples from a Poisson distribution and visualize their distribution:""")
+    mo.md(r"""
+    We can also generate random samples from a Poisson distribution and visualize their distribution:
+    """)
     return
 
 
@@ -589,22 +575,20 @@ def _(np, plt, stats):
     # Use a lambda value of 5 for this example
     _lambda = 5
     create_samples_plot(_lambda)
-    return (create_samples_plot,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Changing Time Frames
+    mo.md(r"""
+    ## Changing Time Frames
 
-        One important property of the Poisson distribution is that the rate parameter $\lambda$ scales linearly with the time interval. If events occur at a rate of $\lambda$ per unit time, then over a period of $t$ units, the rate parameter becomes $\lambda \cdot t$.
+    One important property of the Poisson distribution is that the rate parameter $\lambda$ scales linearly with the time interval. If events occur at a rate of $\lambda$ per unit time, then over a period of $t$ units, the rate parameter becomes $\lambda \cdot t$.
 
-        For example, if a website receives an average of 5 requests per minute, what is the distribution of requests over a 20-minute period?
+    For example, if a website receives an average of 5 requests per minute, what is the distribution of requests over a 20-minute period?
 
-        The rate parameter for the 20-minute period would be $\lambda = 5 \cdot 20 = 100$ requests.
-        """
-    )
+    The rate parameter for the 20-minute period would be $\lambda = 5 \cdot 20 = 100$ requests.
+    """)
     return
 
 
@@ -700,75 +684,73 @@ def _(mo, np, plt, rate_slider, stats, time_slider):
     info = mo.md(_info_text)
 
     mo.vstack([_plot, info], justify="center")
-    return create_time_scaling_plot, info
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-        Pick which of these statements about Poisson distributions you think are correct:
-
-        /// details | The variance of a Poisson distribution is always equal to its mean
-        ✅ Correct! For a Poisson distribution with parameter $\lambda$, both the mean and variance equal $\lambda$.
-        ///
-
-        /// details | The Poisson distribution can be used to model the number of successes in a fixed number of trials
-        ❌ Incorrect! That's the binomial distribution. The Poisson distribution models the number of events in a fixed interval of time or space, not a fixed number of trials.
-        ///
-
-        /// details | If $X \sim \text{Poisson}(\lambda_1)$ and $Y \sim \text{Poisson}(\lambda_2)$ are independent, then $X + Y \sim \text{Poisson}(\lambda_1 + \lambda_2)$
-        ✅ Correct! The sum of independent Poisson random variables is also a Poisson random variable with parameter equal to the sum of the individual parameters.
-        ///
-
-        /// details | As $\lambda$ increases, the Poisson distribution approaches a normal distribution
-        ✅ Correct! For large values of $\lambda$ (generally $\lambda > 10$), the Poisson distribution is approximately normal with mean $\lambda$ and variance $\lambda$.
-        ///
-
-        /// details | The probability of zero events in a Poisson process is always less than the probability of one event
-        ❌ Incorrect! For $\lambda < 1$, the probability of zero events ($e^{-\lambda}$) is actually greater than the probability of one event ($\lambda e^{-\lambda}$).
-        ///
-
-        /// details | The Poisson distribution has a single parameter $\lambda$, which always equals the average number of events per time period
-        ✅ Correct! The parameter $\lambda$ represents the average rate of events, and it uniquely defines the distribution.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
+    Pick which of these statements about Poisson distributions you think are correct:
 
-        The Poisson distribution is one of those incredibly useful tools that shows up all over the place. I've always found it fascinating how such a simple formula can model so many real-world phenomena - from website traffic to radioactive decay.
+    /// details | The variance of a Poisson distribution is always equal to its mean
+    ✅ Correct! For a Poisson distribution with parameter $\lambda$, both the mean and variance equal $\lambda$.
+    ///
 
-        What makes the Poisson really cool is that it emerges naturally as we try to model rare events occurring over a continuous interval. Remember that visualization where we kept dividing time into smaller and smaller chunks? As we showed, when you take a binomial distribution and let the number of trials approach infinity while keeping the expected value constant, you end up with the elegant Poisson formula.
+    /// details | The Poisson distribution can be used to model the number of successes in a fixed number of trials
+    ❌ Incorrect! That's the binomial distribution. The Poisson distribution models the number of events in a fixed interval of time or space, not a fixed number of trials.
+    ///
 
-        The key things to remember about the Poisson distribution:
+    /// details | If $X \sim \text{Poisson}(\lambda_1)$ and $Y \sim \text{Poisson}(\lambda_2)$ are independent, then $X + Y \sim \text{Poisson}(\lambda_1 + \lambda_2)$
+    ✅ Correct! The sum of independent Poisson random variables is also a Poisson random variable with parameter equal to the sum of the individual parameters.
+    ///
 
-        - It models the number of events occurring in a fixed interval of time or space, assuming events happen at a constant average rate and independently of each other
+    /// details | As $\lambda$ increases, the Poisson distribution approaches a normal distribution
+    ✅ Correct! For large values of $\lambda$ (generally $\lambda > 10$), the Poisson distribution is approximately normal with mean $\lambda$ and variance $\lambda$.
+    ///
 
-        - Its PMF is given by the elegantly simple formula $P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$
+    /// details | The probability of zero events in a Poisson process is always less than the probability of one event
+    ❌ Incorrect! For $\lambda < 1$, the probability of zero events ($e^{-\lambda}$) is actually greater than the probability of one event ($\lambda e^{-\lambda}$).
+    ///
 
-        - Both the mean and variance equal the parameter $\lambda$, which represents the average number of events per interval
-
-        - It's related to the binomial distribution as a limiting case when $n \to \infty$, $p \to 0$, and $np = \lambda$ remains constant
-
-        - The rate parameter scales linearly with the length of the interval - if events occur at rate $\lambda$ per unit time, then over $t$ units, the parameter becomes $\lambda t$
-
-        From modeling website traffic and customer arrivals to defects in manufacturing and radioactive decay, the Poisson distribution provides a powerful and mathematically elegant way to understand random occurrences in our world.
-        """
-    )
+    /// details | The Poisson distribution has a single parameter $\lambda$, which always equals the average number of events per time period
+    ✅ Correct! The parameter $\lambda$ represents the average rate of events, and it uniquely defines the distribution.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Appendix code (helper functions, variables, etc.):""")
+    mo.md(r"""
+    ## Summary
+
+    The Poisson distribution is one of those incredibly useful tools that shows up all over the place. I've always found it fascinating how such a simple formula can model so many real-world phenomena - from website traffic to radioactive decay.
+
+    What makes the Poisson really cool is that it emerges naturally as we try to model rare events occurring over a continuous interval. Remember that visualization where we kept dividing time into smaller and smaller chunks? As we showed, when you take a binomial distribution and let the number of trials approach infinity while keeping the expected value constant, you end up with the elegant Poisson formula.
+
+    The key things to remember about the Poisson distribution:
+
+    - It models the number of events occurring in a fixed interval of time or space, assuming events happen at a constant average rate and independently of each other
+
+    - Its PMF is given by the elegantly simple formula $P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}$
+
+    - Both the mean and variance equal the parameter $\lambda$, which represents the average number of events per interval
+
+    - It's related to the binomial distribution as a limiting case when $n \to \infty$, $p \to 0$, and $np = \lambda$ remains constant
+
+    - The rate parameter scales linearly with the length of the interval - if events occur at rate $\lambda$ per unit time, then over $t$ units, the parameter becomes $\lambda t$
+
+    From modeling website traffic and customer arrivals to defects in manufacturing and radioactive decay, the Poisson distribution provides a powerful and mathematically elegant way to understand random occurrences in our world.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Appendix code (helper functions, variables, etc.):
+    """)
     return
 
 
@@ -786,7 +768,7 @@ def _():
     import pandas as pd
     import altair as alt
     from wigglystuff import TangleSlider
-    return TangleSlider, alt, np, pd, plt, stats
+    return TangleSlider, np, pd, plt, stats
 
 
 @app.cell(hide_code=True)
@@ -802,7 +784,7 @@ def _():
         buf.seek(0)
         data = f"data:image/png;base64,{base64.b64encode(buf.read()).decode('utf-8')}"
         return data
-    return Figure, base64, fig_to_image, io
+    return (fig_to_image,)
 
 
 if __name__ == "__main__":

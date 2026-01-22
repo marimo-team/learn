@@ -7,31 +7,29 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🔢 Numbers
+    mo.md("""
+    # 🔢 Numbers
 
-        This tutorial provides a brief overview of working with numbers.
+    This tutorial provides a brief overview of working with numbers.
 
-        ## Number Types
+    ## Number Types
 
-        Python has several types of numbers:
+    Python has several types of numbers:
 
-        ```python
-        integer = 42          # whole numbers (int)
-        decimal = 3.14        # floating-point numbers (float)
-        complex_num = 2 + 3j  # complex numbers
-        ```
+    ```python
+    integer = 42          # whole numbers (int)
+    decimal = 3.14        # floating-point numbers (float)
+    complex_num = 2 + 3j  # complex numbers
+    ```
 
-        Below is an example number we'll use to explore operations.
-        """
-    )
+    Below is an example number we'll use to explore operations.
+    """)
     return
 
 
@@ -43,15 +41,13 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Basic mathematical operations
+    mo.md("""
+    ## Basic mathematical operations
 
-        Python supports all standard mathematical operations.
+    Python supports all standard mathematical operations.
 
-        Try changing the value of `number` above and watch how the results change.
-        """
-    )
+    Try changing the value of `number` above and watch how the results change.
+    """)
     return
 
 
@@ -81,7 +77,9 @@ def _(number):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""Python also has special division operators and power operations.""")
+    mo.md("""
+    Python also has special division operators and power operations.
+    """)
     return
 
 
@@ -105,13 +103,11 @@ def _(number):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Type conversion
+    mo.md("""
+    ## Type conversion
 
-        You can convert between different number types. Try changing these values!
-        """
-    )
+    You can convert between different number types. Try changing these values!
+    """)
     return
 
 
@@ -135,12 +131,10 @@ def _(number):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Built-in math functions
-        Python provides many useful built-in functions for working with numbers:
-        """
-    )
+    mo.md("""
+    ## Built-in math functions
+    Python provides many useful built-in functions for working with numbers:
+    """)
     return
 
 
@@ -170,13 +164,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Advanced operations
+    mo.md("""
+    ## Advanced operations
 
-        For more complex mathematical operations, use Python's [math module](https://docs.python.org/3/library/math.html).
-        """
-    )
+    For more complex mathematical operations, use Python's [math module](https://docs.python.org/3/library/math.html).
+    """)
     return
 
 

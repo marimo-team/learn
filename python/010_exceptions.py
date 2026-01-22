@@ -7,19 +7,17 @@
 
 import marimo
 
-__generated_with = "0.10.19"
+__generated_with = "0.18.4"
 app = marimo.App()
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        # 🛡️ Handling errors
+    mo.md("""
+    # 🛡️ Handling errors
 
-        Sometimes things go wrong in programs. When that happens, Python raises `exceptions` to tell you what went amiss. For example, maybe you divided by 0:
-        """
-    )
+    Sometimes things go wrong in programs. When that happens, Python raises `exceptions` to tell you what went amiss. For example, maybe you divided by 0:
+    """)
     return
 
 
@@ -31,15 +29,13 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        That's a lot of red! The outputs above are Python telling you that
-        something went wrong — in this case, we tried dividing a number by 0.
+    mo.md("""
+    That's a lot of red! The outputs above are Python telling you that
+    something went wrong — in this case, we tried dividing a number by 0.
 
-        Python provides tools to catch and handle exceptions: the `try/except`
-        block. This is demonstrated in the next couple cells.
-        """
-    )
+    Python provides tools to catch and handle exceptions: the `try/except`
+    block. This is demonstrated in the next couple cells.
+    """)
     return
 
 
@@ -61,20 +57,18 @@ def _(divisor):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        Python has many types of Exceptions besides `ZeroDivisionError`. If you
-        don't know what kind of exception you're handling, catch the generic
-        `Exception` type:
+    mo.md("""
+    Python has many types of Exceptions besides `ZeroDivisionError`. If you
+    don't know what kind of exception you're handling, catch the generic
+    `Exception` type:
 
-        ```python
-        try:
-            ...
-        except Exception:
-            ...
-        ```
-        """
-    )
+    ```python
+    try:
+        ...
+    except Exception:
+        ...
+    ```
+    """)
     return
 
 
@@ -154,37 +148,35 @@ def _(error_types, mo):
     }
 
     mo.md(error_explanations.get(error_types.value, "Select an error type"))
-    return (error_explanations,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        """
-        ## Handling multiple exception types
-        
-        Catch and handle different types of errors specifically:
+    mo.md("""
+    ## Handling multiple exception types
 
-        ```python
-        def complex_function(x, y):
-            try:
-                # Potential errors: TypeError, ZeroDivisionError
-                result = x / y
-                return int(result)
-            except TypeError:
-                return "Type mismatch!"
-            except ZeroDivisionError:
-                return "No division by zero!"
-            except ValueError:
-                return "Conversion error!"
-            finally:
-                # The `finally` block always runs, regardless if there
-                # was an error or not
-                ...
-                
-        ```
-        """
-    )
+    Catch and handle different types of errors specifically:
+
+    ```python
+    def complex_function(x, y):
+        try:
+            # Potential errors: TypeError, ZeroDivisionError
+            result = x / y
+            return int(result)
+        except TypeError:
+            return "Type mismatch!"
+        except ZeroDivisionError:
+            return "No division by zero!"
+        except ValueError:
+            return "Conversion error!"
+        finally:
+            # The `finally` block always runs, regardless if there
+            # was an error or not
+            ...
+
+    ```
+    """)
     return
 
 
@@ -230,7 +222,7 @@ def _(finally_input, mo):
 
     Notice how the `finally` block always runs, ensuring cleanup!
     """)
-    return (simulate_resource_management,)
+    return
 
 
 @app.cell

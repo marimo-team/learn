@@ -13,105 +13,103 @@
 
 import marimo
 
-__generated_with = "0.12.0"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Naive Bayes Classification")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Naive Bayes Classification
+    mo.md(r"""
+    # Naive Bayes Classification
 
-        _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/naive_bayes/), by Stanford professor Chris Piech._
+    _This notebook is a computational companion to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/naive_bayes/), by Stanford professor Chris Piech._
 
-        Naive Bayes is one of those classic machine learning algorithms that seems almost too simple to work, yet it's surprisingly effective for many classification tasks. I've always found it fascinating how this algorithm applies Bayes' theorem with a strong (but knowingly incorrect) "naive" assumption that all features are independent of each other.
+    Naive Bayes is one of those classic machine learning algorithms that seems almost too simple to work, yet it's surprisingly effective for many classification tasks. I've always found it fascinating how this algorithm applies Bayes' theorem with a strong (but knowingly incorrect) "naive" assumption that all features are independent of each other.
 
-        In this notebook, we'll dive into why this supposedly "wrong" assumption still leads to good results. We'll walk through the training process, learn how to make predictions, and see some interactive visualizations that helped me understand the concept better when I was first learning it. We'll also explore why Naive Bayes excels particularly in text classification problems like spam filtering.
+    In this notebook, we'll dive into why this supposedly "wrong" assumption still leads to good results. We'll walk through the training process, learn how to make predictions, and see some interactive visualizations that helped me understand the concept better when I was first learning it. We'll also explore why Naive Bayes excels particularly in text classification problems like spam filtering.
 
-        If you're new to Naive Bayes, I highly recommend checking out [this excellent explanation by Mahesh Huddar](https://youtu.be/XzSlEA4ck2I?si=AASeh_KP68BAbzy5), which provides a step-by-step walkthrough with a helpful example (which we take a dive into, down below).
-        """
-    )
+    If you're new to Naive Bayes, I highly recommend checking out [this excellent explanation by Mahesh Huddar](https://youtu.be/XzSlEA4ck2I?si=AASeh_KP68BAbzy5), which provides a step-by-step walkthrough with a helpful example (which we take a dive into, down below).
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Why "Naive"?
+    mo.md(r"""
+    ## Why "Naive"?
 
-        So why is it called "naive"? It's because the algorithm makes an assumption — it assumes all features are completely independent of each other when given the class label.
+    So why is it called "naive"? It's because the algorithm makes an assumption — it assumes all features are completely independent of each other when given the class label.
 
-        The math way of saying this is:
+    The math way of saying this is:
 
-        $$P(X_1, X_2, \ldots, X_n | Y) = P(X_1 | Y) \times P(X_2 | Y) \times \ldots \times P(X_n | Y) = \prod_{i=1}^{n} P(X_i | Y)$$
+    $$P(X_1, X_2, \ldots, X_n | Y) = P(X_1 | Y) \times P(X_2 | Y) \times \ldots \times P(X_n | Y) = \prod_{i=1}^{n} P(X_i | Y)$$
 
-        This independence assumption is almost always wrong in real data. Think about text classification — if you see the word "cloudy" in a weather report, you're much more likely to also see "rain" than you would be to see "sunshine". These words clearly depend on each other! Or in medical diagnosis, symptoms often occur together as part of syndromes.
+    This independence assumption is almost always wrong in real data. Think about text classification — if you see the word "cloudy" in a weather report, you're much more likely to also see "rain" than you would be to see "sunshine". These words clearly depend on each other! Or in medical diagnosis, symptoms often occur together as part of syndromes.
 
-        But here's the cool part — even though we know this assumption is _technically_ wrong, the algorithm still works remarkably well in practice. By making this simplifying assumption, we:
+    But here's the cool part — even though we know this assumption is _technically_ wrong, the algorithm still works remarkably well in practice. By making this simplifying assumption, we:
 
-        - Make the math way easier to compute
-        - Need way less training data to get decent results 
-        - Can handle thousands of features without blowing up computationally
-        """
-    )
+    - Make the math way easier to compute
+    - Need way less training data to get decent results
+    - Can handle thousands of features without blowing up computationally
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## The Math Behind Naive Bayes
+    mo.md(r"""
+    ## The Math Behind Naive Bayes
 
-        At its core, Naive Bayes is just an application of Bayes' theorem from our earlier probability notebooks. Let's break it down:
+    At its core, Naive Bayes is just an application of Bayes' theorem from our earlier probability notebooks. Let's break it down:
 
-        We have some features $\mathbf{X} = [X_1, X_2, \ldots, X_m]$ (like words in an email or symptoms of a disease) and we want to predict a class label $Y$ (like "spam/not spam" or "has disease/doesn't have disease").
+    We have some features $\mathbf{X} = [X_1, X_2, \ldots, X_m]$ (like words in an email or symptoms of a disease) and we want to predict a class label $Y$ (like "spam/not spam" or "has disease/doesn't have disease").
 
-        What we're really trying to find is:
+    What we're really trying to find is:
 
-        $$P(Y|\mathbf{X})$$
+    $$P(Y|\mathbf{X})$$
 
-        In other words, "what's the probability of a certain class given the features we observed?" Once we have these probabilities, we simply pick the class with the highest probability:
+    In other words, "what's the probability of a certain class given the features we observed?" Once we have these probabilities, we simply pick the class with the highest probability:
 
-        $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y|\mathbf{X}=\mathbf{x})$$
+    $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y|\mathbf{X}=\mathbf{x})$$
 
-        Applying Bayes' theorem (from our earlier probability work), we get:
+    Applying Bayes' theorem (from our earlier probability work), we get:
 
-        $$P(Y=y|\mathbf{X}=\mathbf{x}) = \frac{P(Y=y) \times P(\mathbf{X}=\mathbf{x}|Y=y)}{P(\mathbf{X}=\mathbf{x})}$$
+    $$P(Y=y|\mathbf{X}=\mathbf{x}) = \frac{P(Y=y) \times P(\mathbf{X}=\mathbf{x}|Y=y)}{P(\mathbf{X}=\mathbf{x})}$$
 
-        Since we're comparing different possible classes for the same input features, the denominator $P(\mathbf{X}=\mathbf{x})$ is the same for all classes. So we can drop it and just compare:
+    Since we're comparing different possible classes for the same input features, the denominator $P(\mathbf{X}=\mathbf{x})$ is the same for all classes. So we can drop it and just compare:
 
-        $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y) \times P(\mathbf{X}=\mathbf{x}|Y=y)$$
+    $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y) \times P(\mathbf{X}=\mathbf{x}|Y=y)$$
 
-        Here's where the "naive" part comes in. Calculating $P(\mathbf{X}=\mathbf{x}|Y=y)$ directly would be a computational nightmare - we'd need counts for every possible combination of feature values. Instead, we make that simplifying "naive" assumption that features are independent of each other:
+    Here's where the "naive" part comes in. Calculating $P(\mathbf{X}=\mathbf{x}|Y=y)$ directly would be a computational nightmare - we'd need counts for every possible combination of feature values. Instead, we make that simplifying "naive" assumption that features are independent of each other:
 
-        $$P(\mathbf{X}=\mathbf{x}|Y=y) = \prod_{i=1}^{m} P(X_i=x_i|Y=y)$$
+    $$P(\mathbf{X}=\mathbf{x}|Y=y) = \prod_{i=1}^{m} P(X_i=x_i|Y=y)$$
 
-        Which gives us our final formula:
+    Which gives us our final formula:
 
-        $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y) \times \prod_{i=1}^{m} P(X_i=x_i|Y=y)$$
+    $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } P(Y=y) \times \prod_{i=1}^{m} P(X_i=x_i|Y=y)$$
 
-        In actual implementations, we usually use logarithms to avoid the numerical problems that come with multiplying many small probabilities (they can _underflow_ to zero):
+    In actual implementations, we usually use logarithms to avoid the numerical problems that come with multiplying many small probabilities (they can _underflow_ to zero):
 
-        $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } \log P(Y=y) + \sum_{i=1}^{m} \log P(X_i=x_i|Y=y)$$
+    $$\hat{y} = \underset{y}{\operatorname{argmax}} \text{ } \log P(Y=y) + \sum_{i=1}^{m} \log P(X_i=x_i|Y=y)$$
 
-        That's it! The really cool thing is that despite this massive simplification, the algorithm often gives surprisingly good results.
-        """
-    )
+    That's it! The really cool thing is that despite this massive simplification, the algorithm often gives surprisingly good results.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Example Problem""")
+    mo.md(r"""
+    ## Example Problem
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Let's apply Naive Bayes principles to this data (Tennis Training Dataset):""")
+    mo.md(r"""
+    Let's apply Naive Bayes principles to this data (Tennis Training Dataset):
+    """)
     return
 
 
@@ -164,34 +162,32 @@ def _(mo):
         mo.md("#### Tennis Training Dataset"),
         example_table
     ])
-    return example_data, example_table
+    return (example_data,)
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        Let's predict whether someone will play tennis given these weather conditions:
+    mo.md(r"""
+    Let's predict whether someone will play tennis given these weather conditions:
 
-        - Outlook: Sunny
-        - Temperature: Cool
-        - Humidity: High
-        - Wind: Strong
+    - Outlook: Sunny
+    - Temperature: Cool
+    - Humidity: High
+    - Wind: Strong
 
-        Let's walk through the calculations step by step:
+    Let's walk through the calculations step by step:
 
-        #### Step 1: Calculate Prior Probabilities
+    #### Step 1: Calculate Prior Probabilities
 
-        First, we calculate $P(Y=\text{Yes})$ and $P(Y=\text{No})$:
+    First, we calculate $P(Y=\text{Yes})$ and $P(Y=\text{No})$:
 
-        - $P(Y=\text{Yes}) = \frac{9}{14} = 0.64$
-        - $P(Y=\text{No}) = \frac{5}{14} = 0.36$
+    - $P(Y=\text{Yes}) = \frac{9}{14} = 0.64$
+    - $P(Y=\text{No}) = \frac{5}{14} = 0.36$
 
-        #### Step 2: Calculate Conditional Probabilities
+    #### Step 2: Calculate Conditional Probabilities
 
-        Next, we calculate the conditional probabilities for each feature value given each class:
-        """
-    )
+    Next, we calculate the conditional probabilities for each feature value given each class:
+    """)
     return
 
 
@@ -253,20 +249,18 @@ def _(mo, solution_accordion):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ### Try a Different Example
+    mo.md(r"""
+    ### Try a Different Example
 
-        What if the conditions were different? Let's say:
+    What if the conditions were different? Let's say:
 
-        - Outlook: Overcast
-        - Temperature: Hot
-        - Humidity: Normal
-        - Wind: Weak
+    - Outlook: Overcast
+    - Temperature: Hot
+    - Humidity: Normal
+    - Wind: Weak
 
-        Try working through this example on your own. If you get stuck, you can use the tables above and apply the same method we used in the solution.
-        """
-    )
+    Try working through this example on your own. If you get stuck, you can use the tables above and apply the same method we used in the solution.
+    """)
     return
 
 
@@ -278,13 +272,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Interactive Naive Bayes
+    mo.md(r"""
+    ## Interactive Naive Bayes
 
-        Let's explore Naive Bayes with an interactive visualization. This will help build intuition about how the algorithm makes predictions and how the naive independence assumption affects results.
-        """
-    )
+    Let's explore Naive Bayes with an interactive visualization. This will help build intuition about how the algorithm makes predictions and how the naive independence assumption affects results.
+    """)
     return
 
 
@@ -456,182 +448,135 @@ def gaussian_viz(
         mpl_fig,
         stats_table
     ])
-    return (
-        X,
-        X_test,
-        X_train,
-        Z,
-        ax1,
-        ax2,
-        class0_cov,
-        class0_data,
-        class0_mean,
-        class0_var,
-        class1_cov,
-        class1_data,
-        class1_mean,
-        class1_var,
-        class_sep,
-        class_stats,
-        cmap_bold,
-        cmap_light,
-        fig,
-        gnb,
-        grid_points,
-        h,
-        mpl_fig,
-        n_samples,
-        noise_val,
-        plot_ellipse,
-        regenerate_state,
-        scatter1,
-        scatter2,
-        stats_table,
-        viz_df,
-        x_max,
-        x_min,
-        xx,
-        y,
-        y_max,
-        y_min,
-        y_test,
-        y_train,
-        yy,
-    )
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ### what's going on in this demo?
-
-        Playing with the sliders changes how our data looks and how the classifier behaves. Class separation controls how far apart the two classes are — higher values make them easier to tell apart. The noise slider adds randomness by reducing that separation, making boundaries fuzzier and classification harder. More samples just gives you more data points to work with.
-
-        The left graph shows the decision boundary — that curved line where the classifier switches from predicting one class to another. Red and blue regions show where naive bayes would classify new points. The right graph shows the actual distribution of both classes, with those ellipses representing the gaussian distributions naive bayes is using internally.
-
-        Try cranking up the noise and watch how the boundary gets messier. increase separation and see how confident the classifier becomes. This is basically what's happening inside naive bayes — it's looking at each feature's distribution per class and making the best guess based on probabilities. The table below shows the actual parameters (means and variances) the model calculates.
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Types of Naive Bayes Classifiers
+    mo.md(r"""
+    ### what's going on in this demo?
 
-        ### Multinomial Naive Bayes
-        Ideal for text classification where features represent word counts or frequencies.
+    Playing with the sliders changes how our data looks and how the classifier behaves. Class separation controls how far apart the two classes are — higher values make them easier to tell apart. The noise slider adds randomness by reducing that separation, making boundaries fuzzier and classification harder. More samples just gives you more data points to work with.
 
-        Mathematical form:
+    The left graph shows the decision boundary — that curved line where the classifier switches from predicting one class to another. Red and blue regions show where naive bayes would classify new points. The right graph shows the actual distribution of both classes, with those ellipses representing the gaussian distributions naive bayes is using internally.
 
-        \[P(x_i|y) = \frac{\text{count}(x_i, y) + \alpha}{\sum_{i=1}^{|V|} \text{count}(x_i, y) + \alpha|V|}\]
-
-        where:
-
-        - \(\alpha\) is the smoothing parameter
-        - \(|V|\) is the size of the vocabulary
-        - \(\text{count}(x_i, y)\) is the count of feature \(i\) in class \(y\)
-
-        ### Bernoulli Naive Bayes
-        Best for binary features (0/1) — either a word appears or it doesn't.
-
-        Mathematical form:
-
-        \[P(x_i|y) = p_{iy}^{x_i}(1-p_{iy})^{(1-x_i)}\]
-
-        where:
-
-        - \(p_{iy}\) is the probability of feature \(i\) occurring in class \(y\)
-        - \(x_i\) is 1 if the feature is present, 0 otherwise
-
-        ### Gaussian Naive Bayes
-        Designed for continuous features, assuming they follow a normal distribution.
-
-        Mathematical form:
-
-        \[P(x_i|y) = \frac{1}{\sqrt{2\pi\sigma_y^2}} \exp\left(-\frac{(x_i - \mu_y)^2}{2\sigma_y^2}\right)\]
-
-        where:
-
-        - \(\mu_y\) is the mean of feature values for class \(y\)
-        - \(\sigma_y^2\) is the variance of feature values for class \(y\)
-
-        ### Complement Naive Bayes
-        Particularly effective for imbalanced datasets.
-
-        Mathematical form:
-
-        \[P(x_i|y) = \frac{\text{count}(x_i, \bar{y}) + \alpha}{\sum_{i=1}^{|V|} \text{count}(x_i, \bar{y}) + \alpha|V|}\]
-
-        where:
-
-        - \(\bar{y}\) represents all classes except \(y\)
-        - Other parameters are similar to Multinomial Naive Bayes
-        """
-    )
+    Try cranking up the noise and watch how the boundary gets messier. increase separation and see how confident the classifier becomes. This is basically what's happening inside naive bayes — it's looking at each feature's distribution per class and making the best guess based on probabilities. The table below shows the actual parameters (means and variances) the model calculates.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
+    mo.md(r"""
+    ## Types of Naive Bayes Classifiers
 
-        Test your understanding of Naive Bayes with these statements:
+    ### Multinomial Naive Bayes
+    Ideal for text classification where features represent word counts or frequencies.
 
-        /// details | Multiplying small probabilities in Naive Bayes can lead to numerical underflow.
-        ✅ **Correct!** Multiplying many small probabilities can indeed lead to numerical underflow.
+    Mathematical form:
 
-        That's why in practice, we often use log probabilities and add them instead of multiplying the original probabilities. This prevents numerical underflow and improves computational stability.
-        ///
+    \[P(x_i|y) = \frac{\text{count}(x_i, y) + \alpha}{\sum_{i=1}^{|V|} \text{count}(x_i, y) + \alpha|V|}\]
 
-        /// details | Laplace smoothing is unnecessary if your training data covers all possible feature values.
-        ❌ **Incorrect.** Laplace smoothing is still beneficial even with complete feature coverage.
+    where:
 
-        While Laplace smoothing is crucial for handling unseen feature values, it also helps with small sample sizes by preventing overfitting to the training data. Even with complete feature coverage, some combinations might have very few examples, leading to unreliable probability estimates.
-        ///
+    - \(\alpha\) is the smoothing parameter
+    - \(|V|\) is the size of the vocabulary
+    - \(\text{count}(x_i, y)\) is the count of feature \(i\) in class \(y\)
 
-        /// details | Naive Bayes performs poorly on high-dimensional data compared to other classifiers.
-        ❌ **Incorrect.** Naive Bayes actually excels with high-dimensional data.
+    ### Bernoulli Naive Bayes
+    Best for binary features (0/1) — either a word appears or it doesn't.
 
-        Due to its simplicity and the independence assumption, Naive Bayes scales very well to high-dimensional data. It's particularly effective for text classification where each word is a dimension and there can be thousands of dimensions. Other classifiers might overfit in such high-dimensional spaces.
-        ///
+    Mathematical form:
 
-        /// details | For text classification, Multinomial Naive Bayes typically outperforms Gaussian Naive Bayes.
-        ✅ **Correct!** Multinomial NB is better suited for text classification than Gaussian NB.
+    \[P(x_i|y) = p_{iy}^{x_i}(1-p_{iy})^{(1-x_i)}\]
 
-        Text data typically involves discrete counts (word frequencies) which align better with a multinomial distribution. Gaussian Naive Bayes assumes features follow a normal distribution, which doesn't match the distribution of word frequencies in text documents.
-        ///
-        """
-    )
+    where:
+
+    - \(p_{iy}\) is the probability of feature \(i\) occurring in class \(y\)
+    - \(x_i\) is 1 if the feature is present, 0 otherwise
+
+    ### Gaussian Naive Bayes
+    Designed for continuous features, assuming they follow a normal distribution.
+
+    Mathematical form:
+
+    \[P(x_i|y) = \frac{1}{\sqrt{2\pi\sigma_y^2}} \exp\left(-\frac{(x_i - \mu_y)^2}{2\sigma_y^2}\right)\]
+
+    where:
+
+    - \(\mu_y\) is the mean of feature values for class \(y\)
+    - \(\sigma_y^2\) is the variance of feature values for class \(y\)
+
+    ### Complement Naive Bayes
+    Particularly effective for imbalanced datasets.
+
+    Mathematical form:
+
+    \[P(x_i|y) = \frac{\text{count}(x_i, \bar{y}) + \alpha}{\sum_{i=1}^{|V|} \text{count}(x_i, \bar{y}) + \alpha|V|}\]
+
+    where:
+
+    - \(\bar{y}\) represents all classes except \(y\)
+    - Other parameters are similar to Multinomial Naive Bayes
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        Throughout this notebook, we've explored Naive Bayes classification. What makes this algorithm particularly interesting is its elegant simplicity combined with surprising effectiveness. Despite making what seems like an overly simplistic assumption — that features are independent given the class — it consistently delivers reasonable performance across a wide range of applications.
+    Test your understanding of Naive Bayes with these statements:
 
-        The algorithm's power lies in its probabilistic foundation, built upon Bayes' theorem. During training, it simply learns probability distributions: the likelihood of seeing each class (prior probabilities) and the probability of feature values within each class (conditional probabilities). When making predictions, it combines these probabilities using the naive independence assumption, which dramatically simplifies the computation while still maintaining remarkable predictive power.
+    /// details | Multiplying small probabilities in Naive Bayes can lead to numerical underflow.
+    ✅ **Correct!** Multiplying many small probabilities can indeed lead to numerical underflow.
 
-        We've seen how different variants of Naive Bayes adapt to various types of data. Multinomial Naive Bayes excels at text classification by modeling word frequencies, Bernoulli Naive Bayes handles binary features elegantly, and Gaussian Naive Bayes tackles continuous data through normal distributions. Each variant maintains the core simplicity of the algorithm while adapting its probability calculations to match the data's characteristics.
+    That's why in practice, we often use log probabilities and add them instead of multiplying the original probabilities. This prevents numerical underflow and improves computational stability.
+    ///
 
-        Perhaps most importantly, we've learned that sometimes the most straightforward approaches can be the most practical. Naive Bayes demonstrates that a simple model, well-understood and properly applied, can often outperform more complex alternatives, especially in domains like text classification or when working with limited computational resources or training data.
-        """
-    )
+    /// details | Laplace smoothing is unnecessary if your training data covers all possible feature values.
+    ❌ **Incorrect.** Laplace smoothing is still beneficial even with complete feature coverage.
+
+    While Laplace smoothing is crucial for handling unseen feature values, it also helps with small sample sizes by preventing overfitting to the training data. Even with complete feature coverage, some combinations might have very few examples, leading to unreliable probability estimates.
+    ///
+
+    /// details | Naive Bayes performs poorly on high-dimensional data compared to other classifiers.
+    ❌ **Incorrect.** Naive Bayes actually excels with high-dimensional data.
+
+    Due to its simplicity and the independence assumption, Naive Bayes scales very well to high-dimensional data. It's particularly effective for text classification where each word is a dimension and there can be thousands of dimensions. Other classifiers might overfit in such high-dimensional spaces.
+    ///
+
+    /// details | For text classification, Multinomial Naive Bayes typically outperforms Gaussian Naive Bayes.
+    ✅ **Correct!** Multinomial NB is better suited for text classification than Gaussian NB.
+
+    Text data typically involves discrete counts (word frequencies) which align better with a multinomial distribution. Gaussian Naive Bayes assumes features follow a normal distribution, which doesn't match the distribution of word frequencies in text documents.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""appendix (helper code)""")
+    mo.md(r"""
+    ## Summary
+
+    Throughout this notebook, we've explored Naive Bayes classification. What makes this algorithm particularly interesting is its elegant simplicity combined with surprising effectiveness. Despite making what seems like an overly simplistic assumption — that features are independent given the class — it consistently delivers reasonable performance across a wide range of applications.
+
+    The algorithm's power lies in its probabilistic foundation, built upon Bayes' theorem. During training, it simply learns probability distributions: the likelihood of seeing each class (prior probabilities) and the probability of feature values within each class (conditional probabilities). When making predictions, it combines these probabilities using the naive independence assumption, which dramatically simplifies the computation while still maintaining remarkable predictive power.
+
+    We've seen how different variants of Naive Bayes adapt to various types of data. Multinomial Naive Bayes excels at text classification by modeling word frequencies, Bernoulli Naive Bayes handles binary features elegantly, and Gaussian Naive Bayes tackles continuous data through normal distributions. Each variant maintains the core simplicity of the algorithm while adapting its probability calculations to match the data's characteristics.
+
+    Perhaps most importantly, we've learned that sometimes the most straightforward approaches can be the most practical. Naive Bayes demonstrates that a simple model, well-understood and properly applied, can often outperform more complex alternatives, especially in domains like text classification or when working with limited computational resources or training data.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    appendix (helper code)
+    """)
     return
 
 
@@ -667,7 +612,6 @@ def init_imports():
         np,
         pl,
         plt,
-        stats,
         train_test_split,
     )
 
@@ -713,17 +657,7 @@ def _(example_data, mo):
         {"Wind": "Strong", "Y": "3/9", "N": "3/5"},
         {"Wind": "Weak", "Y": "6/9", "N": "2/5"}
     ]
-    return (
-        humidity_data,
-        no_count,
-        outlook_data,
-        summary_data,
-        summary_table,
-        temp_data,
-        total,
-        wind_data,
-        yes_count,
-    )
+    return humidity_data, outlook_data, summary_table, temp_data, wind_data
 
 
 @app.cell(hide_code=True)

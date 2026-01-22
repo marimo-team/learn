@@ -10,60 +10,54 @@
 
 import marimo
 
-__generated_with = "0.12.6"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium", app_title="Bernoulli Distribution")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # Bernoulli Distribution
+    mo.md(r"""
+    # Bernoulli Distribution
 
-        > _Note:_ This notebook builds on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
+    > _Note:_ This notebook builds on concepts from ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
 
-        ## Parametric Random Variables
+    ## Parametric Random Variables
 
-        Probability has a bunch of classic random variable patterns that show up over and over. Let's explore some of the most important parametric discrete distributions.
+    Probability has a bunch of classic random variable patterns that show up over and over. Let's explore some of the most important parametric discrete distributions.
 
-        Bernoulli is honestly the simplest distribution you'll ever see, but it's ridiculously powerful in practice. What makes it fascinating to me is how it captures any yes/no scenario: success/failure, heads/tails, 1/0.
+    Bernoulli is honestly the simplest distribution you'll ever see, but it's ridiculously powerful in practice. What makes it fascinating to me is how it captures any yes/no scenario: success/failure, heads/tails, 1/0.
 
-        I think of these distributions as the atoms of probability — they're the fundamental building blocks that everything else is made from.
-        """
-    )
+    I think of these distributions as the atoms of probability — they're the fundamental building blocks that everything else is made from.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Bernoulli Random Variables
+    mo.md(r"""
+    ## Bernoulli Random Variables
 
-        A Bernoulli random variable boils down to just two possible values: 1 (success) or 0 (failure). dead simple, but incredibly useful.
+    A Bernoulli random variable boils down to just two possible values: 1 (success) or 0 (failure). dead simple, but incredibly useful.
 
-        Some everyday examples where I see these:
+    Some everyday examples where I see these:
 
-        - Coin flip (heads=1, tails=0)
-        - Whether that sketchy email is spam  
-        - If someone actually clicks my ad
-        - Whether my code compiles first try (almost always 0 for me)
+    - Coin flip (heads=1, tails=0)
+    - Whether that sketchy email is spam
+    - If someone actually clicks my ad
+    - Whether my code compiles first try (almost always 0 for me)
 
-        All you need (the classic expression) is a single parameter $p$ - the probability of success.
-        """
-    )
+    All you need (the classic expression) is a single parameter $p$ - the probability of success.
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Key Properties of a Bernoulli Random Variable
+    mo.md(r"""
+    ## Key Properties of a Bernoulli Random Variable
 
-        If $X$ is declared to be a Bernoulli random variable with parameter $p$, denoted $X \sim \text{Bern}(p)$, it has the following properties:
-        """
-    )
+    If $X$ is declared to be a Bernoulli random variable with parameter $p$, denoted $X \sim \text{Bern}(p)$, it has the following properties:
+    """)
     return
 
 
@@ -72,31 +66,29 @@ def _(stats):
     # Define the Bernoulli distribution function
     def Bern(p):
         return stats.bernoulli(p)
-    return (Bern,)
+    return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Bernoulli Distribution Properties
+    mo.md(r"""
+    ## Bernoulli Distribution Properties
 
-        $\begin{array}{lll}
-        \text{Notation:} & X \sim \text{Bern}(p) \\
-        \text{Description:} & \text{A boolean variable that is 1 with probability } p \\
-        \text{Parameters:} & p, \text{ the probability that } X = 1 \\
-        \text{Support:} & x \text{ is either 0 or 1} \\
-        \text{PMF equation:} & P(X = x) = 
-            \begin{cases}
-                p & \text{if }x = 1\\
-                1-p & \text{if }x = 0
-            \end{cases} \\
-        \text{PMF (smooth):} & P(X = x) = p^x(1-p)^{1-x} \\
-        \text{Expectation:} & E[X] = p \\
-        \text{Variance:} & \text{Var}(X) = p(1-p) \\
-        \end{array}$
-        """
-    )
+    $\begin{array}{lll}
+    \text{Notation:} & X \sim \text{Bern}(p) \\
+    \text{Description:} & \text{A boolean variable that is 1 with probability } p \\
+    \text{Parameters:} & p, \text{ the probability that } X = 1 \\
+    \text{Support:} & x \text{ is either 0 or 1} \\
+    \text{PMF equation:} & P(X = x) =
+        \begin{cases}
+            p & \text{if }x = 1\\
+            1-p & \text{if }x = 0
+        \end{cases} \\
+    \text{PMF (smooth):} & P(X = x) = p^x(1-p)^{1-x} \\
+    \text{Expectation:} & E[X] = p \\
+    \text{Variance:} & \text{Var}(X) = p(1-p) \\
+    \end{array}$
+    """)
     return
 
 
@@ -158,62 +150,58 @@ def _(expected_value, p_slider, plt, probabilities, values, variance):
     ax.legend()
     plt.tight_layout()
     plt.gca()
-    return ax, fig
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## Expectation and Variance of a Bernoulli
-
-        > _Note:_ The following derivations are included as reference material. The credit for these mathematical formulations belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
-
-        Let's work through why $E[X] = p$ for a Bernoulli:
-
-        \begin{align}
-        E[X] &= \sum_x x \cdot (X=x) && \text{Definition of expectation} \\
-        &= 1 \cdot p + 0 \cdot (1-p) &&
-        X \text{ can take on values 0 and 1} \\
-        &= p && \text{Remove the 0 term}
-        \end{align}
-
-        And for variance, we first need $E[X^2]$:
-
-        \begin{align}
-        E[X^2]
-        &= \sum_x x^2 \cdot (X=x) &&\text{LOTUS}\\
-        &= 0^2 \cdot (1-p) + 1^2 \cdot p\\
-        &= p
-        \end{align}
-
-        \begin{align}
-        (X)
-        &= E[X^2] - E[X]^2&& \text{Def of variance} \\
-        &= p - p^2 && \text{Substitute }E[X^2]=p, E[X] = p \\
-        &= p (1-p) && \text{Factor out }p
-        \end{align}
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Indicator Random Variables
+    mo.md(r"""
+    ## Expectation and Variance of a Bernoulli
 
-        Indicator variables are a clever trick I like to use — they turn events into numbers. Instead of dealing with "did the event happen?" (yes/no), we get "1" if it happened and "0" if it didn't.
+    > _Note:_ The following derivations are included as reference material. The credit for these mathematical formulations belongs to ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/bernoulli/) by Chris Piech.
 
-        Formally: an indicator variable $I$ for event $A$ equals 1 when $A$ occurs and 0 otherwise. These are just bernoulli variables where $p = P(A)$. people often use notation like $I_A$ to name them.
+    Let's work through why $E[X] = p$ for a Bernoulli:
 
-        Two key properties that make them super useful:
+    \begin{align}
+    E[X] &= \sum_x x \cdot (X=x) && \text{Definition of expectation} \\
+    &= 1 \cdot p + 0 \cdot (1-p) &&
+    X \text{ can take on values 0 and 1} \\
+    &= p && \text{Remove the 0 term}
+    \end{align}
 
-        - $P(I=1)=P(A)$ - probability of getting a 1 is just the probability of the event
-        - $E[I]=P(A)$ - the expected value equals the probability (this one's a game-changer!)
-        """
-    )
+    And for variance, we first need $E[X^2]$:
+
+    \begin{align}
+    E[X^2]
+    &= \sum_x x^2 \cdot (X=x) &&\text{LOTUS}\\
+    &= 0^2 \cdot (1-p) + 1^2 \cdot p\\
+    &= p
+    \end{align}
+
+    \begin{align}
+    (X)
+    &= E[X^2] - E[X]^2&& \text{Def of variance} \\
+    &= p - p^2 && \text{Substitute }E[X^2]=p, E[X] = p \\
+    &= p (1-p) && \text{Factor out }p
+    \end{align}
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Indicator Random Variables
+
+    Indicator variables are a clever trick I like to use — they turn events into numbers. Instead of dealing with "did the event happen?" (yes/no), we get "1" if it happened and "0" if it didn't.
+
+    Formally: an indicator variable $I$ for event $A$ equals 1 when $A$ occurs and 0 otherwise. These are just bernoulli variables where $p = P(A)$. people often use notation like $I_A$ to name them.
+
+    Two key properties that make them super useful:
+
+    - $P(I=1)=P(A)$ - probability of getting a 1 is just the probability of the event
+    - $E[I]=P(A)$ - the expected value equals the probability (this one's a game-changer!)
+    """)
     return
 
 
@@ -234,7 +222,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Simulation""")
+    mo.md(r"""
+    ## Simulation
+    """)
     return
 
 
@@ -276,7 +266,7 @@ def _(np, num_trials_slider, p_sim_slider, plt):
 
     plt.tight_layout()
     plt.gca()
-    return cumulative_mean, p, trials
+    return (trials,)
 
 
 @app.cell(hide_code=True)
@@ -296,88 +286,84 @@ def _(mo, np, trials):
 
     This demonstrates how the sample proportion approaches the true probability $p$ as the number of trials increases.
     """)
-    return num_successes, num_trials, proportion
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-        ## 🤔 Test Your Understanding
-
-        Pick which of these statements about Bernoulli random variables you think are correct:
-
-        /// details | The variance of a Bernoulli random variable is always less than or equal to 0.25
-        ✅ Correct! The variance $p(1-p)$ reaches its maximum value of 0.25 when $p = 0.5$.
-        ///
-
-        /// details | The expected value of a Bernoulli random variable must be either 0 or 1
-        ❌ Incorrect! The expected value is $p$, which can be any value between 0 and 1.
-        ///
-
-        /// details | If $X \sim \text{Bern}(0.3)$ and $Y \sim \text{Bern}(0.7)$, then $X$ and $Y$ have the same variance
-        ✅ Correct! $\text{Var}(X) = 0.3 \times 0.7 = 0.21$ and $\text{Var}(Y) = 0.7 \times 0.3 = 0.21$.
-        ///
-
-        /// details | Two independent coin flips can be modeled as the sum of two Bernoulli random variables
-        ✅ Correct! The sum would follow a Binomial distribution with $n=2$.
-        ///
-        """
-    )
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Applications of Bernoulli Random Variables
+    mo.md(r"""
+    ## 🤔 Test Your Understanding
 
-        Bernoulli random variables are used in many real-world scenarios:
+    Pick which of these statements about Bernoulli random variables you think are correct:
 
-        1. **Quality Control**: Testing if a manufactured item is defective (1) or not (0)
+    /// details | The variance of a Bernoulli random variable is always less than or equal to 0.25
+    ✅ Correct! The variance $p(1-p)$ reaches its maximum value of 0.25 when $p = 0.5$.
+    ///
 
-        2. **A/B Testing**: Determining if a user clicks (1) or doesn't click (0) on a website button
+    /// details | The expected value of a Bernoulli random variable must be either 0 or 1
+    ❌ Incorrect! The expected value is $p$, which can be any value between 0 and 1.
+    ///
 
-        3. **Medical Testing**: Checking if a patient tests positive (1) or negative (0) for a disease
+    /// details | If $X \sim \text{Bern}(0.3)$ and $Y \sim \text{Bern}(0.7)$, then $X$ and $Y$ have the same variance
+    ✅ Correct! $\text{Var}(X) = 0.3 \times 0.7 = 0.21$ and $\text{Var}(Y) = 0.7 \times 0.3 = 0.21$.
+    ///
 
-        4. **Election Modeling**: Modeling if a particular voter votes for candidate A (1) or not (0)
-
-        5. **Financial Markets**: Modeling if a stock price goes up (1) or down (0) in a simplified model
-
-        Because Bernoulli random variables are parametric, as soon as you declare a random variable to be of type Bernoulli, you automatically know all of its pre-derived properties!
-        """
-    )
+    /// details | Two independent coin flips can be modeled as the sum of two Bernoulli random variables
+    ✅ Correct! The sum would follow a Binomial distribution with $n=2$.
+    ///
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ## Summary
+    mo.md(r"""
+    ## Applications of Bernoulli Random Variables
 
-        And that's a wrap on Bernoulli distributions! We've learnt the simplest of all probability distributions — the one that only has two possible outcomes. Flip a coin, check if an email is spam, see if your blind date shows up — these are all Bernoulli trials with success probability $p$. 
+    Bernoulli random variables are used in many real-world scenarios:
 
-        The beauty of Bernoulli is in its simplicity: just set $p$ (the probability of success) and you're good to go! The PMF gives us $P(X=1) = p$ and $P(X=0) = 1-p$, while expectation is simply $p$ and variance is $p(1-p)$. Oh, and when you're tracking whether specific events happen or not? That's an indicator random variable — just another Bernoulli in disguise!
+    1. **Quality Control**: Testing if a manufactured item is defective (1) or not (0)
 
-        Two key things to remember:
+    2. **A/B Testing**: Determining if a user clicks (1) or doesn't click (0) on a website button
 
-        /// note
-        💡 **Maximum Variance**: A Bernoulli's variance $p(1-p)$ reaches its maximum at $p=0.5$, making a fair coin the most "unpredictable" Bernoulli random variable.
+    3. **Medical Testing**: Checking if a patient tests positive (1) or negative (0) for a disease
 
-        💡 **Instant Properties**: When you identify a random variable as Bernoulli, you instantly know all its properties—expectation, variance, PMF—without additional calculations.
-        ///
+    4. **Election Modeling**: Modeling if a particular voter votes for candidate A (1) or not (0)
 
-        Next up: Binomial distribution—where we'll see what happens when we let Bernoulli trials have a party and add themselves together!
-        """
-    )
+    5. **Financial Markets**: Modeling if a stock price goes up (1) or down (0) in a simplified model
+
+    Because Bernoulli random variables are parametric, as soon as you declare a random variable to be of type Bernoulli, you automatically know all of its pre-derived properties!
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""#### Appendix (containing helper code for the notebook)""")
+    mo.md(r"""
+    ## Summary
+
+    And that's a wrap on Bernoulli distributions! We've learnt the simplest of all probability distributions — the one that only has two possible outcomes. Flip a coin, check if an email is spam, see if your blind date shows up — these are all Bernoulli trials with success probability $p$.
+
+    The beauty of Bernoulli is in its simplicity: just set $p$ (the probability of success) and you're good to go! The PMF gives us $P(X=1) = p$ and $P(X=0) = 1-p$, while expectation is simply $p$ and variance is $p(1-p)$. Oh, and when you're tracking whether specific events happen or not? That's an indicator random variable — just another Bernoulli in disguise!
+
+    Two key things to remember:
+
+    /// note
+    💡 **Maximum Variance**: A Bernoulli's variance $p(1-p)$ reaches its maximum at $p=0.5$, making a fair coin the most "unpredictable" Bernoulli random variable.
+
+    💡 **Instant Properties**: When you identify a random variable as Bernoulli, you instantly know all its properties—expectation, variance, PMF—without additional calculations.
+    ///
+
+    Next up: Binomial distribution—where we'll see what happens when we let Bernoulli trials have a party and add themselves together!
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    #### Appendix (containing helper code for the notebook)
+    """)
     return
 
 
@@ -390,7 +376,7 @@ def _():
 @app.cell(hide_code=True)
 def _():
     from marimo import Html
-    return (Html,)
+    return
 
 
 @app.cell(hide_code=True)
@@ -407,7 +393,7 @@ def _():
 
     # Set random seed for reproducibility
     np.random.seed(42)
-    return math, np, plt, stats
+    return np, plt, stats
 
 
 @app.cell(hide_code=True)

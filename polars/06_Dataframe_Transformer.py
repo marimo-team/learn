@@ -12,21 +12,19 @@
 
 import marimo
 
-__generated_with = "0.14.10"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Polars with Marimo's Dataframe Transformer
 
     *By [jesshart](https://github.com/jesshart)*
 
     The goal of this notebook is to explore Marimo's data explore capabilities alonside the power of polars. Feel free to reference the latest about these Marimo features here: https://docs.marimo.io/guides/working_with_data/dataframes/?h=dataframe#transforming-dataframes
-    """
-    )
+    """)
     return
 
 
@@ -40,14 +38,12 @@ def _(requests):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Loading Data
     Let's start by loading our data and getting into the `.lazy()` format so our transformations and queries are speedy.
 
     Read more about `.lazy()` here: https://docs.pola.rs/user-guide/lazy/
-    """
-    )
+    """)
     return
 
 
@@ -60,21 +56,18 @@ def _(json_data, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-    Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenience from `marimo`. You have the `Table` and `Query Plan` options to choose from. 
+    mo.md(r"""
+    Above, you will notice that when you reference the object as a standalone, you get out-of-the-box convenience from `marimo`. You have the `Table` and `Query Plan` options to choose from.
 
     - 💡 Try out the `Table` view! You can click the `Preview data` button to get a quick view of your data.
     - 💡 Take a look at the `Query plan`. Learn more about Polar's query plan here: https://docs.pola.rs/user-guide/lazy/query-plan/
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## marimo's Native Dataframe UI
 
     There are a few ways to leverage marimo's native dataframe UI. One is by doing what we saw above—by referencing a `pl.LazyFrame` directly. You can also try,
@@ -83,19 +76,16 @@ def _(mo):
     - Referencing a `pl.DataFrame` and see how it different from its corresponding lazy version
     - Use `mo.ui.table`
     - Use `mo.ui.dataframe`
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Reference a `pl.DataFrame`
     Let's reference the same frame as before, but this time as a `pl.DataFrame` by calling `.collect()` on it.
-    """
-    )
+    """)
     return
 
 
@@ -107,26 +97,22 @@ def _(demand: "pl.LazyFrame"):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     Note how much functionality we have right out-of-the-box. Click on column names to see rich features like sorting, freezing, filtering, searching, and more!
 
     Notice how `order_quantity` has a green bar chart under it indicating the distribution of values for the field!
 
     Don't miss the `Download` feature as well which supports downloading in CSV, json, or parquet format!
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Use `mo.ui.table`
     The `mo.ui.table` allows you to select rows for use downstream. You can select the rows you want, and then use these as filtered rows downstream.
-    """
-    )
+    """)
     return
 
 
@@ -144,7 +130,9 @@ def _(demand_table):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""I like to use this feature to select groupings based on summary statistics so I can quickly explore subsets of categories. Let me show you what I mean.""")
+    mo.md(r"""
+    I like to use this feature to select groupings based on summary statistics so I can quickly explore subsets of categories. Let me show you what I mean.
+    """)
     return
 
 
@@ -175,13 +163,11 @@ def _(summary_table):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     Now, instead of manually creating a filter for what I want to take a closer look at, I simply select from the ui and do a simple join to get that aggregated level with more detail.
 
     The following cell uses the output of the `mo.ui.table` selection, selects its unique keys, and uses that to join for the selected subset of the original table.
-    """
-    )
+    """)
     return
 
 
@@ -199,13 +185,17 @@ def _(demand: "pl.LazyFrame", pl, summary_table):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""You can learn more about joins in Polars by checking out my other interactive notebook here: https://marimo.io/p/@jesshart/basic-polars-joins""")
+    mo.md("""
+    You can learn more about joins in Polars by checking out my other interactive notebook here: https://marimo.io/p/@jesshart/basic-polars-joins
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""## Use `mo.ui.dataframe`""")
+    mo.md(r"""
+    ## Use `mo.ui.dataframe`
+    """)
     return
 
 
@@ -218,7 +208,9 @@ def _(demand: "pl.LazyFrame", mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Below I simply call the object into view. We will play with it in the following cells.""")
+    mo.md(r"""
+    Below I simply call the object into view. We will play with it in the following cells.
+    """)
     return
 
 
@@ -230,7 +222,9 @@ def _(mo_dataframe):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""One way to group this data in polars code directly would be to group by product family to get the mean. This is how it is done in polars:""")
+    mo.md(r"""
+    One way to group this data in polars code directly would be to group by product family to get the mean. This is how it is done in polars:
+    """)
     return
 
 
@@ -245,16 +239,14 @@ def _(demand_cached, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        f"""
+    mo.md(f"""
     ## Try Before You Buy
 
     1. Now try to do the same summary using Marimo's `mo.ui.dataframe` object above. Also, note how your aggregated column is already renamed! Nice touch!
     2. Try (1) again but use select statements first (This is actually better polars practice anyway since it reduces the frame as you move to aggregation.)
 
     *When you are ready, check the `Python Code` tab at the top of the table to compare your output to the answer below.*
-    """
-    )
+    """)
     return
 
 
@@ -331,29 +323,27 @@ def _(demand_agg: "pl.DataFrame", mo, px):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # About this Notebook
     Polars and Marimo are both relatively new to the data wrangling space, but their power (and the thrill of their use) cannot be overstated—well, I suppose it could, but you get the meaning. In this notebook, you learn how to leverage basic Polars skills to load-in and explore your data in concert with Marimo's powerful UI elements.
 
     ## 📚 Documentation References
 
-    - **Marimo: Dataframe Transformation Guide**  
+    - **Marimo: Dataframe Transformation Guide**
       https://docs.marimo.io/guides/working_with_data/dataframes/?h=dataframe#transforming-dataframes
 
-    - **Polars: Lazy API Overview**  
+    - **Polars: Lazy API Overview**
       https://docs.pola.rs/user-guide/lazy/
 
-    - **Polars: Query Plan Explained**  
+    - **Polars: Query Plan Explained**
       https://docs.pola.rs/user-guide/lazy/query-plan/
 
-    - **Marimo Notebook: Basic Polars Joins (by jesshart)**  
+    - **Marimo Notebook: Basic Polars Joins (by jesshart)**
       https://marimo.io/p/@jesshart/basic-polars-joins
 
-    - **Marimo Learn: Interactive Graphs with Polars**  
+    - **Marimo Learn: Interactive Graphs with Polars**
       https://github.com/marimo-team/learn/blob/main/polars/05_reactive_plots.py
-    """
-    )
+    """)
     return
 
 

@@ -13,39 +13,41 @@
 
 import marimo
 
-__generated_with = "0.12.10"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""#Loading CSVs with DuckDB""")
+    mo.md(r"""
+    #Loading CSVs with DuckDB
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        <p> I remember when I first learnt about DuckDB, it was a gamechanger — I used to load the data I wanted to work on to a database software like MS SQL Server, and then build a bridge to an IDE with the language I wanted to use like Python, or R; it was quite the hassle. DuckDB changed my whole world — now I could just import the data file into the IDE, or notebook, make a duckdb connection, and there we go! But then, I realized I didn't even need the step of first importing the file using python. I could just query the csv file directly using SQL through a DuckDB connection.</p> 
+    mo.md(r"""
+    <p> I remember when I first learnt about DuckDB, it was a gamechanger — I used to load the data I wanted to work on to a database software like MS SQL Server, and then build a bridge to an IDE with the language I wanted to use like Python, or R; it was quite the hassle. DuckDB changed my whole world — now I could just import the data file into the IDE, or notebook, make a duckdb connection, and there we go! But then, I realized I didn't even need the step of first importing the file using python. I could just query the csv file directly using SQL through a DuckDB connection.</p>
 
-        ##Introduction
-        <p> I found this dataset on the evolution of AI research by discipline from <a href= "https://oecd.ai/en/data?selectedArea=ai-research&selectedVisualization=16731"> OECD</a>, and it piqued my interest. I feel like publications in natural language processing drastically jumped in the mid 2010s, and I'm excited to find out if that's the case. </p> 
+    ##Introduction
+    <p> I found this dataset on the evolution of AI research by discipline from <a href= "https://oecd.ai/en/data?selectedArea=ai-research&selectedVisualization=16731"> OECD</a>, and it piqued my interest. I feel like publications in natural language processing drastically jumped in the mid 2010s, and I'm excited to find out if that's the case. </p>
 
-        <p> In this notebook, we'll: </p>
-        <ul>
-            <li> Import the CSV file into the notebook</li>
-            <li> Create another table within the database based on the CSV</li>
-            <li> Dig into publications on natural language processing have evolved over the years</li>
-        </ul>
-        """
-    )
+    <p> In this notebook, we'll: </p>
+    <ul>
+        <li> Import the CSV file into the notebook</li>
+        <li> Create another table within the database based on the CSV</li>
+        <li> Dig into publications on natural language processing have evolved over the years</li>
+    </ul>
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""##Load the CSV""")
+    mo.md(r"""
+    ##Load the CSV
+    """)
     return
 
 
@@ -67,7 +69,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""##Create Another Table""")
+    mo.md(r"""
+    ##Create Another Table
+    """)
     return
 
 
@@ -80,11 +84,11 @@ def _(mo):
             SELECT Year, Concept, publications FROM "https://raw.githubusercontent.com/Mustjaab/Loading_CSVs_in_DuckDB/refs/heads/main/AI_Research_Data.csv"
         """
     )
-    return Discipline_Analysis, Domain_Analysis
+    return
 
 
 @app.cell
-def _(Domain_Analysis, mo):
+def _(mo):
     Analysis = mo.sql(
         f"""
         SELECT * 
@@ -93,11 +97,11 @@ def _(Domain_Analysis, mo):
         ORDER BY Year
         """
     )
-    return (Analysis,)
+    return
 
 
 @app.cell
-def _(Domain_Analysis, mo):
+def _(mo):
     _df = mo.sql(
         f"""
         SELECT 
@@ -111,7 +115,7 @@ def _(Domain_Analysis, mo):
 
 
 @app.cell
-def _(Domain_Analysis, mo):
+def _(mo):
     NLP_Analysis = mo.sql(
         f"""
         SELECT 
@@ -137,21 +141,23 @@ def _(NLP_Analysis, px):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""<p> We can see there's a significant increase in NLP publications 2020 and onwards which definitely makes sense provided the rapid emergence of commercial large language models, and AI assistants. </p>""")
+    mo.md(r"""
+    <p> We can see there's a significant increase in NLP publications 2020 and onwards which definitely makes sense provided the rapid emergence of commercial large language models, and AI assistants. </p>
+    """)
+    return
+
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        ##Conclusion
-        <p> In this notebook, we learned how to:</p> 
-        <ul>
-            <li> Load a CSV into DuckDB </li>
-            <li> Create other tables using the imported CSV </li>
-            <li> Seamlessly analyze and visualize data between SQL, and Python cells</li>
-        </ul>
-        """
-    )
+    mo.md(r"""
+    ##Conclusion
+    <p> In this notebook, we learned how to:</p>
+    <ul>
+        <li> Load a CSV into DuckDB </li>
+        <li> Create other tables using the imported CSV </li>
+        <li> Seamlessly analyze and visualize data between SQL, and Python cells</li>
+    </ul>
+    """)
     return
 
 
@@ -159,7 +165,7 @@ def _(mo):
 def _():
     import pyarrow
     import polars
-    return polars, pyarrow
+    return
 
 
 @app.cell

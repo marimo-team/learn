@@ -8,14 +8,13 @@
 
 import marimo
 
-__generated_with = "0.15.3"
+__generated_with = "0.18.4"
 app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Dealing with Missing Data
 
     _by [etrotta](https://github.com/etrotta) and [Felix Najera](https://github.com/folicks)_
@@ -24,20 +23,17 @@ def _(mo):
 
     First we provide an overview of the methods available in polars, then we walk through a mini case study with real world data showing how to use it, and at last we provide some additional information in the 'Bonus Content' section.
     You can navigate to skip around to each header using the menu on the right side
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Methods for working with Nulls
 
     We'll be using the following DataFrame to show the most important methods:
-    """
-    )
+    """)
     return
 
 
@@ -59,13 +55,11 @@ def _(pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Counting nulls
 
     A simple yet convenient aggregation
-    """
-    )
+    """)
     return
 
 
@@ -77,13 +71,11 @@ def _(df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Dropping Nulls
 
     The simplest way of dealing with null values is throwing them away, but that is not always a good idea.
-    """
-    )
+    """)
     return
 
 
@@ -101,8 +93,7 @@ def _(df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Filtering null values
 
     To filter in polars, you'll typically use `df.filter(expression)` or `df.remove(expression)` methods.
@@ -112,8 +103,7 @@ def _(mo):
 
     Remove will only remove rows in which the expression evaluates to True.
     It will keep rows in which it evaluates to None.
-    """
-    )
+    """)
     return
 
 
@@ -131,13 +121,11 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     You may also be tempted to use `== None` or `!= None`, but operators in polars will generally propagate null values.
 
     You can use `.eq_missing()` or `.ne_missing()` methods if you want to be strict about it, but there are also `.is_null()` and `.is_not_null()` methods you can use.
-    """
-    )
+    """)
     return
 
 
@@ -156,8 +144,7 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Filling Null values
 
     You can also fill in the values with constants, calculations or by consulting external data sources.
@@ -165,8 +152,7 @@ def _(mo):
     Be careful not to treat estimated or guessed values as if they a ground truth however, otherwise you may end up making conclusions about a reality that does not exists.
 
     As an exercise, let's guess some values to fill in nulls, then try giving names to the animals with `null` by editing the cells
-    """
-    )
+    """)
     return
 
 
@@ -192,8 +178,7 @@ def _(guesstimates):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### TL;DR
 
     Before we head into the mini case study, a brief review of what we have covered:
@@ -207,24 +192,21 @@ def _(mo):
     You can also refer to the polars [User Guide](https://docs.pola.rs/user-guide/expressions/missing-data/) more more information.
 
     Whichever approach you take, remember to document how you handled it!
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Mini Case Study
 
-    We will be using a dataset from `alertario` about the weather in Rio de Janeiro, originally available in Google Big Query under `datario.clima_pluviometro`. What you need to know about it: 
+    We will be using a dataset from `alertario` about the weather in Rio de Janeiro, originally available in Google Big Query under `datario.clima_pluviometro`. What you need to know about it:
 
     - Contains multiple stations covering the Municipality of Rio de Janeiro
     - Measures the precipitation as millimeters, with a granularity of 15 minutes
     - We filtered to only include data about 2020, 2021 and 2022
-    """
-    )
+    """)
     return
 
 
@@ -257,8 +239,7 @@ def _(pl, px, stations):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Stations
 
     First, let's take a look at some of the stations. Notice how
@@ -267,8 +248,7 @@ def _(mo):
     - There are some columns that do not even contain data at all!
 
     We will remove the empty columns and remove rows without coordinates
-    """
-    )
+    """)
     return
 
 
@@ -295,16 +275,14 @@ def _(dirty_stations, mo, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Precipitation
     Now, let's move on to the Precipitation data.
 
     ## Part 1 - Null Values
 
     First of all, let's check for null values:
-    """
-    )
+    """)
     return
 
 
@@ -328,8 +306,7 @@ def _(dirty_weather, mo, rain):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### First option to fixing it: Dropping data.
 
     We could just remove those rows like we did for the stations, which may be a passable solution for some problems, but is not always the best idea.
@@ -354,8 +331,7 @@ def _(mo):
 
     Let's investigate a bit more before deciding on following with either approach.
     For example, is our current data even complete, or are we already missing some rows beyond those with null values?
-    """
-    )
+    """)
     return
 
 
@@ -387,8 +363,7 @@ def _(pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Part 2 - Missing Rows
 
     We can see that we expected there to be 1096 rows for each hour for each station (from the start of 2020 to the end of 2022) , but in reality we see between 1077 and 1096 rows.
@@ -400,8 +375,7 @@ def _(mo):
     Given that we are working with time series data, we will [upsample](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.upsample.html) the data, but you could also create a DataFrame containing all expected rows then use `join(how="...")`
 
     However, that will give us _even more_ null values, so we will want to fill them in afterwards. For this case, we will just use a forward fill followed by a backwards fill.
-    """
-    )
+    """)
     return
 
 
@@ -435,15 +409,13 @@ def _(dirty_weather, mo, pl, rain):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     Now that we finally have a clean dataset, let's play around with it a little.
 
     ### Example App
 
     Let's display the amount of precipitation each station measured within a timeframe, aggregated to a lower granularity.
-    """
-    )
+    """)
     return
 
 
@@ -534,13 +506,11 @@ def _(animation_data, pl, px):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     If we were missing some rows, we would have circles popping in and out of existence instead of a smooth animation!
 
     In many scenarios, missing data can also lead to wrong results overall, for example if we were to estimate the total amount of rainfall during the observed period:
-    """
-    )
+    """)
     return
 
 
@@ -556,20 +526,17 @@ def _(dirty_weather, mo, rain, weather):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     Which is still a relatively small difference, but every drop counts when you are dealing with the weather.
 
     For datasets with a higher share of missing values, that difference can get much higher.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     # Bonus Content
 
     ## Appendix A: Missing Time Zones
@@ -577,8 +544,7 @@ def _(mo):
     The original dataset contained naive datetimes instead of timezone-aware, but we can infer whenever it refers to UTC time or local time (for this case, -03:00 UTC) based on the measurements.
 
     For example, we can select one specific interval during which we know that rained a lot, or graph the average amount of precipitation for each hour of the day, then compare the data timestamps with a ground truth.
-    """
-    )
+    """)
     return
 
 
@@ -635,13 +601,11 @@ def _(dirty_weather_naive, pl, rain, stations):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     By externally researching the expected distribution and looking up some of the extreme weather events, we can come to a conclusion about whenever it is aligned with the local time or with UTC.
 
     In this case, the distribution matches the normal weather for this region and we can see that the hours with the most precipitation match those of historical events, so it is safe to say it is using local time (equivalent to the Americas/São Paulo time zone).
-    """
-    )
+    """)
     return
 
 
@@ -655,8 +619,7 @@ def _(dirty_weather_naive, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Appendix B: Not a Number
 
     While some other tools without proper support for missing values may use `NaN` as a way to indicate a value is missing, in polars it is treated exclusively as a float value, much like `0.0`, `1.0` or `infinity`.
@@ -664,8 +627,7 @@ def _(mo):
     You can use `.fill_null(float('nan'))` if you need to convert floats to a format such tools accept, or use `.fill_nan(None)` if you are importing data from them, assuming that there are no values which really are supposed to be the float NaN.
 
     Remember that many calculations can result in NaN, for example dividing by zero:
-    """
-    )
+    """)
     return
 
 
@@ -696,29 +658,25 @@ def _(day_perc, mo, perc_col):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Appendix C: Everything else
 
     As long as this Notebook is, it cannot reasonably cover ***everything*** that may have to deal with missing values, as that is literally everything that may have to deal with data.
 
     This section very briefly covers some other features not mentioned above
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Missing values in Aggregations
 
     Many aggregations methods will ignore/skip missing values, while others take them into consideration.
 
     Always check the documentation of the method you're using, much of the time docstrings will explain their behaviour.
-    """
-    )
+    """)
     return
 
 
@@ -733,13 +691,11 @@ def _(df, pl):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ### Missing values in Joins
 
     By default null values will never produce matches using [join](https://docs.pola.rs/api/python/stable/reference/dataframe/api/polars.DataFrame.join.html), but you can specify `nulls_equal=True` to join Null values with each other.
-    """
-    )
+    """)
     return
 
 
@@ -772,13 +728,11 @@ def _(age_groups, df):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
+    mo.md(r"""
     ## Utilities
 
     Loading data and imports
-    """
-    )
+    """)
     return
 
 

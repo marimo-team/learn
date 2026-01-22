@@ -1,3 +1,8 @@
+---
+title: Readme
+marimo-version: 0.18.4
+---
+
 # Learn Python
 
 This collection of marimo notebooks is designed to teach you the basics
