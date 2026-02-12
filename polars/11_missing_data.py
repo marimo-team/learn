@@ -1,6 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
+#     "marimo",
 #     "plotly[express]==6.3.0",
 #     "polars==1.33.1",
 # ]
