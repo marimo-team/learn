@@ -3,6 +3,7 @@
 # dependencies = [
 #     "duckdb==1.4.3",
 #     "kagglehub==0.3.13",
+#     "marimo",
 #     "polars==1.36.1",
 #     "pyarrow==22.0.0",
 #     "sqlalchemy==2.0.45",
