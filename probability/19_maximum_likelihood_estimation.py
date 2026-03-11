@@ -2,10 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib==3.10.1",
-#     "scipy==1.15.2",
-#     "numpy==2.2.4",
-#     "polars==0.20.2",
+#     "matplotlib==3.10.8",
+#     "scipy==1.17.1",
+#     "numpy==2.4.3",
+#     "polars==1.24.0",
 #     "plotly==5.18.0",
 # ]
 # ///
@@ -400,7 +400,7 @@ def _(
 
     # relevant markdown for the results
     normal_explanation = mo.md(
-        f"""
+        rf"""
         ### Normal MLE Results
 
         **True parameters**: $\mu = {normal_true_mu:.3f}$, $\sigma^2 = {normal_true_var:.3f}$  

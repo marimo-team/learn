@@ -1,9 +1,9 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "altair==5.5.0",
+#     "altair==6.0.0",
 #     "marimo",
-#     "numpy==2.2.3",
+#     "numpy==2.4.3",
 #     "polars==1.24.0",
 # ]
 # ///

@@ -1,8 +1,3 @@
----
-title: Readme
-marimo-version: 0.18.4
----
-
 # marimo learn server
 
 This folder contains server code for hosting marimo apps.

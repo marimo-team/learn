@@ -15,7 +15,9 @@ extend-ignore-re = [
 
 # Words to explicitly accept
 [default.extend-words]
+bimap = "bimap"
 pn = "pn"
+setp = "setp"
 
 # You can also exclude specific files or directories if needed
 # [files]

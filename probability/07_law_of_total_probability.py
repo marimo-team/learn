@@ -2,8 +2,8 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib",
-#     "matplotlib-venn"
+#     "matplotlib==3.10.8",
+#     "matplotlib-venn==1.1.2"
 # ]
 # ///
 
@@ -220,7 +220,7 @@ def _(mo):
     # Calculate total probability
     total_error = total_probability(error_probs, state_probs)
 
-    explanation = mo.md(f"""
+    explanation = mo.md(rf"""
     ### System Error Analysis
 
     Given:
@@ -278,7 +278,7 @@ def _(late_given_dry, late_given_rain, mo, plt, venn2, weather_prob):
     p_late = late_given_rain.value * p_rain + late_given_dry.value * p_dry
 
     # Create explanation
-    explanation_example = mo.md(f"""
+    explanation_example = mo.md(rf"""
     ### Weather and Traffic Analysis
 
     Given:
