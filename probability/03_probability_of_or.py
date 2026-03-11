@@ -2,8 +2,8 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib",
-#     "matplotlib-venn"
+#     "matplotlib==3.10.8",
+#     "matplotlib-venn==1.1.2"
 # ]
 # ///
 

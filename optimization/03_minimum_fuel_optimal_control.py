@@ -1,7 +1,11 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
+#     "cvxpy-base",
 #     "marimo",
+#     "matplotlib==3.10.8",
+#     "numpy==2.4.3",
+#     "wigglystuff==0.2.37",
 # ]
 # ///
 import marimo
@@ -19,7 +23,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Minimal fuel optimal control
+    # Minimal Fuel Optimal Control
 
     This notebook includes an application of linear programming to controlling a
     physical system, adapted from [Convex
@@ -128,14 +132,14 @@ def _():
 
 
 @app.cell
-def _(A, T, b, cp, mo, n, x0, xdes):
+def _(A, T, b, cp, mo, n, np, x0, xdes):
     X, u = cp.Variable(shape=(n, T + 1)), cp.Variable(shape=(1, T))
 
     objective = cp.sum(cp.maximum(cp.abs(u), 2 * cp.abs(u) - 1))
     constraints = [
         X[:, 1:] == A @ X[:, :-1] + b @ u,
-        X[:, 0] == x0,
-        X[:, -1] == xdes,
+        X[:, 0] == np.array(x0).flatten(),
+        X[:, -1] == np.array(xdes).flatten(),
     ]
 
     fuel_used = cp.Problem(cp.Minimize(objective), constraints).solve()

@@ -2,10 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "numpy==2.2.3",
-#     "plotly[express]==6.0.0",
-#     "polars==1.27.1",
-#     "statsmodels==0.14.4",
+#     "numpy==2.4.3",
+#     "plotly[express]==6.3.0",
+#     "polars==1.24.0",
+#     "statsmodels==0.14.5",
 # ]
 # ///
 

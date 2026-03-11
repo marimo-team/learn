@@ -1,14 +1,13 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "adbc-driver-sqlite==1.7.0",
-#     "duckdb==1.4.0",
+#     "duckdb==1.4.4",
 #     "lxml==6.0.0",
 #     "marimo",
 #     "pandas==2.3.2",
-#     "polars==1.32.3",
-#     "pyarrow==21.0.0",
-#     "sqlalchemy==2.0.43",
+#     "polars==1.24.0",
+#     "pyarrow==22.0.0",
+#     "sqlalchemy==2.0.45",
 # ]
 # ///
 
@@ -162,20 +161,20 @@ def _(mo):
 
     You can also use other libraries with [arrow support](#arrow-support) or [polars plugins](#plugin-support) to read from databases before loading into polars, some of which support lazy reading.
 
-    Using the Arrow Database Connectivity SQLite support as an example:
+    Using DuckDB as an example:
     """)
     return
 
 
 @app.cell
-def _(df, folder, pl):
-    URI = "sqlite:///" + f"/{folder.resolve()}/db.sqlite"
-    df.write_database(table_name="quick_reference", connection=URI, engine="adbc", if_table_exists="replace")
+def _(df, duckdb, folder):
+    conn = duckdb.connect(str(folder / "db.duckdb"))
+    conn.register("df_polars", df)
+    conn.execute("CREATE OR REPLACE TABLE quick_reference AS SELECT * FROM df_polars")
 
     query = """SELECT * FROM quick_reference WHERE format LIKE '%Database%'"""
-
-    pl.read_database_uri(query=query, uri=URI, engine="adbc")
-    return
+    conn.sql(query).pl()
+    return (conn,)
 
 
 @app.cell(hide_code=True)
@@ -234,9 +233,8 @@ def _(mo):
 
 
 @app.cell
-def _(duckdb, folder):
+def _(conn):
     # Requires duckdb >= 1.4.0
-    conn = duckdb.connect(folder / "db.sqlite")
     conn.sql("SELECT * FROM quick_reference").pl(lazy=True)
     return
 

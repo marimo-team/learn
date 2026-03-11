@@ -2,8 +2,8 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "marimo",
-#     "pandas==2.2.3",
-#     "polars==1.22.0",
+#     "pandas==2.3.2",
+#     "polars==1.24.0",
 # ]
 # ///
 

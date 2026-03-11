@@ -3,13 +3,13 @@
 # dependencies = [
 #     "marimo",
 #     "faker==37.1.0",
-#     "scipy==1.13.1",
-#     "numpy==2.0.2",
-#     "numba==0.60.0",
-#     "polars==1.26.0",
-#     "matplotlib==3.9.4",
-#     "statsmodels",
-#     "pandas==2.2.3",
+#     "scipy==1.17.1",
+#     "numpy==2.4.3",
+#     "numba==0.64.0",
+#     "polars==1.24.0",
+#     "matplotlib==3.10.8",
+#     "statsmodels==0.14.5",
+#     "pandas==2.3.2",
 # ]
 # ///
 
@@ -22,7 +22,7 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Lazy Execution (a.k.a. the Lazy API)
+    # Lazy Execution
 
     Author: [Deb Debnath](https://github.com/debajyotid2)
     """)
