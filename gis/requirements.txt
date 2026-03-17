@@ -1,0 +1,11 @@
+dask
+geopandas
+odc-stac
+pyproj
+pystac
+pystac-client
+rasterio
+rioxarray
+shapely
+xarray
+xarray-spatial
