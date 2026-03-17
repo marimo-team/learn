@@ -18,7 +18,7 @@ MARIMO := uv run marimo
 PYTHON := uv run python
 
 # Default target
-all : commands
+all: commands
 
 ## commands : show all commands
 commands:
