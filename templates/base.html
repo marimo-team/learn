@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Marimo Learn{% endblock %}</title>
+    <meta name="description" content="Learn Python, data science, and machine learning with interactive marimo notebooks">
+    <link rel="icon" type="image/png" href="{{ root_path }}assets/marimo-learn.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ root_path }}assets/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+{% block content %}{% endblock %}
+
+{% include "contribute.html" %}
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; {{ current_year }} marimo. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/marimo-team/learn" target="_blank" class="footer-link">
+                        {% include "icons/github-24.svg" %}
+                    </a>
+                    <a href="https://marimo.io" target="_blank" class="footer-link">
+                        {% include "icons/globe.svg" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

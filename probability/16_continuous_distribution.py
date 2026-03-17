@@ -2,13 +2,13 @@
 # requires-python = ">=3.11"
 # dependencies = [
 #     "marimo",
-#     "altair==5.5.0",
-#     "matplotlib==3.10.1",
-#     "numpy==2.2.4",
-#     "scipy==1.15.2",
+#     "altair==6.0.0",
+#     "matplotlib==3.10.8",
+#     "numpy==2.4.3",
+#     "scipy==1.17.1",
 #     "sympy==1.13.3",
-#     "wigglystuff==0.1.10",
-#     "polars==1.26.0",
+#     "wigglystuff==0.2.37",
+#     "polars==1.24.0",
 # ]
 # ///
 
@@ -253,31 +253,31 @@ def _(
     # Add appropriate explanation
     if distribution == "uniform":
         _explanation = mo.md(
-            f"""
-            In the **uniform distribution**, all values between 0 and 5 are equally likely. 
+            rf"""
+            In the **uniform distribution**, all values between 0 and 5 are equally likely.
             The probability density is constant at 0.2 (which is 1/5, ensuring the total area is 1).
-            For a uniform distribution, the probability that $X$ is in the interval $[{a:.1f}, {b:.1f}]$ 
+            For a uniform distribution, the probability that $X$ is in the interval $[{a:.1f}, {b:.1f}]$
             is simply proportional to the width of the interval: $P({a:.1f} \leq X \leq {b:.1f}) = {_probability:.4f}$
             Note that while the PDF has a constant value of 0.2, this is not a probability but a density!
             """
         )
     elif distribution == "triangular":
         _explanation = mo.md(
-            f"""
-            In this **triangular distribution**, the probability density increases linearly from 0 to 2.5, 
+            rf"""
+            In this **triangular distribution**, the probability density increases linearly from 0 to 2.5,
             then decreases linearly from 2.5 to 5.
             The distribution's peak is at x = 2.5, where the value is highest.
-            The orange shaded area representing $P({a:.1f} \leq X \leq {b:.1f}) = {_probability:.4f}$ 
+            The orange shaded area representing $P({a:.1f} \leq X \leq {b:.1f}) = {_probability:.4f}$
             is calculated by integrating the PDF over the interval.
             """
         )
     else:
         _explanation = mo.md(
-            f"""
+            rf"""
             The **exponential distribution** (with λ = 0.5) models the time between events in a Poisson process.
-            Unlike the uniform and triangular distributions, the exponential distribution has infinite support 
+            Unlike the uniform and triangular distributions, the exponential distribution has infinite support
             (extends from 0 to infinity). The probability density decreases exponentially as x increases.
-            The orange shaded area representing $P({a:.1f} \leq X \leq {b:.1f}) = {_probability:.4f}$ 
+            The orange shaded area representing $P({a:.1f} \leq X \leq {b:.1f}) = {_probability:.4f}$
             is calculated by integrating $f(x) = 0.5e^{{-0.5x}}$ over the interval.
             """
         )
@@ -848,7 +848,7 @@ def _(np, plt):
         ax.legend(loc='upper right')
 
         # relevant annotations
-        ax.annotate(f'$P({a:.1f} \leq X \leq {b:.1f}) = {probability:.4f}$', 
+        ax.annotate(rf'$P({a:.1f} \leq X \leq {b:.1f}) = {probability:.4f}$',
                     xy=(0.5, 0.9), xycoords='axes fraction',
                     bbox=dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.8),
                     horizontalalignment='center', fontsize=12)

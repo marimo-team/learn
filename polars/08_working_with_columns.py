@@ -1,8 +1,8 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "polars==1.18.0",
 #     "marimo",
+#     "polars==1.24.0",
 # ]
 # ///
 

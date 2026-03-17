@@ -1,13 +1,13 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "altair==5.5.0",
+#     "altair==6.0.0",
 #     "beautifulsoup4==4.13.3",
 #     "httpx==0.28.1",
 #     "marimo",
 #     "nest-asyncio==1.6.0",
-#     "numba==0.61.0",
-#     "numpy==2.1.3",
+#     "numba==0.64.0",
+#     "numpy==2.4.3",
 #     "polars==1.24.0",
 # ]
 # ///
@@ -239,7 +239,7 @@ def _(parsed_html_df, pl):
                 pl.struct(
                     *(
                         pl.element()
-                        .str.extract(f'(?:"{key}"|{key})\s*:\s*"([^"]*)"')
+                        .str.extract(rf'(?:"{key}"|{key})\s*:\s*"([^"]*)"')
                         .alias(key)
                         for key in ["path", "thumbnail", "title"]
                     )

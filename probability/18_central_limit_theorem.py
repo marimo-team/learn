@@ -2,11 +2,11 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib==3.10.1",
-#     "scipy==1.15.2",
-#     "numpy==2.2.4",
+#     "matplotlib==3.10.8",
+#     "scipy==1.17.1",
+#     "numpy==2.4.3",
 #     "plotly==5.18.0",
-#     "wigglystuff==0.1.13",
+#     "wigglystuff==0.2.37",
 # ]
 # ///
 

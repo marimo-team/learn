@@ -3,13 +3,13 @@
 # dependencies = [
 #     "marimo",
 #     "plotly[express]==6.3.0",
-#     "polars==1.33.1",
+#     "polars==1.24.0",
 # ]
 # ///
 
 import marimo
 
-__generated_with = "0.18.4"
+__generated_with = "0.20.4"
 app = marimo.App(width="medium")
 
 
@@ -646,14 +646,12 @@ def _(dirty_weather, pl, rain):
 
 @app.cell(hide_code=True)
 def _(day_perc, mo, perc_col):
-    mo.md(
-        f"""
+    mo.md(f"""
     It is null for {day_perc.select(perc_col.is_null().mean()).item():.4%} of the rows, but is NaN for {day_perc.select(perc_col.is_nan().mean()).item():.4%} of them.
     If we use the cleaned weather dataframe to calculate it instead of the dirty_weather, we will have no nulls, but note how for this calculation we can end up with both, with each having a different meaning.
 
     In this case it makes sense to fill in NaNs as 0 to indicate there was no rain during that period, but treating the nulls the same could lead to a different interpretation of the data, so remember to handle NaNs and nulls separately.
-    """
-    )
+    """)
     return
 
 
@@ -773,18 +771,21 @@ def _(pl, raw_weather):
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 
 @app.cell
 def _():
     import polars as pl
+
     return (pl,)
 
 
 @app.cell
 def _():
     import plotly.express as px
+
     return (px,)
 
 

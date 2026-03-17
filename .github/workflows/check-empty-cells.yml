@@ -17,6 +17,9 @@ jobs:
       - name: 🔄 Checkout code
         uses: actions/checkout@v4
 
+      - name: 🚀 Install uv
+        uses: astral-sh/setup-uv@v4
+
       - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
@@ -24,7 +27,7 @@ jobs:
 
       - name: 🔍 Check for empty cells
         run: |
-          python scripts/check_empty_cells.py
+          make check_empty
 
       - name: 📊 Report results
         if: failure()
