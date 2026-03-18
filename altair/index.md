@@ -8,7 +8,7 @@ description: >
 ## Acknowledgments
 
 These notebooks were created by Jeffrey Heer, Dominik Moritz, Jake VanderPlas, and Brock Craft
-as part of the [Visualization Curriculum](https://uwdata.github.io/visualization-curriculum/intro.html)
+as part of the [Visualization Curriculum](https://uwdata.github.io/visualization-curriculum/)
 at the University of Washington.
 Our thanks to the authors for making their work available under an open license:
 if we all share a little, we all get a lot.
