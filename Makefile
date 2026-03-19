@@ -1,8 +1,8 @@
 # Default target.
-all : commands
+all: commands
 
 ## commands : show all commands.
-commands :
+commands:
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
 
 ## install: install minimal required packages into current environment.

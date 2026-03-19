@@ -28,11 +28,11 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          uv pip install marimo jinja2
+          make install
 
       - name: 🛠️ Export notebooks
         run: |
-          python scripts/build.py
+          make build
 
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3

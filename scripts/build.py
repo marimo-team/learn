@@ -72,7 +72,13 @@ def get_course_metadata(course_dir: Path) -> Dict[str, Any]:
     if readme_path.exists():
         with open(readme_path, "r", encoding="utf-8") as f:
             content = f.read()
-            
+
+            # Strip YAML front matter if present
+            if content.startswith("---"):
+                end = content.find("\n---", 3)
+                if end != -1:
+                    content = content[end + 4:].lstrip("\n")
+
             # Try to extract title from first heading
             title_match = content.split("\n")[0]
             if title_match.startswith("# "):
