@@ -1,7 +1,11 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
+#     "cvxpy==1.6.0",
 #     "marimo",
+#     "matplotlib==3.10.0",
+#     "numpy==2.2.2",
+#     "wigglystuff==0.1.9",
 # ]
 # ///
 import marimo
