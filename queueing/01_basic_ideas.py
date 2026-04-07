@@ -14,7 +14,7 @@ __generated_with = "0.22.4"
 app = marimo.App(width="medium")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     import marimo as mo
     import math
@@ -46,7 +46,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     sim_time_slider = mo.ui.slider(
         start=0,
