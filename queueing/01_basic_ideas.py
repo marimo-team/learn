@@ -10,7 +10,7 @@
 
 import marimo
 
-__generated_with = "0.20.4"
+__generated_with = "0.22.4"
 app = marimo.App(width="medium")
 
 
@@ -81,7 +81,7 @@ def _(mo):
         step=1,
         label="Random seed"
     )
-    run_button = mo.ui.button(label="Run simulation")
+    run_button = mo.ui.run_button(label="Run simulation")
     mo.vstack([sim_time_slider, arrival_rate_slider, service_rate_slider, window_slider, seed_input, run_button])
     return (
         arrival_rate_slider,
@@ -196,7 +196,7 @@ def _(
             }
             for k in range(max(counts) + 1)
         ])
-    
+
     _df = comparison().unpivot(
         on=["observed", "theory"], index="k", variable_name="source", value_name="probability"
     )

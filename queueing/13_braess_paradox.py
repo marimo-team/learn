@@ -101,7 +101,7 @@ def _(mo):
         label="Random seed",
     )
 
-    run_button = mo.ui.button(label="Run simulation")
+    run_button = mo.ui.run_button(label="Run simulation")
 
     mo.vstack([
         n_rounds_slider,
