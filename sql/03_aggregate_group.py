@@ -372,7 +372,7 @@ def _():
     mo.md(r"""
     ## Check Understanding
 
-    ![concept map](/public/03_concepts.svg)
+    ![concept map](./public/03_concepts.svg)
     """)
     return
 
