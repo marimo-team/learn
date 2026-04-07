@@ -371,7 +371,7 @@ def _():
                 "Count the total number of rows",
             ],
             correct_answer=1,
-            explanation="`*` is shorthand for 'all columns'. `SELECT *` retrieves every column; the number of rows returned depends on whether you add WHERE, LIMIT, or other clauses.",
+            explanation="* is shorthand for 'all columns'. SELECT * retrieves every column; the number of rows returned depends on whether you add WHERE, LIMIT, or other clauses.",
         )
     )
     _widget
