@@ -29,7 +29,7 @@ title: marimo for Educators
     - more than Notebook but not as intimidating as VS Code
     - reactivity allows for (encourages) dynamic, interactive elements
         - marimo is both a notebook and a library of UI elements
-        - and AnyWidget makes it relatively easy to extend [GVW: point at [faw](https://github.com/gvwilson/faw)]
+        - and [AnyWidget](https://anywidget.dev/) makes it relatively easy to extend [GVW: point at [faw](https://github.com/gvwilson/faw)]
     - doesn't allow out-of-order execution of cells, which reduces “worked for me” complaints
     - plays nicely with other Python tools (because a notebook is a Python file)
     - plays nicely with version control (same reason)
