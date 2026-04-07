@@ -566,7 +566,7 @@ def _(mo):
 
     The `column` and `row` encoding channels generate either a horizontal (columns) or vertical (rows) set of sub-plots, in which the data is partitioned according to the provided data field.
 
-    Here is a trellis plot that divides the data into one column per \`cluster\` value:
+    Here is a trellis plot that divides the data into one column per `cluster` value:
     """)
     return
 

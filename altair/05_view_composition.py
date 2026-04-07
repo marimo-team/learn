@@ -712,7 +712,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(alt, weather):
     splom = alt.Chart().mark_point(filled=True, size=15, opacity=0.5).encode(
       alt.X(alt.repeat('column'), type='quantitative'),
