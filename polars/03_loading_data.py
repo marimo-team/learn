@@ -493,12 +493,11 @@ def _(folder, lz, pl):
     _df, _df2, _df3 = pl.collect_all([lz, lz2, lz3])
 
     # Sinking multiple LazyFrames into different destinations
-    sinks = [
-        lz.sink_csv(folder / "data_1.csv", lazy=True),
-        lz2.sink_csv(folder / "data_2.csv", lazy=True),
-        lz3.sink_csv(folder / "data_3.csv", lazy=True),
-    ]
-    _ = pl.collect_all(sinks)
+    # (polars 1.23+ removed lazy=True from sink methods; each sink now executes immediately)
+    lz.sink_csv(folder / "data_1.csv")
+    lz2.sink_csv(folder / "data_2.csv")
+    lz3.sink_csv(folder / "data_3.csv")
+    sinks = []
     return (sinks,)
 
 
@@ -520,9 +519,10 @@ async def _(lz):
 
 @app.cell
 async def _(folder, lz, pl, sinks):
-    # If you want to write to a file, use `lz.sink_format(lazy=True)` followed by `...collect_async()` or `pl.collect_all_async(...)`
-    _ = await lz.sink_csv(folder / "data_from_async.csv", lazy=True).collect_async()
-    _ = await pl.collect_all_async(sinks)
+    # polars 1.23+ removed lazy=True from sink methods; sinks now execute immediately
+    lz.sink_csv(folder / "data_from_async.csv")
+    if sinks:
+        _ = await pl.collect_all_async(sinks)
     return
 
 

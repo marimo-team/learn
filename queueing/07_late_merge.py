@@ -240,9 +240,9 @@ def _(ArrivalStream, Environment, MergeServer, Queue, SEED, SIM_TIME, random):
         blocked = []
 
         if zipper:
-            lanes = [Queue(env, max_capacity=k), Queue(env, max_capacity=k)]
+            lanes = [Queue(env, capacity=k), Queue(env, capacity=k)]
         else:
-            lanes = [Queue(env, max_capacity=k)]
+            lanes = [Queue(env, capacity=k)]
         ArrivalStream(env, lanes, sojourn_times, blocked, zipper)
         MergeServer(env, lanes, zipper)
         env.run(until=SIM_TIME)

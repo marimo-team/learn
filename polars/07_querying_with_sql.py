@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "duckdb==1.4.4",
-#     "kagglehub==0.3.13",
+#     "kagglehub==1.0.0",
 #     "marimo",
 #     "polars==1.24.0",
 #     "pyarrow==22.0.0",

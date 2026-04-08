@@ -291,7 +291,10 @@ def _(log_data, pl):
 
 @app.cell
 def _(log_data_erroneous):
-    log_data_erroneous.collect()
+    try:
+        log_data_erroneous.collect()
+    except Exception as e:
+        print(f"{type(e).__name__}: {e}")
     return
 
 
@@ -307,12 +310,15 @@ def _(mo):
 
 @app.cell
 def _(log_data, pl):
-    (
-        log_data.pivot(index="time", on="request_code", 
-                   values="status", aggregate_function="len")
-                .filter(pl.col("POST").is_null())
-                .collect()
-    )
+    try:
+        (
+            log_data.pivot(index="time", on="request_code",
+                       values="status", aggregate_function="len")
+                    .filter(pl.col("POST").is_null())
+                    .collect()
+        )
+    except Exception as e:
+        print(f"{type(e).__name__}: {e}")
     return
 
 
@@ -438,7 +444,10 @@ def _(mo):
 
 @app.cell
 def _(a_query):
-    a_query.collect(engine="streaming")
+    try:
+        a_query.collect(engine="streaming")
+    except Exception as e:
+        print(f"{type(e).__name__}: {e}")
     return
 
 
@@ -491,21 +500,16 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The results of a query from a lazyframe can be saved in streaming mode using `sink_*` (e.g. `sink_parquet`) functions. Sinks support saving data to disk or cloud, and are especially helpful with large datasets. The data being sunk can also be partitioned into multiple files if needed, after specifying a suitable partitioning strategy, as shown below.
+    The results of a query from a lazyframe can be saved in streaming mode using `sink_*` (e.g. `sink_parquet`) functions. Sinks support saving data to disk or cloud, and are especially helpful with large datasets. To write output partitioned into multiple files by a column key, collect the LazyFrame first and use `DataFrame.write_parquet` with the `partition_by` parameter, as shown below.
     """)
     return
 
 
 @app.cell
-def _(a_query, pl):
-    (
-        a_query
-            .sink_parquet(
-                pl.PartitionMaxSize(
-                    "log_data_filtered_{part}.parquet",
-                    max_size=1_000
-                )
-            )
+def _(a_query):
+    a_query.collect().write_parquet(
+        "log_data_filtered/",
+        partition_by="request_code",
     )
     return
 
@@ -520,9 +524,9 @@ def _(mo):
 
 @app.cell
 def _(a_query, pl):
-    _q1 = a_query.sink_parquet("log_data_filtered.parquet", lazy=True)
-    _q2 = a_query.sink_ipc("log_data_filtered.ipc", lazy=True)
-    pl.collect_all([_q1, _q2])
+    # polars 1.23+ removed lazy=True from sink methods; each sink executes immediately
+    a_query.sink_parquet("log_data_filtered.parquet")
+    a_query.sink_ipc("log_data_filtered.ipc")
     return
 
 

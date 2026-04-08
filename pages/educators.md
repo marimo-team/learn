@@ -1,360 +1,206 @@
----
-title: marimo for Educators
----
+marimo for Educators
 
 ## Introduction
 
-- what *is* a notebook?
-    - *literate programming* mixes prose and software in a single "runnable paper"
-    - each *cell* is prose or software
-    - prose typically written in Markdown
-    - software written in whatever programming languages the notebook supports
-    - software's output displayed in the notebook as well
-- why notebooks for everyday work?
-    - easier to understand (think about the way textbooks present material)
-    - improves reproducibility
-    - [GVW: if we emphasize embedded AI] keep track of what you asked for as well as what you did
-- why notebooks for learning?
-    - more engaging than static material: learners are active users of material, not passive consumers, can experiment with settings, alter code, etc.
-    - no installation required: notebooks can be hosted so learners don't have to struggle with the hard bits first (i.e., focus on learning rather than on the tool)
-    - reproducibility helps collaboration as well [GVW: but we don’t support concurrent editing a la Google Docs, which some people will regard as table stakes]
-    - less intimidating than jumping straight into scripting
-    - introduces a real-world tool
-    - [if we emphasize embedded AI] a natural way to bring LLMs into the classroom
-- why notebooks for teaching?
-    - all of the above…
-    - create interactive lecture material in a single place
-- why the marimo notebook?
-    - open source
-    - more than Notebook but not as intimidating as VS Code
-    - reactivity allows for (encourages) dynamic, interactive elements
-        - marimo is both a notebook and a library of UI elements
-        - and [AnyWidget](https://anywidget.dev/) makes it relatively easy to extend [GVW: point at [faw](https://github.com/gvwilson/faw)]
-    - doesn't allow out-of-order execution of cells, which reduces “worked for me” complaints
-    - plays nicely with other Python tools (because a notebook is a Python file)
-    - plays nicely with version control (same reason)
-    - helps instructors keep their prose and examples in sync
-    - configurable interaction with AI tools
-    - [if we emphasize embedded AI] natural way to teaching prompting and review
-- why *not* marimo?
-    - not yet as widely known as Jupyter (i.e., your IT department may not already support it)
-    - not yet integrated with auto-grading tools ([faw](https://github.com/gvwilson/faw) is a start, but we're waiting to see what you want)
-    - doesn't yet support multi-notebook books
-    - some quirks that might not make it the right tool for a CS-101 course (see below)
+A computational notebook is a form of *literate programming* that mixes prose and software in a single runnable document. Each *cell* contains either prose written in Markdown or code written in a supported programming language, and the output of any code cell is displayed directly in the notebook alongside the source.
+
+Notebooks make everyday work easier to understand because they present explanation and evidence together, just like people do in conversation. This format also improves reproducibility, since the code that produced a result lives beside the result itself.
+
+For learning, notebooks offer several advantages over static material. Learners become active participants rather than passive readers: they can experiment with settings, alter code, and see immediate results. Because notebooks can be hosted, learners do not need to install anything before they start, which means the first session can focus on the subject itself rather than on tooling. The format is less intimidating than jumping straight into a script editor, and it introduces learners to a real-world tool used in research and industry.
+
+For teaching, notebooks serve all those purposes while also letting instructors keep interactive lecture material in one place.
+
+### Why marimo?
+
+marimo is open source and occupies a useful middle ground: richer than a plain text editor but less overwhelming than a full IDE such as VS Code. Its reactivity encourages dynamic, interactive elements, because marimo is both a notebook environment and a library of UI components. The [AnyWidget](https://anywidget.dev/) protocol makes it relatively straightforward to extend marimo with custom widgets.
+
+marimo does not allow out-of-order cell execution, which eliminates a common class of "it worked on my machine" complaints. And since a marimo notebook is a valid Python file, it integrates naturally with other Python tools and with version control. Instructors benefit from having prose and code examples in the same file, which helps keep explanations in sync with the code they describe. marimo also offers configurable integration with AI tools.
+
+### Why *Not* marimo?
+
+marimo is not yet as widely known as Jupyter, so your institution's IT department may not already support it. Auto-grading integration is not yet available in a mature form (but we're working on it), and multi-chapter books are not yet supported. Some quirks in how marimo handles scope may make it a less natural fit for an introductory CS course; see "Things to Watch Out For" below.
+
+## molab
+
+molab is marimo's free cloud-hosted notebook service, available at [molab.marimo.io](https://molab.marimo.io/notebooks). It is the easiest way for students to get started because it requires no local installation: marimo is accessible as a self-contained web application, comparable in experience to Google Colab. Notebooks created on molab are public but not discoverable by default, and can be shared with others by URL. Students can download their notebooks as `.py`, `.ipynb`, or PDF files, which makes submission to grading systems such as Gradescope straightforward.
+
+molab can also preview notebooks hosted on GitHub. The service provides a stable URL for a notebook that stays current as the notebook changes, so students always see the latest version. From the preview page, students can fork the notebook into their own workspace.
+
+Existing Jupyter notebooks can be converted to marimo notebooks automatically with `uvx marimo convert my_notebook.ipynb -o my_notebook.py`.
 
 ## Ways to Teach With marimo
 
-- high level
-    - follow along with lesson (code already present)
-    - workbooks for assignments ("fill in these cells")
-    - notebooks as apps (play with data rather than write code)
-    - notebooks as lab reports (models real-world use)
-- micro
-    - scroll through a pre-executed notebook
-    - step through a notebook by executing the cells in order
-    - fill out details or values into a mostly complete notebook
-    - tweak or fill in a notebook with some content
-    - add content to a completely blank notebook
-    - ask learners what to add *or* what's going to happen
-    - ask AI to do something and then explore/correct/improve its output
+At a high level, there are (at least) four ways to teach with marimo notebooks:
+
+1.  Learners can follow along with the lesson when the code already present in the notebook.
+
+1.  Notebooks can be used as assignments (i.e., "fill in these cells").
+
+1.  Notebooks be used as apps so that learners can explore data rather than, or as well as, writing code.
+
+1.  Learners can create notebooks from scratch as lab reports, which most closely models real-world use.
 
 ## Things to Watch Out For
 
-- Variable names
-    - Underscored variable names are different from common usage, and require some understanding of scope
-    - Solution is functions-early teaching methodology, which has a sound pedagogical basis
-- Image files
-    - For security reasons, marimo requires local image files to be in a folder called `public` below the directory the notebook is run from, and to be accessed in Markdown as `[alt text](/public/image.ext)`
-    - Which means it’s important to launch the notebook from the right place
-    - Can get around this using `mo.image` but that can’t be embedded in Markdown
-- [Using pytest in marimo](https://docs.marimo.io/guides/testing/pytest/#testing-in-notebook) is straightforward as long as the cell *only* contains tests
-- marimo uses [KaTeX](https://katex.org/) rather than [MathJax](https://www.mathjax.org/) for rendering math - see the appendix to this document for notes
+Variable names
+:   Underscore-prefixed variable names in marimo have a meaning different from their common usage in Python and require some understanding of lexical scope. The recommended remedy is a functions-early teaching methodology, which has a sound pedagogical basis and prepares learners for idiomatic Python.
+
+Image files
+:   For security reasons, marimo requires local image files to be placed in a folder named `public` directly below the directory from which the notebook is launched, and to be referenced in Markdown as `/public/image.ext`. This means it matters where the notebook is started. The `mo.image` function works around this restriction but cannot be embedded inside a Markdown string.
+
+Testing
+:   [Using pytest in marimo](https://docs.marimo.io/guides/testing/pytest/#testing-in-notebook) is straightforward, provided that each test cell contains only tests and nothing else.
+
+Math rendering
+:   marimo uses [KaTeX](https://katex.org/) rather than [MathJax](https://www.mathjax.org/) for rendering mathematics. The two systems are largely compatible but differ in some commands and environments. See the appendix for details.
 
 ## Pedagogical Patterns
 
+Much of this section is inspired by or taken from
+[*Teaching and Learning with Jupyter*](https://jupyter4edu.github.io/jupyter-edu-book/).
+We are grateful to its authors for making their work available under an open license.
+
 ### Shift-Enter
 
-**Description:** Learner starts with complete notebook, re-executes cells; (possibly) fills in prose cells with analysis/description
+Learners start with a complete notebook and re-execute the cells in order, optionally filling in prose cells with analysis or description. This pattern is well suited to introducing new topics or checking understanding through warmup exercises, and works with any audience in a synchronous setting. It gives learners a working example immediately, though engagement tends to be low because learners are not yet making decisions.
 
-**Use For:** Introduce new topics; check understanding (e.g., warmup exercise)
+### Fill in the Blanks
 
-**Works For:** Any audience
+Some code cells are provided complete; learners must complete the rest. This reduces cognitive load by directing attention to a single concept, such as filtering a dataset, and works for any audience in assignments and lab sessions. The risk is that learners delegate the task to an AI tool, and the difficulty of the blanks can be hard to calibrate for a mixed-ability group.
 
-**Format:** Synchronous
+### Tweak and Twiddle
 
-**Pro:** Gives learners a complete working example
+Learners start with a complete, working notebook and are asked to alter parameters in order to achieve a specified goal. This pattern supports compare-and-contrast exercises and the acquisition of domain knowledge. It is particularly effective for learners who have domain knowledge but little programming experience, in fixed-time workshop exercises or pair programming sessions. It helps learners overcome anxiety about code. The main difficulties are that learners may not know where to start, or may spend time following unproductive tangents.
 
-**Con:** Low engagement
+### Notebook as App
 
-### Fill in the blanks
+The notebook is presented as an interactive dashboard, with prose kept in a separate document so the interface looks like a standalone application. This pattern is designed for non-programmers exploring datasets. It can replace slides in a lecture if the instructor knows the material well enough to navigate live, or it can be used after a physical lab experiment for data analysis. It requires less effort to build than a custom UI, but it demands thorough testing and does not develop learners' programming skills.
 
-**Description:** Some code cells filled in, learner must complete
+### Top-Down Delivery
 
-**Use For:** Reducing cognitive load
+Learners are given just enough control to reach a motivating result quickly. The goal is engagement on the first day of a course or workshop. This pattern works for any audience but is most effective with learners who have limited programming experience, in tutorials and synchronous workshops. Student engagement is the main advantage; the main challenge is finding the right level of detail for a group with mixed abilities.
 
-**Works For:** Any audience
+### Coding as Translation
 
-**Format:** Assignments and labs
+Learners convert prose to code, or code to prose. The purpose is to connect concepts to implementations and implementations to concepts. It is well suited to learners who understand theory but struggle with coding, or the reverse. A notebook with scaffolding text and possibly some pre-written code works well as the format. The barrier to entry is low for learners with limited programming background; the challenge, again, is calibrating difficulty for a mixed-ability group.
 
-**Pro:** Focus attention on a specific concept (e.g., filtering data)
+### Symbolic Math
 
-**Con:** “Just get AI to do it”; required work can be too easy or too hard
+Learners use SymPy to do symbolic mathematics inside the notebook, extending the coding-as-translation pattern to include converting mathematical expressions to code or code to mathematical expressions. This works well for STEM students interested in theory and fits any format. It introduces another real-world tool, but SymPy's syntax is yet another thing to learn on top of the mathematics itself.
 
-### Tweak and twiddle
+### Numerical Methods and Simulation
 
-**Description:** Learner starts with complete working notebook, is asked to alter parameters to achieve some goal
-
-**Use For:** Compare and contrast; acquiring domain knowledge
-
-**Works For:** Learners without programming experience (but requires some domain knowledge)
-
-**Format:** Fixed-time workshop exercise; pair programming
-
-**Pro:** Helps learners overcome code anxiety
-
-**Con:** “Where do I start?” and going down rabbit holes
-
-### Notebook as app
-
-**Description:** Use notebook as interactive dashboard (note: usually keep prose in a separate document to make the dashboard look like an app)
-
-**Use For:** Exploring datasets
-
-**Works For:** Non-programmers
-
-**Format:** Use instead of slides (but must know where you’re going); have learners suggest alternatives to explore; data analysis after (physical) lab experiment
-
-**Pro:** Less effort to build than custom UI
-
-**Con:** Requires testing; does not develop programming skills
-
-### Top-down delivery
-
-**Description:** Give learners just enough control to get to a motivating result quickly (“day one”)
-
-**Use For:** Follow-along lectures
-
-**Works For:** Any audience (but most engaging for people with low programming skills)
-
-**Format:** Tutorials and workshops (synchronous)
-
-**Pro:** Student engagement
-
-**Con:** Hard to get the right level of detail for a mixed-ability audience
-
-### Coding as translation
-
-**Description:** Convert prose to code (or vice versa)
-
-**Use For:** Connect concepts to implementation (and implementation to concepts)
-
-**Works For:** Learners who understand theory but struggle with coding (or vice versa)
-
-**Format:** Notebook with scaffolding text and possibly some (scaffolded) code
-
-**Pro:** Low barrier to entry for learners with limited programming knowledge
-
-**Con:** Hard to get the level right for mixed-ability audience
-
-### Symbolic math
-
-**Description:** Use SymPy for symbolic math in notebook
-
-**Use For:** Extension of previous exercise: convert math to code or code to math
-
-**Works For:** STEM students interested in theory
-
-**Format:** Any
-
-**Pro:** Introduce another real-world tool
-
-**Con:** Math in SymPy is yet another thing to learn
-
-### Numerical methods / simulation
-
-**Description:** Use calculation or simulation instead of formulaic analysis
-
-**Use For:** Make concepts tangible before introducing mathematical abstraction
-
-**Works For:** Learners with some programming skill
-
-**Format:** Any
-
-**Pro:** Going from specific to general is often more engaging and approachable
-
-**Con:** Requires programming skill; can be hard to debug
+Learners use calculation or simulation rather than closed-form analysis to make a concept tangible before the mathematical abstraction is introduced. This requires some programming skill and fits any format. Going from specific to general is often more engaging and approachable than the reverse, but debugging numerical code can be difficult.
 
 ### Learn an API
 
-**Description:** Introduce a key API example by example
+A key library or API is introduced example by example, in order of increasing complexity or decreasing frequency of use. The purpose is to direct learner attention toward tools they will use in other parts of the course. This works for learners with some programming skill and patience. It guides learning in a sensible order, which AI tools sometimes struggle to provide on their own. The risk is that learners lose sight of the larger goal, or prefer to ask an AI for help as needed rather than building systematic knowledge.
 
-**Use For:** Put focus on tools to be used in other places / lessons
+### Choose Your Data
 
-**Works For:** Learners with some programming skill (and patience)
+Learners replace the dataset in a provided notebook with one of their own choosing, possibly making some modifications to the code. The goal is engagement through personal relevance, and it works well for learners with a specific domain interest such as sports analytics. A common structure is a shared first half followed by independent exploration, sometimes leading to presentations. It improves self-efficacy, but learners may struggle to find suitable data, encounter data that is too messy to work with, or have interests that do not overlap enough for a shared debrief.
 
-**Format:** Examples in order of increasing complexity or decreasing frequency of use
+### Test-Driven Learning
 
-**Pro:** Guide learning in a sensible order (which AI sometimes struggles with)
+The instructor provides a notebook full of tests; learners must write code that makes those tests pass. This teaches learners to think in terms of a specification. It works for learners who want firm goalposts and fits homework exercises well. The task is well-defined and easy to stay focused on, but it is very easy for learners to have an AI generate the code without understanding it.
 
-**Con:** “Can’t see the forest for the trees”; learners may prefer just asking AI as needed
+A useful pattern is to place a stub function in one cell and pytest tests in a separate cell. Because of marimo's reactive execution, every time the learner edits their implementation the tests rerun automatically, giving immediate feedback on correctness without giving away the answer. For example, the stub cell might contain:
 
-### Choose your data
+```python
+def add(x, y):
+    """Return the sum of x and y."""
+    # your code here
+    pass
+```
 
-**Description:** Replace the dataset used in a notebook with another one (which may require some modifications to code)
+and the test cell:
 
-**Use For:** Engagement
+```python
+def test_add_integers():
+    assert add(5, 6) == 11
 
-**Works For:** Learners with specific domain interest (e.g., sports analytics)
+def test_add_floats():
+    assert isinstance(add(4, 2.1), float)
+```
 
-**Format:** Common first half, learners explore on their own for second half; learners create presentations to share with others
+### Bug Hunt
 
-**Pro:** Improves self-efficacy; leverages engagement with personal interests
+Learners are given a notebook with one or more bugs, which may include misleading prose. The purpose is to develop critical reading skills, which is especially important for learners who regularly use AI tools. It requires enough programming experience to debug systematically and works well as a homework exercise. Some learners find the detective aspect genuinely engaging, and the skill is extremely valuable. The main challenges are calibrating bug difficulty and helping learners know when they are done.
 
-**Con:** Can’t find data, data is too messy, learners’ interest don’t overlap
+### Adversarial Programming
 
-### Test-driven learning
-
-**Description:** Instructor provides notebook full of tests; learners must write code to make those tests pass (e.g., handle messy data)
-
-**Use For:** Think in terms of a spec
-
-**Works For:** Learners who want firm goalposts
-
-**Format:** Notebook full of test cases with empty cells (and function stubs) for code; works well for homework exercises
-
-**Pro:** Helps learners stay focused on well-defined task
-
-**Con:** Very easy to have AI generate the code without understanding it
-
-### Bug hunt
-
-**Description:** Give learners a notebook with one or more bugs (which can include misleading prose)
-
-**Use For:** Developing critical reading skills (especially important for learners using AI)
-
-**Works For:** Learners with enough programming experience to be able to debug systematically
-
-**Format:** Works well as homework exercise
-
-**Pro:** Some learners enjoy playing detective; extremely useful skill to learn
-
-**Con:** Hard to calibrate bug difficulty to learner level; hard for learners to know when they’re done
-
-### Adversarial programming
-
-**Description:** Given a notebook full of code, write tests that break it (reverse of bug hunt)
-
-**Use For:** Learning critical thinking
-
-**Works For:** Learners with enough programming experience to be able to debug systematically
-
-**Format:** Works well as homework exercise
-
-**Pro:** Helps learners appreciate how hard it is to write robust code; improves their debugging skills
-
-**Con:** Learners can break code in repetitive ways (e.g., provide several inputs that trigger the same flaw)
-
-## Acknowledgments
-
-Much of this is inspired by or taken from
-[*Teaching and Learning with Jupyter*](https://jupyter4edu.github.io/jupyter-edu-book/).
+Given a notebook full of code, learners write tests designed to break it. This is the reverse of the bug hunt. The purpose is to develop critical thinking, and it requires the same level of programming experience. It works well as a homework exercise. It helps learners appreciate the difficulty of writing robust code and sharpens their debugging skills, but learners sometimes find repetitive ways to break the code rather than probing for distinct failure modes.
 
 ## Appendix: Learner Personas
 
+The three profiles below outlines who we're trying to help and how.
+
 ### Anya Academic
 
-**Background:** Biology professor at mid-sized state university; teaches undergrad microbiology and biostatistics classes, both of which emphasize data management and visualization.
+Anya is a biology professor at a mid-sized state university who teaches undergraduate microbiology and biostatistics, both of which emphasize data management and visualization. She used R for fifteen years before switching to Python three years ago, largely through self-teaching, and she routinely remixes teaching material she finds online.
 
-**Relevant Experience:** Used R for 15 years, switched to Python three years ago, mostly self-taught. Frequently remixes teaching material she finds online, particularly examples.
+She wants to equip her students with modern skills, including AI-related tools, both because she sees them as important and because she hopes they will increase student engagement. She is also looking for more recognition at her university for her teaching work, which she believes is more likely to come from publishable innovation than from high student evaluations. She would like to restore the level of student engagement she saw before the pandemic, which she attributes in part to the shift toward online education reducing social cohesion in her cohorts.
 
-**Goals**
-
-1. Wants to equip her students with modern skills, especially AI-related, both because she thinks they’re important and to increase student engagement.
-
-2. Wants more recognition at her university for her teaching work, which she believes is more likely to come from publishable innovation than from high student evaluations.
-
-3. Would like to get student engagement back to pre-COVID levels; she feels that today’s cohorts don’t know each other as well and aren’t as excited about material because of the shift to online education.
-
-**Complications**
-
-1. Is concerned about tool setup and maintenance overheads. Doesn't have time to completely rewrite courses, so will only move over if there's an incremental migration path that allows her to back out if thing don't appear to be working.
-
-2. Anya's department has two overworked IT staff, and nothing at her university is allowed to go beyond the pilot phase if it doesn't integrate with the LMS somehow.
+Her main concern is tool setup and maintenance overhead. She does not have time to rewrite courses wholesale, so she will only migrate to a new tool if there is an incremental path that allows her to back out if things are not working. Her department has only two IT staff, and nothing at her university can move beyond a pilot without integrating with the institution's learning management system.
 
 ### Ellis Engineer
 
-**Background:** Senior undergraduate in mechanical engineering who just returned to school from their third and final co-op placement. They are very excited about drones.
+Ellis is a senior undergraduate in mechanical engineering who has just returned from their third co-op placement and is very interested in drones. They used Jupyter notebooks with Google Colab in their second semester and are comfortable with NumPy and Altair, though they have done roughly as many courses in MATLAB and AutoCAD as in Python.
 
-**Relevant Experience:** Used Jupyter notebooks with Colab in their second semester. They are comfortable with NumPy and Altair and has bumped into Pandas, but has done as many classes with MATLAB and AutoCAD as with Python.
+Ellis wants to build an impressive senior project to strengthen their graduate school application. They have seen custom widgets in notebooks and are willing to invest time in learning to build one with AI support. They also want to explore small-craft aerodynamics, particularly feedback stability problems, both as a personal interest and as a way to become known in the drone community.
 
-**Goals**
-
-1. Ellis wants to create an impressive senior project to secure themself a place in a good graduate program (which they think is essential to doing interesting work with drones). They have seen custom widgets in notebooks, and are willing to invest some time to learn how to build one with AI support.
-
-2. They also want to explore small-craft aerodynamics, particularly feedback stability problems, out of personal interest and as a way to become part of the “serious” drone community.
-
-**Complications**
-
-Having spent several months convinced that Lisp was the language of the future, Ellis is leery of investing too much in new technologies just because they’re cool.
+Having spent a period convinced that Lisp was the language of the future, Ellis is now cautious about investing heavily in new technologies purely because they seem exciting.
 
 ### Nang Newbie
 
-**Background:** Undergraduate business student; decided not to minor in CS because "AI is going to eat all those jobs". Nang chooses courses, tools, and interests based primarily on what the web tells him potential future employers are going to look for. He routinely uses ChatGPT for help with homework.
+Nang is an undergraduate business student who decided against minoring in computer science because he believes AI will take most programming jobs. He chooses courses, tools, and interests largely based on what he reads about future employer demand, and he routinely uses ChatGPT for help with homework. He used Scratch in middle school and covered HTML and basic Python in a high school CS course. He just finished an introductory statistics course that used Pandas, which he enjoyed enough to sign up for the follow-on course.
 
-**Relevant Experience:** Used Scratch in middle school and did one CS class in high school that covered HTML and a bit of Python. He just finished an intro stats class that used Pandas, which to his surprise he enjoyed enough to sign up for the sequel.
+He wants to complete assignments more quickly and with less effort. He also wants to learn how to explore and analyze sports statistics for fun, as a keen basketball fan, and to share findings with other fans through online forums.
 
-**Goals**
-
-1. Nang wants to be able to do homework assignments more quickly and with less effort (hence his interest in ChatGPT).
-
-2. He wants to learn how to explore and analyze sports statistics for fun (he's a keen basketball fan), and to share what he finds with like-minded fans through online forums.
-
-**Complications**
-
-Nang is taking five courses and volunteering with two campus clubs (one for the sake of his CV, and one because of his passion for basketball), so he is chronically over-committed.
+Nang is taking five courses and volunteering with two campus clubs, one for his CV and one out of genuine passion for basketball, so he is chronically over-committed.
 
 ## Appendix: KaTeX vs. MathJax
 
-marimo uses [KaTeX](https://katex.org/) for rendering math (faster, slightly narrower coverage, silent errors) rather than [MathJax](https://www.mathjax.org/).
+marimo uses [KaTeX](https://katex.org/) for rendering math rather than [MathJax](https://www.mathjax.org/). KaTeX is faster and has slightly narrower coverage, and it fails silently when it encounters an unsupported command.
 
-### Use raw strings
+### Use Raw Strings
 
 LaTeX lives in Python strings in marimo, so use `r"..."` to preserve backslashes:
 
 ```python
-mo.md(r"$\\frac{1}{2}$")   # ✅
-mo.md("$\\frac{1}{2}$")    # ❌ — \\f is a form-feed character
+mo.md(r"$\frac{1}{2}$")   # correct
+mo.md("$\frac{1}{2}$")    # wrong: \f is a form-feed character
 ```
 
-### MathJax → KaTeX
+### MathJax to KaTeX
 
 | Category | MathJax | KaTeX |
 | --- | --- | --- |
-| Text | `\\mbox`, `\\bbox` | `\\text{}` |
-| Text style | `\\textsc`, `\\textsl` | `\\text{}` |
-| Environments | `\\begin{eqnarray}` | `\\begin{align}` |
-|  | `\\begin{multline}` | `\\begin{gather}` |
-| References | `\\label`, `\\eqref`, `\\ref` | `\\tag{}` for manual numbering |
-| Arrays | `\\cline`, `\\multicolumn`, `\\hfill`, `\\vline` | — |
-| Macros | `\\DeclareMathOperator` | `\\operatorname{}` inline |
-|  | `\\newenvironment` | — |
-| Spacing | `\\mspace`, `\\setlength`, `\\strut`, `\\rotatebox` | — |
-| Conditionals | `\\if`, `\\else`, `\\fi`, `\\ifx` | — |
+| Text | `\mbox`, `\bbox` | `\text{}` |
+| Text style | `\textsc`, `\textsl` | `\text{}` |
+| Environments | `\begin{eqnarray}` | `\begin{align}` |
+|  | `\begin{multline}` | `\begin{gather}` |
+| References | `\label`, `\eqref`, `\ref` | `\tag{}` for manual numbering |
+| Arrays | `\cline`, `\multicolumn`, `\hfill`, `\vline` | not supported |
+| Macros | `\DeclareMathOperator` | `\operatorname{}` inline |
+|  | `\newenvironment` | not supported |
+| Spacing | `\mspace`, `\setlength`, `\strut`, `\rotatebox` | not supported |
+| Conditionals | `\if`, `\else`, `\fi`, `\ifx` | not supported |
 
-These *do* work in KaTeX (despite outdated claims): `\\newcommand`, `\\def`, `\\hbox`, `\\hskip`, `\\cal`, `\\pmb`, `\\begin{equation}`, `\\begin{split}`, `\\operatorname*`.
+The following commands do work in KaTeX despite claims to the contrary in some older references: `\newcommand`, `\def`, `\hbox`, `\hskip`, `\cal`, `\pmb`, `\begin{equation}`, `\begin{split}`, `\operatorname*`.
 
-### Shared macros across cells
+### Shared Macros Across Cells
 
-`\\newcommand` works inline. For cross-cell reuse, use `mo.latex(filename="macros.tex")` in the same cell as `import marimo`.
+`\newcommand` works inline within a single cell. For macros that need to be available across multiple cells, use `mo.latex(filename="macros.tex")` in the same cell as your `import marimo` statement.
 
-### Migration checklist
+### Migration Checklist
 
-1. Find-replace `\\mbox{` → `\\text{`
-2. Use raw strings (`r"..."`)
-3. Replace `\\begin{eqnarray}` → `\\begin{align}`
-4. Replace `\\DeclareMathOperator` → `\\operatorname{}`
-5. Remove `\\label`/`\\eqref` → use `\\tag{}` if needed
-6. Visually verify — KaTeX fails silently
+1. Find and replace `\mbox{` with `\text{`.
+2. Wrap all LaTeX strings in raw string literals (`r"..."`).
+3. Replace `\begin{eqnarray}` with `\begin{align}`.
+4. Replace `\DeclareMathOperator` with `\operatorname{}`.
+5. Remove `\label` and `\eqref`; use `\tag{}` where manual numbering is needed.
+6. Verify the output visually, since KaTeX fails silently.
 
 ### References
 

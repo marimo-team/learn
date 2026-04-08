@@ -1,7 +1,8 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cvxpy-base",
+#     "clarabel>=0.11.1",
+#     "cvxpy>=1.8.2",
 #     "marimo",
 #     "numpy==2.4.3",
 #     "wigglystuff==0.2.37",

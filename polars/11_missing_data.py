@@ -743,28 +743,34 @@ def _(pl):
 
 
 @app.cell
-def _(pl, raw_stations):
-    dirty_stations = raw_stations.select(
-        pl.col("id_estacao").alias("station"),
-        pl.col("estacao").alias("name"),
-        pl.col("latitude").alias("lat"),
-        pl.col("longitude").alias("lon"),
-        pl.col("cota").alias("altitude"),
-        pl.col("situacao").alias("situation"),
-        pl.col("endereco").alias("address"),
-        pl.col("data_inicio_operacao").alias("operation_start_date"),
-        pl.col("data_fim_operacao").alias("operation_end_date"),
-    ).collect()
+def _(mo, pl, raw_stations):
+    try:
+        dirty_stations = raw_stations.select(
+            pl.col("id_estacao").alias("station"),
+            pl.col("estacao").alias("name"),
+            pl.col("latitude").alias("lat"),
+            pl.col("longitude").alias("lon"),
+            pl.col("cota").alias("altitude"),
+            pl.col("situacao").alias("situation"),
+            pl.col("endereco").alias("address"),
+            pl.col("data_inicio_operacao").alias("operation_start_date"),
+            pl.col("data_fim_operacao").alias("operation_end_date"),
+        ).collect()
+    except Exception as e:
+        mo.stop(True, mo.md(f"**Failed to load stations data from HuggingFace:** {e}"))
     return (dirty_stations,)
 
 
 @app.cell
-def _(pl, raw_weather):
-    dirty_weather_naive = raw_weather.select(
-        pl.col("id_estacao").alias("station"),
-        pl.col("acumulado_chuva_15_min").alias("accumulated_rain_15_minutes"),
-        pl.concat_str("data_particao", pl.lit("T"), "horario").str.to_datetime(time_zone=None).alias("datetime"),
-    ).collect()
+def _(mo, pl, raw_weather):
+    try:
+        dirty_weather_naive = raw_weather.select(
+            pl.col("id_estacao").alias("station"),
+            pl.col("acumulado_chuva_15_min").alias("accumulated_rain_15_minutes"),
+            pl.concat_str("data_particao", pl.lit("T"), "horario").str.to_datetime(time_zone=None).alias("datetime"),
+        ).collect()
+    except Exception as e:
+        mo.stop(True, mo.md(f"**Failed to load weather data from HuggingFace:** {e}"))
     return (dirty_weather_naive,)
 
 

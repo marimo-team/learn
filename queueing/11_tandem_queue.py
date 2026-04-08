@@ -189,7 +189,7 @@ def _(Environment, Queue, SIM_TIME, Source, Stage1, Stage2):
     def simulate(buffer_capacity):
         env = Environment()
         input_q = Queue(env)
-        middle_q = Queue(env, max_capacity=buffer_capacity)
+        middle_q = Queue(env, capacity=buffer_capacity)
         s2_idle = []
         completions = []
         Source(env, input_q)

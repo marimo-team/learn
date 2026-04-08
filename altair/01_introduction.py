@@ -4,7 +4,6 @@
 #     "altair==6.0.0",
 #     "marimo",
 #     "pandas==3.0.1",
-#     "vega_datasets==0.9.0",
 # ]
 # ///
 
@@ -76,23 +75,23 @@ def _(mo):
 
     When using Altair, datasets are commonly provided as data frames. Alternatively, Altair can also accept a URL to load a network-accessible dataset. As we will see, the named columns of the data frame are an essential piece of plotting with Altair.
 
-    We will often use datasets from the [vega-datasets](https://github.com/vega/vega-datasets) repository. Some of these datasets are directly available as Pandas data frames:
+    We will often use datasets from Altair's `datasets` sub-package. Some of these datasets are directly available as Pandas data frames:
     """)
     return
 
 
 @app.cell
 def _():
-    from vega_datasets import data  # import vega_datasets
-    cars = data.cars()              # load cars data as a Pandas data frame
-    cars.head()                     # display the first five rows
+    from altair.datasets import data  # import vega_datasets
+    cars = data.cars()                # load cars data as a Pandas data frame
+    cars.head()                       # display the first five rows
     return cars, data
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Datasets in the vega-datasets collection can also be accessed via URLs:
+    Altair's datasets can also be accessed via URLs:
     """)
     return
 

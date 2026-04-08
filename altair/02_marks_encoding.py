@@ -4,7 +4,6 @@
 #     "altair==6.0.0",
 #     "marimo",
 #     "pandas==3.0.1",
-#     "vega_datasets==0.9.0",
 # ]
 # ///
 
@@ -62,15 +61,15 @@ def _(mo):
     mo.md(r"""
     We will be visualizing global health and population data for a number of countries, over the time period of 1955 to 2005. The data was collected by the [Gapminder Foundation](https://www.gapminder.org/) and shared in [Hans Rosling's popular TED talk](https://www.youtube.com/watch?v=hVimVzgtD6w). If you haven't seen the talk, we encourage you to watch it first!
 
-    Let's first load the dataset from the [vega-datasets](https://github.com/vega/vega-datasets) collection into a Pandas data frame.
+    Let's first load the dataset into a Pandas data frame.
     """)
     return
 
 
 @app.cell
 def _():
-    from vega_datasets import data as vega_data
-    data = vega_data.gapminder()
+    from altair.datasets import data as altair_data
+    data = altair_data.gapminder()
     return (data,)
 
 

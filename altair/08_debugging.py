@@ -4,7 +4,6 @@
 #     "altair==6.0.0",
 #     "marimo",
 #     "pandas==3.0.1",
-#     "vega_datasets==0.9.0",
 # ]
 # ///
 
@@ -57,18 +56,18 @@ def _(mo):
     mo.md(r"""
     These instructions follow [the Altair documentation](https://altair-viz.github.io/getting_started/installation.html) but focus on some specifics for this series of notebooks.
 
-    In every notebook, we will import the [Altair](https://github.com/altair-viz/altair) and [Vega Datasets](https://github.com/altair-viz/vega_datasets) packages. If you are running this notebook on [Colab](https://colab.research.google.com), Altair and Vega Datasets should be preinstalled and ready to go. The notebooks in this series are designed for Colab but should also work in Jupyter Lab or the Jupyter Notebook (the notebook requires a bit more setup [described below](#Special-Setup-for-the-Jupyter-Notebook)) but additional packages are required.
+    In every notebook, we will import the [Altair](https://github.com/altair-viz/altair) package. If you are running this notebook on [Colab](https://colab.research.google.com), Altair should be preinstalled and ready to go. The notebooks in this series are designed for Colab but should also work in Jupyter Lab or the Jupyter Notebook (the notebook requires a bit more setup [described below](#Special-Setup-for-the-Jupyter-Notebook)) but additional packages are required.
 
     If you are running in Jupyter Lab or Jupyter Notebooks, you have to install the necessary packages by running the following command in your terminal.
 
     ```bash
-    pip install altair vega_datasets
+    pip install altair
     ```
 
     Or if you use [Conda](https://conda.io)
 
     ```bash
-    conda install -c conda-forge altair vega_datasets
+    conda install -c conda-forge altair
     ```
 
     You can run command line commands from a code cell by prefixing it with `!`. For example, to install Altair and Vega Datasets with [Pip](https://pip.pypa.io/), you can run the following cell.
@@ -78,14 +77,14 @@ def _(mo):
 
 @app.cell
 def _():
-    # packages added via marimo's package management: altair vega_datasets !pip install altair vega_datasets
+    # packages added via marimo's package management: altair !pip install altair
     return
 
 
 @app.cell
 def _():
     import altair as alt
-    from vega_datasets import data
+    from altair.datasets import data
 
     return alt, data
 
@@ -134,7 +133,7 @@ def _(mo):
     If you are not running the latest version, you can update it with `pip`. You can update Altair and Vega Datasets by running this command in your terminal.
 
     ```
-    pip install -U altair vega_datasets
+    pip install -U altair
     ```
     """)
     return
@@ -247,7 +246,7 @@ def _(alt):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Check the spelling of your files and print the data source to confirm that the data and fields exist. For instance, here you see that `color` is not a vaid field.
+    Check the spelling of your files and print the data source to confirm that the data and fields exist. For instance, here you see that `color` is not a valid field.
     """)
     return
 

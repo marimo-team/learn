@@ -4,7 +4,6 @@
 #     "altair==6.0.0",
 #     "marimo",
 #     "pandas==3.0.1",
-#     "vega_datasets==0.9.0",
 # ]
 # ///
 
@@ -51,7 +50,9 @@ def _(mo):
 def _():
     import pandas as pd
     import altair as alt
-    from vega_datasets import data
+    from altair.datasets import data
+    import json
+    import urllib.request
 
     return alt, data
 
@@ -131,7 +132,8 @@ def _(data):
 
 @app.cell
 def _(data):
-    world_topo = data.world_110m()
+    with urllib.request.urlopen(world) as response:
+        world_topo = json.load(response)
     return (world_topo,)
 
 
@@ -160,7 +162,7 @@ def _(mo):
 
     In the data above, the `objects` property indicates the named elements we can extract from the data: geometries for all `countries`, or a single polygon representing all `land` on Earth. Either of these can be unpacked to GeoJSON data we can then visualize.
 
-    As TopoJSON is a specialized format, we need to instruct Altair to parse the TopoJSON format, indicating which named faeture object we wish to extract from the topology. The following code indicates that we want to extract GeoJSON features from the `world` dataset for the `countries` object:
+    As TopoJSON is a specialized format, we need to instruct Altair to parse the TopoJSON format, indicating which named feature object we wish to extract from the topology. The following code indicates that we want to extract GeoJSON features from the `world` dataset for the `countries` object:
 
     ~~~ js
     alt.topo_feature(world, 'countries')
@@ -563,7 +565,7 @@ def _(mo):
     mo.md(r"""
     _Which U.S. airports have the highest number of outgoing routes?_
 
-    Now that we can see the airports, which may wish to interact with them to better understand the structure of the air traffic network. We can add a `rule` mark layer to represent paths from `origin` airports to `destination` airports, which requires two `lookup` transforms to retreive coordinates for each end point. In addition, we can use a `single` selection to filter these routes, such that only the routes originating at the currently selected airport are shown.
+    Now that we can see the airports, which may wish to interact with them to better understand the structure of the air traffic network. We can add a `rule` mark layer to represent paths from `origin` airports to `destination` airports, which requires two `lookup` transforms to retrieve coordinates for each end point. In addition, we can use a `single` selection to filter these routes, such that only the routes originating at the currently selected airport are shown.
 
     _Starting from the static map above, can you build an interactive version? Feel free to skip the code below to engage with the interactive map first, and think through how you might build it on your own!_
     """)

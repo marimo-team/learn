@@ -542,7 +542,7 @@ def _(mo):
 
     Finally, note that horizontal and vertical concatenation can be combined. _What happens if you write something like `(temp | precip) & wind`?_
 
-    _Aside_: Note the importance of those parentheses... what happens if you remove them? Keep in mind that these overloaded operators are still subject to [Python's operator precendence rules](https://docs.python.org/3/reference/expressions.html#operator-precedence), and so vertical concatenation with `&` will take precedence over horizontal concatenation with `|`!
+    _Aside_: Note the importance of those parentheses... what happens if you remove them? Keep in mind that these overloaded operators are still subject to [Python's operator precedence rules](https://docs.python.org/3/reference/expressions.html#operator-precedence), and so vertical concatenation with `&` will take precedence over horizontal concatenation with `|`!
 
     As we will revisit later, concatenation operators let you combine any and all charts into a multi-view dashboard!
     """)
