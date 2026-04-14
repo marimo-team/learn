@@ -34,7 +34,7 @@
                             <ol class="space-y-1 list-decimal pl-5">
                                 {% for notebook in lesson.notebooks %}
                                     <li>
-                                        <a href="{{ notebook.local_html_path }}" class="link-primary">
+                                        <a href="{{ notebook.molab_url }}" class="link-primary">
                                             {{ notebook.title }}
                                         </a>
                                     </li>

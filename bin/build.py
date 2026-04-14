@@ -15,7 +15,7 @@ from jinja2 import Environment, FileSystemLoader
 from utils import get_notebook_title
 
 
-def transform_lessons(data: dict, root: Path) -> dict:
+def transform_lessons(data: dict, root: Path, branch: str) -> dict:
     """Transform raw lesson data into template-ready form."""
     for course_id, course in data.items():
         desc = course.get("description", "").strip()
@@ -26,6 +26,7 @@ def transform_lessons(data: dict, root: Path) -> dict:
                          or re.sub(r"^\d+_", "", nb.replace(".py", "")).replace("_", " ").title(),
                 "html_path": f"{course_id}/{nb.replace('.py', '.html')}",
                 "local_html_path": nb.replace(".py", ".html"),
+                "molab_url": f"https://molab.marimo.io/github/marimo-team/learn/blob/{branch}/{course_id}/{nb}",
             }
             for nb in course.get("notebooks", [])
         ]
@@ -45,13 +46,14 @@ def main():
     parser.add_argument("--root", required=True, help="Project root directory")
     parser.add_argument("--output", required=True, help="Output directory")
     parser.add_argument("--data", required=True, help="Path to lessons JSON file")
+    parser.add_argument("--branch", required=True, help="Git branch name for molab URLs")
     args = parser.parse_args()
 
     root = Path(args.root)
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
 
-    lessons = transform_lessons(json.loads(Path(args.data).read_text()), root)
+    lessons = transform_lessons(json.loads(Path(args.data).read_text()), root, args.branch)
     env = Environment(loader=FileSystemLoader(root / "templates"))
     current_year = datetime.date.today().year
 

@@ -44,8 +44,8 @@ check_exec:
 	fi
 
 ## build: build website
-build: ${LESSON_DATA} ${NOTEBOOK_OUT} ${TEMPLATES}
-	${PYTHON} bin/build.py --root ${ROOT} --output ${SITE} --data ${LESSON_DATA}
+build: ${LESSON_DATA} ${TEMPLATES} # ${NOTEBOOK_OUT}
+	${PYTHON} bin/build.py --branch temp --root ${ROOT} --output ${SITE} --data ${LESSON_DATA}
 
 ## links: check links locally (while 'make serve')
 links:
