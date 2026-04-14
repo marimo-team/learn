@@ -2,7 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = [
 #     "marimo",
-#     "marimo-learn>=0.7.0",
+#     "marimo-learn>=0.12.0",
 #     "polars==1.24.0",
 #     "sqlalchemy",
 # ]
@@ -19,7 +19,10 @@ def _():
     import marimo_learn as mol
     import sqlalchemy
 
-    db_path = mol.localize_file("lab.db")
+    db_path = mol.localize_file(
+        "lab.db",
+        "https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/lab.db"
+    )
     DATABASE_URL = f"sqlite:///{db_path}"
     engine = sqlalchemy.create_engine(DATABASE_URL)
     return engine, mo, mol

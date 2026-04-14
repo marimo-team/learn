@@ -2,7 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = [
 #     "marimo",
-#     "marimo-learn>=0.7.0",
+#     "marimo-learn>=0.12.0",
 #     "polars==1.24.0",
 #     "sqlalchemy",
 # ]
@@ -19,7 +19,10 @@ with app.setup:
     from marimo_learn import MultipleChoiceWidget, OrderingWidget
     import sqlalchemy
 
-    db_path = mol.localize_file("penguins.db")
+    db_path = mol.localize_file(
+        "penguins.db",
+        "https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/penguins.db"
+    )
     DATABASE_URL = f"sqlite:///{db_path}"
     engine = sqlalchemy.create_engine(DATABASE_URL)
 
