@@ -1,6 +1,7 @@
 ROOT := .
 SITE := _site
 TMP := ./tmp
+BRANCH := main
 LESSON_DATA := ${TMP}/lessons.json
 TEMPLATES := $(wildcard templates/*.html)
 
@@ -45,7 +46,7 @@ check_exec:
 
 ## build: build website
 build: ${LESSON_DATA} ${TEMPLATES} # ${NOTEBOOK_OUT}
-	${PYTHON} bin/build.py --branch temp --root ${ROOT} --output ${SITE} --data ${LESSON_DATA}
+	${PYTHON} bin/build.py --branch ${BRANCH} --root ${ROOT} --output ${SITE} --data ${LESSON_DATA}
 
 ## links: check links locally (while 'make serve')
 links:
