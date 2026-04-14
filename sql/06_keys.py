@@ -41,7 +41,7 @@ def _():
 
     The previous tutorial explained how to combine information from two tables using `inner join` and `left join`. This tutorial will explain how we can tell when it makes sense to do this, and introduce our first complex database. To start, let's look at a diagram showing the four tables in the `survey` database.
 
-    ![survey tables](./public/survey_tables.svg)
+    ![survey tables](https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/survey_tables.svg)
     """)
     return
 
@@ -284,7 +284,7 @@ def _():
 
 @app.cell
 def _():
-    mo.image(src="./public/survey_tables.svg", alt="table diagram of survey database")
+    mo.image(src="https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/survey_tables.svg", alt="table diagram of survey database")
     return
 
 
@@ -440,7 +440,7 @@ def _():
     mo.md(r"""
     ## Check Understanding
 
-    ![concept map](./public/06_concepts.svg)
+    ![concept map](https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/06_concepts.svg)
     """)
     return
 

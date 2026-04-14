@@ -276,7 +276,7 @@ def _():
     mo.md(r"""
     ## Check Understanding
 
-    ![concept map](./public/05_concepts.svg)
+    ![concept map](https://raw.githubusercontent.com/marimo-team/learn/main/sql/public/05_concepts.svg)
     """)
     return
 
