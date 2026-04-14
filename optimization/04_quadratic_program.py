@@ -1,11 +1,12 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cvxpy==1.6.0",
+#     "clarabel>=0.11.1",
+#     "cvxpy-base>=1.8.2",
 #     "marimo",
-#     "matplotlib==3.10.0",
-#     "numpy==2.2.2",
-#     "wigglystuff==0.1.9",
+#     "matplotlib==3.10.8",
+#     "numpy==2.4.3",
+#     "wigglystuff==0.2.37",
 # ]
 # ///
 
@@ -24,7 +25,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Quadratic program
+    # Quadratic Program
 
     A quadratic program is an optimization problem with a quadratic objective and
     affine equality and inequality constraints. A common standard form is the

@@ -2,10 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "numpy==2.2.3",
-#     "plotly[express]==6.0.0",
-#     "polars==1.27.1",
-#     "statsmodels==0.14.4",
+#     "numpy==2.4.3",
+#     "plotly[express]==6.3.0",
+#     "polars==1.24.0",
+#     "statsmodels==0.14.5",
 # ]
 # ///
 
@@ -61,22 +61,25 @@ def _(mo):
 
 
 @app.cell
-def _(lz, pl):
-    df = (
-        lz
-        # Filter data we consider relevant (somewhat arbitrary in this example)
-        .filter(pl.col("explicit") == False)
-        .drop("Unnamed: 0", "track_id", "explicit")
-        .with_columns(
-            # Perform whichever transformations you want  (again somewhat arbitrary in this example)
-            # Convert the duration from milliseconds to seconds (int)
-            pl.col("duration_ms").floordiv(1_000).alias("duration_seconds"),
-            # Convert the popularity from an integer 0 ~ 100 to a percentage 0 ~ 1.0
-            pl.col("popularity").truediv(100),
+def _(lz, mo, pl):
+    try:
+        df = (
+            lz
+            # Filter data we consider relevant (somewhat arbitrary in this example)
+            .filter(pl.col("explicit") == False)
+            .drop("Unnamed: 0", "track_id", "explicit")
+            .with_columns(
+                # Perform whichever transformations you want  (again somewhat arbitrary in this example)
+                # Convert the duration from milliseconds to seconds (int)
+                pl.col("duration_ms").floordiv(1_000).alias("duration_seconds"),
+                # Convert the popularity from an integer 0 ~ 100 to a percentage 0 ~ 1.0
+                pl.col("popularity").truediv(100),
+            )
+            # lastly, download (if needed) and collect into memory
+            .collect()
         )
-        # lastly, download (if needed) and collect into memory
-        .collect()
-    )
+    except Exception as e:
+        mo.stop(True, mo.md(f"**Failed to load data from HuggingFace:** {e}"))
     df
     return (df,)
 

@@ -1,12 +1,13 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cvxpy==1.6.0",
+#     "clarabel>=0.11.1",
+#     "cvxpy-base>=1.8.2",
 #     "marimo",
-#     "matplotlib==3.10.0",
-#     "numpy==2.2.2",
-#     "scipy==1.15.1",
-#     "wigglystuff==0.1.9",
+#     "matplotlib==3.10.8",
+#     "numpy==2.4.3",
+#     "scipy==1.17.1",
+#     "wigglystuff==0.2.37",
 # ]
 # ///
 
@@ -25,7 +26,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Portfolio optimization
+    # Portfolio Optimization
     """)
     return
 
@@ -145,7 +146,7 @@ def _(mo, np):
 def _(mu_widget, np):
     np.random.seed(1)
     n = 10
-    mu = np.array(mu_widget.matrix)
+    mu = np.array(mu_widget.matrix).flatten()
     Sigma = np.random.randn(n, n)
     Sigma = Sigma.T.dot(Sigma)
     return Sigma, mu, n
@@ -153,7 +154,7 @@ def _(mu_widget, np):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(r"""
     Next, we solve the problem for 100 different values of $\gamma$
     """)
     return
@@ -187,7 +188,7 @@ def _(cp, gamma, np, prob, ret, risk):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(r"""
     Plotted below are the risk return tradeoffs for two values of $\gamma$ (blue squares), and the risk return tradeoffs for investing fully in each asset (red circles)
     """)
     return

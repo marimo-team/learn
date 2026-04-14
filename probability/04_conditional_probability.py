@@ -2,9 +2,9 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib==3.10.0",
-#     "matplotlib-venn==1.1.1",
-#     "numpy==2.2.2",
+#     "matplotlib==3.10.8",
+#     "matplotlib-venn==1.1.2",
+#     "numpy==2.4.3",
 # ]
 # ///
 
@@ -333,7 +333,7 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(r"""
     ## Summary
 
     You've learned:

@@ -1,9 +1,10 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "cvxpy==1.6.0",
+#     "clarabel>=0.11.1",
+#     "cvxpy-base>=1.8.2",
 #     "marimo",
-#     "numpy==2.2.2",
+#     "numpy==2.4.3",
 # ]
 # ///
 
@@ -22,7 +23,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Least squares
+    # Least Squares
 
     In a least-squares problem, we have measurements $A \in \mathcal{R}^{m \times
     n}$ (i.e., $m$ rows and $n$ columns) and $b \in \mathcal{R}^m$. We seek a vector

@@ -175,3 +175,13 @@ __marimo__
 
 # Generated site content
 _site/
+
+# Editors
+*~
+
+# Temporary build files
+tmp/
+example.db
+example.db.wal
+log_data_filtered/*
+log_data_filtered.*

@@ -2,14 +2,13 @@
 # requires-python = ">=3.11"
 # dependencies = [
 #     "marimo",
-#     "duckdb==1.3.2",
-#     "polars==1.17.1",
-#     "numpy==2.2.4",
-#     "pyarrow==19.0.1",
-#     "pandas==2.2.3",
-#     "sqlglot==26.12.1",
-#     "plotly==5.24.1",
-#     "statsmodels==0.14.4",
+#     "duckdb==1.4.4",
+#     "numpy==2.4.3",
+#     "pandas==2.3.2",
+#     "plotly[express]==6.3.0",
+#     "polars[pyarrow]==1.24.0",
+#     "sqlglot==27.0.0",
+#     "statsmodels==0.14.5",
 # ]
 # ///
 
@@ -32,9 +31,7 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(rf"""
-    # 🦆 **DuckDB**: An Embeddable Analytical Database System
-
-    ## What is DuckDB?
+    # What is DuckDB?
 
     [DuckDB](https://duckdb.org/) is a _high-performance_, in-process, embeddable SQL OLAP (Online Analytical Processing) Database Management System (DBMS) designed for simplicity and speed. It's essentially a fully-featured database that runs directly within your application's process, without needing a separate server. This makes it excellent for complex analytical workloads, offering a robust SQL interface and efficient processing – perfect for learning about databases and data analysis concepts.  It's a great alternative to heavier database systems like PostgreSQL or MySQL when you don't need a full-blown server.
 

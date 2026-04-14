@@ -1,10 +1,11 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cvxpy==1.6.0",
+#     "clarabel>=0.11.1",
+#     "cvxpy>=1.8.2",
 #     "marimo",
-#     "numpy==2.2.2",
-#     "wigglystuff==0.1.9",
+#     "numpy==2.4.3",
+#     "wigglystuff==0.2.37",
 # ]
 # ///
 
@@ -23,7 +24,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Semidefinite program
+    # Semidefinite Program
     """)
     return
 

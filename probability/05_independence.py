@@ -2,6 +2,8 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
+#     "numpy==2.4.3",
+#     "pandas==2.3.2",
 # ]
 # ///
 
@@ -19,7 +21,7 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(r"""
     # Independence in Probability Theory
 
     _This notebook is a computational companion to the book ["Probability for Computer Scientists"](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/independence/), by Stanford professor Chris Piech._

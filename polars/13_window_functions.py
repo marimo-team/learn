@@ -1,11 +1,11 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "duckdb==1.2.2",
+#     "duckdb==1.4.4",
 #     "marimo",
-#     "polars==1.29.0",
-#     "pyarrow==20.0.0",
-#     "sqlglot==26.16.4",
+#     "polars==1.24.0",
+#     "pyarrow==22.0.0",
+#     "sqlglot==28.3.0",
 # ]
 # ///
 
@@ -154,7 +154,7 @@ def _(mo):
 def _(df, pl):
     (
         df.with_columns(
-            is_weekday=pl.col("date").dt.is_business_day(),
+            is_weekday=pl.col("date").dt.weekday() < 5,
         ).with_columns(
             max_rev_by_channel_and_weekday=pl.col("revenue").max().over("is_weekday", "channel"),
         )
@@ -179,7 +179,7 @@ def _(df, pl):
     df.with_columns(
         max_rev_by_channel_and_weekday=pl.col("revenue")
         .max()
-        .over((pl.col("date").dt.is_business_day()), "channel")
+        .over((pl.col("date").dt.weekday() < 5), "channel")
     )
     return
 

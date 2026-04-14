@@ -2,9 +2,9 @@
 # requires-python = ">=3.11"
 # dependencies = [
 #     "marimo",
-#     "numpy==2.2.5",
-#     "pandas==2.2.3",
-#     "polars==1.29.0",
+#     "numpy==2.4.3",
+#     "pandas==2.3.2",
+#     "polars==1.24.0",
 # ]
 # ///
 

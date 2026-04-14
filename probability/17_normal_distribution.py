@@ -2,10 +2,10 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #     "marimo",
-#     "matplotlib==3.10.1",
-#     "scipy==1.15.2",
-#     "wigglystuff==0.1.10",
-#     "numpy==2.2.4",
+#     "matplotlib==3.10.8",
+#     "scipy==1.17.1",
+#     "wigglystuff==0.2.37",
+#     "numpy==2.4.3",
 # ]
 # ///
 
@@ -787,8 +787,8 @@ def _(np, plt, stats):
         textstr = '\n'.join((
             r'Normal (aka Gaussian) Random Variable',
             r'',
-            f'Parameter $\mu$: {mu}',
-            f'Parameter $\sigma$: {sigma}'
+            rf'Parameter $\mu$: {mu}',
+            rf'Parameter $\sigma$: {sigma}'
         ))
         ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=10,
                 verticalalignment='top', bbox=props)

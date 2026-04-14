@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Marimo Learn{% endblock %}
+
+{% block content %}
+    <header class="bg-white">
+        <div class="container mx-auto px-4 py-12 max-w-6xl">
+            <a href="../" class="link-primary text-sm mb-4 inline-block">&larr; Home</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ title }}</h1>
+        </div>
+    </header>
+
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="prose">
+                {{ body_html|safe }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

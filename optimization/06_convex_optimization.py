@@ -1,9 +1,10 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cvxpy==1.6.0",
+#     "clarabel>=0.11.1",
+#     "cvxpy-base>=1.8.2",
 #     "marimo",
-#     "numpy==2.2.2",
+#     "numpy==2.4.3",
 # ]
 # ///
 
@@ -22,7 +23,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Convex optimization
+    # Convex Optimization
 
     In the previous tutorials, we learned about least squares, linear programming,
     and quadratic programming, and saw applications of each. We also learned that these problem
