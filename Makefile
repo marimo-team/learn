@@ -45,12 +45,15 @@ check_exec:
 	fi
 
 ## build: build website
-build: ${LESSON_DATA} ${TEMPLATES} # ${NOTEBOOK_OUT}
+build: ${LESSON_DATA} ${TEMPLATES}
 	${PYTHON} bin/build.py --branch ${BRANCH} --root ${ROOT} --output ${SITE} --data ${LESSON_DATA}
 
 ## links: check links locally (while 'make serve')
 links:
 	linkchecker -F text http://localhost:8000
+
+## wasm: build all notebooks as WASM
+wasm: ${NOTEBOOK_OUT}
 
 ## serve: run local web server without rebuilding
 serve:
