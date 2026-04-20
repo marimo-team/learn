@@ -9,9 +9,10 @@
 #     "wigglystuff==0.3.1",
 # ]
 # ///
+
 import marimo
 
-__generated_with = "0.20.4"
+__generated_with = "0.23.1"
 app = marimo.App(width="full")
 
 
@@ -20,8 +21,7 @@ def _(mo):
     mo.md(r"""
     # wigglystuff Widgets
 
-    This notebook demonstrates four widgets from the [wigglystuff](https://github.com/koaning/wigglystuff) package:
-    `Slider2D`, `Matrix`, `HoverZoom`, and `TextCompare`.
+    This notebook demonstrates four widgets from [Vincent van Warmerdam](https://koaning.io/)'s [wigglystuff](https://koaning.github.io/wigglystuff/) package. They are useful in their own right, and also show how easy it is to build custom plugins for marimo using [AnyWidget](https://anywidget.dev/) to meet your teaching needs.
     """)
     return
 
@@ -36,12 +36,8 @@ def _():
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from wigglystuff import Slider2D, Matrix, HoverZoom, TextCompare
+
     return HoverZoom, Matrix, Slider2D, TextCompare, alt, mo, np, pd, plt
-
-
-# ---------------------------------------------------------------------------
-# Slider2D
-# ---------------------------------------------------------------------------
 
 
 @app.cell(hide_code=True)
@@ -76,11 +72,6 @@ def _(mo, slider2d):
     return
 
 
-# ---------------------------------------------------------------------------
-# Matrix
-# ---------------------------------------------------------------------------
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -100,7 +91,7 @@ def _(Matrix, mo, np, pd):
     rgb_df = pd.DataFrame(
         {"r": rgb_mat[:, 0], "g": rgb_mat[:, 1], "b": rgb_mat[:, 2], "color": color}
     )
-    return color, pca_mat, rgb_df, rgb_mat
+    return color, pca_mat, rgb_mat
 
 
 @app.cell
@@ -115,11 +106,6 @@ def _(alt, color, mo, pca_mat, pd, rgb_mat):
     )
     mo.hstack([pca_mat, pca_chart])
     return
-
-
-# ---------------------------------------------------------------------------
-# HoverZoom
-# ---------------------------------------------------------------------------
 
 
 @app.cell(hide_code=True)
@@ -157,11 +143,6 @@ def _(HoverZoom, fig, mo):
     return
 
 
-# ---------------------------------------------------------------------------
-# TextCompare
-# ---------------------------------------------------------------------------
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -188,12 +169,14 @@ def _(TextCompare, mo):
 
     compare = mo.ui.anywidget(TextCompare(text_a=text_a, text_b=text_b, min_match_words=3))
     compare
-    return compare, text_a, text_b
+    return (compare,)
 
 
 @app.cell
 def _(compare, mo):
-    mo.md(f"**Found {len(compare.matches)} matching passages**")
+    mo.md(f"""
+    **Found {len(compare.matches)} matching passages**
+    """)
     return
 
 

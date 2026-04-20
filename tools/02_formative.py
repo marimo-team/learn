@@ -3,7 +3,7 @@
 # dependencies = [
 #     "anywidget",
 #     "marimo",
-#     "marimo-learn",
+#     "marimo-learn==0.13.0",
 # ]
 # ///
 
@@ -16,7 +16,7 @@ Run with: marimo edit demo.py
 
 import marimo
 
-__generated_with = "0.20.4"
+__generated_with = "0.23.1"
 app = marimo.App()
 
 
@@ -24,7 +24,6 @@ app = marimo.App()
 def _():
     import marimo as mo
     from marimo_learn import (
-        Color,
         ConceptMapWidget,
         FlashcardWidget,
         LabelingWidget,
@@ -33,11 +32,9 @@ def _():
         NumericEntryWidget,
         OrderingWidget,
         PredictThenCheckWidget,
-        World,
     )
 
     return (
-        Color,
         ConceptMapWidget,
         FlashcardWidget,
         LabelingWidget,
@@ -46,35 +43,18 @@ def _():
         NumericEntryWidget,
         OrderingWidget,
         PredictThenCheckWidget,
-        World,
+        mo,
     )
 
 
 @app.cell
 def _(mo):
     mo.md("""
-    # Educational Widgets Demo
+    # Formative Assessment Widgets
 
-    This notebook demonstrates widgets in marimo_learn.
+    This notebook demonstrates several widgets from the [marimo-learn](https://pypi.org/project/marimo-learn/) package that you can use to embed formative assessments in your lessons. They also show how easy it is to build custom plugins for the marimo notebook to meet your teaching needs.
     """)
     return
-
-
-# Spiral
-@app.cell
-def _(Color, World, mo):
-    _world = World()
-
-    async def _spiral(world, turtle):
-        colors = list(Color)
-        for i in range(70):
-            if i % 10 == 0:
-                turtle.set_color(colors[(i // 10) % len(colors)])
-            await turtle.forward(i * 2.8)
-            turtle.right(91)
-
-    _world.set_coroutine(_spiral)
-    mo.ui.anywidget(_world)
 
 
 @app.cell
@@ -288,7 +268,7 @@ def _(MultipleChoiceWidget, mo):
 
 
 @app.cell
-def _(multiple_choice_question, mo):
+def _(mo, multiple_choice_question):
     _val = multiple_choice_question.value.get("value") or {}
     if _val.get("answered"):
         _msg = "Score: 1/1" if _val.get("correct") else "Score: 0/1"
@@ -427,8 +407,8 @@ def _(
     concept_map,
     flashcard_deck,
     matching_question,
-    multiple_choice_question,
     mo,
+    multiple_choice_question,
     numeric_entry_question,
     ordering_question,
     predict_then_check_question,
