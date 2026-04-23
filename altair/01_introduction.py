@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "altair==6.0.0",
+#     "altair==6.1.0",
 #     "marimo",
 #     "pandas==3.0.1",
 # ]
@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.20.4"
+__generated_with = "0.23.2"
 app = marimo.App()
 
 
@@ -81,11 +81,11 @@ def _(mo):
 
 
 @app.cell
-def _():
-    from altair.datasets import data  # import vega_datasets
-    cars = data.cars()                # load cars data as a Pandas data frame
+def _(pd):
+    cars_url = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/cars.json"
+    cars = pd.read_json(cars_url)     # load cars data as a Pandas data frame
     cars.head()                       # display the first five rows
-    return cars, data
+    return cars, cars_url
 
 
 @app.cell(hide_code=True)
@@ -97,8 +97,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    data.cars.url
+def _(cars_url):
+    cars_url
     return
 
 
@@ -111,8 +111,8 @@ def _(mo):
 
 
 @app.cell
-def _(data, pd):
-    pd.read_json(data.cars.url).head() # load JSON data into a data frame
+def _(cars_url, pd):
+    pd.read_json(cars_url).head() # load JSON data into a data frame
     return
 
 

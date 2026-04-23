@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "altair==6.0.0",
+#     "altair==6.1.0",
 #     "marimo",
 #     "pandas==3.0.1",
 # ]
@@ -50,11 +50,10 @@ def _(mo):
 def _():
     import pandas as pd
     import altair as alt
-    from altair.datasets import data
     import json
     import urllib.request
 
-    return alt, data
+    return (alt,)
 
 
 @app.cell(hide_code=True)
@@ -124,8 +123,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    world = data.world_110m.url
+def _():
+    world = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json"
     world
     return (world,)
 
@@ -312,8 +311,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    zipcodes = data.zipcodes.url
+def _():
+    zipcodes = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/zipcodes.csv"
     zipcodes
     return (zipcodes,)
 
@@ -445,8 +444,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    usa = data.us_10m.url
+def _():
+    usa = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/us-10m.json"
     usa
     return (usa,)
 
@@ -460,8 +459,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    airports = data.airports.url
+def _():
+    airports = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/airports.csv"
     airports
     return (airports,)
 
@@ -475,8 +474,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    flights = data.flights_airport.url
+def _():
+    flights = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/flights-airport.csv"
     flights
     return (flights,)
 
@@ -665,8 +664,8 @@ def _(mo):
 
 
 @app.cell
-def _(data):
-    unemp = data.unemployment.url
+def _():
+    unemp = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/unemployment.tsv"
     unemp
     return (unemp,)
 

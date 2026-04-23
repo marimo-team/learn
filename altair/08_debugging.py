@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "altair==6.0.0",
+#     "altair==6.1.0",
 #     "marimo",
 #     "pandas==3.0.1",
 # ]
@@ -84,9 +84,9 @@ def _():
 @app.cell
 def _():
     import altair as alt
-    from altair.datasets import data
+    import pandas as pd
 
-    return alt, data
+    return alt, pd
 
 
 @app.cell(hide_code=True)
@@ -156,8 +156,8 @@ def _(mo):
 
 
 @app.cell
-def _(alt, data):
-    cars = data.cars()
+def _(alt, pd):
+    cars = pd.read_json("https://cdn.jsdelivr.net/npm/vega-datasets@2/data/cars.json")
 
     alt.Chart(cars).mark_point().encode(
         x='Horsepower',

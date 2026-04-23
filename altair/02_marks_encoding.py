@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
-#     "altair==6.0.0",
+#     "altair==6.1.0",
 #     "marimo",
 #     "pandas==3.0.1",
 # ]
@@ -45,7 +45,7 @@ def _():
     import pandas as pd
     import altair as alt
 
-    return (alt,)
+    return alt, pd
 
 
 @app.cell(hide_code=True)
@@ -67,9 +67,8 @@ def _(mo):
 
 
 @app.cell
-def _():
-    from altair.datasets import data as altair_data
-    data = altair_data.gapminder()
+def _(pd):
+    data = pd.read_json("https://cdn.jsdelivr.net/npm/vega-datasets@2/data/gapminder.json")
     return (data,)
 
 
