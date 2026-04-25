@@ -185,3 +185,6 @@ example.db
 example.db.wal
 log_data_filtered/*
 log_data_filtered.*
+
+# JavaScript package
+js/node_modules/*

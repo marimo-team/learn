@@ -25,9 +25,36 @@ all: commands
 commands:
 	@grep -h -E '^##' ${MAKEFILE_LIST} | sed -e 's/## //g' | column -t -s ':'
 
-## install: install required packages
+## install: install all dependencies (package + site)
 install:
-	uv pip install -r requirements.txt
+	uv sync --group dev --group site
+
+## package: build JavaScript and Python package
+package:
+	@cd js && npm install && npm run build
+	@uv run python -m build --no-isolation
+
+## test: run Python tests
+test:
+	@uv run pytest tests
+
+## coverage: run tests with coverage
+coverage:
+	@uv run python -m coverage run -m pytest tests
+	@uv run python -m coverage report --show-missing
+
+## fix: fix formatting and code issues
+fix:
+	@uv run ruff format .
+	@uv run ruff check --fix .
+
+## publish: publish package using ~/.pypirc credentials
+publish:
+	uv run twine upload --verbose dist/*
+
+## update-forma: upgrade @gvwilson/forma to latest and rebuild
+update-forma:
+	@cd js && npm install @gvwilson/forma@latest && npm run build
 
 ## check: run all simple checks
 check:
@@ -68,7 +95,8 @@ databases: ${DATABASES}
 clean:
 	@find . -name '*~' -exec rm {} +
 	@find . -name '.DS_Store' -exec rm {} +
-	@rm -rf ${TMP}
+	@find . -path './.venv' -prune -o -type d -name '__pycache__' -exec rm -rf {} +
+	@rm -rf ${TMP} dist js/dist src/marimo_learn/static
 	@rm -f log_data_filtered*.*
 
 ## check_empty: check for empty cells

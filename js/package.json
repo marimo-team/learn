@@ -1,0 +1,16 @@
+{
+  "name": "marimo-learn-build",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "clean": "rm -rf ../src/marimo_learn/static dist"
+  },
+  "dependencies": {
+    "@gvwilson/forma": "^0.14.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.3"
+  }
+}

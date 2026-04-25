@@ -1,0 +1,64 @@
+[project]
+name = "marimo-learn"
+dynamic = ["version"]
+description = "marimo learning utilities"
+keywords = ["open source", "marimo", "education"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    {name = "Greg Wilson", email = "gvwilson@third-bit.com"},
+]
+dependencies = [
+    "anywidget>=0.9.21",
+    "marimo>=0.23.0",
+]
+
+[project.urls]
+Repository = "https://github.com/gvwilson/learn"
+
+[dependency-groups]
+dev = [
+    "build>=1.4.0",
+    "coverage>=7.13.2",
+    "hatchling>=1.27.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.15.5",
+    "twine>=6.2.0",
+]
+site = [
+    "faker==40.11.0",
+    "jinja2==3.1.6",
+    "linkchecker==10.6.0",
+    "markdown==3.10.2",
+    "python-frontmatter==1.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+artifacts = [
+    "src/marimo_learn/static/*.js",
+    "src/marimo_learn/static/*.map",
+]
+
+[tool.hatch.build.targets.sdist.force-include]
+"src/marimo_learn/static" = "src/marimo_learn/static"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/marimo_learn"]
+
+[tool.hatch.version]
+path = "src/marimo_learn/__init__.py"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
