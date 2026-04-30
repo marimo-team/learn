@@ -11,11 +11,11 @@ You can open and run these notebooks in [molab](https://molab.marimo.io), marimo
 
 ## Notebooks
 
-- What is DuckDB? [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/01_getting_started.py)
-- Loading Parquet files with DuckDB [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/08_loading_parquet.py)
-- Loading JSON [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/09_loading_json.py)
-- Working with Apache Arrow [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/11_working_with_apache_arrow.py)
-- Loading CSVs [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/DuckDB_Loading_CSVs.py)
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/01_getting_started.py) What is DuckDB?
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/08_loading_parquet.py) Loading Parquet files with DuckDB
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/09_loading_json.py) Loading JSON
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/11_working_with_apache_arrow.py) Working with Apache Arrow
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/duckdb/DuckDB_Loading_CSVs.py) Loading CSVs
 
 ## Contributors
 

@@ -12,19 +12,19 @@ You can open and run these notebooks in [molab](https://molab.marimo.io), marimo
 
 ## Notebooks
 
-- Basic Ideas in Queueing Theory [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/01_basic_ideas.py)
-- Queue Formation [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/02_queue_formation.py)
-- Little's Law [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/03_littles_law.py)
-- Sojourn Time [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/04_sojourn_time.py)
-- M/M/1 Queue Nonlinearity [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/05_mm1_nonlinearity.py)
-- Pooled vs. Separate Queues [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/06_pooled_vs_separate.py)
-- Late Merge [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/07_late_merge.py)
-- The Inspector's Paradox [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/08_inspectors_paradox.py)
-- The Convoy Effect [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/09_convoy_effect.py)
-- Priority Starvation [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/10_priority_starvation.py)
-- Tandem Queue Blocking [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/11_tandem_queue.py)
-- Rush Hour Displacement [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/12_rush_hour.py)
-- Braess's Paradox [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/13_braess_paradox.py)
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/01_basic_ideas.py) Basic Ideas in Queueing Theory
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/02_queue_formation.py) Queue Formation
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/03_littles_law.py) Little's Law
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/04_sojourn_time.py) Sojourn Time
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/05_mm1_nonlinearity.py) M/M/1 Queue Nonlinearity
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/06_pooled_vs_separate.py) Pooled vs. Separate Queues
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/07_late_merge.py) Late Merge
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/08_inspectors_paradox.py) The Inspector's Paradox
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/09_convoy_effect.py) The Convoy Effect
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/10_priority_starvation.py) Priority Starvation
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/11_tandem_queue.py) Tandem Queue Blocking
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/12_rush_hour.py) Rush Hour Displacement
+- [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/marimo-team/learn/blob/main/queueing/13_braess_paradox.py) Braess's Paradox
 
 ## Contributors
 
