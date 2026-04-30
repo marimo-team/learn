@@ -30,8 +30,8 @@ def transform_lessons(data: dict, root: Path, branch: str) -> dict:
             }
             for nb in course.get("notebooks", [])
         ]
-        index_md = root / course_id / "index.md"
-        post = frontmatter.load(index_md)
+        readme_md = root / course_id / "README.md"
+        post = frontmatter.load(readme_md)
         course["body_html"] = md.markdown(post.content, extensions=["fenced_code", "tables"])
     return data
 
