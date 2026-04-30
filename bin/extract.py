@@ -14,9 +14,9 @@ NOTEBOOK_PATTERN = re.compile(r"^\d{2}_.*\.py$")
 
 def extract_lessons(root: Path) -> dict:
     lessons = {}
-    for index_file in sorted(root.glob("*/index.md")):
-        lesson_dir = index_file.parent
-        post = frontmatter.load(index_file)
+    for readme_file in sorted(root.glob("*/README.md")):
+        lesson_dir = readme_file.parent
+        post = frontmatter.load(readme_file)
         notebooks = sorted(
             p.name
             for p in lesson_dir.glob("*.py")
