@@ -1,7 +1,7 @@
 ---
 title: Learn Probability
 description: >
-    These marimo notebooks teach the fundamental of probability with
+    These marimo notebooks teach the fundamentals of probability with
     an emphasis on interactive learning and computation in Python.
 ---
 
