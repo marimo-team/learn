@@ -304,9 +304,9 @@ def _(mo):
     </details>
 
     <details>
-    <summary>3. P(prime or odd) = 5/6</summary>
+    <summary>3. P(prime or odd) = 4/6</summary>
 
-    ✅ Correct! {2,3,5} ∪ {1,3,5} = {1,2,3,5}, so probability is 5/6.
+    ✅ Correct! {2,3,5} ∪ {1,3,5} = {1,2,3,5}, so probability is 4/6.
     </details>
     """)
     return
