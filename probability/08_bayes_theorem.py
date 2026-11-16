@@ -1,10 +1,14 @@
 # /// script
-# requires-python = ">=3.10"
+# requires-python = ">=3.10,<3.15"
 # dependencies = [
 #     "marimo",
 #     "matplotlib==3.10.8",
 #     "numpy==2.4.3",
+#     "marimo-studio==0.4.1",
 # ]
+#
+# [tool.marimo-studio]
+# default = "explainer"
 # ///
 
 import marimo
@@ -27,7 +31,7 @@ def _():
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def introduction(mo):
     mo.md(r"""
     # Bayes' Theorem
 
@@ -41,7 +45,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def bayesian_reasoning(mo):
     mo.md(r"""
     ## The Heart of Bayesian Reasoning
 
@@ -58,7 +62,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def formula(mo):
     mo.md(r"""
     ## The Formula
 
@@ -81,7 +85,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def components(mo):
     mo.md(r"""
     ## Understanding Each Component
 
@@ -109,7 +113,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def real_world_examples(mo):
     mo.md(r"""
     ## Real-World Examples
 
@@ -176,7 +180,7 @@ def _(medical_posterior, mo):
     - False positive: 10% of healthy people test positive
 
     Using Bayes' Theorem:
-    $P(D|+) = \\frac{{0.95 times 0.01}}{{0.95 times 0.01 + 0.10 times 0.99}} = {medical_posterior:.3f}$
+    $P(D|+) = \\frac{{0.95 \\times 0.01}}{{0.95 \\times 0.01 + 0.10 \\times 0.99}} = {medical_posterior:.3f}$
 
     Despite a positive test, there's only a {medical_posterior:.1%} chance of having the disease!
     This counterintuitive result occurs because the disease is rare (low prior probability).
@@ -267,7 +271,7 @@ def _(location_posterior, mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def interactive_heading(mo):
     mo.md(r"""
     ## Interactive example
     """)
@@ -275,7 +279,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def area_model(mo):
     mo.md(
         r"""
 
@@ -316,43 +320,30 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(
-    bayes_result,
+    area_walkthrough,
     construct_probability_plot,
     mo,
-    p_e,
     p_e_given_h,
     p_e_given_not_h,
     p_h,
 ):
     mo.hstack(
         [
-            mo.md(
-                rf"""
-                ### Probability parameters
+            mo.vstack(
+                [
+                    mo.md(
+                        rf"""
+                        ### Probability parameters
 
-                You can configure the probabilities of the events $H$, $E \mid H$, and $E \mid \neg H$
+                        You can configure the probabilities of the events $H$, $E \mid H$, and $E \mid \neg H$
 
-                {mo.as_html([p_h, p_e_given_h, p_e_given_not_h])}
+                        {mo.as_html([p_h, p_e_given_h, p_e_given_not_h])}
 
-                The plot on the right visualizes the probabilities of these events. 
-
-                1. The yellow rectangle represents the event $H$, and its area is $P(H) = {p_h.value:0.2f}$.
-                2. The teal rectangle overlapping with the yellow one represents the event $E \cap H$, and
-                   its area is $P(H) \cdot P(E \mid H) = {p_h.value * p_e_given_h.value:0.2f}$.
-                3. The teal rectangle that doesn't overlap the yellow rectangle represents the event $E \cap \neg H$, and
-                   its area is $P(\neg H) \cdot P(E \mid \neg H) = {(1 - p_h.value) * p_e_given_not_h.value:0.2f}$.
-
-                Notice that the sum of the areas in $2$ and $3$ is the probability $P(E) = {p_e:0.2f}$. 
-
-                One way to think about Bayes' Theorem is the following: the probability $P(H \mid E)$ is the probability
-                of $E$ and $H$ happening together (the area of the rectangle $2$), divided by the probability of $E$ happening
-                at all (the sum of the areas of $2$ and $3$).
-                In this case, Bayes' Theorem says
-
-                \[
-                P(H \mid E) = \frac{{P(H) P(E \mid H)}}{{P(E)}} = \frac{{{p_h.value} \cdot {p_e_given_h.value}}}{{{p_e:0.2f}}} = {bayes_result:0.2f}
-                \]
-                """
+                        The plot on the right visualizes the probabilities of these events.
+                        """
+                    ),
+                    area_walkthrough,
+                ]
             ),
             construct_probability_plot(),
         ],
@@ -365,7 +356,7 @@ def _(
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def applications(mo):
     mo.md(r"""
     ## Applications in Computer Science
 
@@ -392,7 +383,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def quiz(mo):
     mo.md("""
     ## 🤔 Test Your Understanding
 
@@ -417,7 +408,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def summary(mo):
     mo.md("""
     ## Summary
 
@@ -450,11 +441,49 @@ def _(p_e_given_h, p_e_given_not_h, p_h):
 
 
 @app.cell(hide_code=True)
+def area_walkthrough(bayes_result, mo, p_e, p_e_given_h, p_e_given_not_h, p_h):
+    area_walkthrough = mo.md(
+        rf"""
+        1. The yellow rectangle represents the event $H$, and its area is $P(H) = {p_h.value:0.2f}$.
+        2. The teal rectangle overlapping with the yellow one represents the event $E \cap H$, and
+           its area is $P(H) \cdot P(E \mid H) = {p_h.value * p_e_given_h.value:0.2f}$.
+        3. The teal rectangle that doesn't overlap the yellow rectangle represents the event $E \cap \neg H$, and
+           its area is $P(\neg H) \cdot P(E \mid \neg H) = {(1 - p_h.value) * p_e_given_not_h.value:0.2f}$.
+
+        Notice that the sum of the areas in $2$ and $3$ is the probability $P(E) = {p_e:0.2f}$.
+
+        One way to think about Bayes' Theorem is the following: the probability $P(H \mid E)$ is the probability
+        of $E$ and $H$ happening together (the area of the rectangle $2$), divided by the probability of $E$ happening
+        at all (the sum of the areas of $2$ and $3$).
+        In this case, Bayes' Theorem says
+
+        \[
+        P(H \mid E) = \frac{{P(H) P(E \mid H)}}{{P(E)}} = \frac{{{p_h.value:0.2f} \cdot {p_e_given_h.value:0.2f}}}{{{p_e:0.2f}}} = {bayes_result:0.2f}
+        \]
+        """
+    )
+    return (area_walkthrough,)
+
+
+@app.cell(hide_code=True)
+def area_inputs(p_e_given_h, p_e_given_not_h, p_h):
+    # The explainer view in studio/ draws its area model from these values.
+    area_inputs = {
+        "p_h": p_h.value,
+        "p_e_given_h": p_e_given_h.value,
+        "p_e_given_not_h": p_e_given_not_h.value,
+    }
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
-    p_h = mo.ui.slider(0.0, 1, label="$P(H)$", value=0.1, step=0.1)
-    p_e_given_h = mo.ui.slider(0.0, 1, label=r"$P(E \mid H)$", value=0.3, step=0.1)
+    p_h = mo.ui.slider(0.0, 1, label="$P(H)$", value=0.3, step=0.1, show_value=True)
+    p_e_given_h = mo.ui.slider(
+        0.0, 1, label=r"$P(E \mid H)$", value=0.9, step=0.1, show_value=True
+    )
     p_e_given_not_h = mo.ui.slider(
-        0.0, 1, label=r"$P(E \mid \neg H)$", value=0.3, step=0.1
+        0.0, 1, label=r"$P(E \mid \neg H)$", value=0.4, step=0.1, show_value=True
     )
     return p_e_given_h, p_e_given_not_h, p_h
 
