@@ -145,7 +145,6 @@
         font-size: 3.5px;
         font-weight: 400;
         opacity: 0;
-        text-anchor: start;
       }
 
       .square.given-e .prior-label {
@@ -245,8 +244,14 @@
         display: grid;
         gap: 1.25rem;
         max-width: 24rem;
-        position: sticky;
-        top: 1.5rem;
+      }
+
+      /* Stick beside the walkthrough only when the whole panel fits on screen. */
+      @media (min-width: 961px) and (min-height: 46rem) {
+        .workbench {
+          position: sticky;
+          top: 1.5rem;
+        }
       }
 
       .controls {
@@ -377,10 +382,6 @@
           grid-template-columns: minmax(0, 1fr);
         }
 
-        .workbench {
-          position: static;
-        }
-
         .example-grid {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -494,7 +495,7 @@
                 </button>
               </div>
               <svg id="model" class="square" viewBox="-1 -1 102 102" role="img" data-labels>
-                <title>
+                <title id="model-title">
                   The square of all outcomes, split into H and not H, with the outcomes
                   where E happens shaded teal
                 </title>
@@ -527,7 +528,7 @@
                 <dd id="posterior" class="posterior">–</dd>
               </div>
             </dl>
-            <p id="readout-note" class="note" hidden></p>
+            <p id="readout-note" class="note" role="status"></p>
 
             <div hidden>
               <span id="area-inputs" hidden mo-value="area_inputs"></span>
@@ -650,10 +651,20 @@
           label(svg, 3, w, 100 - enh, 100 - w, enh);
         }
         q(".n2")?.classList.add("on-dark");
+        // Keep the "prior" label inside one region: right of the dashed line
+        // when it fits, otherwise left of it, otherwise hidden.
         const priorLabel = q(".prior-label");
         if (priorLabel) {
-          priorLabel.setAttribute("x", w + 1.5);
-          priorLabel.classList.toggle("on-dark", conditioned && w < posterior * 100);
+          const p = posterior * 100;
+          const inDark = w < p;
+          const [start, end] = inDark ? [0, p] : [p, 100];
+          const width = 9;
+          const right = w + 1.5 + width <= end;
+          const left = w - 1.5 - width >= start;
+          priorLabel.setAttribute("x", right ? w + 1.5 : w - 1.5);
+          priorLabel.style.textAnchor = right ? "start" : "end";
+          priorLabel.style.display = right || left ? "" : "none";
+          priorLabel.classList.toggle("on-dark", inDark);
         }
       };
 
@@ -713,6 +724,9 @@
           posterior: state.posterior,
           conditioned,
         });
+        $("#model-title").textContent = conditioned
+          ? "Only the outcomes where E happened, split into E and H and E and not H"
+          : "The square of all outcomes, split into H and not H, with the outcomes where E happens shaded teal";
         $(".model").setAttribute("aria-busy", "false");
       };
 
@@ -740,11 +754,14 @@
         button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
         button.addEventListener("click", () => setMode(button.dataset.mode));
       }
+      window.addEventListener("hashchange", () =>
+        setMode(location.hash === "#given-e" && !buttons[1].disabled ? "given-e" : "all"),
+      );
 
       const update = (key) => (value) => {
         state[key] = value;
         if (key === "posterior") {
-          $("#readout-note").hidden = true;
+          $("#readout-note").textContent = "";
           buttons[1].disabled = false;
         }
         drawModel();
@@ -761,9 +778,8 @@
         if (state.mode === "given-e") setMode("all");
         drawModel();
         drawReadout();
-        const note = $("#readout-note");
-        note.textContent = "With these settings E never happens, so there is nothing to update on.";
-        note.hidden = false;
+        $("#readout-note").textContent =
+          "With these settings E never happens, so there is nothing to update on.";
       };
 
       for (const [selector, onValue, onError] of [

@@ -329,18 +329,21 @@ def _(
 ):
     mo.hstack(
         [
-            mo.md(
-                rf"""
-                ### Probability parameters
+            mo.vstack(
+                [
+                    mo.md(
+                        rf"""
+                        ### Probability parameters
 
-                You can configure the probabilities of the events $H$, $E \mid H$, and $E \mid \neg H$
+                        You can configure the probabilities of the events $H$, $E \mid H$, and $E \mid \neg H$
 
-                {mo.as_html([p_h, p_e_given_h, p_e_given_not_h])}
+                        {mo.as_html([p_h, p_e_given_h, p_e_given_not_h])}
 
-                The plot on the right visualizes the probabilities of these events. 
-
-                {area_walkthrough}
-                """
+                        The plot on the right visualizes the probabilities of these events.
+                        """
+                    ),
+                    area_walkthrough,
+                ]
             ),
             construct_probability_plot(),
         ],
